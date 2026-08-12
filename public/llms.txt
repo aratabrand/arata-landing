@@ -1,0 +1,23 @@
+# Arata San
+
+> Agencia digital en Bogotá, Colombia. Le montamos a negocios comerciales tradicionales y pymes la estructura digital para vender más por internet: páginas que convierten, chatbots con IA que contestan y agendan por WhatsApp, automatización de procesos y apps a la medida para decidir mejor.
+
+Arata San ayuda a comerciantes y pequeñas empresas de Colombia a automatizar su negocio, ahorrar tiempo y dinero, y atender a sus clientes las 24 horas. El primer paso es un diagnóstico gratuito por WhatsApp; no se muestran precios en la web porque cada solución se arma a la medida del negocio.
+
+## Qué hacemos
+
+- **Páginas que venden**: sitios y landing pages de alta conversión, pensados para que quien llega compre o escriba.
+- **Chatbot con IA (WhatsApp)**: contesta, cotiza, cualifica y agenda clientes automáticamente, todo el día.
+- **Automatización de procesos**: conectamos las herramientas del negocio (n8n, OpenAI, Supabase) para que lo repetitivo pase solo.
+- **Apps a la medida**: software propio para ver los números del negocio y tomar mejores decisiones.
+
+## Cómo trabajamos
+
+- Diagnóstico gratuito y sin compromiso.
+- Modelo de cobro: montaje (pago único) + mensualidad.
+- Atendemos negocios en toda Colombia; base en Bogotá.
+
+## Contacto
+
+- WhatsApp: +57 313 401 1189 (https://wa.me/573134011189)
+- Instagram: @arata.san.web (https://instagram.com/arata.san.web)
