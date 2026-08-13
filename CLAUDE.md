@@ -207,6 +207,9 @@ Estándar técnico para toda landing en Next.js. Todo esto quedó implementado y
 ### Rendimiento
 - Página estática (SSG), fuentes locales con `display: swap`, gráficos en SVG (sin peso de imágenes).
 - **Diferir dependencias pesadas** con `next/dynamic` + `ssr:false` (ej. `ogl`/LightRays) para sacarlas del bundle inicial. First Load objetivo < 150 KB.
+- **Reveals al scroll: usar `IntersectionObserver` (fuera del hilo principal) + un chequeo inmediato de `getBoundingClientRect` al montar** (helper `lib/inview.ts`). NO listeners de `scroll` por elemento (causan reflow/jank en móvil). El chequeo al montar cubre recargas a mitad de página que el observer solo no revelaría.
+- Animar solo **`transform` y `opacity`** (compuestas por GPU). Evitar animar `width/height/top/left` (PageSpeed: "animaciones no compuestas").
+- `browserslist` a navegadores modernos en `package.json` → reduce el "JavaScript heredado".
 
 ### Verificación (evitar falsos positivos)
 - Para animaciones, medir **visibilidad real** (`opacity`, `is-visible`), NO solo `textContent`/conteo de nodos (leen el DOM aunque esté invisible).
