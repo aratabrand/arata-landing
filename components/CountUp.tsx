@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 // Cuenta de 0 al valor objetivo cuando entra en vista. Respeta reduced-motion.
+// Usa detección por scroll (más confiable que IntersectionObserver en móvil).
 export default function CountUp({
   value,
   prefix = "",
@@ -31,26 +32,36 @@ export default function CountUp({
       return;
     }
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const t = Math.min(1, (now - start) / duration);
-            const eased = 1 - Math.pow(1 - t, 3);
-            setDisplay(value * eased);
-            if (t < 1) requestAnimationFrame(tick);
-            else setDisplay(value);
-          };
-          requestAnimationFrame(tick);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.6 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    const animate = () => {
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        setDisplay(value * eased);
+        if (t < 1) requestAnimationFrame(tick);
+        else setDisplay(value);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const check = () => {
+      if (started.current || !ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
+        started.current = true;
+        animate();
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    };
+
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, [value, duration]);
 
   return (

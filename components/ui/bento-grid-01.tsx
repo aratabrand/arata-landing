@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Target, MessageSquare, Zap, BarChart3, Layers, Globe } from "lucide-react";
 
@@ -202,8 +202,37 @@ const tiles: Tile[] = [
 ];
 
 export default function ServicesBento() {
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const reduced = useReducedMotion();
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (reduced) {
+      setInView(true);
+      return;
+    }
+    let done = false;
+    const check = () => {
+      if (done || !gridRef.current) return;
+      const rect = gridRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
+        done = true;
+        setInView(true);
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [reduced]);
+
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:auto-rows-[200px]">
+    <div ref={gridRef} className="grid grid-cols-1 gap-4 md:grid-cols-6 md:auto-rows-[200px]">
       {tiles.map((tile, i) => {
         const Icon = tile.icon;
         return (
@@ -211,8 +240,7 @@ export default function ServicesBento() {
             key={tile.title}
             className={`group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors duration-300 hover:border-lime/40 sm:p-8 ${tile.span}`}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.6, delay: i * 0.08, ease: EASE }}
             whileHover={{
               ...tile.hover,

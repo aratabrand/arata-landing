@@ -54,17 +54,24 @@ export default function Ring({
       setDrawn(true);
       return;
     }
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setDrawn(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.6 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    let done = false;
+    const check = () => {
+      if (done || !wrapRef.current) return;
+      const rect = wrapRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
+        done = true;
+        setDrawn(true);
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, []);
 
   return (

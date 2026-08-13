@@ -61,17 +61,22 @@ export default function ChatDemo() {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !started) {
-          setStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.4 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    const check = () => {
+      if (started || !ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+        setStarted(true);
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, [started]);
 
   useEffect(() => {

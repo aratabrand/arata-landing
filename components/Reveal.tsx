@@ -27,26 +27,32 @@ export default function Reveal({
     const el = ref.current;
     if (!el) return;
 
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (media.matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
-    );
+    let done = false;
+    const check = () => {
+      if (done || !ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      // Revela cuando el elemento entra por abajo (o ya está en/por encima
+      // de la vista, ej. al recargar a mitad de página).
+      if (rect.top < window.innerHeight * 0.88 && rect.bottom > 0) {
+        done = true;
+        setVisible(true);
+        window.removeEventListener("scroll", check);
+        window.removeEventListener("resize", check);
+      }
+    };
 
-    observer.observe(el);
-    return () => observer.disconnect();
+    check(); // inmediato: cubre lo que ya está en pantalla al cargar
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, []);
 
   return (
