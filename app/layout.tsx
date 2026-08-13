@@ -71,16 +71,36 @@ export const viewport: Viewport = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
+  "@id": `${site.url}/#agencia`,
   name: site.name,
+  alternateName: ["Arata San Web", "Arata San Agencia Digital"],
   description: site.description,
-  areaServed: "CO",
+  slogan: "Automatiza tu negocio. Ahorra tiempo y dinero.",
+  url: site.url,
+  logo: `${site.url}/icon.svg`,
+  image: `${site.url}/og.png`,
+  areaServed: { "@type": "Country", name: "Colombia" },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Bogotá",
+    addressRegion: "Bogotá D.C.",
     addressCountry: "CO",
   },
   telephone: "+573134011189",
-  url: site.url,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+573134011189",
+    contactType: "sales",
+    availableLanguage: ["Spanish"],
+  },
+  knowsAbout: [
+    "Diseño de páginas web",
+    "Landing pages de alta conversión",
+    "Chatbots con inteligencia artificial",
+    "Automatización de procesos de negocio",
+    "WhatsApp Business",
+    "Marketing digital",
+  ],
   sameAs: [site.instagram],
 };
 
