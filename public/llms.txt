@@ -2,22 +2,22 @@
 
 > Agencia digital en Bogotá, Colombia. Le montamos a negocios comerciales tradicionales y pymes la estructura digital para vender más por internet: páginas que convierten, chatbots con IA que contestan y agendan por WhatsApp, automatización de procesos y apps a la medida para decidir mejor.
 
-Arata San ayuda a comerciantes y pequeñas empresas de Colombia a automatizar su negocio, ahorrar tiempo y dinero, y atender a sus clientes las 24 horas. El primer paso es un diagnóstico gratuito por WhatsApp; no se muestran precios en la web porque cada solución se arma a la medida del negocio.
+Arata San ayuda a comerciantes y pequeñas empresas de Colombia a automatizar su negocio, ahorrar tiempo y dinero, y atender a sus clientes las 24 horas. El primer paso es un diagnóstico gratuito por WhatsApp; no se muestran precios en la web porque cada solución se arma a la medida del negocio. Modelo de cobro: montaje (pago único) + mensualidad.
 
 ## Qué hacemos
 
-- **Páginas que venden**: sitios y landing pages de alta conversión, pensados para que quien llega compre o escriba.
-- **Chatbot con IA (WhatsApp)**: contesta, cotiza, cualifica y agenda clientes automáticamente, todo el día.
-- **Automatización de procesos**: conectamos las herramientas del negocio (n8n, OpenAI, Supabase) para que lo repetitivo pase solo.
-- **Apps a la medida**: software propio para ver los números del negocio y tomar mejores decisiones.
+- [Páginas que venden](https://www.aratasan.com/#solucion): sitios y landing pages de alta conversión, pensados para que quien llega compre o escriba.
+- [Chatbot con IA en WhatsApp](https://www.aratasan.com/#solucion): contesta, cotiza, cualifica y agenda clientes automáticamente, todo el día.
+- [Automatización de procesos](https://www.aratasan.com/#solucion): conectamos las herramientas del negocio para que lo repetitivo pase solo.
+- [Apps a la medida](https://www.aratasan.com/#solucion): software propio para ver los números del negocio y tomar mejores decisiones.
 
-## Cómo trabajamos
+## Enlaces
 
-- Diagnóstico gratuito y sin compromiso.
-- Modelo de cobro: montaje (pago único) + mensualidad.
-- Atendemos negocios en toda Colombia; base en Bogotá.
+- [Sitio web de Arata San](https://www.aratasan.com): landing principal de la agencia.
+- [Cómo funciona](https://www.aratasan.com/#como): los tres pasos para trabajar con Arata San.
+- [Dudas frecuentes](https://www.aratasan.com/#dudas): respuestas a las preguntas más comunes.
 
 ## Contacto
 
-- WhatsApp: +57 313 401 1189 (https://wa.me/573134011189)
-- Instagram: @arata.san.web (https://instagram.com/arata.san.web)
+- [Agendar diagnóstico por WhatsApp](https://wa.me/573134011189): respuesta el mismo día, sin costo.
+- [Instagram @arata.san.web](https://instagram.com/arata.san.web): casos y contenido de la agencia.
