@@ -49,7 +49,7 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-up": "fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up": "fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
         "blink": "blink 1.1s ease-in-out infinite",
       },
     },

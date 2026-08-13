@@ -30,23 +30,23 @@ export default function Hero() {
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
           {/* Columna de mensaje — entrada escalonada */}
           <div>
-            <span className="pointer-events-auto inline-flex animate-fade-up items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/85 [animation-delay:60ms]">
+            <span className="pointer-events-auto inline-flex animate-fade-up items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/85">
               <LiveDot />
               Agencia digital · Bogotá
             </span>
 
-            <h1 className="mt-6 animate-fade-up font-display text-[1.95rem] font-extrabold leading-[1.05] [animation-delay:140ms] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 animate-fade-up font-display text-[1.95rem] font-extrabold leading-[1.05] [animation-delay:50ms] sm:text-5xl lg:text-6xl">
               Automatiza tu negocio.{" "}
               <span className="text-lime">Ahorra tiempo y dinero.</span>
             </h1>
 
-            <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-white/80 [animation-delay:220ms] sm:mt-6 sm:text-lg">
+            <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-white/80 [animation-delay:110ms] sm:mt-6 sm:text-lg">
               Optimizamos tus procesos con IA y marketing: automatizamos lo repetitivo,
               aprovechamos mejor tu presupuesto y te liberamos horas para lo que de
               verdad hace crecer tu negocio.
             </p>
 
-            <div className="pointer-events-auto mt-8 flex animate-fade-up flex-col items-stretch gap-3 [animation-delay:300ms] sm:flex-row sm:items-center">
+            <div className="pointer-events-auto mt-8 flex animate-fade-up flex-col items-stretch gap-3 [animation-delay:170ms] sm:flex-row sm:items-center">
               <WhatsAppCTA variant="lime" />
               <a
                 href="#solucion"
@@ -55,13 +55,13 @@ export default function Hero() {
                 Ver cómo funciona
               </a>
             </div>
-            <p className="mt-3 animate-fade-up text-sm text-white/60 [animation-delay:360ms]">
+            <p className="mt-3 animate-fade-up text-sm text-white/60 [animation-delay:210ms]">
               Te respondemos hoy. El diagnóstico es sin costo.
             </p>
           </div>
 
           {/* Panel de operaciones (firma visual) */}
-          <div className="pointer-events-auto animate-fade-up [animation-delay:260ms]">
+          <div className="pointer-events-auto animate-fade-up [animation-delay:120ms]">
             <div className="glass-dark rounded-2xl p-4 transition-transform duration-500 hover:-translate-y-1 sm:p-5">
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
