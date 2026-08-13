@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
+import { onInView } from "@/lib/inview";
 
 type Variant = "up" | "left" | "right" | "scale" | "blur";
 
@@ -26,33 +27,11 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setVisible(true);
       return;
     }
-
-    let done = false;
-    const check = () => {
-      if (done || !ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      // Revela cuando el elemento entra por abajo (o ya está en/por encima
-      // de la vista, ej. al recargar a mitad de página).
-      if (rect.top < window.innerHeight * 0.88 && rect.bottom > 0) {
-        done = true;
-        setVisible(true);
-        window.removeEventListener("scroll", check);
-        window.removeEventListener("resize", check);
-      }
-    };
-
-    check(); // inmediato: cubre lo que ya está en pantalla al cargar
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    return onInView(el, () => setVisible(true), 0.12);
   }, []);
 
   return (

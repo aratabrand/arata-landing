@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Target, MessageSquare, Zap, BarChart3, Layers, Globe } from "lucide-react";
+import { onInView } from "@/lib/inview";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -211,24 +212,9 @@ export default function ServicesBento() {
       setInView(true);
       return;
     }
-    let done = false;
-    const check = () => {
-      if (done || !gridRef.current) return;
-      const rect = gridRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-        done = true;
-        setInView(true);
-        window.removeEventListener("scroll", check);
-        window.removeEventListener("resize", check);
-      }
-    };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    const el = gridRef.current;
+    if (!el) return;
+    return onInView(el, () => setInView(true), 0.1);
   }, [reduced]);
 
   return (

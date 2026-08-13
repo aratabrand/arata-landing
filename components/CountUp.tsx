@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { onInView } from "@/lib/inview";
 
 // Cuenta de 0 al valor objetivo cuando entra en vista. Respeta reduced-motion.
-// Usa detección por scroll (más confiable que IntersectionObserver en móvil).
 export default function CountUp({
   value,
   prefix = "",
@@ -33,6 +33,8 @@ export default function CountUp({
     }
 
     const animate = () => {
+      if (started.current) return;
+      started.current = true;
       const start = performance.now();
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / duration);
@@ -44,24 +46,7 @@ export default function CountUp({
       requestAnimationFrame(tick);
     };
 
-    const check = () => {
-      if (started.current || !ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-        started.current = true;
-        animate();
-        window.removeEventListener("scroll", check);
-        window.removeEventListener("resize", check);
-      }
-    };
-
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    return onInView(el, animate, 0.4);
   }, [value, duration]);
 
   return (

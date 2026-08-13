@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { onInView } from "@/lib/inview";
 
 type Msg = { from: "them" | "sara"; text: string };
 
@@ -61,22 +62,8 @@ export default function ChatDemo() {
       return;
     }
 
-    const check = () => {
-      if (started || !ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
-        setStarted(true);
-        window.removeEventListener("scroll", check);
-        window.removeEventListener("resize", check);
-      }
-    };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    if (started) return;
+    return onInView(el, () => setStarted(true), 0.35);
   }, [started]);
 
   useEffect(() => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import CountUp from "./CountUp";
+import { onInView } from "@/lib/inview";
 
 // Anillo dashboard-premium: arco redondeado + dot brillante en la punta,
 // número XL centrado (con contador). El arco se dibuja al entrar en vista. SVG puro.
@@ -54,24 +55,7 @@ export default function Ring({
       setDrawn(true);
       return;
     }
-    let done = false;
-    const check = () => {
-      if (done || !wrapRef.current) return;
-      const rect = wrapRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-        done = true;
-        setDrawn(true);
-        window.removeEventListener("scroll", check);
-        window.removeEventListener("resize", check);
-      }
-    };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    return onInView(el, () => setDrawn(true), 0.4);
   }, []);
 
   return (
