@@ -40,6 +40,7 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // no revelar "X-Powered-By: Next.js"
+  agentRules: false, // no inyectar el bloque de reglas de Next en CLAUDE.md
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
