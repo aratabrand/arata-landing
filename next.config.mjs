@@ -7,13 +7,15 @@
 // en producción se usa la versión estricta.
 const isDev = process.env.NODE_ENV === "development";
 
+// Google Analytics (gtag.js) necesita cargar desde googletagmanager.com y
+// enviar datos a google-analytics.com / analytics.google.com.
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
   "font-src 'self' data:",
-  `connect-src 'self'${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com${isDev ? " ws:" : ""}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

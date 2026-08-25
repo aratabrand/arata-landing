@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
+import Analytics from "@/components/Analytics";
 import "./globals.css";
 
 // Fuentes de marca auto-hospedadas (sin dependencias de red en runtime)
@@ -118,6 +119,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
