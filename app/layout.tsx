@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
-import Analytics from "@/components/Analytics";
+import { GtmScript, GtmNoScript } from "@/components/GoogleTagManager";
 import "./globals.css";
 
 // Fuentes de marca auto-hospedadas (sin dependencias de red en runtime)
@@ -114,12 +114,13 @@ export default function RootLayout({
   return (
     <html lang="es-CO" className={`${display.variable} ${body.variable}`}>
       <body className="font-body antialiased">
+        <GtmNoScript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
-        <Analytics />
+        <GtmScript />
       </body>
     </html>
   );

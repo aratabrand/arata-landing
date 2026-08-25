@@ -7,15 +7,18 @@
 // en producción se usa la versión estricta.
 const isDev = process.env.NODE_ENV === "development";
 
-// Google Analytics (gtag.js) necesita cargar desde googletagmanager.com y
-// enviar datos a google-analytics.com / analytics.google.com.
+// Google Tag Manager carga desde googletagmanager.com; los tags que se
+// administran dentro (GA4, etc.) envían datos a google-analytics.com /
+// analytics.google.com (incluidos endpoints regionales). El iframe de respaldo
+// sin JS de GTM requiere frame-src hacia googletagmanager.com.
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self' data:",
-  `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com${isDev ? " ws:" : ""}`,
+  "frame-src https://www.googletagmanager.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
