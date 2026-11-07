@@ -159,6 +159,37 @@ Opcional **[decidir]**: *"Si no entregamos en la fecha acordada, el primer mes d
 
 Implica cobrar el prototipo como etapa propia **[decidir]**.
 
+### 4.3 Paquetes con precio (D-013)
+
+Propuesta de estructura. Los precios son **[decidir]** (en COP).
+
+**Páginas web**
+
+| Paquete | Para quién | Incluye | Plazo | Precio |
+|---|---|---|---|---|
+| **Landing** | Negocio que necesita una página que agende o reciba mensajes | 1 página + toda la pila de la Oferta 1 | [decidir] | [decidir] |
+| **Sitio web** ⭐ | Negocio con varios servicios que quiere que lo encuentren en Google | Hasta [X] páginas + blog o casos + toda la pila | [decidir] | [decidir] |
+| **Catálogo** | Negocio que vende productos y cierra por WhatsApp | Catálogo con fotos, categorías y botón de pedido + toda la pila | [decidir] | [decidir] |
+
+Ya hay dos catálogos hechos en el portafolio (D-011), así que el paquete Catálogo tiene prueba desde el día uno.
+
+**Apps a medida**
+
+| Paquete | Qué incluye | Plazo | Precio |
+|---|---|---|---|
+| **Prototipo** | Sesión de mapeo + prototipo navegable en Figma | [decidir] | Precio fijo [decidir] |
+| **Primera versión** | Desarrollo de la primera versión usable a partir del prototipo aprobado | [decidir] | Desde [decidir] |
+| **Soporte mensual** | Mejoras, mantenimiento y soporte | Mensual | [decidir] |
+
+Las apps se cotizan "desde" porque cada una es distinta. El prototipo sí lleva precio fijo, y es el que hace posible la garantía.
+
+**Reglas de Hormozi para mostrar precios**
+
+- El paquete recomendado (⭐) va resaltado, y a su lado se pone uno más completo que sirva de referencia.
+- Junto al precio va la pila de lo que incluye, para que se vea que el valor supera el precio.
+- La garantía va junto al precio, que es donde aparece la duda.
+- Siempre debajo: *"¿No sabes cuál? Agenda y te decimos en 30 minutos"*.
+
 ---
 
 ## 5. Gancho de captación (lead magnet)

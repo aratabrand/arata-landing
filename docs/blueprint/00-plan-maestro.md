@@ -98,12 +98,12 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 
 ## 7. Decisiones pendientes (Fase 0)
 
-| ID | Decisión | Opciones | Recomendación |
+| ID | Decisión | Opciones | Respuesta |
 |---|---|---|---|
-| D1 | **Portafolio** | ¿Qué proyectos reales hay, con qué material (capturas, URL, métricas, testimonio)? | Inventario real; si faltan métricas, usar las técnicas medibles (velocidad, plazo de entrega) y proyectos propios |
-| D2 | **Herramienta de agenda** | Cal.com · Calendly · Agenda de citas de Google Calendar | Cal.com: gratis, se integra en la página y avisa cuando alguien agenda (se puede medir en GTM) |
-| D3 | **Precios en el sitio** | Ninguno (como hoy) · "Desde $X" · Paquetes con precio | "Desde $X": filtra curiosos y ancla el valor sin cerrar la conversación |
-| D4 | **Optimización y mobile-first** | Promesa de los dos servicios · Tercer servicio · Promesa + auditoría gratis como gancho | Promesa + auditoría gratis: diferencia la oferta y sirve de puerta de entrada |
+| D1 | **Portafolio** | ¿Qué proyectos reales hay y con qué material? | ✅ 4 proyectos (2 sitios web + 2 webs tipo catálogo) y 2 testimonios → D-011. Falta el inventario detallado (§10) |
+| D2 | **Herramienta de agenda** | Cal.com · Calendly · Google Calendar | ✅ **Cal.com** → D-012 |
+| D3 | **Precios en el sitio** | Ninguno · "Desde $X" · Paquetes con precio | ✅ **Paquetes con precio** → D-013. Faltan los precios |
+| D4 | **Optimización y mobile-first** | Promesa · Tercer servicio · Promesa + auditoría | ✅ **Promesa + auditoría gratis** → D-014 |
 | D5 | **Cambios del sistema de diseño** | Sergio trae los cambios (Figma) · Claude propone y Sergio elige | Que Sergio diga qué cambios tiene en mente; Claude propone el resto |
 | D6 | **Página Nosotros** | Sí · No | Sí, corta: la gente le compra a personas |
 | D7 | **Preguntas antes de agendar** | Sin filtro · 3 preguntas (tipo de proyecto, plazo, presupuesto) | 3 preguntas: llegan llamadas mejor preparadas y se descartan curiosos |
@@ -127,7 +127,10 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Plan maestro v0.1
 - [x] Estrategia Hormozi — borrador v0.1
 - [x] Estructura de documentación (`docs/`)
-- [ ] Decisiones D1–D7 respondidas
+- [x] Decisiones D1–D4 respondidas
+- [ ] Decisiones D5–D7 respondidas
+- [ ] Inventario del portafolio completo (§10)
+- [ ] Precios y plazos de los paquetes
 - [ ] Estrategia aprobada
 - [ ] Arquitectura y copy
 - [ ] Sistema de diseño v2
@@ -135,3 +138,32 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento
 - [ ] Blueprint consolidado
+
+---
+
+## 10. Inventario del portafolio
+
+Según Sergio: **2 sitios web reales + 2 webs tipo catálogo**, y **2 testimonios**. Falta completar la tabla para poder armar cada caso de estudio.
+
+| Proyecto | Tipo (web / catálogo / app) | URL | Qué hicimos | Material (capturas, video) | Resultado medible | Testimonio |
+|---|---|---|---|---|---|---|
+| Your Boost Menu | por confirmar | | | | | ¿sí / no? |
+| Danrodedm | por confirmar | | | | | ¿sí / no? |
+| Caravana | por confirmar | | | | | ¿sí / no? |
+| Arata Print | por confirmar | | | | | ¿sí / no? |
+
+### Lo que se puede medir aunque no haya datos de ventas
+
+Si un proyecto no tiene métricas de negocio, se usan métricas que **sí** se pueden verificar hoy:
+
+- Puntaje de PageSpeed móvil y escritorio (se corre en vivo sobre la URL).
+- Plazo real de entrega.
+- Antes / después (captura de la página anterior vs la nueva), si existe.
+
+### Hueco: el servicio de apps no tiene casos
+
+Los 4 proyectos son de web o catálogo. Para el servicio 2 (apps a medida) hay tres salidas, que se pueden combinar:
+
+1. **Arata Print como caso de app**, si incluye panel, pedidos o inventario (más que una web).
+2. **Proyectos propios en construcción** (Mesa, Dental) mostrados como casos "en desarrollo", con prototipos de Figma.
+3. **Reforzar la garantía** ("si el prototipo no te convence, no pagas el desarrollo"): cuando hay poca prueba, la reversión de riesgo carga más peso.

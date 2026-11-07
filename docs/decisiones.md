@@ -16,3 +16,7 @@ Cada decisión del proyecto queda aquí. Si una decisión cambia, **no se borra*
 | D-008 | 2026-11-07 | Chatbot y automatización **salen de la oferta pública** | Consecuencia de D-002 | Claude | Propuesta |
 | D-009 | 2026-11-07 | Se conserva la base técnica (Next.js 16, fuentes locales, seguridad, GTM, SEO) y se rehace estructura, copy y componentes | La base ya logró SEO 100 y velocidad 100/93; rehacerla no suma | Claude | Propuesta |
 | D-010 | 2026-11-07 | Garantías solo sobre lo que controlamos (plazo, velocidad, ajustes), nunca sobre ventas del cliente | Una garantía incumplible destruye confianza | Claude | Propuesta |
+| D-011 | 2026-11-07 | **Portafolio inicial:** 4 proyectos reales (Your Boost Menu, Danrodedm, Caravana, Arata Print) — 2 sitios web + 2 webs tipo catálogo — y 2 testimonios | Es la prueba real disponible hoy (D1) | Sergio | Tomada (falta inventario detallado) |
+| D-012 | 2026-11-07 | Agenda con **Cal.com** integrado en `/agendar` | Gratis, se integra en la página y emite eventos medibles en GTM (D2) | Sergio | Tomada |
+| D-013 | 2026-11-07 | **Paquetes con precio** visibles en el sitio | Filtra curiosos y llega a la reunión gente que ya sabe el rango (D3). **Reemplaza** la regla v1 de `CLAUDE.md` §9 "sin precios en la página" | Sergio | Tomada (faltan precios) |
+| D-014 | 2026-11-07 | Mobile-first y optimización = **promesa de los dos servicios + auditoría gratis** como gancho para agendar | Diferencia la oferta y abre una puerta de entrada de bajo riesgo (D4) | Sergio | Tomada |
