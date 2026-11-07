@@ -218,4 +218,15 @@ Estándar técnico para toda landing en Next.js. Todo esto quedó implementado y
 
 ---
 
+## 11. Proyecto en curso — sitio de agencia v2 (desde nov 2026)
+
+La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de agencia** con un único objetivo: **agendar reuniones**. Servicios: (1) landing pages y sitios web, (2) apps a medida. Promesa central: mobile-first y optimización. Estrategia de captación: método Hormozi.
+
+- **Antes de trabajar en el sitio, lee [`docs/README.md`](docs/README.md)** y el plan maestro en `docs/blueprint/00-plan-maestro.md` (fase actual, decisiones pendientes).
+- Toda decisión nueva se registra en `docs/decisiones.md`.
+- Solo se construye lo que está `Aprobado` en el blueprint. Orden: oferta → copy → diseño → construcción.
+- La base técnica de la sección 10 sigue vigente para la v2.
+
+---
+
 *Este archivo reemplaza cualquier versión previa del sistema de marca. Última consolidación de contexto.*
