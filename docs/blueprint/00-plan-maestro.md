@@ -145,7 +145,9 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Copy de las páginas de servicio aprobado (D-049 a D-051)
 - [x] Copy de portafolio, casos, agendar, gracias, privacidad y 404 v0.1
 - [x] **Copy aprobado — Fase 2 cerrada (D-056)**. Datos pendientes en `03-copy.md`
-- [ ] Sistema de diseño v2
+- [x] Sistema de diseño v2 en código: guía `/sistema` y muestra del Inicio `/v2` (D-057)
+- [x] Velocidad de la muestra: Lighthouse móvil 94–97, accesibilidad 100 (D-059)
+- [ ] **Aprobación visual de Sergio (puerta de la Fase 3)**
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento

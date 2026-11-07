@@ -24,6 +24,9 @@ const body = localFont({
   ],
   variable: "--font-body",
   display: "swap",
+  // Solo se precarga la fuente de títulos (el h1 es el LCP). El cuerpo entra con
+  // swap sin competir por ancho de banda en el primer pintado.
+  preload: false,
 });
 
 export const metadata: Metadata = {

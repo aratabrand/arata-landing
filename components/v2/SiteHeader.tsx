@@ -23,6 +23,8 @@ const previews = [
 export default function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [mega, setMega] = useState(false);
+  // Las vistas previas del mega menú se crean recién la primera vez que se abre (menos DOM al cargar)
+  const [megaVisto, setMegaVisto] = useState(false);
   const [mobile, setMobile] = useState(false);
   const closeTimer = useRef<number | null>(null);
   const megaRef = useRef<HTMLDivElement | null>(null);
@@ -63,6 +65,7 @@ export default function SiteHeader() {
 
   const openMega = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setMegaVisto(true);
     setMega(true);
   };
   const scheduleClose = () => {
@@ -90,7 +93,10 @@ export default function SiteHeader() {
               type="button"
               aria-expanded={mega}
               aria-controls="mega-servicios"
-              onClick={() => setMega((v) => !v)}
+              onClick={() => {
+                setMegaVisto(true);
+                setMega((v) => !v);
+              }}
               className={cn(
                 "inline-flex h-9 items-center gap-1 rounded-btn px-3 text-sm font-medium transition-colors",
                 mega ? "bg-surface-2 text-white" : "text-fog hover:text-white"
@@ -119,7 +125,7 @@ export default function SiteHeader() {
                     className="group rounded-frame p-1.5 transition-colors hover:bg-surface-2"
                   >
                     <div className="v2-frame aspect-[4/3]">
-                      <ProjectPreview proyecto={previews[i]} />
+                      {megaVisto && <ProjectPreview proyecto={previews[i]} />}
                     </div>
                     <p className="mt-3 px-1.5 text-sm font-semibold text-white">{s.titulo}</p>
                     <p className="mb-1 mt-1 px-1.5 text-xs leading-relaxed text-fog-dim">{s.texto}</p>

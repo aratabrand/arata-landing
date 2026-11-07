@@ -23,6 +23,15 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 
 Los archivos sin enlace todavía no existen: se crean al llegar a su fase.
 
+### Dónde se ve en vivo (Fase 3)
+
+| Ruta | Qué es |
+|---|---|
+| `/v2` | Muestra del Inicio v2 con el copy aprobado |
+| `/sistema` | Guía viva de tokens y componentes v2 |
+
+Ambas están ocultas a Google (`noindex`) y se revisan en el preview de Vercel de la rama. El código vive en `components/v2/` y el contenido en `content/`.
+
 ---
 
 ## Cómo usar este blueprint en una página nueva

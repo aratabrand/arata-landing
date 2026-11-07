@@ -46,6 +46,10 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // no revelar "X-Powered-By: Next.js"
   agentRules: false, // no inyectar el bloque de reglas de Next en CLAUDE.md
+  experimental: {
+    // El CSS va dentro del HTML: quita la petición que bloqueaba el primer pintado (LCP)
+    inlineCss: true,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

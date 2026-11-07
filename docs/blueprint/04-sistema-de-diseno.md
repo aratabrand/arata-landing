@@ -2,9 +2,9 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Borrador (dirección) | 0.2 | 7 nov 2026 | Sergio |
+| En revisión (implementado en código) | 0.3 | 7 nov 2026 | Sergio |
 
-> Esta versión registra la **dirección** que dio Sergio (D-025, D-026) y la traducción de las referencias de 21st.dev (D-044, §9). Los valores marcados **[decidir]** y la especificación fina de cada componente se cierran en la Fase 3, con capturas de referencia.
+> Esta versión registra la **dirección** que dio Sergio (D-025, D-026), la traducción de las referencias de 21st.dev (D-044, §9) y la **implementación en código** (§10–§12). Se ve en vivo en `/sistema` (guía) y `/v2` (muestra del Inicio). Los valores marcados **[decidir]** y la especificación fina de cada componente se cierran en la Fase 3, con capturas de referencia.
 
 ---
 
@@ -52,7 +52,8 @@ Las superficies tienen un leve tinte morado para que el oscuro se sienta de marc
 |---|---|---|---|
 | `lime` | `#B6FF00` | **CTA principal** (fondo lima + texto `ink`), estados activos, cifras clave | Grandes superficies |
 | `purple` | `#7D53FF` | Brillos, hover, enlaces, gráficos, detalles | Texto pequeño (contraste ≈ 4.5:1, solo texto grande) |
-| `purple-deep` | `#3B1D99` | Tintes de brillos y fondos de luz | Texto (no se lee sobre oscuro) |
+| `purple-deep` (`brand-ink`) | `#3B1D99` | Tintes de brillos y fondos de luz | Texto (no se lee sobre oscuro) |
+| `brand-soft` | `#B9A4FF` | Texto morado sobre oscuro: etiquetas, íconos de lista (≈9.7:1) | Fondos |
 
 ### Luces de fondo ✅ (D-044)
 
@@ -174,4 +175,55 @@ Capturas en [`docs/referencias/21st-dev/`](../referencias/21st-dev/).
 ### Tipografía al estilo de la referencia
 
 Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 em) e interlineado ajustado (~1.0). Se logra con **Funnel Display Bold**, sin cambiar de fuente (D-025).
+
+---
+
+## 10. Implementación en código (D-057, D-062)
+
+| Pieza | Archivo | Qué hace |
+|---|---|---|
+| Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple`; opacidad `8` |
+| Clases base | `app/globals.css` (bloque v2) | `.v2-card`, `.v2-frame`, `.v2-spotlight`, `.v2-shine`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop` |
+| Contenido | `content/inicio.ts`, `content/proyectos.ts` | Copy aprobado y portafolio. **Para cambiar un texto o sumar un proyecto, se edita aquí**, no en los componentes |
+| Botón | `components/v2/Button.tsx` | `primary` · `secondary` · `ghost`; `md` / `lg`; `arrow`; `external` |
+| Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader` |
+| Header | `components/v2/SiteHeader.tsx` | Barra, mega menú "Servicios", panel móvil, Escape y clic afuera cierran |
+| Barra fija | `components/v2/StickyBookBar.tsx` | "Agendar reunión" en celular al bajar del hero |
+| Tarjeta con luz | `components/v2/Spotlight.tsx` | Tarjeta base + luz que sigue el cursor |
+| Vista previa | `components/v2/ProjectPreview.tsx` | Video si existe; si no, mockup provisional por tipo (D-063) |
+| Video | `components/v2/LoopVideo.tsx` | Especificación de §6 |
+| Secciones del Inicio | `Hero`, `HomeSections`, `PortfolioShowcase` + `ShowcaseCarousel`, `Pricing`, `Closing` | Una por cada fila de `02-arquitectura` §3.1 |
+| Páginas | `app/(v2)/v2`, `app/(v2)/sistema`, `app/(v2)/layout.tsx` | Muestra y guía; `noindex`, fuera del sitemap; fondo `ink` en todo el documento |
+
+**Para agregar el video de un proyecto:** subir `public/portafolio/<slug>.mp4` (+ `.webm` y póster `.webp`) y agregar `video: { mp4, webm, poster }` a ese proyecto en `content/proyectos.ts`. El mockup se reemplaza solo.
+
+---
+
+## 11. Medición de la muestra (Lighthouse móvil, local)
+
+| Medición | Rendimiento | Accesibilidad | Buenas prácticas | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|
+| Primera versión | 92 | 100 | 96 | 3.0 s | 160 ms | 0 |
+| Con optimizaciones (2 corridas) | **94 – 97** | **100** | 96 | 2.4 – 3.0 s | **50 – 60 ms** | **0** |
+
+- **SEO sale 66 a propósito:** la muestra es `noindex`. Al lanzar vuelve a 100.
+- **Buenas prácticas 96:** los errores de consola son GTM (bloqueado en el entorno de prueba) y la precarga de `/agendar`, que aún no existe. Ambos desaparecen en producción.
+- **El número oficial** se toma en PageSpeed sobre la URL publicada (Fase 5).
+
+---
+
+## 12. Reglas aprendidas (reutilizables en cualquier página)
+
+| Regla | Por qué |
+|---|---|
+| El `h1` del hero **no se anima** | Es el LCP: animar su opacidad retrasa el primer pintado |
+| `experimental.inlineCss: true` en `next.config.mjs` | Quita la hoja de estilos que bloqueaba el primer pintado |
+| Precargar **solo la fuente de títulos**; el cuerpo con `preload: false` | Menos archivos compitiendo en conexiones lentas |
+| Lo decorativo se renderiza en el **servidor** y se pasa como `children`/props a los componentes de cliente | El navegador no hidrata lo que no necesita interacción |
+| Contenido oculto (mega menú) se crea **al abrirlo por primera vez** | Menos elementos al cargar |
+| Luces de fondo con gradiente radial, **sin `filter: blur`** | El blur grande es caro de pintar en celular |
+| Al combinar una animación con `transform` y un centrado con `translate`, van en **capas distintas** | Si no, la animación pisa el centrado (pasó con el mega menú) |
+| Tamaño del hero **medido**, no adivinado: `clamp(1.8rem, 5.8vw, 4.25rem)` | 3 líneas en 360–430 px y 2 desde tablet (regla de `CLAUDE.md`: máx. 3) |
+| En Tailwind, toda opacidad usada debe existir en la escala (se agregó `8`) | `border-white/8` sin el paso `8` sale invisible (gotcha de `CLAUDE.md`) |
+| Pruebas con Playwright: bloquear dominios externos y no esperar `networkidle` | GTM bloqueado deja la red "ocupada" para siempre |
 

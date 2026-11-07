@@ -67,6 +67,19 @@ export const portafolio = {
   boton: "Ver todo el portafolio",
 };
 
+// Velocidad real medida en Google PageSpeed (dato, no decoración — CLAUDE.md §3).
+// ⚠ Hoy es la medición del sitio v1 en producción (ago 2026). Al lanzar la v2,
+// se mide www.aratasan.com en PageSpeed y se actualizan estos números.
+export const velocidad = {
+  escritorio: 100,
+  celular: 93,
+  fuente: "Medido en Google PageSpeed",
+  titulo: "Así de rápido es nuestro sitio",
+  nota: "Lo mismo que te garantizamos:",
+  notaFuerte: "90 o más",
+  notaFin: "en tu página.",
+};
+
 export const pasos = {
   titulo: "De la reunión a tu página en 5 días hábiles",
   items: [
