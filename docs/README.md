@@ -13,7 +13,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/00-plan-maestro.md`](blueprint/00-plan-maestro.md) | Objetivo, alcance, mapa del sitio, fases, estado y decisiones pendientes | 0 |
 | [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Paquetes y precios, avatar, ecuación de valor, nombres, garantías, gancho, embudo y guion de llamada | 1 |
 | [`blueprint/02-arquitectura.md`](blueprint/02-arquitectura.md) | Menú, flujo de agendamiento y estructura sección por sección de cada página | 2 |
-| [`blueprint/03-copy.md`](blueprint/03-copy.md) | Copy de cada página con versiones para elegir (hoy: Inicio y servicios) | 2 |
+| [`blueprint/03-copy.md`](blueprint/03-copy.md) | Copy de cada página con versiones para elegir (todas las páginas) | 2 |
 | [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2 y especificación de cada componente (hoy: dirección) | 3 |
 | `blueprint/05-construccion.md` | Decisiones técnicas, estructura de carpetas, datos del portafolio, agenda | 4 |
 | `blueprint/06-seo-geo-velocidad.md` | Checklist de SEO, IA, velocidad, accesibilidad y legal por página | 5 |

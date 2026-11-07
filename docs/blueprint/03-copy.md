@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.3 | 7 nov 2026 | Sergio |
+| En revisión | 0.4 | 7 nov 2026 | Sergio |
 
 **Reglas** (`CLAUDE.md` §2): español colombiano plano, frases directas, sin jerga. No usar *ROI*, *conversión*, *cargar* (→ abrir), *abandonan* (→ se sale), *ecosistemas*.
 
@@ -148,7 +148,7 @@
 > - Capacitación para que la manejes tú
 > - Entrega en 5 días hábiles
 >
-> *Adicional:* panel para editar tu página y ver las métricas de tu negocio (costo aparte).
+> *Adicional:* panel para editar tu página y ver las métricas de tu negocio (se cotiza aparte).
 >
 > **[Agenda tu reunión]**
 
@@ -250,11 +250,11 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ---
 
-## Páginas que venden — `/paginas-web`
+## Páginas que venden — `/paginas-web` · ✅ aprobado (D-049, D-050, D-051)
 
 ### 1. Hero — elige una versión
 
-**Versión A · Resultado + plazo** ⭐ recomendada
+**Versión A · Resultado + plazo** ✅ elegida (D-049)
 
 > Etiqueta: **Página Lista en 5 Días**
 >
@@ -317,9 +317,9 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 ### 4. Adicional: tu panel
 
 > **Maneja tu página tú mismo.**
-> Un panel para cambiar textos y fotos sin depender de nadie, y ver las métricas de tu negocio. Se agrega con un costo aparte.
+> Un panel para cambiar textos y fotos sin depender de nadie, y ver las métricas de tu negocio. Lo cotizamos según las funciones que necesites.
 
-◻ Precio del panel (D-034).
+✅ Se cotiza según funciones (D-051).
 
 ---
 
@@ -348,7 +348,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ---
 
-### 7. Cómo son los 5 días ◻
+### 7. Cómo son los 5 días ✅ (D-050)
 
 | Día | Qué pasa |
 |---|---|
@@ -357,7 +357,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | 4 | Te la mostramos y hacemos los ajustes (2 rondas). |
 | 5 | La publicamos, la medimos en Google y te enseñamos a usarla. |
 
-◻ Confirmar que así se reparten los 5 días. ✅ 2 rondas de ajustes (D-046).
+✅ Reparto confirmado (D-050) · 2 rondas de ajustes (D-046).
 
 ---
 
@@ -383,7 +383,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Qué son las 5 secciones? | Son las partes de tu página: por ejemplo, inicio, qué ofreces, trabajos o productos, preguntas y contacto. Las definimos contigo en la reunión. |
 | ¿Tengo que escribir los textos? | Sí. Tú nos mandas los textos de tu negocio y nosotros los organizamos en el diseño para que se lean fácil. |
 | ¿Y si necesito más de 5 secciones? | Se puede. Te damos el precio en la propuesta. |
-| ¿Qué es el panel adicional? | Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Tiene un costo aparte. |
+| ¿Qué es el panel adicional? | Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Lo cotizamos según las funciones que necesites. |
 | ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. |
 | ¿Incluye dominio y hosting? | Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento. |
 | ¿Cuántos cambios puedo pedir? | Dos rondas de ajustes dentro de los 5 días. |
@@ -400,11 +400,11 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ---
 
-## Catálogos y sistemas a medida — `/catalogos-y-sistemas`
+## Catálogos y sistemas a medida — `/catalogos-y-sistemas` · ✅ aprobado salvo el límite de productos (D-049)
 
 ### 1. Hero — elige una versión
 
-**Versión A · Plazo + WhatsApp** ⭐ recomendada
+**Versión A · Plazo + WhatsApp** ✅ elegida (D-049)
 
 > Etiqueta: **Tienda por WhatsApp en 5 Días**
 >
@@ -541,13 +541,258 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ---
 
-## Pendiente de aprobar (páginas de servicio)
+## Estado de las páginas de servicio
 
-- [ ] Hero de `/paginas-web`: A, B o C
-- [ ] Hero de `/catalogos-y-sistemas`: A, B o C
-- [ ] ◻ Reparto de los 5 días (✅ 2 rondas de ajustes, D-046)
+- [x] Hero de `/paginas-web`: A (D-049)
+- [x] Hero de `/catalogos-y-sistemas`: A (D-049)
+- [x] Reparto de los 5 días (D-050) y 2 rondas de ajustes (D-046)
 - [x] Dominio y hosting el primer año (D-045)
 - [x] El cliente sube sus productos (D-047)
 - [x] Solo pedido por WhatsApp (D-048)
 - [ ] ◻ ¿Hay un límite de productos para el precio de 800 USD?
-- [ ] ◻ Precio del panel adicional de la Landing
+- [x] Panel adicional: se cotiza (D-051)
+
+---
+
+## Textos globales (menú, barra fija, footer)
+
+| Lugar | Texto |
+|---|---|
+| Menú | Servicios ▾ · Portafolio · Precios · **[Agendar reunión]** |
+| Mega menú → Páginas que venden | *Tu página lista en 5 días, desde 400 USD.* |
+| Mega menú → Catálogos y sistemas | *Tienda por WhatsApp y sistemas a tu medida.* |
+| Mega menú → Portafolio | *Trabajos reales, negocios reales.* |
+| Barra fija en celular | **Agendar reunión** |
+| Footer — frase | Páginas, catálogos y sistemas para negocios que quieren clientes por internet. |
+| Footer — columnas | **Servicios:** Páginas que venden · Catálogos y sistemas · Precios — **Arata San:** Portafolio · Agendar reunión · Auditoría gratis — **Contacto:** WhatsApp · Instagram — **Legal:** Política de datos |
+| Footer — cierre | Bogotá, Colombia · © 2026 Arata San |
+
+---
+
+## Portafolio — `/portafolio`
+
+### 1. Encabezado — elige
+
+**Versión A** ⭐
+
+> # Trabajos reales, negocios reales.
+>
+> Cada proyecto resolvió un problema concreto de un negocio. Mira cómo.
+
+**Versión B**
+
+> # Páginas, catálogos y sistemas funcionando.
+>
+> Esto es lo que ya hicimos para negocios como el tuyo.
+
+**Filtro:** Todos · Páginas · Catálogos · Sistemas
+
+### 2. Tarjetas
+
+| Proyecto | Etiquetas | Frase | Botón |
+|---|---|---|---|
+| Danrodedm | Catálogo | De PDF interminables a un catálogo de maquinaria que lleva a agendar. | Ver caso |
+| Boost Your Menu | Página | Una landing para vender menús digitales en New Jersey. | Ver caso |
+| Arata Print | Catálogo · Sistema | Del chat de WhatsApp a un catálogo con los datos del negocio. | Ver caso |
+| Caravana | Catálogo · Sistema | De la galería de fotos a una tienda con inventario y panel. | Ver caso |
+
+### 3. CTA
+
+> # ¿Quieres el tuyo?
+>
+> Agenda tu reunión y en 30 minutos te decimos cómo lo haríamos para tu negocio.
+>
+> **[Agendar reunión]**
+
+---
+
+## Casos de estudio — `/portafolio/[proyecto]`
+
+**Estructura igual para todos:** etiqueta · nombre · frase de resultado · [Ver sitio en vivo] → El problema → Lo que hicimos → El resultado → Galería → Testimonio (si hay) → Siguiente proyecto → CTA.
+
+**Regla:** el resultado se dice como pasó. Sin cifra, no se inventa la cifra (`portafolio.md`).
+
+### Danrodedm — `/portafolio/danrodedm`
+
+> Etiqueta: **Catálogo · Maquinaria**
+> # De PDF interminables a un catálogo que lleva a agendar.
+
+**El problema.** Danrodedm vende maquinaria de alto valor. Quien entraba a su página se encontraba con PDF interminables de fichas técnicas, y así era difícil interesarse por una máquina.
+
+**Lo que hicimos.** Convertimos las fichas en un catálogo organizado por línea, con solo la información que importa para decidir y un botón claro para agendar una reunión de compra.
+
+- Catálogo organizado por línea de máquinas
+- Ficha simple de cada máquina
+- Botón para agendar reunión de compra
+
+**El resultado.** Más interesados pasaron a pedir reunión, porque mirar las máquinas dejó de ser una barrera. ◻ *Si hay cifra de solicitudes antes y después, va aquí.*
+
+### Boost Your Menu — `/portafolio/boost-your-menu`
+
+> Etiqueta: **Página · New Jersey, EE. UU.**
+> # Una landing para vender menús digitales en New Jersey.
+
+**El problema.** Boost Your Menu vende menús digitales a restaurantes en New Jersey. Necesitaba conseguir interesados y explicar una oferta que combina software y hardware.
+
+**Lo que hicimos.** Una landing en inglés, con estructura sencilla: los restaurantes con los que ya trabajan, cómo es su método y cómo dan una experiencia completa con software y hardware.
+
+- Landing en inglés
+- Restaurantes que ya confían en ellos
+- Su método de trabajo, paso a paso
+- La oferta de software + hardware explicada simple
+
+**El resultado.** ◻ *Falta el dato (interesados o reuniones). Si no hay, esta sección se reemplaza por "Qué logra la página".*
+
+### Arata Print — `/portafolio/arata-print`
+
+> Etiqueta: **Catálogo · Sistema**
+> # Del chat de WhatsApp a un negocio con datos.
+
+**El problema.** Un emprendedor que vendía por WhatsApp. El negocio vivía en el chat: no había orden en los pedidos ni datos de qué compraban sus clientes.
+
+**Lo que hicimos.** Un catálogo interactivo que el dueño maneja desde el celular, con una línea de producción de los pedidos y datos de lo que compran sus clientes.
+
+- Catálogo interactivo para sus clientes
+- Línea de producción de los pedidos
+- Datos de qué compran sus clientes
+- Todo manejado desde el celular
+
+**El resultado.** Ahora toma mejores decisiones sobre en qué invertir, y sus clientes compran más fácil.
+
+**Testimonio:** ◻ pendiente.
+
+### Caravana — `/portafolio/caravana`
+
+> Etiqueta: **Catálogo · Sistema · Tecnología**
+> # De la galería de fotos a una tienda con panel.
+
+**El problema.** Muchos locales y emprendedores que venden tecnología no sabían cómo organizar su mercancía: mandaban fotos por WhatsApp en una galería sin fin.
+
+**Lo que hicimos.** Un catálogo con los productos organizados y un panel para la tienda.
+
+- Catálogo de productos organizado
+- Panel de la tienda con inventario y pedidos
+- Tablero con los datos de venta
+- Opción de agregar personas del equipo
+
+**El resultado.** Toda la mercancía organizada y la operación de la tienda en un solo lugar.
+
+**Testimonio:** ◻ pendiente.
+
+### Cierre de cada caso
+
+> **Siguiente proyecto →**
+>
+> # ¿Tu negocio tiene un problema parecido?
+>
+> Agenda y lo vemos juntos en 30 minutos.
+>
+> **[Agendar reunión]**
+
+---
+
+## Agendar — `/agendar`
+
+### Encabezado — elige
+
+**Versión A** ⭐
+
+> # Agenda tu reunión.
+>
+> 30 minutos, sin costo. Sales con el paquete y el precio para tu caso.
+
+**Versión B**
+
+> # Hablemos de tu negocio.
+>
+> Responde 3 preguntas y elige la hora que te sirva.
+
+### Formulario
+
+| Paso | Pregunta | Opciones |
+|---|---|---|
+| 1 | **¿Qué necesitas?** | Una página nueva · Un catálogo o tienda · Un sistema a medida · Una auditoría gratis de mi página |
+| 1b | *(solo auditoría)* **¿Cuál es tu página?** | Campo: `tunegocio.com` |
+| 2 | **¿Para cuándo lo necesitas?** | Ya · Este mes · En 1 a 3 meses · Solo estoy averiguando |
+| 3 | **¿Cuánto tienes pensado invertir?** *(no aparece en auditoría)* | Menos de 400 USD · 400 a 800 USD · 800 a 2.000 USD · Más de 2.000 USD |
+| 4 | **Tus datos** | Tu nombre · Tu WhatsApp · Tu correo |
+
+- **Si elige "Menos de 400 USD":** *Puedes pagar por partes: 50 % para arrancar y 50 % al entregar.* (D-041)
+- **Autorización (obligatoria):** ☐ *Autorizo a Arata San a usar mis datos para contactarme sobre mi solicitud, según la [Política de tratamiento de datos](/privacidad).*
+- **Botón:** **Elegir hora** → calendario de Cal.com
+- **Botón de volver:** Atrás
+
+### Mensajes de error
+
+| Caso | Texto |
+|---|---|
+| No eligió opción | Elige una opción para seguir. |
+| WhatsApp incompleto | Escribe tu WhatsApp con el indicativo, por ejemplo +57 300 000 0000. |
+| Correo inválido | Revisa tu correo, parece que le falta algo. |
+| No autorizó datos | Necesitamos tu autorización para poder contactarte. |
+
+### Lateral (debajo en celular)
+
+> **Qué pasa en la reunión**
+> 1. Nos cuentas tu negocio y qué necesitas.
+> 2. Te decimos qué paquete te sirve y cuánto cuesta.
+> 3. En 48 horas te mandamos la propuesta.
+>
+> **Garantía de velocidad** · si tu página no saca 90 o más en celular, la seguimos ajustando gratis.
+>
+> **Tomamos 3 proyectos nuevos al mes.**
+
+**Si pidió la auditoría:** *Te la entregamos en 48 horas y la revisamos juntos en la reunión.* ◻ Confirmar cómo se maneja (D-036): ¿la reunión se agenda con al menos 48 horas de margen?
+
+---
+
+## Gracias — `/agendar/gracias`
+
+> # ¡Listo! Tu reunión quedó agendada.
+>
+> Te llegó la confirmación al correo con el link de la reunión.
+
+**Para aprovechar los 30 minutos, ten a mano:**
+
+- Tu página actual, si tienes una.
+- Ejemplos de páginas o tiendas que te gusten.
+- Tu logo.
+- Qué quieres que pase con tu página o tu tienda.
+
+> ¿Necesitas cambiar la hora? Usa el link de tu correo o **[escríbenos por WhatsApp]**.
+>
+> Mientras tanto, **[mira nuestros trabajos]**.
+
+---
+
+## Política de datos — `/privacidad`
+
+Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redactarlo se necesitan los datos del responsable del tratamiento:
+
+- [ ] Nombre o razón social y NIT o cédula
+- [ ] Dirección y correo de contacto para peticiones sobre datos
+- [ ] Confirmar para qué se usan los datos: contactar sobre la solicitud, enviar la propuesta y, si se autoriza, enviar contenido
+
+> Recomendación: que un abogado revise el texto final.
+
+---
+
+## 404
+
+> # Esta página no existe.
+>
+> Puede que el enlace esté mal escrito o que la página ya no esté.
+>
+> **[Ir al inicio]** · [Ver portafolio] · [Agendar reunión]
+
+---
+
+## Pendiente de aprobar (resto del sitio)
+
+- [ ] Encabezado de `/portafolio`: A o B
+- [ ] Encabezado de `/agendar`: A o B
+- [ ] ◻ Cifras de resultado (Danrodedm, Boost Your Menu)
+- [ ] ◻ Testimonios (Arata Print, Caravana)
+- [ ] ◻ Cómo se maneja la auditoría de 48 horas con la reunión (D-036)
+- [ ] ◻ Datos del responsable para la política de datos
+- [ ] ◻ Límite de productos del catálogo de 800 USD (Sergio lo pasa después)
