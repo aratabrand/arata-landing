@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.2 | 7 nov 2026 | Sergio |
+| En revisión | 0.3 | 7 nov 2026 | Sergio |
 
 **Reglas** (`CLAUDE.md` §2): español colombiano plano, frases directas, sin jerga. No usar *ROI*, *conversión*, *cargar* (→ abrir), *abandonan* (→ se sale), *ecosistemas*.
 
@@ -243,3 +243,303 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 - [x] Permiso de clientes (D-042)
 - [x] Sin sección de equipo por ahora (D-043)
 - [x] Facilidad de pago 50/50 en precios y FAQ (D-040)
+
+---
+
+## Páginas que venden — `/paginas-web`
+
+### 1. Hero — elige una versión
+
+**Versión A · Resultado + plazo** ⭐ recomendada
+
+> Etiqueta: **Página Lista en 5 Días**
+>
+> # Una página que trabaja por ti, lista en 5 días.
+>
+> Diseñada primero para el celular, rápida y lista para que te encuentren en Google. Desde 400 USD.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+**Versión B · Plazo + facilidad de pago**
+
+> Etiqueta: **Página Lista en 5 Días**
+>
+> # Tu página nueva, publicada en 5 días hábiles.
+>
+> 5 secciones, diseño a tu medida y velocidad garantizada. Desde 400 USD, y pagas la mitad para arrancar.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+**Versión C · Lo que quiere el cliente**
+
+> Etiqueta: **Página Lista en 5 Días**
+>
+> # Que te escriban más clientes desde tu página.
+>
+> Hecha para el celular, rápida y fácil de encontrar en Google. Lista en 5 días hábiles, desde 400 USD.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+---
+
+### 2. Para quién es
+
+**Título:** **Es para ti si…**
+
+- Tu negocio vive del voz a voz o de Instagram y quieres que te encuentren en internet.
+- Tienes una página vieja que se ve mal en el celular.
+- Necesitas que la gente te escriba o agende, no solo que mire.
+- Vendes fuera de Colombia y necesitas una página en inglés. *(caso Boost Your Menu)*
+
+---
+
+### 3. Qué incluye
+
+**Título:** **Todo lo que trae tu página**
+
+| Qué | Texto |
+|---|---|
+| 5 secciones | Las partes que tu negocio necesita para explicar qué haces y llevar a la gente a escribirte. |
+| Hecha primero para el celular | Porque es donde te van a ver tus clientes. |
+| Velocidad garantizada | 90 o más en la medición de Google. Si no lo logra, la seguimos ajustando gratis. |
+| Lista para Google y la IA | Configuración para Google, tu perfil de Google Business y para que la IA encuentre tu página. |
+| Capacitación | Te enseñamos a manejarla. |
+| Entrega en 5 días hábiles | Desde que apruebas y nos mandas tus textos, tu logo y tus fotos. |
+
+---
+
+### 4. Adicional: tu panel
+
+> **Maneja tu página tú mismo.**
+> Un panel para cambiar textos y fotos sin depender de nadie, y ver las métricas de tu negocio. Se agrega con un costo aparte.
+
+◻ Precio del panel (D-034).
+
+---
+
+### 5. Casos
+
+**Título:** **Páginas que ya están trabajando**
+
+| Proyecto | Frase |
+|---|---|
+| Boost Your Menu | Una landing para vender menús digitales a restaurantes en New Jersey. |
+| Danrodedm | De PDF interminables a un catálogo de maquinaria que lleva a agendar. |
+
+**Botón:** Ver todo el portafolio
+
+---
+
+### 6. Qué necesitamos de ti
+
+**Título:** **Para entregarte en 5 días, necesitamos**
+
+1. **Tus textos:** qué haces, qué ofreces y cómo te contactan.
+2. **Tu logo.**
+3. **Fotos** de tu negocio, tus productos o tu trabajo.
+
+*Con esto listo, empieza a correr el plazo.*
+
+---
+
+### 7. Cómo son los 5 días ◻
+
+| Día | Qué pasa |
+|---|---|
+| 1 | Armamos la estructura de tus 5 secciones con tus textos. |
+| 2–3 | Diseñamos y construimos tu página, primero para el celular. |
+| 4 | Te la mostramos y hacemos los ajustes. |
+| 5 | La publicamos, la medimos en Google y te enseñamos a usarla. |
+
+◻ Confirmar que así se reparten los 5 días y cuántas rondas de ajustes incluye.
+
+---
+
+### 8. Precio y garantía
+
+> **Página Lista en 5 Días**
+> # Desde 400 USD
+>
+> Paga por partes: 50 % para arrancar y 50 % cuando te entregamos.
+>
+> **Garantía de velocidad:** si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo.
+>
+> Mantenimiento opcional: 15 % del valor de tu proyecto al mes.
+>
+> **[Agenda tu reunión gratis]**
+
+---
+
+### 9. Preguntas frecuentes
+
+| Pregunta | Respuesta |
+|---|---|
+| ¿Qué son las 5 secciones? | Son las partes de tu página: por ejemplo, inicio, qué ofreces, trabajos o productos, preguntas y contacto. Las definimos contigo en la reunión. |
+| ¿Tengo que escribir los textos? | Sí. Tú nos mandas los textos de tu negocio y nosotros los organizamos en el diseño para que se lean fácil. |
+| ¿Y si necesito más de 5 secciones? | Se puede. Te damos el precio en la propuesta. |
+| ¿Qué es el panel adicional? | Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Tiene un costo aparte. |
+| ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. |
+| ¿Incluye dominio y hosting? | ◻ **[falta respuesta]** |
+| ¿Cuántos cambios puedo pedir? | ◻ **[falta respuesta]** |
+
+---
+
+### 10. CTA final
+
+> # Tu página puede estar publicada en 5 días hábiles.
+>
+> Este mes tomamos 3 proyectos nuevos. Agenda y separa tu cupo.
+>
+> **[Agendar reunión]**
+
+---
+
+## Catálogos y sistemas a medida — `/catalogos-y-sistemas`
+
+### 1. Hero — elige una versión
+
+**Versión A · Plazo + WhatsApp** ⭐ recomendada
+
+> Etiqueta: **Tienda por WhatsApp en 5 Días**
+>
+> # Tu tienda lista en 5 días. Los pedidos te llegan al WhatsApp.
+>
+> Catálogo con carrito, inventario y un panel para manejar tu negocio desde el celular. Desde 800 USD.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+**Versión B · Dolor**
+
+> Etiqueta: **Tienda por WhatsApp en 5 Días**
+>
+> # Deja de mandar fotos por WhatsApp.
+>
+> Ten un catálogo ordenado donde tus clientes eligen, arman su pedido y te lo mandan listo a tu WhatsApp. Listo en 5 días hábiles.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+**Versión C · Orden**
+
+> Etiqueta: **Catálogos y sistemas a medida**
+>
+> # Tu negocio en orden: catálogo, pedidos e inventario en un solo lugar.
+>
+> Tienda por WhatsApp en 5 días desde 800 USD, o un sistema hecho a tu medida.
+>
+> **[Agenda tu reunión gratis]** · [Ver trabajos]
+
+---
+
+### 2. El problema
+
+**Título:** **Si vendes por WhatsApp, esto te suena**
+
+1. Mandas fotos y más fotos, y el cliente se pierde en la galería.
+2. Los pedidos llegan desordenados y alguno se te pierde.
+3. No sabes cuánto te queda en inventario.
+4. No sabes qué es lo que más te compran.
+
+---
+
+### 3. Tienda por WhatsApp en 5 Días
+
+**Título:** **Tu catálogo, listo para vender**
+
+| Qué | Texto |
+|---|---|
+| Catálogo con carrito | Tus clientes ven tus productos ordenados por categoría y arman su pedido. |
+| Pedido directo a tu WhatsApp | El pedido te llega ordenado, con productos y cantidades. |
+| Panel para tu tienda | Manejas tus productos y tus pedidos desde el celular. |
+| Inventario | Sabes cuánto tienes de cada producto. |
+| Velocidad garantizada | 90 o más en la medición de Google, o la seguimos ajustando gratis. |
+| Lista para Google y la IA | Configuración para Google, Google Business y la IA. |
+| Capacitación | Te enseñamos a usar todo. |
+| Entrega en 5 días hábiles | Desde que apruebas y nos mandas tus productos y fotos. |
+
+> **Desde 800 USD** · el precio depende del tamaño de tu tienda.
+> Paga por partes: 50 % para arrancar y 50 % al entregar.
+>
+> **[Agenda tu reunión gratis]**
+
+---
+
+### 4. Tu Negocio en Orden
+
+**Título:** **¿Necesitas algo más a tu medida?**
+
+> Hacemos sistemas para cómo trabaja tu negocio:
+>
+> - **Reservas:** tus clientes apartan su cita o su mesa solos.
+> - **Menú digital:** tu carta en el celular de tus clientes.
+> - **Registro de clientes (CRM):** quién te compra, cuándo y qué.
+> - O lo que tu negocio necesite.
+>
+> **Lo cotizamos contigo.** En la reunión vemos qué necesitas y en 48 horas te mandamos la propuesta con precio y plazo.
+>
+> **[Cuéntanos tu idea]**
+
+---
+
+### 5. Casos
+
+**Título:** **Negocios que ya se organizaron**
+
+| Proyecto | Frase |
+|---|---|
+| Caravana | De la galería de fotos a una tienda con inventario, pedidos, datos de venta y su equipo dentro del panel. |
+| Arata Print | Del chat de WhatsApp a un catálogo con línea de producción de pedidos y datos de qué compran sus clientes. |
+| Danrodedm | De PDF interminables a un catálogo de maquinaria organizado por línea. |
+
+**Botón:** Ver todo el portafolio
+
+---
+
+### 6. Proceso
+
+**Título:** **Cómo trabajamos**
+
+| Paso | Título | Texto |
+|---|---|---|
+| 1 | Agendas una reunión | 30 minutos. Nos cuentas cómo vendes hoy. |
+| 2 | Te mandamos la propuesta | En 48 horas: paquete, precio y fecha de entrega. |
+| 3 | Apruebas y arrancamos | Pagas el 50 % y nos mandas tus productos y fotos. |
+| 4 | Te entregamos | Tu tienda en 5 días hábiles. Si es un sistema a medida, en el plazo de la propuesta. |
+| 5 | Te enseñamos a usarlo | Capacitación incluida. |
+
+---
+
+### 7. Preguntas frecuentes
+
+| Pregunta | Respuesta |
+|---|---|
+| ¿Cómo me llegan los pedidos? | El cliente arma su pedido en el catálogo y te llega ordenado a tu WhatsApp, con productos y cantidades. |
+| ¿Puedo manejar el inventario yo mismo? | Sí, desde tu panel, también en el celular. |
+| ¿Por qué el precio dice "desde"? | Porque depende de cuántos productos y categorías tengas. En la reunión te damos el precio exacto. |
+| ¿Qué es "Tu Negocio en Orden"? | Un sistema hecho para cómo trabaja tu negocio: reservas, menú digital, registro de clientes (CRM) u otro. Lo cotizamos contigo. |
+| ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. |
+| ¿Quién sube los productos? | ◻ **[falta respuesta]** |
+| ¿Mis clientes pueden pagar en línea? | ◻ **[falta respuesta]** |
+| ¿Cuántos productos caben? | ◻ **[falta respuesta]** |
+
+---
+
+### 8. CTA final
+
+> # Ordena tu negocio este mes.
+>
+> Tomamos 3 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.
+>
+> **[Agendar reunión]**
+
+---
+
+## Pendiente de aprobar (páginas de servicio)
+
+- [ ] Hero de `/paginas-web`: A, B o C
+- [ ] Hero de `/catalogos-y-sistemas`: A, B o C
+- [ ] ◻ Reparto de los 5 días y rondas de ajustes
+- [ ] ◻ ¿Incluye dominio y hosting?
+- [ ] ◻ ¿Quién sube los productos del catálogo?
+- [ ] ◻ ¿Hay pago en línea o solo pedido por WhatsApp?
+- [ ] ◻ ¿Hay un límite de productos para el precio de 800 USD?
+- [ ] ◻ Precio del panel adicional de la Landing

@@ -142,7 +142,8 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Arquitectura v0.1 (`02-arquitectura.md`) y copy del Inicio v0.1 (`03-copy.md`)
 - [x] Copy del Inicio aprobado (D-038 a D-043)
 - [x] Referencias visuales de 21st.dev recibidas y traducidas (D-044)
-- [ ] Copy del resto de páginas
+- [x] Copy de las páginas de servicio v0.1 (por aprobar)
+- [ ] Copy de portafolio, casos, agendar y gracias
 - [ ] Sistema de diseño v2
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
