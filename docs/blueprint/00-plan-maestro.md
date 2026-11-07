@@ -24,7 +24,7 @@ Convertir la landing actual (un solo servicio de chatbot y automatización, CTA 
 | # | Servicio | Para quién | Paquetes (ver `01-estrategia` §1) |
 |---|---|---|---|
 | 1 | **Páginas que venden** (landing pages y sitios web) | Negocios que necesitan que les lleguen clientes por internet | Landing desde 400 USD · 5 días hábiles |
-| 2 | **Catálogos y sistemas a medida** *(antes "apps", D-021 por confirmar)* | Negocios que venden por WhatsApp o manejan pedidos, reservas, inventario o clientes a mano | Catálogo desde 800 USD · 5 días hábiles · Sistema a medida cotizado |
+| 2 | **Catálogos y sistemas a medida** *(antes "apps", D-027)* | Negocios que venden por WhatsApp o manejan pedidos, reservas, inventario o clientes a mano | Catálogo desde 800 USD · 5 días hábiles · Sistema a medida cotizado |
 
 Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 3 proyectos nuevos al mes (D-023).
 
@@ -135,7 +135,8 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [ ] Capturas de referencia de 21st.dev y del estilo de portafolio
 - [x] Inventario del portafolio (§10 → `portafolio.md`)
 - [x] Precios, plazos, cupos y mensualidad
-- [ ] Confirmar estructura de servicios, moneda, garantías y nombres (`01-estrategia` §11)
+- [x] Estructura de servicios, moneda, garantía y nombres (D-027 a D-030)
+- [ ] Mantenimiento (opcional o incluido) y confirmar qué incluye cada paquete
 - [ ] Estrategia aprobada
 - [ ] Arquitectura y copy
 - [ ] Sistema de diseño v2

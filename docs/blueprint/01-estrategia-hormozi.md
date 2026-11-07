@@ -2,11 +2,12 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Borrador | 0.2 | 7 nov 2026 | Sergio |
+| En revisión | 0.3 | 7 nov 2026 | Sergio |
 
 > Propuesta para reaccionar. **✅** = confirmado por Sergio · **◻** = propuesto por Claude, falta confirmar · **[decidir]** = falta respuesta.
 >
 > **v0.2:** se agregan precios, plazos, cupos y mensualidad reales; "apps" pasa a ser "sistemas a medida" (D-021).
+> **v0.3:** estructura de 2 servicios confirmada (D-027), precios en USD (D-028), garantía única de velocidad (D-029) y nombres del grupo A (D-030).
 
 ---
 
@@ -27,14 +28,13 @@
 
 | Servicio | Paquete | Qué incluye | Plazo | Precio |
 |---|---|---|---|---|
-| **1. Páginas que venden** | **Landing** | ✅ 5 secciones | ✅ 5 días hábiles desde la aprobación | ✅ Desde **400 USD** |
-| | Sitio web (varias páginas) | **[decidir si se ofrece]** | — | — |
-| **2. Catálogos y sistemas a medida** ◻ | **Catálogo** | ✅ Carrito, panel del cliente, inventario, pedido enviado por WhatsApp | ✅ 5 días hábiles desde la aprobación | ✅ Desde **800 USD** (sube según el tamaño de la tienda) |
-| | **Sistema a medida** | ✅ Reservas, menús digitales, CRM… | Según alcance | ✅ Según tamaño (se cotiza en la reunión) |
+| **1. Páginas que venden** | **Landing** — *Página Lista en 5 Días* | ✅ 5 secciones | ✅ 5 días hábiles desde la aprobación | ✅ Desde **400 USD** |
+| **2. Catálogos y sistemas a medida** ✅ | **Catálogo** — *Tienda por WhatsApp en 5 Días* | ✅ Carrito, panel del cliente, inventario, pedido enviado por WhatsApp | ✅ 5 días hábiles desde la aprobación | ✅ Desde **800 USD** (sube según el tamaño de la tienda) |
+| | **Sistema a medida** — *Tu Negocio en Orden* | ✅ Reservas, menús digitales, CRM… | Según alcance | ✅ Según tamaño (se cotiza en la reunión) |
 | **Mantenimiento** | Mensualidad | ✅ Soporte y mantenimiento | Mensual | ✅ **15 % del valor del proyecto** (Landing desde 60 USD/mes · Catálogo desde 120 USD/mes) |
 
 - **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
-- **Moneda en el sitio:** **[decidir]** USD, COP o ambas.
+- **Moneda en el sitio:** ✅ **USD** (D-028).
 - **Mantenimiento:** **[decidir]** ¿es opcional o viene incluido con cada proyecto?
 
 ---
@@ -105,7 +105,7 @@ Valor = ────────────────────────
 
 MAGIC = razón **M**agnética + **A**vatar + meta (**G**oal) + **I**ntervalo + **C**ontenedor. Para pymes conviene corto, con resultado y plazo, y sin palabras técnicas.
 
-| Oferta | Opción A ⭐ | Opción B | Opción C |
+| Oferta | Opción A ✅ elegida (D-030) | Opción B | Opción C |
 |---|---|---|---|
 | Landing | **Página Lista en 5 Días** | Página que Agenda | Tu Negocio en Internet en 5 Días |
 | Catálogo | **Tienda por WhatsApp en 5 Días** | Catálogo con Panel | Tu Tienda en el Celular |
@@ -120,13 +120,15 @@ Por qué las ⭐:
 
 ---
 
-## 6. Garantías ◻ (solo sobre lo que controlamos, D-010)
+## 6. Garantía ✅ (D-029)
 
-| Garantía | Texto propuesto | Tipo (Hormozi) |
-|---|---|---|
-| Velocidad | *"Si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo."* | Condicional |
-| Plazo | *"Si no la entregamos en 5 días hábiles desde que apruebas, el primer mes de mantenimiento va por nuestra cuenta."* | Condicional |
-| Diseño de sistemas | *"Antes de construir ves el diseño de tu sistema. Si no te convence, no pagas el desarrollo."* | Reversión de riesgo |
+> *"Si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo."*
+
+- **Tipo (Hormozi):** condicional.
+- **Por qué esta:** prueba la promesa mobile-first y siempre se puede cumplir, porque la velocidad la controlamos nosotros.
+- **Cómo se muestra:** sello junto al precio de cada paquete y en el bloque de proceso.
+- **Cómo se verifica:** PageSpeed Insights, celular, sobre la URL publicada. Se entrega una captura con el puntaje.
+- **Descartadas:** la de plazo y la de diseño de sistemas (quedan registradas en D-029).
 
 ---
 
@@ -148,7 +150,7 @@ La plantilla de la auditoría ya existe: es el diagnóstico orgánico que se hiz
 | Escasez | ✅ *"Tomamos 3 proyectos nuevos al mes"* | Es verdad (D-023) |
 | Urgencia | ◻ *"Cupos de [mes]: quedan X"* | Solo si se actualiza de verdad cada mes |
 | Prueba | 4 casos reales; testimonios cuando lleguen | Nunca inventados |
-| Garantía | §6 | Junto al precio |
+| Garantía | Velocidad 90+ (§6) | Junto al precio |
 | Nombre | §5 | En hero, paquetes y CTA |
 
 ---
@@ -185,11 +187,11 @@ Tráfico ──► Sitio ──► /agendar ──► Confirmación + recordator
 
 ## 11. Pendiente de decidir
 
-| Tema | Pregunta |
-|---|---|
-| Estructura | ¿Se confirma "Catálogos y sistemas a medida" como servicio 2? ¿Se ofrece "Sitio web (varias páginas)"? |
-| Moneda | USD, COP o ambas |
-| Mantenimiento | ¿Opcional o incluido? |
-| Qué incluye | Confirmar los ◻ de §4 |
-| Garantías | Aprobar, ajustar o quitar las de §6 |
-| Nombres | Elegir en §5 |
+| Tema | Pregunta | Estado |
+|---|---|---|
+| Estructura | 2 servicios, sin Sitio web | ✅ D-027 |
+| Moneda | USD | ✅ D-028 |
+| Garantía | Velocidad | ✅ D-029 |
+| Nombres | Grupo A | ✅ D-030 |
+| Mantenimiento | ¿Es opcional o viene incluido con cada proyecto? | **[decidir]** |
+| Qué incluye | Confirmar los ◻ de §4: textos, Google/Google Business/IA, medición, capacitación | **[decidir]** |
