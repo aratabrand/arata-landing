@@ -2,11 +2,12 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.3 | 7 nov 2026 | Sergio |
+| En revisión | 0.4 | 7 nov 2026 | Sergio |
 
 > Propuesta para reaccionar. **✅** = confirmado por Sergio · **◻** = propuesto por Claude, falta confirmar · **[decidir]** = falta respuesta.
 >
 > **v0.2:** se agregan precios, plazos, cupos y mensualidad reales; "apps" pasa a ser "sistemas a medida" (D-021).
+> **v0.4:** mantenimiento opcional (D-031), qué incluye cada paquete (D-032) y panel adicional de la Landing (D-033).
 > **v0.3:** estructura de 2 servicios confirmada (D-027), precios en USD (D-028), garantía única de velocidad (D-029) y nombres del grupo A (D-030).
 
 ---
@@ -35,7 +36,8 @@
 
 - **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
 - **Moneda en el sitio:** ✅ **USD** (D-028).
-- **Mantenimiento:** **[decidir]** ¿es opcional o viene incluido con cada proyecto?
+- **Mantenimiento:** ✅ **opcional**, se ofrece al entregar (D-031).
+- **Adicional de la Landing:** ✅ **panel básico** para editar la página y ver las métricas del negocio (D-033). **[decidir]** si va incluido o con costo aparte.
 
 ---
 
@@ -68,7 +70,7 @@ Valor = ────────────────────────
 | ⬆ Resultado soñado | "Una página que te trae clientes que escriben y agendan, también desde el celular" | "Tu negocio en orden: pedidos, inventario y datos en el celular" | Hero, oferta |
 | ⬆ Probabilidad | Danrodedm, Boost Your Menu; nuestro sitio con velocidad 100/93; garantía | Arata Print y Caravana funcionando; garantía | Portafolio, sello de garantía |
 | ⬇ Tiempo de espera | ✅ **5 días hábiles** | ✅ **5 días hábiles** (catálogo) | Hero, paquetes, proceso |
-| ⬇ Esfuerzo | ◻ "Tú apruebas, nosotros hacemos todo" | ◻ "Te lo dejamos funcionando y te enseñamos a usarlo" | Proceso |
+| ⬇ Esfuerzo | ✅ "Te enseñamos a usarla y la editas tú mismo desde tu panel" (D-032, D-033) | ✅ "Te lo dejamos funcionando y te enseñamos a usarlo" (D-032) | Proceso |
 
 **Los 5 días hábiles son la palanca más fuerte de la oferta.** La competencia suele dar semanas, así que debe aparecer en el primer pantallazo.
 
@@ -83,9 +85,10 @@ Valor = ────────────────────────
 | "Necesito la página ya" | Entrega en 5 días hábiles | ✅ |
 | "Se ve mal en el celular" | Diseño primero para celular | ✅ (D-014) |
 | "Es lenta" | Velocidad de 90 o más en celular | ✅ (D-014) |
-| "Nadie me encuentra" | Google, Google Business y preparación para IA | ◻ |
-| "No sé qué poner" | Escribimos los textos | ◻ |
-| "No sé si funciona" | Medición instalada (GTM + GA4) | ◻ |
+| "Nadie me encuentra" | Google, Google Business y preparación para IA | ✅ (D-032) |
+| "No sé qué poner" | Textos escritos por nosotros | ❌ No incluido: el cliente entrega sus textos (D-032) |
+| "No sé si funciona" | Panel con las métricas de su negocio | ✅ Adicional (D-033) |
+| "Quiero cambiar cosas sin depender de nadie" | Panel básico de edición | ✅ Adicional (D-033) |
 | "El que la hizo desapareció" | Mantenimiento mensual | ✅ (15 %) |
 
 ### Catálogos y sistemas
@@ -97,7 +100,7 @@ Valor = ────────────────────────
 | "No sé cuánto tengo" | Inventario | ✅ |
 | "No sé qué me compran" | Datos de venta en el panel | ✅ (casos Arata Print y Caravana) |
 | "Necesito reservas / menú / CRM" | Sistema a medida | ✅ |
-| "No sé usarlo" | Capacitación en la entrega | ◻ |
+| "No sé usarlo" | Capacitación en la entrega | ✅ (D-032) |
 
 ---
 
@@ -193,5 +196,6 @@ Tráfico ──► Sitio ──► /agendar ──► Confirmación + recordator
 | Moneda | USD | ✅ D-028 |
 | Garantía | Velocidad | ✅ D-029 |
 | Nombres | Grupo A | ✅ D-030 |
-| Mantenimiento | ¿Es opcional o viene incluido con cada proyecto? | **[decidir]** |
-| Qué incluye | Confirmar los ◻ de §4: textos, Google/Google Business/IA, medición, capacitación | **[decidir]** |
+| Mantenimiento | Opcional | ✅ D-031 |
+| Qué incluye | Google + Business + IA y capacitación; sin textos ni GTM/GA4 | ✅ D-032 |
+| Panel de la Landing | ¿Incluido en los 400 USD o adicional con costo? | **[decidir]** |

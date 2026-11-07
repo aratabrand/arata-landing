@@ -136,7 +136,8 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Inventario del portafolio (§10 → `portafolio.md`)
 - [x] Precios, plazos, cupos y mensualidad
 - [x] Estructura de servicios, moneda, garantía y nombres (D-027 a D-030)
-- [ ] Mantenimiento (opcional o incluido) y confirmar qué incluye cada paquete
+- [x] Mantenimiento opcional y qué incluye cada paquete (D-031, D-032)
+- [ ] Panel de la Landing: ¿incluido o con costo? (D-033)
 - [ ] Estrategia aprobada
 - [ ] Arquitectura y copy
 - [ ] Sistema de diseño v2
