@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.4 | 7 nov 2026 | Sergio |
+| **Aprobado** | 1.0 | 7 nov 2026 | Sergio |
 
 **Reglas** (`CLAUDE.md` §2): español colombiano plano, frases directas, sin jerga. No usar *ROI*, *conversión*, *cargar* (→ abrir), *abandonan* (→ se sale), *ecosistemas*.
 
@@ -573,7 +573,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ### 1. Encabezado — elige
 
-**Versión A** ⭐
+**Versión A** ✅ elegida (D-052)
 
 > # Trabajos reales, negocios reales.
 >
@@ -695,7 +695,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ### Encabezado — elige
 
-**Versión A** ⭐
+**Versión A** ✅ elegida (D-053)
 
 > # Agenda tu reunión.
 >
@@ -742,7 +742,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 >
 > **Tomamos 3 proyectos nuevos al mes.**
 
-**Si pidió la auditoría:** *Te la entregamos en 48 horas y la revisamos juntos en la reunión.* ◻ Confirmar cómo se maneja (D-036): ¿la reunión se agenda con al menos 48 horas de margen?
+**Si pidió la auditoría:** *Te la entregamos en 48 horas y la revisamos juntos en la reunión.* ✅ El calendario solo muestra horas con mínimo 48 horas de anticipación (D-054).
 
 ---
 
@@ -769,8 +769,10 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redactarlo se necesitan los datos del responsable del tratamiento:
 
-- [ ] Nombre o razón social y NIT o cédula
-- [ ] Dirección y correo de contacto para peticiones sobre datos
+- [x] Responsable: persona natural, Sergio David Cuevas (D-055)
+- [ ] Número de RUT
+- [x] Correo para peticiones sobre datos: contacto@aratasan.com (D-055)
+- [ ] Dirección (o al menos ciudad) del responsable
 - [ ] Confirmar para qué se usan los datos: contactar sobre la solicitud, enviar la propuesta y, si se autoriza, enviar contenido
 
 > Recomendación: que un abogado revise el texto final.
@@ -787,12 +789,14 @@ Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redac
 
 ---
 
-## Pendiente de aprobar (resto del sitio)
+## Estado del resto del sitio
 
-- [ ] Encabezado de `/portafolio`: A o B
-- [ ] Encabezado de `/agendar`: A o B
+> Copy **aprobado** (D-056). Lo que sigue en ◻ son datos que llegan después y se insertan sin cambiar la estructura.
+
+- [x] Encabezado de `/portafolio`: A (D-052)
+- [x] Encabezado de `/agendar`: A (D-053)
 - [ ] ◻ Cifras de resultado (Danrodedm, Boost Your Menu)
 - [ ] ◻ Testimonios (Arata Print, Caravana)
-- [ ] ◻ Cómo se maneja la auditoría de 48 horas con la reunión (D-036)
-- [ ] ◻ Datos del responsable para la política de datos
+- [x] Auditoría con mínimo 48 h de anticipación (D-054)
+- [ ] ◻ RUT y dirección del responsable (D-055)
 - [ ] ◻ Límite de productos del catálogo de 800 USD (Sergio lo pasa después)

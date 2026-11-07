@@ -1,0 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Button } from "./Button";
+import { AGENDAR, menu } from "@/content/inicio";
+import { cn } from "@/lib/utils";
+
+// Barra fija en celular (02-arquitectura.md §1): aparece al bajar del hero.
+// Se anima solo con transform/opacity. Oculta en escritorio.
+export default function StickyBookBar() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.7);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <div
+      aria-hidden={!show}
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-ink/85 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl transition-[transform,opacity,visibility] duration-300 lg:hidden",
+        show ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-full opacity-0"
+      )}
+    >
+      <Button href={AGENDAR} size="lg" className="w-full">
+        {menu.cta}
+      </Button>
+    </div>
+  );
+}

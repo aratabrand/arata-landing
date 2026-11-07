@@ -70,6 +70,140 @@
   }
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   v2 · sitio de agencia (solo fondo oscuro)
+   Especificación: docs/blueprint/04-sistema-de-diseno.md
+   Todo lo animado usa solo transform/opacity (compuesto por GPU).
+   ────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
+  .v2-card {
+    background: #0a0714;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 24px;
+  }
+
+  /* Vista previa enmarcada DENTRO de una tarjeta (ref. 21st.dev captura 01) */
+  .v2-frame {
+    background: #110c20;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* Luz que sigue el cursor. El componente actualiza --mx / --my.
+     Solo se anima la opacidad del pseudo-elemento. */
+  .v2-spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .v2-spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(125, 83, 255, 0.16),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .v2-spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Brillo que recorre el botón principal al pasar el mouse */
+  .v2-shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .v2-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .v2-shine:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Luces de fondo (atmósfera). Gradiente radial sin filter:blur → barato. */
+  .v2-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: radial-gradient(
+      closest-side,
+      rgba(125, 83, 255, 0.28),
+      rgba(59, 29, 153, 0.12) 45%,
+      transparent 100%
+    );
+  }
+
+  /* Rejilla muy sutil para superficies */
+  .v2-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Acordeón con <details>: el ícono gira (transform) */
+  .v2-faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .v2-faq[open] .v2-faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* Barra de progreso segmentada del carrusel */
+  .v2-progress-fill {
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  .v2-progress-fill.is-active {
+    animation: v2-progress var(--dur, 6s) linear forwards;
+  }
+  .v2-progress-fill.is-done {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes v2-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Entrada del panel del mega menú */
+.v2-pop {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.985);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+.v2-pop.is-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
 /* Reveal en scroll con variantes direccionales — respeta reduce-motion */
 .reveal {
   opacity: 0;
