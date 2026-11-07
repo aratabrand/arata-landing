@@ -54,11 +54,11 @@ Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 3 proyectos n
 | Ruta | Página | Trabajo de la página |
 |---|---|---|
 | `/` | Inicio | Entender la oferta en 5 segundos y llevar a agendar. Incluye la sección del equipo (D-016) |
-| `/paginas-web` | Servicio 1 | Oferta completa de landing pages y sitios web |
-| `/aplicaciones` | Servicio 2 | Oferta completa de apps a medida |
+| `/paginas-web` | Páginas que venden | Oferta completa de la *Página Lista en 5 Días* (D-037) |
+| `/catalogos-y-sistemas` | Catálogos y sistemas a medida | Oferta de la *Tienda por WhatsApp en 5 Días* y de *Tu Negocio en Orden* (D-037) |
 | `/portafolio` | Portafolio | Mostrar los trabajos, filtrados por tipo |
 | `/portafolio/[proyecto]` | Caso de estudio | Problema → solución → resultado de cada proyecto |
-| `/agendar` | Agendar | 3 preguntas (D-017) y calendario de Cal.com (D-012). **La página que cuenta.** |
+| `/agendar` | Agendar | 3 preguntas (D-017), opción de auditoría gratis (D-036) y calendario de Cal.com (D-012). **La página que cuenta.** |
 | `/agendar/gracias` | Confirmación | Confirmar la cita, preparar la llamada y registrar el evento |
 | `/privacidad` | Política de datos | Cumplimiento de la Ley 1581 de 2012 (habeas data) |
 | 404 | No encontrada | Ya existe; se adapta |
@@ -137,9 +137,11 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Precios, plazos, cupos y mensualidad
 - [x] Estructura de servicios, moneda, garantía y nombres (D-027 a D-030)
 - [x] Mantenimiento opcional y qué incluye cada paquete (D-031, D-032)
-- [ ] Panel de la Landing: ¿incluido o con costo? (D-033)
-- [ ] Estrategia aprobada
-- [ ] Arquitectura y copy
+- [x] Panel de la Landing: adicional con costo (D-034)
+- [x] **Estrategia aprobada — Fase 1 cerrada (D-035)**
+- [x] Arquitectura v0.1 (`02-arquitectura.md`) y copy del Inicio v0.1 (`03-copy.md`)
+- [ ] Aprobación de arquitectura y copy del Inicio
+- [ ] Copy del resto de páginas
 - [ ] Sistema de diseño v2
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal

@@ -2,9 +2,11 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.4 | 7 nov 2026 | Sergio |
+| **Aprobado** | 1.0 | 7 nov 2026 | Sergio |
 
-> Propuesta para reaccionar. **✅** = confirmado por Sergio · **◻** = propuesto por Claude, falta confirmar · **[decidir]** = falta respuesta.
+> **Aprobado el 7 nov 2026 (D-035).** Base para el copy de la Fase 2.
+>
+> Leyenda: **✅** = confirmado por Sergio · **◻** = propuesto por Claude, falta confirmar · **[decidir]** = falta respuesta.
 >
 > **v0.2:** se agregan precios, plazos, cupos y mensualidad reales; "apps" pasa a ser "sistemas a medida" (D-021).
 > **v0.4:** mantenimiento opcional (D-031), qué incluye cada paquete (D-032) y panel adicional de la Landing (D-033).
@@ -37,7 +39,7 @@
 - **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
 - **Moneda en el sitio:** ✅ **USD** (D-028).
 - **Mantenimiento:** ✅ **opcional**, se ofrece al entregar (D-031).
-- **Adicional de la Landing:** ✅ **panel básico** para editar la página y ver las métricas del negocio (D-033). **[decidir]** si va incluido o con costo aparte.
+- **Adicional de la Landing:** ✅ **panel básico** para editar la página y ver las métricas del negocio, **con costo aparte** (D-033, D-034). Precio **[decidir]**.
 
 ---
 
@@ -198,4 +200,4 @@ Tráfico ──► Sitio ──► /agendar ──► Confirmación + recordator
 | Nombres | Grupo A | ✅ D-030 |
 | Mantenimiento | Opcional | ✅ D-031 |
 | Qué incluye | Google + Business + IA y capacitación; sin textos ni GTM/GA4 | ✅ D-032 |
-| Panel de la Landing | ¿Incluido en los 400 USD o adicional con costo? | **[decidir]** |
+| Panel de la Landing | Adicional con costo | ✅ D-034 (falta precio) |
