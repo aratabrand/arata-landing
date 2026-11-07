@@ -1,19 +1,17 @@
 import CountUp from "@/components/CountUp";
+import { TiltedGridHero } from "@/components/ui/tilted-grid-hero";
 import { Button } from "./Button";
 import { Badge, Container, Glow } from "./primitives";
-import ProjectPreview from "./ProjectPreview";
 import { AGENDAR, hero } from "@/content/inicio";
-import { proyectos } from "@/content/proyectos";
+import { capturasIntercaladas } from "@/content/proyectos";
 
-// Hero v2 (copy D-038; ritmo de la ref. 21st.dev captura 02: centrado + vista previa grande enmarcada).
-// Rendimiento: el <h1> NO se anima (aparece en el primer pintado → mejor LCP en celular).
-// Solo entran con fade los elementos secundarios.
+// Hero v2 (copy D-038). Debajo del texto, una banda curva con las capturas
+// reales de los proyectos pasando (TiltedGridHero, D-064).
+// Rendimiento: el <h1> NO se anima (es el LCP); las capturas bajan con prioridad baja.
 export default function Hero() {
-  const escritorio = proyectos.find((p) => p.slug === "danrodedm")!;
-  const celular = proyectos.find((p) => p.slug === "caravana")!;
-
+  const imagenes = capturasIntercaladas();
   return (
-    <section className="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-36">
+    <section className="relative overflow-hidden pt-28 sm:pt-32">
       <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
       <div
         aria-hidden
@@ -41,8 +39,44 @@ export default function Hero() {
             {hero.ctaSecundario}
           </Button>
         </div>
+      </Container>
 
-        <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
+      {/* Banda curva con capturas reales del portafolio */}
+      <div className="relative mt-8 sm:mt-10">
+        <Glow className="left-1/2 top-1/2 h-[26rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 opacity-70" />
+        {/* Celular y escritorio con proporción fija → la curva se pinta correcta desde el servidor (D-064).
+            Las capturas se pintan como fondo de cada franja: el <h1> sigue siendo el LCP. */}
+        <TiltedGridHero
+          images={imagenes}
+          ratio={0.62}
+          aspectRatio={16 / 10}
+          tileHeight={72}
+          axis={50}
+          curve={62}
+          gap={5}
+          fade={8}
+          speed={4.5}
+          tileWidth={220}
+          className="w-full md:hidden"
+        />
+        <TiltedGridHero
+          images={imagenes}
+          ratio={0.33}
+          aspectRatio={16 / 10}
+          tileHeight={66}
+          axis={50}
+          curve={62}
+          gap={5}
+          fade={10}
+          speed={4.5}
+          tileWidth={500}
+          className="hidden w-full md:block"
+        />
+      </div>
+
+      {/* Pruebas rápidas, debajo de las capturas */}
+      <Container className="relative pb-16 sm:pb-24">
+        <dl className="mx-auto mt-2 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
           {hero.pruebas.map((p) => (
             <div key={p.texto} className="rounded-frame border border-white/6 bg-surface-1/60 px-2 py-4 sm:px-4">
               <dt className="sr-only">{p.texto}</dt>
@@ -57,25 +91,6 @@ export default function Hero() {
             </div>
           ))}
         </dl>
-      </Container>
-
-      {/* Vista previa: computador + celular (la promesa mobile-first, sin decirlo) */}
-      <Container className="relative mt-14 sm:mt-20">
-        <div className="relative mx-auto max-w-5xl">
-          <Glow className="left-1/2 top-1/2 h-[30rem] w-[52rem] -translate-x-1/2 -translate-y-1/2 opacity-80" />
-          <div className="v2-card relative p-2 shadow-2xl">
-            <div className="v2-frame aspect-[16/10]">
-              <ProjectPreview proyecto={escritorio} />
-            </div>
-          </div>
-          <div className="absolute -bottom-6 right-2 w-[34%] max-w-[230px] sm:-bottom-10 sm:right-8 sm:w-[24%]">
-            <div className="rounded-[22px] border border-white/10 bg-surface-1 p-1.5 shadow-2xl sm:rounded-[28px] sm:p-2">
-              <div className="aspect-[9/19] overflow-hidden rounded-[16px] border border-white/6 sm:rounded-[22px]">
-                <ProjectPreview proyecto={celular} device="phone" />
-              </div>
-            </div>
-          </div>
-        </div>
       </Container>
     </section>
   );

@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import ProjectPreview from "./ProjectPreview";
 import { AGENDAR, INICIO, menu } from "@/content/inicio";
+import { proyectos } from "@/content/proyectos";
 import { cn } from "@/lib/utils";
 
 // Header v2 (ref. 21st.dev captura 05):
@@ -14,10 +15,11 @@ import { cn } from "@/lib/utils";
 // "Servicios ▾" abre un mega menú con tarjetas de vista previa;
 // en celular, panel a pantalla completa.
 
+// Vista previa de cada opción: una captura real del portafolio
 const previews = [
-  { nombre: "Páginas que venden", tipos: ["Página" as const], acento: "#B6FF00" },
-  { nombre: "Catálogos y sistemas", tipos: ["Catálogo" as const], acento: "#7D53FF" },
-  { nombre: "Portafolio", tipos: ["Sistema" as const], acento: "#9B7BFF" },
+  proyectos.find((p) => p.slug === "boost-your-menu")!,
+  proyectos.find((p) => p.slug === "caravana")!,
+  proyectos.find((p) => p.slug === "danrodedm")!,
 ];
 
 export default function SiteHeader() {
@@ -63,13 +65,20 @@ export default function SiteHeader() {
     };
   }, [mobile]);
 
+  // Abre con una pequeña demora (intención de hover): si el cursor solo pasa por
+  // encima rumbo a otra parte, no se dispara.
+  const openTimer = useRef<number | null>(null);
   const openMega = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setMegaVisto(true);
-    setMega(true);
+    if (openTimer.current) window.clearTimeout(openTimer.current);
+    openTimer.current = window.setTimeout(() => {
+      setMegaVisto(true);
+      setMega(true);
+    }, 120);
   };
   const scheduleClose = () => {
-    closeTimer.current = window.setTimeout(() => setMega(false), 140);
+    if (openTimer.current) window.clearTimeout(openTimer.current);
+    closeTimer.current = window.setTimeout(() => setMega(false), 160);
   };
 
   return (
@@ -107,7 +116,14 @@ export default function SiteHeader() {
             </button>
 
             {/* Capa 1 centra (translate); capa 2 anima (v2-pop usa transform propio) */}
-            <div className="absolute left-1/2 top-full w-[760px] -translate-x-1/2 pt-3">
+            <div
+              className={cn(
+                "absolute left-1/2 top-full w-[760px] -translate-x-1/2 pt-3",
+                // Cerrado no recibe el mouse: antes esta zona invisible abría el menú
+                // al pasar el cursor por debajo de "Servicios".
+                mega ? "pointer-events-auto" : "pointer-events-none"
+              )}
+            >
               <div
                 id="mega-servicios"
                 aria-hidden={!mega}
@@ -125,7 +141,7 @@ export default function SiteHeader() {
                     className="group rounded-frame p-1.5 transition-colors hover:bg-surface-2"
                   >
                     <div className="v2-frame aspect-[4/3]">
-                      {megaVisto && <ProjectPreview proyecto={previews[i]} />}
+                      {megaVisto && <ProjectPreview proyecto={previews[i]} sizes="240px" />}
                     </div>
                     <p className="mt-3 px-1.5 text-sm font-semibold text-white">{s.titulo}</p>
                     <p className="mb-1 mt-1 px-1.5 text-xs leading-relaxed text-fog-dim">{s.texto}</p>

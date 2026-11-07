@@ -83,6 +83,16 @@
 
 **Cierre:** *Todo esto tiene arreglo, y no tarda meses.*
 
+**Títulos cortos de las tarjetas (D-066) — ◻ nuevo, por aprobar:**
+
+| Ícono | Título ◻ | Texto (aprobado) |
+|---|---|---|
+| Fotos | Fotos sin fin | Mandas fotos por WhatsApp y el cliente se pierde en la galería. |
+| Reloj | Página lenta | Tu página se demora en abrir en el celular y la gente se sale. |
+| Documento | PDF que nadie lee | Tienes fichas técnicas o PDF que nadie lee. |
+| Lupa | Invisible en Google | Nadie te encuentra en Google. |
+| Caja | Sin datos | No sabes cuánto tienes en inventario ni qué te compran. |
+
 ---
 
 ### 4. Servicios
@@ -93,6 +103,15 @@
 |---|---|---|---|
 | **Páginas que venden** | Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar. | *Página Lista en 5 Días* · desde 400 USD | Ver páginas |
 | **Catálogos y sistemas a medida** | Tu catálogo con carrito, inventario y pedidos que te llegan por WhatsApp. O un sistema hecho para tu negocio: reservas, menús digitales o registro de clientes (CRM). | *Tienda por WhatsApp en 5 Días* · desde 800 USD | Ver catálogos y sistemas |
+
+**Bento (D-065):** las tarjetas usan el copy aprobado de arriba y de las páginas de servicio ("Tienda por WhatsApp en 5 Días", "Tu Negocio en Orden"). Se suma una cuarta tarjeta — ◻ nuevo, por aprobar:
+
+| Etiqueta | Título ◻ | Texto ◻ |
+|---|---|---|
+| En tu panel | **Tus datos, a la vista** | Mira cómo van tus ventas y qué te compran, desde el celular. |
+
+- ◻ **Confirmar:** ¿el panel del Catálogo de verdad muestra ventas y qué compra la gente? Si no, se cambia la tarjeta.
+- La gráfica dice **"EJEMPLO · VENTAS POR SEMANA"**: los valores son ilustrativos, no de un cliente.
 
 ---
 
@@ -247,6 +266,8 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 - [x] Permiso de clientes (D-042)
 - [x] Sin sección de equipo por ahora (D-043)
 - [x] Facilidad de pago 50/50 en precios y FAQ (D-040)
+- [ ] ◻ Títulos cortos de las tarjetas del problema (D-066)
+- [ ] ◻ Tarjeta "Tus datos, a la vista" del bento y si el panel incluye ventas (D-065)
 
 ---
 

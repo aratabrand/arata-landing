@@ -191,6 +191,87 @@
   }
 }
 
+/* Problema (D-066): el resaltado recorre las tarjetas una por una.
+   Cada tarjeta ocupa 1/n del ciclo → solo una encendida a la vez. Solo opacidad. */
+.v2-problem-hl {
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  opacity: 0;
+  animation: v2-problem-cycle calc(var(--n, 5) * 2.2s) infinite;
+  animation-delay: calc(var(--i, 0) * 2.2s);
+}
+.v2-problem-icon {
+  animation: v2-problem-icon calc(var(--n, 5) * 2.2s) infinite;
+  animation-delay: calc(var(--i, 0) * 2.2s);
+}
+.v2-problem:hover .v2-problem-hl {
+  animation: none;
+  opacity: 1;
+}
+@keyframes v2-problem-cycle {
+  0% { opacity: 0; }
+  4%, 16% { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+@keyframes v2-problem-icon {
+  0% { color: #b9a4ff; }
+  4%, 16% { color: #b6ff00; }
+  20%, 100% { color: #b9a4ff; }
+}
+
+/* Tarjetas glass de garantía, pago y mantenimiento (D-068).
+   Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
+.v2-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 60%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 30px 60px -40px rgba(0, 0, 0, 0.8);
+}
+.v2-glass::before {
+  /* luz de color en una esquina, detrás del vidrio */
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  top: -35%;
+  right: -25%;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--glow, rgba(125, 83, 255, 0.35)), transparent);
+}
+.v2-draw {
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+.is-visible .v2-draw {
+  stroke-dashoffset: var(--to, 0);
+}
+.v2-needle {
+  transform-box: view-box;
+  transform-origin: 50px 52px;
+  transform: rotate(-90deg);
+  transition: transform 1.5s cubic-bezier(0.34, 1.4, 0.5, 1) 0.25s;
+}
+.is-visible .v2-needle {
+  transform: rotate(var(--deg, 72deg));
+}
+.v2-spin {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: v2-spin 14s linear infinite;
+}
+.v2-beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: v2-beat 2.4s ease-in-out infinite;
+}
+@keyframes v2-spin { to { transform: rotate(360deg); } }
+@keyframes v2-beat { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.6); } }
+
 /* Entrada del panel del mega menú */
 .v2-pop {
   opacity: 0;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, ShieldCheck } from "lucide-react";
+import { Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { Button } from "./Button";
 import { Container, SectionHeader } from "./primitives";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
 // la tarjeta recomendada lleva borde morado + brillo + badge y el ÚNICO botón lima.
-// La garantía va junto al precio (Hormozi: donde aparece la duda).
+// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
   const rec = paquete.recomendado;
@@ -47,13 +47,141 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
   );
 }
 
-export function GuaranteeSeal({ children, className }: { children: React.ReactNode; className?: string }) {
+/* Íconos SVG animados de las tarjetas glass (se dibujan con .is-visible de <Reveal>) */
+
+function GaugeIcon() {
+  // Velocímetro de 180°: arco que llena el 90 % y aguja que sube hasta 90 (−90° → 72°).
+  const ticks = Array.from({ length: 9 }, (_, k) => (Math.PI * k) / 8);
   return (
-    <div className={cn("flex items-start gap-3 rounded-frame border border-lime/30 bg-lime/[0.06] p-4", className)}>
-      <ShieldCheck aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-lime" />
-      <p className="text-sm text-white">
-        <span className="font-semibold">Garantía de velocidad.</span> {children}
-      </p>
+    <svg viewBox="0 0 100 62" className="h-20 w-auto" aria-hidden>
+      <path d="M12 52 A38 38 0 0 1 88 52" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="7" strokeLinecap="round" />
+      {ticks.map((a, k) => (
+        <line
+          key={k}
+          x1={50 - Math.cos(a) * 44}
+          y1={52 - Math.sin(a) * 44}
+          x2={50 - Math.cos(a) * 47.5}
+          y2={52 - Math.sin(a) * 47.5}
+          stroke={k >= 7 ? "#B6FF00" : "rgba(255,255,255,0.3)"}
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+      ))}
+      <path
+        className="v2-draw"
+        d="M12 52 A38 38 0 0 1 88 52"
+        fill="none"
+        stroke="#B6FF00"
+        strokeWidth="7"
+        strokeLinecap="round"
+        pathLength={100}
+        strokeDasharray="100"
+        strokeDashoffset="100"
+        style={{ ["--to" as string]: 10 }}
+      />
+      <g className="v2-needle" style={{ ["--deg" as string]: "72deg" }}>
+        <line x1="50" y1="52" x2="50" y2="22" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" />
+        <circle cx="50" cy="22" r="2.4" fill="#B6FF00" className="v2-beat" />
+      </g>
+      <circle cx="50" cy="52" r="4.5" fill="#18112D" stroke="#FFFFFF" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+function SplitRingIcon() {
+  // Anillo en dos mitades: 50 % lima (primero) y 50 % morado (después).
+  return (
+    <svg viewBox="0 0 100 100" className="h-20 w-20" aria-hidden>
+      <circle cx="50" cy="50" r="36" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+      <circle
+        className="v2-draw"
+        cx="50"
+        cy="50"
+        r="36"
+        fill="none"
+        stroke="#B6FF00"
+        strokeWidth="8"
+        strokeLinecap="round"
+        pathLength={100}
+        strokeDasharray="48 100"
+        strokeDashoffset="48"
+        transform="rotate(-90 50 50)"
+        style={{ ["--to" as string]: 0 }}
+      />
+      <circle
+        className="v2-draw"
+        cx="50"
+        cy="50"
+        r="36"
+        fill="none"
+        stroke="#7D53FF"
+        strokeWidth="8"
+        strokeLinecap="round"
+        pathLength={100}
+        strokeDasharray="48 100"
+        strokeDashoffset="48"
+        transform="rotate(90 50 50)"
+        style={{ ["--to" as string]: 0, transitionDelay: "0.9s" }}
+      />
+      <text x="50" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">
+        50/50
+      </text>
+    </svg>
+  );
+}
+
+function MaintenanceIcon() {
+  // Anillo que marca 15 % + borde punteado que gira despacio (mantenimiento continuo).
+  return (
+    <svg viewBox="0 0 100 100" className="h-20 w-20" aria-hidden>
+      <circle className="v2-spin" cx="50" cy="50" r="46" fill="none" stroke="rgba(185,164,255,0.45)" strokeWidth="1.4" strokeDasharray="2 6" strokeLinecap="round" />
+      <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+      <circle
+        className="v2-draw"
+        cx="50"
+        cy="50"
+        r="34"
+        fill="none"
+        stroke="#B6FF00"
+        strokeWidth="8"
+        strokeLinecap="round"
+        pathLength={100}
+        strokeDasharray="100"
+        strokeDashoffset="100"
+        transform="rotate(-90 50 50)"
+        style={{ ["--to" as string]: 85 }}
+      />
+      <text x="50" y="56" textAnchor="middle" fontSize="17" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">
+        15%
+      </text>
+    </svg>
+  );
+}
+
+const ICONOS_GLASS = {
+  velocidad: { Icon: GaugeIcon, glow: "rgba(182,255,0,0.13)" },
+  pago: { Icon: SplitRingIcon, glow: "rgba(125,83,255,0.4)" },
+  mantenimiento: { Icon: MaintenanceIcon, glow: "rgba(185,164,255,0.3)" },
+} as const;
+
+/** Tarjetas glass de garantía, pago y mantenimiento (D-068). */
+export function Assurances({ className }: { className?: string }) {
+  return (
+    <div className={cn("grid gap-4 md:grid-cols-3", className)}>
+      {precios.aseguramientos.map((a, i) => {
+        const { Icon, glow } = ICONOS_GLASS[a.tipo as keyof typeof ICONOS_GLASS];
+        return (
+          <Reveal key={a.tipo} delay={i * 90} className="h-full">
+            <article className="v2-glass flex h-full flex-col p-6" style={{ ["--glow" as string]: glow }}>
+              <div className="flex h-24 items-center justify-start">
+                <Icon />
+              </div>
+              <h3 className="mt-4 font-display text-xl font-bold tracking-heading text-white">{a.titulo}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-fog">{a.texto}</p>
+            </article>
+          </Reveal>
+        );
+      })}
     </div>
   );
 }
@@ -71,13 +199,7 @@ export default function PricingSection() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <GuaranteeSeal>{precios.garantia}</GuaranteeSeal>
-          <div className="space-y-1.5 rounded-frame border border-white/8 bg-surface-1 p-4 text-sm text-fog">
-            <p>{precios.pago}</p>
-            <p>{precios.mantenimiento}</p>
-          </div>
-        </div>
+        <Assurances className="mt-8" />
 
         <p className="mt-8 text-center text-fog">
           {precios.ayuda}{" "}

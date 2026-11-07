@@ -50,7 +50,7 @@ export function CtaCard() {
                 className="v2-frame h-full"
                 style={{ transform: `translateY(${i % 2 === 0 ? "-8%" : "10%"}) rotate(${i % 2 === 0 ? -3 : 3}deg)` }}
               >
-                <ProjectPreview proyecto={p} />
+                <ProjectPreview proyecto={p} captura={i % 2} sizes="(min-width: 640px) 300px, 50vw" />
               </div>
             ))}
           </div>

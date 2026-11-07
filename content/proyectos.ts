@@ -25,6 +25,8 @@ export type Proyecto = {
   // Color de acento solo para la vista previa provisional (hasta tener video)
   acento: string;
   video?: VideoProyecto; // D-026: video en loop, se agrega cuando exista
+  // Capturas reales del sitio (WebP 1280×800) en public/portafolio/capturas/
+  capturas: { src: string; alt: string }[];
 };
 
 export const proyectos: Proyecto[] = [
@@ -48,6 +50,10 @@ export const proyectos: Proyecto[] = [
     resultado:
       "Más interesados pasaron a pedir reunión, porque mirar las máquinas dejó de ser una barrera.",
     acento: "#7D53FF",
+    capturas: [
+      { src: "/portafolio/capturas/danrodedm-1.webp", alt: "Inicio de la página de Danrodedm, maquinaria de electroerosión" },
+      { src: "/portafolio/capturas/danrodedm-2.webp", alt: "Sección de problemas de la página de Danrodedm" },
+    ],
   },
   {
     slug: "boost-your-menu",
@@ -69,6 +75,10 @@ export const proyectos: Proyecto[] = [
     ],
     resultado: undefined, // ◻ falta el dato
     acento: "#B6FF00",
+    capturas: [
+      { src: "/portafolio/capturas/boost-your-menu-1.webp", alt: "Inicio de la landing de Boost Your Menu, menús digitales para iPad" },
+      { src: "/portafolio/capturas/boost-your-menu-2.webp", alt: "Sección de beneficios de la landing de Boost Your Menu" },
+    ],
   },
   {
     slug: "arata-print",
@@ -91,6 +101,10 @@ export const proyectos: Proyecto[] = [
     resultado:
       "Ahora toma mejores decisiones sobre en qué invertir, y sus clientes compran más fácil.",
     acento: "#9B7BFF",
+    capturas: [
+      { src: "/portafolio/capturas/arata-print-1.webp", alt: "Inicio del catálogo de Arata Print, camisetas estampadas" },
+      { src: "/portafolio/capturas/arata-print-2.webp", alt: "Productos nuevos en el catálogo de Arata Print" },
+    ],
   },
   {
     slug: "caravana",
@@ -111,5 +125,17 @@ export const proyectos: Proyecto[] = [
     ],
     resultado: "Toda la mercancía organizada y la operación de la tienda en un solo lugar.",
     acento: "#D3FF5C",
+    capturas: [
+      { src: "/portafolio/capturas/caravana-1.webp", alt: "Inicio de la tienda de Caravana, tecnología y gadgets" },
+      { src: "/portafolio/capturas/caravana-2.webp", alt: "Productos y pasos para pedir en la tienda de Caravana" },
+    ],
   },
 ];
+
+/** Capturas de todos los proyectos intercaladas (una de cada uno, luego la segunda de cada uno). */
+export function capturasIntercaladas() {
+  const max = Math.max(...proyectos.map((p) => p.capturas.length));
+  const out: { src: string; alt: string }[] = [];
+  for (let i = 0; i < max; i++) for (const p of proyectos) if (p.capturas[i]) out.push(p.capturas[i]);
+  return out;
+}

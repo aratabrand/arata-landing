@@ -30,12 +30,13 @@ export const prueba = {
 
 export const problema = {
   titulo: "¿Tu negocio vive en el chat?",
+  // Tarjetas (D-066). `texto` es el copy aprobado; ◻ `titulo` es nuevo (por aprobar).
   items: [
-    "Mandas fotos por WhatsApp y el cliente se pierde en la galería.",
-    "Tu página se demora en abrir en el celular y la gente se sale.",
-    "Tienes fichas técnicas o PDF que nadie lee.",
-    "Nadie te encuentra en Google.",
-    "No sabes cuánto tienes en inventario ni qué te compran.",
+    { icono: "fotos", titulo: "Fotos sin fin", texto: "Mandas fotos por WhatsApp y el cliente se pierde en la galería." },
+    { icono: "lenta", titulo: "Página lenta", texto: "Tu página se demora en abrir en el celular y la gente se sale." },
+    { icono: "pdf", titulo: "PDF que nadie lee", texto: "Tienes fichas técnicas o PDF que nadie lee." },
+    { icono: "google", titulo: "Invisible en Google", texto: "Nadie te encuentra en Google." },
+    { icono: "datos", titulo: "Sin datos", texto: "No sabes cuánto tienes en inventario ni qué te compran." },
   ],
   cierre: "Todo esto tiene arreglo, y no tarda meses.",
 };
@@ -60,6 +61,39 @@ export const servicios = {
       href: "/catalogos-y-sistemas",
     },
   ],
+  // Bento de diagramas vivos (D-065). Textos tomados del copy aprobado;
+  // ◻ `datos` es copy nuevo, pendiente de aprobación de Sergio.
+  bento: {
+    catalogo: {
+      etiqueta: "Catálogos y sistemas a medida · desde 800 USD",
+      titulo: "Tienda por WhatsApp en 5 Días",
+      texto:
+        "Catálogo con carrito, inventario y un panel para manejar tu negocio desde el celular. El pedido te llega ordenado a tu WhatsApp.",
+      boton: "Ver catálogos y sistemas",
+      href: "/catalogos-y-sistemas",
+    },
+    sistema: {
+      etiqueta: "Sistema a medida · lo cotizamos contigo",
+      titulo: "Tu Negocio en Orden",
+      texto: "Reservas, menú digital o registro de clientes (CRM), hecho para cómo trabaja tu negocio.",
+    },
+    paginas: {
+      etiqueta: "Página Lista en 5 Días · desde 400 USD",
+      titulo: "Páginas que venden",
+      texto:
+        "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar.",
+      boton: "Ver páginas",
+      href: "/paginas-web",
+      conexiones: ["Google", "Google Business", "IA", "WhatsApp"],
+    },
+    datos: {
+      etiqueta: "En tu panel",
+      titulo: "Tus datos, a la vista",
+      texto: "Mira cómo van tus ventas y qué te compran, desde el celular.",
+      // Valores ilustrativos (la gráfica dice "EJEMPLO"): no son datos de un cliente.
+      valores: [12, 15, 13, 18, 17, 22, 21, 26, 25, 30, 33, 38],
+    },
+  },
 };
 
 export const portafolio = {
@@ -154,6 +188,18 @@ export const precios = {
   garantia:
     "Si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo.",
   pago: "Paga por partes: 50 % para arrancar y 50 % cuando te entregamos.",
+  // Tarjetas glass (D-068): mismo copy aprobado, separado en título y texto.
+  aseguramientos: [
+    {
+      tipo: "velocidad",
+      titulo: "Garantía de velocidad",
+      cifra: "90+",
+      texto:
+        "Si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo.",
+    },
+    { tipo: "pago", titulo: "Paga por partes", cifra: "50/50", texto: "50 % para arrancar y 50 % cuando te entregamos." },
+    { tipo: "mantenimiento", titulo: "Mantenimiento opcional", cifra: "15 %", texto: "15 % del valor de tu proyecto al mes." },
+  ],
   mantenimiento: "Mantenimiento opcional: 15 % del valor de tu proyecto al mes.",
   ayuda: "¿No sabes cuál necesitas?",
   ayudaCta: "Agenda y te decimos en 30 minutos.",

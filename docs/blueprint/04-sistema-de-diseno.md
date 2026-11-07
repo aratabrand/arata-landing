@@ -99,14 +99,16 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
-| Tarjeta de servicio | Para los 2 servicios | P1 |
+| Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
+| Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
+| Tarjetas del problema | Apiladas, caja de ícono + título + texto, resaltado que las recorre (D-066) | P1 |
 | Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva borde morado, brillo suave, badge "Recomendado" y el único botón lima; las demás, botón oscuro (captura 03) | P1 |
-| Sello de garantía | Garantía visible junto al precio | P1 |
+| Tarjetas glass de garantía | Garantía, pago 50/50 y mantenimiento, `backdrop-filter` + ícono SVG animado (`Assurances`, D-068) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
 | Bloque de caso | Problema → solución → resultado | P1 |
 | Métrica | Cifra con contador + anillo (patrón v1) | P1 |
-| Pasos del proceso | Cómo trabajamos, de la aprobación a la entrega en 5 días hábiles | P1 |
+| Pasos del proceso | Cómo trabajamos; la línea y los pasos se pintan de lima con el scroll (`ScrollPaint`, D-067) | P1 |
 | Preguntas frecuentes | **Dos columnas**: título a la izquierda, acordeón a la derecha; en celular, una columna (captura 02) | P1 |
 | Formulario de 3 pasos | Las 3 preguntas antes del calendario (D-017) | P1 |
 | Calendario Cal.com | Integrado en `/agendar` | P1 |
@@ -205,6 +207,9 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 |---|---|---|---|---|---|---|
 | Primera versión | 92 | 100 | 96 | 3.0 s | 160 ms | 0 |
 | Con optimizaciones (2 corridas) | **94 – 97** | **100** | 96 | 2.4 – 3.0 s | **50 – 60 ms** | **0** |
+| Banda de capturas con `<img>` (D-064, descartado) | 78 – 81 | 100 | 96 | 4.8 – 5.5 s | 90 – 160 ms | 0 |
+| Banda de capturas con `<canvas>` (D-064, actual) | **90 – 96** | **100** | 96 | 2.7 – 3.6 s | **50 – 60 ms** | **0** |
+| Escritorio, banda con `<canvas>` | **98 – 99** | 100 | — | 0.8 s | 0 ms | 0 |
 
 - **SEO sale 66 a propósito:** la muestra es `noindex`. Al lanzar vuelve a 100.
 - **Buenas prácticas 96:** los errores de consola son GTM (bloqueado en el entorno de prueba) y la precarga de `/agendar`, que aún no existe. Ambos desaparecen en producción.
@@ -226,4 +231,11 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Tamaño del hero **medido**, no adivinado: `clamp(1.8rem, 5.8vw, 4.25rem)` | 3 líneas en 360–430 px y 2 desde tablet (regla de `CLAUDE.md`: máx. 3) |
 | En Tailwind, toda opacidad usada debe existir en la escala (se agregó `8`) | `border-white/8` sin el paso `8` sale invisible (gotcha de `CLAUDE.md`) |
 | Pruebas con Playwright: bloquear dominios externos y no esperar `networkidle` | GTM bloqueado deja la red "ocupada" para siempre |
+| **Imágenes decorativas grandes que se mueven (carruseles 3D, bandas) van en `<canvas>`** | Chrome toma como LCP cualquier `<img>` o `background-image` que se pinte después y más grande que el `h1`; con perspectiva, las tarjetas de los bordes se agrandan y cada una que entra es un candidato nuevo. El canvas no cuenta para el LCP (D-064) |
+| Una imagen recortada (`overflow:hidden`) cuenta para el LCP con **su tamaño completo**, no con lo visible | Por eso achicar la banda no bastó |
+| Geometría que depende solo de la proporción → **proporción fija** (`ratio`) | El servidor calcula el layout final y no hay que ocultar nada hasta que JS mida |
+| Una instancia por breakpoint (`md:hidden` / `hidden md:block`) y descargas solo si la instancia tiene ancho | Lo oculto con `display:none` no descarga imágenes |
+| Contadores: el servidor renderiza **la cifra real**; el efecto la reinicia a 0 solo en el navegador | Google y los bots de IA leen "5 días", no "0 días" |
+| Capas invisibles (`opacity:0`) de menús: **`pointer-events-none` cuando están cerradas** + retraso de intención al abrir | Si no, se abren al pasar el mouse por debajo del botón (bug del mega menú) |
+| Animación ligada al scroll: **un solo listener pasivo** que escribe una variable CSS (`--p`), activo solo mientras la sección se ve; lo demás es `calc()` en CSS | Sin listeners por elemento ni reflow (`ScrollPaint`, D-067) |
 

@@ -7,7 +7,7 @@ import { Button } from "@/components/v2/Button";
 import { Badge, Container, Eyebrow, Glow, SectionHeader } from "@/components/v2/primitives";
 import Spotlight from "@/components/v2/Spotlight";
 import ProjectPreview from "@/components/v2/ProjectPreview";
-import { GuaranteeSeal, PricingCard } from "@/components/v2/Pricing";
+import { Assurances, PricingCard } from "@/components/v2/Pricing";
 import { precios } from "@/content/inicio";
 
 // Guía viva del sistema de diseño v2 (Fase 3).
@@ -193,7 +193,7 @@ export default function SistemaV2() {
               <PricingCard paquete={precios.paquetes[1]} />
               <PricingCard paquete={precios.paquetes[0]} />
             </div>
-            <GuaranteeSeal className="mt-5">{precios.garantia}</GuaranteeSeal>
+            <Assurances className="mt-5" />
           </Bloque>
 
           <Bloque id="b-metrica" titulo="Métrica · anillo dashboard-premium (contador + punta con dot)">

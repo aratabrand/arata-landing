@@ -28,7 +28,7 @@ export default function PortfolioShowcase() {
             <ShowcaseCarousel
               items={proyectos.map(({ slug, nombre, etiqueta, frase }) => ({ slug, nombre, etiqueta, frase }))}
               slides={proyectos.map((p) => (
-                <ProjectPreview key={p.slug} proyecto={p} />
+                <ProjectPreview key={p.slug} proyecto={p} sizes="(min-width: 1024px) 760px, 100vw" />
               ))}
             />
           </Spotlight>

@@ -1,11 +1,12 @@
+import type { CSSProperties } from "react";
+import { FileText, Hourglass, Images, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { Button } from "./Button";
 import { Container, SectionHeader } from "./primitives";
-import Spotlight from "./Spotlight";
-import ProjectPreview from "./ProjectPreview";
+import ScrollPaint from "./ScrollPaint";
+import ServicesBento from "./ServicesBento";
 import { pasos, problema, prueba, servicios } from "@/content/inicio";
 
-// Secciones del Inicio v2 sin estado (se renderizan en el servidor).
+// Secciones del Inicio v2.
 
 /** Franja de prueba: "Han confiado en nosotros" + nombres (ref. captura 02). */
 export function ProofStrip() {
@@ -25,86 +26,127 @@ export function ProofStrip() {
   );
 }
 
-/** Problema: el cliente se reconoce. Lista con hairlines (no es una secuencia → sin números). */
+const ICONOS: Record<string, LucideIcon> = {
+  fotos: Images,
+  lenta: Hourglass,
+  pdf: FileText,
+  google: SearchX,
+  datos: PackageSearch,
+};
+
+/**
+ * Problema (D-066): tarjetas apiladas dentro de un panel (ref. Sergio, lista con caja de ícono).
+ * El resaltado recorre las tarjetas una por una con animación CSS (opacidad), sin JS.
+ */
 export function ProblemSection() {
+  const n = problema.items.length;
   return (
     <section aria-labelledby="problema" className="py-20 sm:py-28">
-      <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <Reveal>
           <h2 id="problema" className="font-display text-v2-h2 font-bold tracking-heading text-white">
             {problema.titulo}
           </h2>
           <p className="mt-4 max-w-md text-v2-lead text-fog">{problema.cierre}</p>
         </Reveal>
-        <ul className="border-t border-white/8">
-          {problema.items.map((item, i) => (
-            <Reveal as="li" key={item} delay={i * 60} className="flex gap-4 border-b border-white/8 py-5">
-              <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
-              <span className="text-base text-white sm:text-lg">{item}</span>
-            </Reveal>
-          ))}
-        </ul>
+
+        <Reveal variant="right">
+          <ul className="space-y-2 rounded-card border border-white/8 bg-surface-1/70 p-2 sm:p-3">
+            {problema.items.map((item, i) => {
+              const Icono = ICONOS[item.icono] ?? Images;
+              return (
+                <li
+                  key={item.titulo}
+                  className="v2-problem relative flex items-center gap-4 overflow-hidden rounded-frame border border-white/6 bg-ink/60 p-3 sm:p-4"
+                  style={{ ["--i" as string]: i, ["--n" as string]: n } as CSSProperties}
+                >
+                  {/* resaltado que recorre las tarjetas */}
+                  <span aria-hidden className="v2-problem-hl pointer-events-none absolute inset-0 rounded-frame" />
+                  <span className="relative flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-btn border border-white/10 bg-surface-2">
+                    <Icono aria-hidden className="v2-problem-icon h-5 w-5 text-brand-soft" />
+                  </span>
+                  <span className="relative">
+                    <span className="block font-semibold text-white">{item.titulo}</span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-fog">{item.texto}</span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </Reveal>
       </Container>
     </section>
   );
 }
 
-/** Servicios: 2 tarjetas con vista previa enmarcada (ref. captura 01). */
+/** Servicios: bento de diagramas vivos (D-065). */
 export function ServicesSection() {
-  const previews = [
-    { nombre: servicios.items[0].titulo, tipos: ["Página" as const], acento: "#B6FF00" },
-    { nombre: servicios.items[1].titulo, tipos: ["Catálogo" as const], acento: "#7D53FF" },
-  ];
   return (
     <section aria-labelledby="servicios" className="py-20 sm:py-28">
       <Container>
         <SectionHeader id="servicios" title={servicios.titulo} />
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {servicios.items.map((s, i) => (
-            <Reveal key={s.titulo} delay={i * 80}>
-              <Spotlight as="article" className="flex h-full flex-col p-2">
-                <div className="v2-frame aspect-[16/10]">
-                  <ProjectPreview proyecto={previews[i]} />
-                </div>
-                <div className="flex flex-1 flex-col px-4 pb-4 pt-5 sm:px-5">
-                  <p className="text-xs font-semibold text-lime">{s.etiqueta}</p>
-                  <h3 className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">{s.titulo}</h3>
-                  <p className="mt-2 text-fog">{s.texto}</p>
-                  <div className="mt-auto pt-4">
-                    <Button href={s.href} variant="ghost" arrow>
-                      {s.boton}
-                    </Button>
-                  </div>
-                </div>
-              </Spotlight>
-            </Reveal>
-          ))}
+        <div className="mt-12">
+          <ServicesBento />
         </div>
       </Container>
     </section>
   );
 }
 
-/** Cómo trabajamos: 5 pasos (SÍ es una secuencia → números). */
+/**
+ * Cómo trabajamos (D-067): la línea y los pasos se pintan de lima con el scroll.
+ * Escritorio horizontal, celular vertical (no cambia la orientación).
+ * Todo sale de `--p` (ScrollPaint): transform en la línea, opacidad en cada paso.
+ */
 export function StepsSection() {
+  const tramos = pasos.items.length - 1;
+  // Un paso se enciende cuando la línea llega a él: opacidad 0 → 1 en el último cuarto de su tramo.
+  const encendido = (i: number) => `clamp(0, calc((var(--p) * ${tramos} - ${i}) * 4 + 1), 1)`;
   return (
     <section aria-labelledby="como" className="py-20 sm:py-28">
       <Container>
         <SectionHeader id="como" title={pasos.titulo} />
-        <ol className="relative mt-12 grid gap-4 lg:grid-cols-5 lg:gap-3">
-          <span aria-hidden className="absolute left-[1.15rem] top-4 hidden h-px w-[calc(100%-2.3rem)] bg-white/10 lg:block" />
+        <ScrollPaint as="ol" className="relative mt-12 grid gap-8 lg:grid-cols-5 lg:gap-3">
+          {/* Línea horizontal (escritorio): del centro del primer círculo al del último */}
+          <span aria-hidden className="absolute left-[1.125rem] top-[1.125rem] hidden h-px w-[calc(80%+0.6rem)] bg-white/10 lg:block" />
+          <span
+            aria-hidden
+            className="absolute left-[1.125rem] top-[1.125rem] hidden h-[2px] w-[calc(80%+0.6rem)] origin-left bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:block"
+            style={{ transform: "scaleX(var(--p))" }}
+          />
+          {/* Línea vertical (celular) */}
+          <span aria-hidden className="absolute bottom-6 left-[1.125rem] top-4 w-px bg-white/10 lg:hidden" />
+          <span
+            aria-hidden
+            className="absolute bottom-6 left-[1.125rem] top-4 w-[2px] origin-top bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:hidden"
+            style={{ transform: "scaleY(var(--p))" }}
+          />
+
           {pasos.items.map((p, i) => (
-            <Reveal as="li" key={p.titulo} delay={i * 70} className="relative flex gap-4 lg:flex-col lg:gap-5">
-              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-surface-2 font-display text-sm font-bold text-lime">
+            <li key={p.titulo} className="relative flex gap-4 lg:flex-col lg:gap-5">
+              <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-surface-2 font-display text-sm font-bold text-fog">
                 {i + 1}
+                {/* versión encendida: círculo lima con número ink */}
+                <span
+                  aria-hidden
+                  className="absolute inset-[-1px] flex items-center justify-center rounded-full bg-lime text-ink shadow-[0_0_18px_rgba(182,255,0,0.55)]"
+                  style={{ opacity: encendido(i) }}
+                >
+                  {i + 1}
+                </span>
               </span>
-              <div className="pb-2">
-                <h3 className="font-display text-lg font-bold tracking-heading text-white">{p.titulo}</h3>
+              <div className="pb-1">
+                <h3 className="relative font-display text-lg font-bold tracking-heading text-white/50">
+                  {p.titulo}
+                  <span aria-hidden className="absolute inset-0 text-white" style={{ opacity: encendido(i) }}>
+                    {p.titulo}
+                  </span>
+                </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-fog">{p.texto}</p>
               </div>
-            </Reveal>
+            </li>
           ))}
-        </ol>
+        </ScrollPaint>
       </Container>
     </section>
   );

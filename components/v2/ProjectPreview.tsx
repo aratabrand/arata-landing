@@ -1,20 +1,28 @@
+import Image from "next/image";
 import type { Proyecto, TipoProyecto } from "@/content/proyectos";
 import LoopVideo from "./LoopVideo";
 import { cn } from "@/lib/utils";
 
 // Vista previa de un proyecto dentro de un marco.
-// - Si el proyecto tiene video → LoopVideo (D-026).
-// - Si no (provisional) → mockup dibujado con CSS según el tipo, en el color del proyecto.
-//   Es decorativo: no imita la página real del cliente.
+// Orden de preferencia:
+// 1. Video en loop (D-026).
+// 2. Captura real del sitio (next/image: tamaño justo por pantalla y carga diferida).
+// 3. Mockup dibujado con CSS según el tipo (solo para tarjetas genéricas sin proyecto).
 
 export default function ProjectPreview({
   proyecto,
   className,
   device = "desktop",
+  sizes = "(min-width: 1024px) 50vw, 100vw",
+  captura = 0,
 }: {
-  proyecto: Pick<Proyecto, "nombre" | "tipos" | "acento" | "video">;
+  proyecto: Pick<Proyecto, "nombre" | "tipos" | "acento" | "video"> & { capturas?: Proyecto["capturas"] };
   className?: string;
   device?: "desktop" | "phone";
+  /** Atributo `sizes` de la imagen (ancho que ocupa en cada pantalla). */
+  sizes?: string;
+  /** Cuál captura mostrar (0 = inicio del sitio). */
+  captura?: number;
 }) {
   if (proyecto.video) {
     return (
@@ -23,6 +31,14 @@ export default function ProjectPreview({
         label={`Video del proyecto ${proyecto.nombre}`}
         className={cn("h-full w-full object-cover object-top", className)}
       />
+    );
+  }
+  const cap = proyecto.capturas?.[captura] ?? proyecto.capturas?.[0];
+  if (cap && device === "desktop") {
+    return (
+      <div className={cn("relative h-full w-full overflow-hidden bg-surface-2", className)}>
+        <Image src={cap.src} alt={cap.alt} fill sizes={sizes} className="object-cover object-top" />
+      </div>
     );
   }
   const tipo: TipoProyecto = proyecto.tipos.includes("Sistema")
