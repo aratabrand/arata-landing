@@ -51,14 +51,13 @@ Convertir la landing actual (un solo servicio de chatbot y automatización, CTA 
 
 | Ruta | Página | Trabajo de la página |
 |---|---|---|
-| `/` | Inicio | Entender la oferta en 5 segundos y llevar a agendar |
+| `/` | Inicio | Entender la oferta en 5 segundos y llevar a agendar. Incluye la sección del equipo (D-016) |
 | `/paginas-web` | Servicio 1 | Oferta completa de landing pages y sitios web |
 | `/aplicaciones` | Servicio 2 | Oferta completa de apps a medida |
 | `/portafolio` | Portafolio | Mostrar los trabajos, filtrados por tipo |
 | `/portafolio/[proyecto]` | Caso de estudio | Problema → solución → resultado de cada proyecto |
-| `/agendar` | Agendar | Calificar con pocas preguntas y elegir hora. **La página que cuenta.** |
+| `/agendar` | Agendar | 3 preguntas (D-017) y calendario de Cal.com (D-012). **La página que cuenta.** |
 | `/agendar/gracias` | Confirmación | Confirmar la cita, preparar la llamada y registrar el evento |
-| `/nosotros` | Nosotros *(opcional, D6)* | Las personas detrás y cómo trabajamos |
 | `/privacidad` | Política de datos | Cumplimiento de la Ley 1581 de 2012 (habeas data) |
 | 404 | No encontrada | Ya existe; se adapta |
 
@@ -104,9 +103,10 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 | D2 | **Herramienta de agenda** | Cal.com · Calendly · Google Calendar | ✅ **Cal.com** → D-012 |
 | D3 | **Precios en el sitio** | Ninguno · "Desde $X" · Paquetes con precio | ✅ **Paquetes con precio** → D-013. Faltan los precios |
 | D4 | **Optimización y mobile-first** | Promesa · Tercer servicio · Promesa + auditoría | ✅ **Promesa + auditoría gratis** → D-014 |
-| D5 | **Cambios del sistema de diseño** | Sergio trae los cambios (Figma) · Claude propone y Sergio elige | Que Sergio diga qué cambios tiene en mente; Claude propone el resto |
-| D6 | **Página Nosotros** | Sí · No | Sí, corta: la gente le compra a personas |
-| D7 | **Preguntas antes de agendar** | Sin filtro · 3 preguntas (tipo de proyecto, plazo, presupuesto) | 3 preguntas: llegan llamadas mejor preparadas y se descartan curiosos |
+| D5 | **Cambios del sistema de diseño** | Figma · Sergio los describe · Claude propone | ✅ **Sergio los describe** → D-015. Falta la descripción |
+| D6 | **Página Nosotros** | Sí · No | ✅ **No**: el equipo va como sección del inicio → D-016 |
+| D7 | **Preguntas antes de agendar** | Sin filtro · 3 preguntas | ✅ **3 preguntas** (tipo de proyecto, para cuándo, presupuesto) → D-017 |
+| — | **Estructura de paquetes** | Propuesta en `01-estrategia` §4.3 | ✅ **Aprobada** → D-018. Faltan precios y plazos |
 
 ---
 
@@ -128,7 +128,8 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Estrategia Hormozi — borrador v0.1
 - [x] Estructura de documentación (`docs/`)
 - [x] Decisiones D1–D4 respondidas
-- [ ] Decisiones D5–D7 respondidas
+- [x] Decisiones D5–D7 respondidas y estructura de paquetes aprobada
+- [ ] Descripción de los cambios del sistema de diseño v2 (D-015)
 - [ ] Inventario del portafolio completo (§10)
 - [ ] Precios y plazos de los paquetes
 - [ ] Estrategia aprobada

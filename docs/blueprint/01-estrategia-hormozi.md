@@ -161,7 +161,7 @@ Implica cobrar el prototipo como etapa propia **[decidir]**.
 
 ### 4.3 Paquetes con precio (D-013)
 
-Propuesta de estructura. Los precios son **[decidir]** (en COP).
+Estructura **aprobada** (D-018). Los precios y plazos son **[decidir]** (en COP).
 
 **Páginas web**
 
