@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.1 | 7 nov 2026 | Sergio |
+| En revisión | 0.2 | 7 nov 2026 | Sergio |
 
 ---
 
@@ -21,12 +21,14 @@ Convertir la landing actual (un solo servicio de chatbot y automatización, CTA 
 
 ### Servicios (exclusivamente dos)
 
-| # | Servicio | Para quién |
-|---|---|---|
-| 1 | **Diseño y desarrollo de landing pages y sitios web** | Negocios que necesitan que les lleguen clientes por internet |
-| 2 | **Diseño y desarrollo de aplicaciones a medida** | Negocios que necesitan ordenar su operación (pedidos, citas, inventario) o emprendedores con una idea de app |
+| # | Servicio | Para quién | Paquetes (ver `01-estrategia` §1) |
+|---|---|---|---|
+| 1 | **Páginas que venden** (landing pages y sitios web) | Negocios que necesitan que les lleguen clientes por internet | Landing desde 400 USD · 5 días hábiles |
+| 2 | **Catálogos y sistemas a medida** *(antes "apps", D-021 por confirmar)* | Negocios que venden por WhatsApp o manejan pedidos, reservas, inventario o clientes a mano | Catálogo desde 800 USD · 5 días hábiles · Sistema a medida cotizado |
 
-**Promesa en los dos servicios:** todo se diseña **primero para celular** (mobile-first) y sale **optimizado**: rápido, encontrable en Google y en la IA, y medido. *(La forma exacta de presentarlo se decide en D4.)*
+Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 3 proyectos nuevos al mes (D-023).
+
+**Promesa en los dos servicios:** todo se diseña **primero para celular** (mobile-first) y sale **optimizado**: rápido, encontrable en Google y en la IA, y medido. Se presenta como promesa + auditoría gratis de gancho (D-014).
 
 ### Qué sale del sitio
 
@@ -129,9 +131,11 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Estructura de documentación (`docs/`)
 - [x] Decisiones D1–D4 respondidas
 - [x] Decisiones D5–D7 respondidas y estructura de paquetes aprobada
-- [ ] Descripción de los cambios del sistema de diseño v2 (D-015)
-- [ ] Inventario del portafolio completo (§10)
-- [ ] Precios y plazos de los paquetes
+- [x] Dirección del sistema de diseño v2 (D-025, D-026 → `04-sistema-de-diseno.md`)
+- [ ] Capturas de referencia de 21st.dev y del estilo de portafolio
+- [x] Inventario del portafolio (§10 → `portafolio.md`)
+- [x] Precios, plazos, cupos y mensualidad
+- [ ] Confirmar estructura de servicios, moneda, garantías y nombres (`01-estrategia` §11)
 - [ ] Estrategia aprobada
 - [ ] Arquitectura y copy
 - [ ] Sistema de diseño v2
@@ -144,27 +148,7 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 
 ## 10. Inventario del portafolio
 
-Según Sergio: **2 sitios web reales + 2 webs tipo catálogo**, y **2 testimonios**. Falta completar la tabla para poder armar cada caso de estudio.
+✅ Completo en [`docs/portafolio.md`](../portafolio.md) (D-024): **Danrodedm** (catálogo de maquinaria), **Boost Your Menu** (landing), **Arata Print** (catálogo + sistema) y **Caravana** (catálogo + panel de tienda).
 
-| Proyecto | Tipo (web / catálogo / app) | URL | Qué hicimos | Material (capturas, video) | Resultado medible | Testimonio |
-|---|---|---|---|---|---|---|
-| Your Boost Menu | por confirmar | | | | | ¿sí / no? |
-| Danrodedm | por confirmar | | | | | ¿sí / no? |
-| Caravana | por confirmar | | | | | ¿sí / no? |
-| Arata Print | por confirmar | | | | | ¿sí / no? |
-
-### Lo que se puede medir aunque no haya datos de ventas
-
-Si un proyecto no tiene métricas de negocio, se usan métricas que **sí** se pueden verificar hoy:
-
-- Puntaje de PageSpeed móvil y escritorio (se corre en vivo sobre la URL).
-- Plazo real de entrega.
-- Antes / después (captura de la página anterior vs la nueva), si existe.
-
-### Hueco: el servicio de apps no tiene casos
-
-Los 4 proyectos son de web o catálogo. Para el servicio 2 (apps a medida) hay tres salidas, que se pueden combinar:
-
-1. **Arata Print como caso de app**, si incluye panel, pedidos o inventario (más que una web).
-2. **Proyectos propios en construcción** (Mesa, Dental) mostrados como casos "en desarrollo", con prototipos de Figma.
-3. **Reforzar la garantía** ("si el prototipo no te convence, no pagas el desarrollo"): cuando hay poca prueba, la reversión de riesgo carga más peso.
+- El servicio 2 sí tiene prueba: Arata Print y Caravana ya son sistemas, con panel, pedidos, inventario y datos.
+- Falta: testimonios (posibles: Arata Print, Caravana), cifras de resultado si existen, videos en loop y permiso de cada cliente.

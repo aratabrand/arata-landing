@@ -220,7 +220,7 @@ Estándar técnico para toda landing en Next.js. Todo esto quedó implementado y
 
 ## 11. Proyecto en curso — sitio de agencia v2 (desde nov 2026)
 
-La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de agencia** con un único objetivo: **agendar reuniones**. Servicios: (1) landing pages y sitios web, (2) apps a medida. Promesa central: mobile-first y optimización. Estrategia de captación: método Hormozi.
+La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de agencia** con un único objetivo: **agendar reuniones**. Servicios: (1) páginas que venden (landing desde 400 USD, 5 días hábiles), (2) catálogos y sistemas a medida (catálogo desde 800 USD, 5 días hábiles; sistemas cotizados). Promesa central: mobile-first y optimización. Estrategia de captación: método Hormozi. **Diseño v2: solo fondo oscuro `#03010B`** (reemplaza la alternancia blanco/oscuro de la v1) y **paquetes con precio visibles** (reemplaza "sin precios" de la v1).
 
 - **Antes de trabajar en el sitio, lee [`docs/README.md`](docs/README.md)** y el plan maestro en `docs/blueprint/00-plan-maestro.md` (fase actual, decisiones pendientes).
 - Toda decisión nueva se registra en `docs/decisiones.md`.

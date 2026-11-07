@@ -11,13 +11,14 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | Archivo | Qué contiene | Fase |
 |---|---|---|
 | [`blueprint/00-plan-maestro.md`](blueprint/00-plan-maestro.md) | Objetivo, alcance, mapa del sitio, fases, estado y decisiones pendientes | 0 |
-| [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Avatar, ecuación de valor, ofertas, gancho, garantías, embudo y guion de llamada | 1 |
+| [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Paquetes y precios, avatar, ecuación de valor, nombres, garantías, gancho, embudo y guion de llamada | 1 |
 | `blueprint/02-arquitectura.md` | Mapa del sitio final y estructura sección por sección de cada página | 2 |
 | `blueprint/03-copy.md` | Copy aprobado de cada página (con versiones descartadas) | 2 |
-| `blueprint/04-sistema-de-diseno.md` | Tokens v2 y especificación de cada componente | 3 |
+| [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2 y especificación de cada componente (hoy: dirección) | 3 |
 | `blueprint/05-construccion.md` | Decisiones técnicas, estructura de carpetas, datos del portafolio, agenda | 4 |
 | `blueprint/06-seo-geo-velocidad.md` | Checklist de SEO, IA, velocidad, accesibilidad y legal por página | 5 |
 | `blueprint/07-medicion-lanzamiento.md` | Eventos de GTM/GA4, QA y salida a producción | 6 |
+| [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
 | [`decisiones.md`](decisiones.md) | Bitácora de cada decisión: qué, cuándo, quién y por qué | Todas |
 
 Los archivos sin enlace todavía no existen: se crean al llegar a su fase.
