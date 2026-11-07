@@ -140,7 +140,8 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Panel de la Landing: adicional con costo (D-034)
 - [x] **Estrategia aprobada — Fase 1 cerrada (D-035)**
 - [x] Arquitectura v0.1 (`02-arquitectura.md`) y copy del Inicio v0.1 (`03-copy.md`)
-- [ ] Aprobación de arquitectura y copy del Inicio
+- [x] Copy del Inicio aprobado (D-038 a D-043)
+- [x] Referencias visuales de 21st.dev recibidas y traducidas (D-044)
 - [ ] Copy del resto de páginas
 - [ ] Sistema de diseño v2
 - [ ] Construcción

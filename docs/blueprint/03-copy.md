@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.1 | 7 nov 2026 | Sergio |
+| En revisión | 0.2 | 7 nov 2026 | Sergio |
 
 **Reglas** (`CLAUDE.md` §2): español colombiano plano, frases directas, sin jerga. No usar *ROI*, *conversión*, *cargar* (→ abrir), *abandonan* (→ se sale), *ecosistemas*.
 
@@ -12,11 +12,11 @@
 
 ---
 
-## Inicio — `/`
+## Inicio — `/` · ✅ aprobado (D-038)
 
 ### 1. Hero — elige una versión
 
-**Versión A · Plazo + resultado** ⭐ recomendada
+**Versión A · Plazo + resultado** ✅ elegida (D-038)
 
 > Badge: **Tomamos 3 proyectos nuevos al mes**
 >
@@ -62,7 +62,7 @@
 
 > Han confiado en nosotros: **Danrodedm · Boost Your Menu · Arata Print · Caravana**
 
-◻ Confirmar permiso de cada cliente para mostrar su nombre (`portafolio.md`).
+✅ Permiso confirmado (D-042).
 
 ---
 
@@ -70,7 +70,7 @@
 
 **Título — elige:**
 
-- A: **¿Tu negocio vive en el chat?** ⭐
+- A: **¿Tu negocio vive en el chat?** ✅
 - B: **Así se pierden clientes todos los días**
 
 **Lista:**
@@ -100,7 +100,7 @@
 
 **Título — elige:**
 
-- A: **Trabajos reales, negocios reales** ⭐
+- A: **Trabajos reales, negocios reales** ✅
 - B: **Lo que ya hicimos**
 
 | Proyecto | Frase de la tarjeta |
@@ -121,7 +121,7 @@
 | Paso | Título | Texto | Nota |
 |---|---|---|---|
 | 1 | Agendas una reunión | 30 minutos. Nos cuentas tu negocio y qué necesitas. | ✅ |
-| 2 | Te mandamos la propuesta | En 48 horas: paquete, precio y fecha de entrega. | ◻ confirmar las 48 h |
+| 2 | Te mandamos la propuesta | En 48 horas: paquete, precio y fecha de entrega. | ✅ D-039 |
 | 3 | Apruebas y arrancamos | Nos mandas tus textos, tu logo y tus fotos. | ✅ D-032 |
 | 4 | Te entregamos en 5 días hábiles | Tu página o tu catálogo publicado y funcionando. | ✅ |
 | 5 | Te enseñamos a usarlo | Capacitación incluida. | ✅ D-032 |
@@ -132,7 +132,7 @@
 
 **Título — elige:**
 
-- A: **Precios claros, sin sorpresas** ⭐
+- A: **Precios claros, sin sorpresas** ✅
 - B: **Cuánto cuesta**
 
 **Tarjeta 1 — Página Lista en 5 Días**
@@ -179,6 +179,8 @@
 
 > **Garantía de velocidad.** Si tu página no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo.
 >
+> **Paga por partes:** 50 % para arrancar y 50 % cuando te entregamos.
+>
 > **Mantenimiento opcional:** 15 % del valor de tu proyecto al mes.
 >
 > ¿No sabes cuál necesitas? **Agenda y te decimos en 30 minutos.**
@@ -187,15 +189,7 @@
 
 ### 8. Equipo
 
-**Título:** **Las personas detrás**
-
-| Persona | Rol (texto) |
-|---|---|
-| Sergio | Estrategia y diseño |
-| Andrés | Clientes y ventas |
-| Santiago | Desarrollo y sistemas |
-
-◻ Confirmar roles, apellidos y fotos.
+Fuera por ahora (D-043). Se puede agregar después.
 
 ---
 
@@ -216,13 +210,14 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Qué pasa después de la entrega? | Te enseñamos a usar todo. Si quieres que sigamos cuidando tu página, tienes el mantenimiento opcional: 15 % del valor del proyecto al mes. |
 | ¿Trabajan con negocios fuera de Colombia? | Sí. Por ejemplo, hicimos la landing de Boost Your Menu, en New Jersey. |
 | ¿Por qué solo 3 proyectos al mes? | Porque así cumplimos los 5 días sin bajar la calidad. |
+| ¿Puedo pagar por partes? | Sí. Pagas el 50 % para arrancar y el otro 50 % cuando te entregamos. |
 | ¿La reunión tiene costo? | No. Son 30 minutos y sales con el paquete y el precio para tu caso. |
 
 ---
 
 ### 11. CTA final — elige
 
-**Versión A · Escasez** ⭐
+**Versión A · Escasez** ✅
 
 > # Este mes tomamos 3 proyectos nuevos.
 >
@@ -240,11 +235,11 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 ---
 
-## Pendiente de aprobar (Inicio)
+## Estado del Inicio
 
-- [ ] Hero: A, B o C
-- [ ] Títulos con opción: Problema, Portafolio, Precios
-- [ ] CTA final: A o B
-- [ ] ◻ Propuesta en 48 horas
-- [ ] ◻ Permiso de clientes para mostrar nombres
-- [ ] ◻ Roles y fotos del equipo
+- [x] Hero: versión A (D-038)
+- [x] Títulos y CTA final: versión A por defecto (D-038); se pueden cambiar en cualquier momento
+- [x] Propuesta en 48 horas (D-039)
+- [x] Permiso de clientes (D-042)
+- [x] Sin sección de equipo por ahora (D-043)
+- [x] Facilidad de pago 50/50 en precios y FAQ (D-040)

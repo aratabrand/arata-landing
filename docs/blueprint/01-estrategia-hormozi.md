@@ -37,6 +37,8 @@
 | **Mantenimiento** | Mensualidad | ✅ Soporte y mantenimiento | Mensual | ✅ **15 % del valor del proyecto** (Landing desde 60 USD/mes · Catálogo desde 120 USD/mes) |
 
 - **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
+- **Pago:** ✅ **50 % al iniciar y 50 % al entregar** (D-040).
+- **Propuesta:** ✅ en **48 horas** después de la reunión (D-039).
 - **Moneda en el sitio:** ✅ **USD** (D-028).
 - **Mantenimiento:** ✅ **opcional**, se ofrece al entregar (D-031).
 - **Adicional de la Landing:** ✅ **panel básico** para editar la página y ver las métricas del negocio, **con costo aparte** (D-033, D-034). Precio **[decidir]**.
@@ -156,6 +158,7 @@ La plantilla de la auditoría ya existe: es el diagnóstico orgánico que se hiz
 | Urgencia | ◻ *"Cupos de [mes]: quedan X"* | Solo si se actualiza de verdad cada mes |
 | Prueba | 4 casos reales; testimonios cuando lleguen | Nunca inventados |
 | Garantía | Velocidad 90+ (§6) | Junto al precio |
+| Pago por partes | 50 % / 50 % (D-040) | Baja el sacrificio sin bajar el precio; va junto al precio y en las preguntas frecuentes |
 | Nombre | §5 | En hero, paquetes y CTA |
 
 ---

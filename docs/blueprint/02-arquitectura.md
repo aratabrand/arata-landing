@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.1 | 7 nov 2026 | Sergio |
+| En revisión | 0.2 | 7 nov 2026 | Sergio |
 
 Estructura sección por sección de cada página. **Cada sección tiene un trabajo**: si no ayuda a que la persona agende, sobra.
 
@@ -16,7 +16,7 @@ Base: estrategia aprobada en [`01-estrategia-hormozi.md`](01-estrategia-hormozi.
 
 | Escritorio | Celular |
 |---|---|
-| Logo · Páginas · Catálogos y sistemas · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
+| Logo · **Servicios ▾** (mega menú: Páginas que venden · Catálogos y sistemas · Portafolio, con vista previa) · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
 
 - "Precios" lleva a la sección de paquetes del inicio (`/#precios`).
 - El botón **Agendar reunión** siempre está visible y es el único con color lima.
@@ -56,7 +56,7 @@ Cualquier CTA ──► /agendar
 ```
 
 - Las respuestas llegan con la cita, así la reunión arranca preparada (CLOSER, paso C).
-- "Menos de 400 USD" no bloquea la agenda: avisa con amabilidad que el paquete de entrada arranca en 400 USD. **[decidir]** si se deja agendar igual.
+- "Menos de 400 USD" **sí puede agendar** (D-041). Se le muestra: *"Puedes pagar por partes: 50 % para arrancar y 50 % al entregar."* (D-040)
 
 ---
 
@@ -73,10 +73,9 @@ Cualquier CTA ──► /agendar
 | 5 | **Portafolio destacado** | Probar que sabemos hacerlo | 4 casos con video | Tarjeta de proyecto |
 | 6 | **Cómo trabajamos** | Bajar el miedo al proceso | 5 pasos hasta la entrega en 5 días hábiles | Pasos del proceso |
 | 7 | **Precios** (`#precios`) | Filtrar y anclar valor | 3 paquetes + mantenimiento opcional + garantía | Tarjeta de paquete · Sello de garantía |
-| 8 | **Equipo** | La gente le compra a personas (D-016) | Sergio, Andrés, Santiago | Sección equipo |
-| 9 | **Testimonios** | Prueba social | Solo cuando lleguen los reales | Testimonio |
-| 10 | **Preguntas frecuentes** | Resolver objeciones | 6–8 preguntas | Acordeón |
-| 11 | **CTA final** | Cerrar | Cupos (escasez real) + agendar | Banda de CTA (LightRays) |
+| 8 | **Testimonios** | Prueba social | Solo cuando lleguen los reales | Testimonio |
+| 9 | **Preguntas frecuentes** | Resolver objeciones | 6–8 preguntas | Acordeón |
+| 10 | **CTA final** | Cerrar | Cupos (escasez real) + agendar | Banda de CTA (LightRays) |
 
 ### 3.2 Páginas que venden — `/paginas-web`
 
@@ -159,5 +158,5 @@ Se adapta la existente al estilo v2, con enlaces a inicio, portafolio y agendar.
 
 ## 5. Pendiente
 
-- [ ] ¿Se deja agendar a quien elige "Menos de 400 USD"? (§2)
+- [x] "Menos de 400 USD" puede agendar, con facilidad de pago (D-041)
 - [ ] Aprobar la estructura de cada página.
