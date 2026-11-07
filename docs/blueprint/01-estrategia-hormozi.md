@@ -39,6 +39,8 @@
 - **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
 - **Pago:** ✅ **50 % al iniciar y 50 % al entregar** (D-040).
 - **Propuesta:** ✅ en **48 horas** después de la reunión (D-039).
+- **También incluyen (Landing y Catálogo):** ✅ dominio y hosting el primer año (D-045) y 2 rondas de ajustes (D-046).
+- **Catálogo:** ✅ el cliente sube sus productos desde su panel (D-047); ✅ sin pago en línea, el pedido llega por WhatsApp (D-048).
 - **Moneda en el sitio:** ✅ **USD** (D-028).
 - **Mantenimiento:** ✅ **opcional**, se ofrece al entregar (D-031).
 - **Adicional de la Landing:** ✅ **panel básico** para editar la página y ver las métricas del negocio, **con costo aparte** (D-033, D-034). Precio **[decidir]**.

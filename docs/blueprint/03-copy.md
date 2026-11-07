@@ -143,6 +143,8 @@
 > - Diseño hecho primero para el celular
 > - Velocidad de 90 o más en Google, garantizada
 > - Lista para que te encuentren en Google, Google Business y la IA
+> - Dominio y hosting el primer año
+> - 2 rondas de ajustes
 > - Capacitación para que la manejes tú
 > - Entrega en 5 días hábiles
 >
@@ -160,6 +162,8 @@
 > - Inventario
 > - Velocidad de 90 o más en Google, garantizada
 > - Lista para Google, Google Business y la IA
+> - Dominio y hosting el primer año
+> - 2 rondas de ajustes
 > - Capacitación
 > - Entrega en 5 días hábiles
 >
@@ -303,6 +307,8 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | Hecha primero para el celular | Porque es donde te van a ver tus clientes. |
 | Velocidad garantizada | 90 o más en la medición de Google. Si no lo logra, la seguimos ajustando gratis. |
 | Lista para Google y la IA | Configuración para Google, tu perfil de Google Business y para que la IA encuentre tu página. |
+| Dominio y hosting | El primer año va por nuestra cuenta. |
+| 2 rondas de ajustes | Para que quede como la quieres. |
 | Capacitación | Te enseñamos a manejarla. |
 | Entrega en 5 días hábiles | Desde que apruebas y nos mandas tus textos, tu logo y tus fotos. |
 
@@ -348,10 +354,10 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 |---|---|
 | 1 | Armamos la estructura de tus 5 secciones con tus textos. |
 | 2–3 | Diseñamos y construimos tu página, primero para el celular. |
-| 4 | Te la mostramos y hacemos los ajustes. |
+| 4 | Te la mostramos y hacemos los ajustes (2 rondas). |
 | 5 | La publicamos, la medimos en Google y te enseñamos a usarla. |
 
-◻ Confirmar que así se reparten los 5 días y cuántas rondas de ajustes incluye.
+◻ Confirmar que así se reparten los 5 días. ✅ 2 rondas de ajustes (D-046).
 
 ---
 
@@ -379,8 +385,8 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Y si necesito más de 5 secciones? | Se puede. Te damos el precio en la propuesta. |
 | ¿Qué es el panel adicional? | Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Tiene un costo aparte. |
 | ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. |
-| ¿Incluye dominio y hosting? | ◻ **[falta respuesta]** |
-| ¿Cuántos cambios puedo pedir? | ◻ **[falta respuesta]** |
+| ¿Incluye dominio y hosting? | Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento. |
+| ¿Cuántos cambios puedo pedir? | Dos rondas de ajustes dentro de los 5 días. |
 
 ---
 
@@ -453,8 +459,10 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | Inventario | Sabes cuánto tienes de cada producto. |
 | Velocidad garantizada | 90 o más en la medición de Google, o la seguimos ajustando gratis. |
 | Lista para Google y la IA | Configuración para Google, Google Business y la IA. |
-| Capacitación | Te enseñamos a usar todo. |
-| Entrega en 5 días hábiles | Desde que apruebas y nos mandas tus productos y fotos. |
+| Dominio y hosting | El primer año va por nuestra cuenta. |
+| 2 rondas de ajustes | Para que quede como la quieres. |
+| Capacitación | Te enseñamos a usar todo, también a subir tus productos. |
+| Entrega en 5 días hábiles | Desde que apruebas la propuesta. Tus productos los subes tú desde el panel. |
 
 > **Desde 800 USD** · el precio depende del tamaño de tu tienda.
 > Paga por partes: 50 % para arrancar y 50 % al entregar.
@@ -502,7 +510,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 |---|---|---|
 | 1 | Agendas una reunión | 30 minutos. Nos cuentas cómo vendes hoy. |
 | 2 | Te mandamos la propuesta | En 48 horas: paquete, precio y fecha de entrega. |
-| 3 | Apruebas y arrancamos | Pagas el 50 % y nos mandas tus productos y fotos. |
+| 3 | Apruebas y arrancamos | Pagas el 50 % y nos mandas tu logo. |
 | 4 | Te entregamos | Tu tienda en 5 días hábiles. Si es un sistema a medida, en el plazo de la propuesta. |
 | 5 | Te enseñamos a usarlo | Capacitación incluida. |
 
@@ -517,8 +525,8 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Por qué el precio dice "desde"? | Porque depende de cuántos productos y categorías tengas. En la reunión te damos el precio exacto. |
 | ¿Qué es "Tu Negocio en Orden"? | Un sistema hecho para cómo trabaja tu negocio: reservas, menú digital, registro de clientes (CRM) u otro. Lo cotizamos contigo. |
 | ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. |
-| ¿Quién sube los productos? | ◻ **[falta respuesta]** |
-| ¿Mis clientes pueden pagar en línea? | ◻ **[falta respuesta]** |
+| ¿Quién sube los productos? | Tú, desde tu panel. Te enseñamos a hacerlo en la capacitación. |
+| ¿Mis clientes pueden pagar en línea? | Por ahora no. El cliente arma su pedido, te llega por WhatsApp y el pago lo coordinas tú directamente. |
 | ¿Cuántos productos caben? | ◻ **[falta respuesta]** |
 
 ---
@@ -537,9 +545,9 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 - [ ] Hero de `/paginas-web`: A, B o C
 - [ ] Hero de `/catalogos-y-sistemas`: A, B o C
-- [ ] ◻ Reparto de los 5 días y rondas de ajustes
-- [ ] ◻ ¿Incluye dominio y hosting?
-- [ ] ◻ ¿Quién sube los productos del catálogo?
-- [ ] ◻ ¿Hay pago en línea o solo pedido por WhatsApp?
+- [ ] ◻ Reparto de los 5 días (✅ 2 rondas de ajustes, D-046)
+- [x] Dominio y hosting el primer año (D-045)
+- [x] El cliente sube sus productos (D-047)
+- [x] Solo pedido por WhatsApp (D-048)
 - [ ] ◻ ¿Hay un límite de productos para el precio de 800 USD?
 - [ ] ◻ Precio del panel adicional de la Landing
