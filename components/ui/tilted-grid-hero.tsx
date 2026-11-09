@@ -241,10 +241,20 @@ export function TiltedGridHero({
           .catch(() => {});
       });
     };
+    // Espera a que la página termine de cargar y luego a un momento libre: las
+    // capturas no compiten con lo que se ve primero (título, fuentes, JS).
     const idle = "requestIdleCallback" in window;
-    const handle = idle ? window.requestIdleCallback(run, { timeout: 1200 }) : window.setTimeout(run, 200);
+    let handle = 0;
+    const schedule = () => {
+      if (cancelled) return;
+      handle = idle ? window.requestIdleCallback(run, { timeout: 1500 }) : window.setTimeout(run, 300);
+    };
+    const loaded = document.readyState === "complete";
+    if (loaded) schedule();
+    else window.addEventListener("load", schedule, { once: true });
     return () => {
       cancelled = true;
+      window.removeEventListener("load", schedule);
       if (idle) window.cancelIdleCallback(handle);
       else window.clearTimeout(handle);
     };

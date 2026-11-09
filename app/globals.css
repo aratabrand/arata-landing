@@ -285,6 +285,55 @@
   pointer-events: auto;
 }
 
+/* Menú del celular (D-070): el panel entra con fundido y los elementos suben
+   escalonados (--d). Al cerrar sale rápido, sin escalonar. Solo transform/opacity. */
+.v2-mnav {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+}
+.v2-mnav.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+.v2-mnav-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.v2-mnav.is-open .v2-mnav-item {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0) * 45ms + 60ms),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0) * 45ms + 60ms);
+}
+/* Hamburguesa → X */
+.v2-burger-l {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-burger-l:first-child {
+  transform: translateY(-4px);
+}
+.v2-burger-l:last-child {
+  transform: translateY(3px);
+}
+.v2-burger.is-open .v2-burger-l:first-child {
+  transform: translateY(-0.5px) rotate(45deg);
+}
+.v2-burger.is-open .v2-burger-l:last-child {
+  transform: translateY(-0.5px) rotate(-45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-mnav,
+  .v2-mnav.is-open,
+  .v2-mnav-item,
+  .v2-mnav.is-open .v2-mnav-item,
+  .v2-burger-l {
+    transition: none !important;
+  }
+}
+
 /* Reveal en scroll con variantes direccionales — respeta reduce-motion */
 .reveal {
   opacity: 0;

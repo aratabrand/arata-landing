@@ -35,6 +35,7 @@ export function Button({
   arrow = false,
   external = false,
   className,
+  onClick,
 }: {
   href: string;
   children: ReactNode;
@@ -43,6 +44,7 @@ export function Button({
   arrow?: boolean;
   external?: boolean;
   className?: string;
+  onClick?: () => void;
 }) {
   const cls = cn(base, variants[variant], variant === "ghost" ? "h-11 px-1 text-sm" : sizes[size], className);
   const content = (
@@ -54,13 +56,13 @@ export function Button({
 
   if (external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cn("group", cls)}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={cn("group", cls)} onClick={onClick}>
         {content}
       </a>
     );
   }
   return (
-    <Link href={href} className={cn("group", cls)}>
+    <Link href={href} className={cn("group", cls)} onClick={onClick}>
       {content}
     </Link>
   );

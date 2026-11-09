@@ -92,7 +92,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 
 | Componente | Descripción | Prioridad |
 |---|---|---|
-| Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa | P1 |
+| Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
 | Botón | Rectangular redondeado 10 px. Primario **lima** con texto `ink` · secundario superficie oscura (`surface-2`) · terciario texto con flecha ("Ver todo →") | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
 | Tarjeta base | Superficie + borde fino de 1 px + radio 24 px; luz que sigue el cursor en hover | P1 |
@@ -237,5 +237,8 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Una instancia por breakpoint (`md:hidden` / `hidden md:block`) y descargas solo si la instancia tiene ancho | Lo oculto con `display:none` no descarga imágenes |
 | Contadores: el servidor renderiza **la cifra real**; el efecto la reinicia a 0 solo en el navegador | Google y los bots de IA leen "5 días", no "0 días" |
 | Capas invisibles (`opacity:0`) de menús: **`pointer-events-none` cuando están cerradas** + retraso de intención al abrir | Si no, se abren al pasar el mouse por debajo del botón (bug del mega menú) |
+| **Nada `position: fixed` dentro de un elemento con `backdrop-filter`, `transform` o `filter`** | Ese padre se vuelve el contenedor del `fixed`: el panel del menú quedaba recortado al alto del header (D-070). Los paneles a pantalla completa van como hermanos del header |
+| Paneles que se abren con un toque se **crean al primer toque** (y se abren al siguiente cuadro para que la animación corra) | Montados desde el inicio, Next precarga sus enlaces y suma ~95 KB al cargar |
+| Menú del celular: opciones de **56 px o más**, acción principal **abajo** (zona del pulgar), cierre con X/Escape/al tocar, foco dentro del panel | Fácil de usar con una mano (D-070) |
 | Animación ligada al scroll: **un solo listener pasivo** que escribe una variable CSS (`--p`), activo solo mientras la sección se ve; lo demás es `calc()` en CSS | Sin listeners por elemento ni reflow (`ScrollPaint`, D-067) |
 

@@ -268,6 +268,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 - [x] Facilidad de pago 50/50 en precios y FAQ (D-040)
 - [ ] ◻ Títulos cortos de las tarjetas del problema (D-066)
 - [ ] ◻ Tarjeta "Tus datos, a la vista" del bento y si el panel incluye ventas (D-065)
+- [x] Menú del celular: bajo el botón va *"30 minutos, sin costo."* (texto ya aprobado en D-053)
 
 ---
 
