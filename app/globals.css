@@ -390,6 +390,32 @@
   .nd-hand { animation: none !important; }
 }
 
+/* Cápsula "Ver proyecto" que sigue al mouse (D-085). La capa externa solo se
+   mueve (sin transición, para que no se atrase); la interna aparece con escala. */
+@media (hover: hover) and (pointer: fine) {
+  .v2-capsule-zone { cursor: none; }
+}
+.v2-capsule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+  transform: translate3d(var(--cx, 50%), var(--cy, 50%), 0) translate(-50%, -50%);
+}
+.v2-capsule-in {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.18s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-capsule-zone[data-on] .v2-capsule-in {
+  opacity: 1;
+  transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-capsule-in { transition: none; }
+}
+
 /* Paso del formulario de /agendar: entra con un deslizamiento corto (D-072) */
 .v2-step {
   animation: v2-step-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;

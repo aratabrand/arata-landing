@@ -149,8 +149,10 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Velocidad de la muestra: Lighthouse móvil 94–97, accesibilidad 100 (D-059)
 - [x] **Aprobación visual de Sergio — Fase 3 cerrada (D-072)**
 - [x] Fase 4: páginas de servicio, portafolio, 4 casos, agendar, gracias, privacidad y 404 construidos (`05-construccion.md`, D-073 a D-075)
-- [ ] Enlaces de Cal.com, RUT y dirección (Sergio)
-- [ ] **Preview de Vercel revisado (puerta de la Fase 4)**
+- [x] Enlaces de Cal.com (D-076)
+- [ ] RUT y dirección (Sergio)
+- [x] **Preview de Vercel revisado — Fase 4 cerrada (D-086)**
+- [ ] Fase 5: SEO, GEO, velocidad y legal (`06-seo-geo-velocidad.md`)
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento

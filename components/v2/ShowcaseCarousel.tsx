@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import HoverCapsule from "./HoverCapsule";
 import { useEffect, useState, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -34,17 +35,20 @@ export default function ShowcaseCarousel({ items, slides }: { items: SlideMeta[]
       onFocusCapture={() => setPausa(true)}
       onBlurCapture={() => setPausa(false)}
     >
-      <div className="v2-frame relative aspect-[16/10]">
-        {slides.map((slide, i) => (
-          <div
-            key={items[i].slug}
-            aria-hidden={i !== actual}
-            className={cn("absolute inset-0 transition-opacity duration-500", i === actual ? "opacity-100" : "opacity-0")}
-          >
-            {slide}
-          </div>
-        ))}
-      </div>
+      {/* La imagen también lleva al caso (con mouse: cápsula "Ver proyecto"). Con teclado se usa "Ver caso". */}
+      <Link href={`/portafolio/${p.slug}`} tabIndex={-1} aria-hidden className="block">
+        <HoverCapsule className="v2-frame aspect-[16/10]">
+          {slides.map((slide, i) => (
+            <div
+              key={items[i].slug}
+              aria-hidden={i !== actual}
+              className={cn("absolute inset-0 transition-opacity duration-500", i === actual ? "opacity-100" : "opacity-0")}
+            >
+              {slide}
+            </div>
+          ))}
+        </HoverCapsule>
+      </Link>
 
       {/* Barra de progreso segmentada */}
       <div className="mt-3 flex gap-1.5 px-1" role="group" aria-label="Elegir proyecto">

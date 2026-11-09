@@ -23,6 +23,7 @@ import { Button } from "./Button";
 import { Badge, Container, Eyebrow, Glow, SectionHeader } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import Spotlight from "./Spotlight";
+import HoverCapsule from "./HoverCapsule";
 import { Assurances } from "./Pricing";
 import { AGENDAR } from "@/content/inicio";
 import { proyectos, type Proyecto } from "@/content/proyectos";
@@ -274,13 +275,13 @@ export function CaseCard({
   return (
     <Spotlight as="article" className="group h-full p-2">
       <Link href={`/portafolio/${proyecto.slug}`} className="flex h-full flex-col">
-        <div className="v2-frame aspect-[16/10]">
+        <HoverCapsule className="v2-frame aspect-[16/10]">
           <ProjectPreview
             proyecto={proyecto}
             priority={priority}
             sizes={sizes ?? "(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"}
           />
-        </div>
+        </HoverCapsule>
         <div className="flex flex-1 flex-col px-3 pb-3 pt-4">
           <p className="text-xs font-semibold text-brand-soft">{proyecto.etiqueta}</p>
           <Titulo className="mt-1.5 font-display text-xl font-bold tracking-heading text-white">{proyecto.nombre}</Titulo>
