@@ -10,7 +10,7 @@ export default function SitioLayout({ children }: { children: React.ReactNode })
     <>
       <Preloader />
       <SiteHeader />
-      <main>{children}</main>
+      <main className="v2-main">{children}</main>
       <SiteFooter />
       <StickyBookBar />
     </>
