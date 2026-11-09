@@ -242,5 +242,6 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | **Nada `position: fixed` dentro de un elemento con `backdrop-filter`, `transform` o `filter`** | Ese padre se vuelve el contenedor del `fixed`: el panel del menú quedaba recortado al alto del header (D-070). Los paneles a pantalla completa van como hermanos del header |
 | Paneles que se abren con un toque se **crean al primer toque** (y se abren al siguiente cuadro para que la animación corra) | Montados desde el inicio, Next precarga sus enlaces y suma ~95 KB al cargar |
 | Menú del celular: opciones de **56 px o más**, acción principal **abajo** (zona del pulgar), cierre con X/Escape/al tocar, foco dentro del panel | Fácil de usar con una mano (D-070) |
+| **Scroll horizontal: recortar solo el `<main>` en celular con `overflow-x: clip`** (no el `body`, no `hidden`) | Evita que una luz o una banda 3D (Safari no siempre recorta lo 3D) mueva la página de lado, y deja que una sección tenga su propio scroll horizontal (D-097) |
 | Animación ligada al scroll: **un solo listener pasivo** que escribe una variable CSS (`--p`), activo solo mientras la sección se ve; lo demás es `calc()` en CSS | Sin listeners por elemento ni reflow (`ScrollPaint`, D-067) |
 

@@ -420,9 +420,9 @@
    0–1,1 s: el símbolo cae pieza por pieza, la barra se llena y la cuenta llega a 100.
    1,1–1,7 s: las capas ink, morado y lima suben una tras otra y descubren la página. */
 @property --v2l-n { syntax: "<integer>"; inherits: false; initial-value: 0; }
-.v2l { position: fixed; inset: 0; z-index: 100; pointer-events: none; animation: v2l-fin 0s linear 1.75s forwards; }
+.v2l { position: fixed; inset: 0; width: 100%; max-width: 100vw; overflow: hidden; z-index: 100; pointer-events: none; animation: v2l-fin 0s linear 1.75s forwards; }
 .v2l-off .v2l { display: none; }
-@keyframes v2l-fin { to { visibility: hidden; } }
+@keyframes v2l-fin { to { visibility: hidden; display: none; } }
 .v2l-capa { position: absolute; inset: 0; will-change: transform; animation: v2l-sube 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
 .v2l-ink { z-index: 3; background: #03010B; display: flex; flex-direction: column; align-items: center; justify-content: center; animation-delay: 1.1s; }
 .v2l-morado { z-index: 2; background: #7D53FF; animation-delay: 1.2s; }
@@ -447,6 +447,18 @@
 @keyframes v2-marquee { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .v2-marquee-track { animation: none; }
+}
+
+/* Sin scroll horizontal de página en celular (D-097). Se recorta SOLO el contenedor
+   principal y SOLO en celular: lo que se salga por los lados (luces, bandas 3D que Safari
+   a veces no recorta) no mueve la página, y una sección puede tener su propio scroll
+   horizontal (overflow-x: auto) más adelante. `clip` no crea contenedor de scroll, así
+   que no rompe `position: sticky`; `hidden` queda de respaldo para navegadores viejos. */
+@media (max-width: 1023.98px) {
+  .v2-main { overflow-x: hidden; }
+  @supports (overflow: clip) {
+    .v2-main { overflow-x: clip; }
+  }
 }
 
 /* Paso del formulario de /agendar: entra con un deslizamiento corto (D-072) */
