@@ -99,10 +99,10 @@ En Vercel el servidor responde en 30–50 ms (en el entorno de prueba, ~460 ms):
 
 | Qué | Estado |
 |---|---|
-| Política de datos (`/privacidad`, Ley 1581 de 2012) | ✅ Publicada con responsable, ciudad, correo, finalidades, derechos y plazos (D-075) |
-| Autorización en el formulario de `/agendar` | ✅ Casilla obligatoria con enlace a la política |
+| Política de datos (`/privacidad`, Ley 1581 de 2012) | ✅ Publicada (D-075) y reforzada (D-099): autorización con prueba, envío fuera de Colombia (art. 26), dirección para notificaciones, plazo de conservación, cookies y seguridad |
+| Autorización en el formulario de `/agendar` | ✅ Casilla obligatoria que nombra a Cal.com y Google y el envío fuera de Colombia; la fecha y hora de la autorización viajan en las notas de cada cita (D-099) |
 | Datos del responsable | ✅ Nombre, domicilio digital (Bogotá), correo y teléfono. Cédula/NIT no se publica (D-090) |
-| Revisión de un abogado | ◻ Recomendada antes de lanzar |
+| Revisión de un abogado | ◻ Pendiente: confirmar el correo como dirección de notificaciones y el plazo de 2 años (`07-medicion-lanzamiento.md` §5) |
 
 ---
 
