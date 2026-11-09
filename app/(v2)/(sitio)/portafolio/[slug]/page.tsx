@@ -5,10 +5,13 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import Ring from "@/components/Ring";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
-import { CtaCard } from "@/components/v2/Closing";
+import { CtaCard, FaqSection } from "@/components/v2/Closing";
+import { StepsSection } from "@/components/v2/HomeSections";
 import { Container, Eyebrow, Glow } from "@/components/v2/primitives";
 import ProjectPreview from "@/components/v2/ProjectPreview";
+import { cn } from "@/lib/utils";
 import { casoTextos as t, proyectos } from "@/content/proyectos";
+import { catalogos, paginasWeb } from "@/content/servicios";
 
 // Caso de estudio — estructura 02-arquitectura.md §3.5, copy 03-copy.md.
 // Regla: el resultado se dice como pasó. Si no hay dato, la sección no aparece.
@@ -37,6 +40,20 @@ export default async function Caso({ params }: Props) {
   if (i < 0) notFound();
   const p = proyectos[i];
   const sig = proyectos[(i + 1) % proyectos.length];
+  // D-082: con "fuerte" no se muestra la velocidad en celular (debajo de la garantía de 90) hasta optimizar.
+  const completo = p.puntajes?.mostrar === "todo";
+  // Datos del cliente: solo los que existen (no se inventan)
+  const ficha = (
+    [
+      [t.ficha.sector, p.ficha.sector],
+      [t.ficha.ciudad, p.ficha.ciudad],
+      [t.ficha.servicios, p.ficha.servicios],
+      [t.ficha.duracion, p.ficha.duracion],
+    ] as const
+  ).filter((x): x is [string, string] => !!x[1]);
+  // Proceso: el real del proyecto si Sergio lo contó; si no, el estándar de su servicio (aprobado)
+  const estandar = p.servicio === "pagina" ? paginasWeb.dias.items : catalogos.proceso.items;
+  const faq = p.servicio === "pagina" ? paginasWeb.faq.items : catalogos.faq.items;
 
   return (
     <>
@@ -71,7 +88,30 @@ export default async function Caso({ params }: Props) {
             <span className="text-sm text-fog-dim">{p.nombre}</span>
           </div>
 
-          <div className="v2-card mt-12 p-2 shadow-2xl">
+          {/* Datos del cliente (Sector · Ciudad · Servicios · Duración) */}
+          <dl
+            className={cn(
+              "mt-10 grid grid-cols-2 overflow-hidden rounded-card border border-white/8 bg-surface-1",
+              ficha.length === 4 ? "lg:grid-cols-4" : ficha.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"
+            )}
+          >
+            {ficha.map(([k, val], n) => (
+              <div
+                key={k}
+                className={cn(
+                  "border-white/8 p-5",
+                  n % 2 === 1 && "border-l",
+                  n >= 2 && "border-t lg:border-t-0",
+                  n >= 1 && "lg:border-l"
+                )}
+              >
+                <dt className="text-[0.7rem] font-medium uppercase tracking-[0.14em] text-fog-dim">{k}</dt>
+                <dd className="mt-2 font-semibold leading-snug text-white">{val}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="v2-card mt-6 p-2 shadow-2xl">
             <div className="v2-frame aspect-[16/10]">
               <ProjectPreview proyecto={p} priority sizes="(min-width: 1200px) 1150px, 100vw" />
             </div>
@@ -112,8 +152,11 @@ export default async function Caso({ params }: Props) {
         </Container>
       </section>
 
+      {/* Cómo fue el proceso (o, mientras no lo tengamos, cómo trabajamos un proyecto así) */}
+      <StepsSection id="proceso" titulo={p.proceso ? t.proceso : t.procesoEstandar} items={p.proceso ?? estandar} />
+
       {/* Puntajes de Google del sitio en vivo (reemplaza la galería: la página ya se ve arriba y en vivo) */}
-      {p.puntajes?.mostrar && (
+      {p.puntajes && (
         <section aria-labelledby="puntajes" className="py-16 sm:py-24">
           <Container>
             <div className="grid gap-8 rounded-[28px] border border-white/8 bg-surface-1 p-6 sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-12">
@@ -123,11 +166,13 @@ export default async function Caso({ params }: Props) {
                 </h2>
                 <p className="mt-4 text-fog">{t.puntajes.texto}</p>
                 <dl className="mt-8 grid grid-cols-2 gap-3">
-                  <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
-                    <dt className="text-xs text-fog-dim">{t.puntajes.abre}</dt>
-                    <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-lime">{p.puntajes.abreEnCelular}</dd>
-                    <dd className="text-xs text-fog-dim">{t.puntajes.celular.toLowerCase()}</dd>
-                  </div>
+                  {completo && (
+                    <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                      <dt className="text-xs text-fog-dim">{t.puntajes.abre}</dt>
+                      <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-lime">{p.puntajes.abreEnCelular}</dd>
+                      <dd className="text-xs text-fog-dim">{t.puntajes.celular.toLowerCase()}</dd>
+                    </div>
+                  )}
                   <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
                     <dt className="text-xs text-fog-dim">
                       {t.puntajes.rendimiento} · {t.puntajes.escritorio.toLowerCase()}
@@ -153,7 +198,7 @@ export default async function Caso({ params }: Props) {
                       ["seo", p.puntajes.celular.seo],
                     ] as const
                   )
-                    .filter((x): x is [typeof x[0], number] => x[1] !== null)
+                    .filter((x): x is [typeof x[0], number] => x[1] !== null && (completo || x[0] !== "rendimiento"))
                     .map(([k, val]) => (
                     <Ring
                       key={k}
@@ -172,6 +217,9 @@ export default async function Caso({ params }: Props) {
           </Container>
         </section>
       )}
+
+      {/* Preguntas frecuentes del tipo de servicio (copy aprobado de cada página de servicio) */}
+      <FaqSection titulo={p.servicio === "pagina" ? t.faqPagina : t.faqCatalogo} subtitulo="" items={faq} />
 
       {/* Siguiente proyecto */}
       <section aria-label={t.siguiente} className="pb-8">

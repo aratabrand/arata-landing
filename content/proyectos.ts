@@ -17,9 +17,19 @@ export type Puntajes = {
   /** Tiempo en que se ve lo principal en celular (LCP), ej. "2,1 s". */
   abreEnCelular: string;
   fecha: string;
-  /** false = medido pero no se publica (D-080: debajo de la garantía de 90, Sergio decide). */
-  mostrar: boolean;
+  /**
+   * "todo" = se publican todos los números.
+   * "fuerte" = D-082: la velocidad en celular está debajo de la garantía de 90 → no se muestra
+   * (ni el tiempo en celular) hasta optimizar ese sitio; sí SEO, buenas prácticas, accesibilidad y computador.
+   */
+  mostrar: "todo" | "fuerte";
 };
+
+/** Datos del cliente que van arriba en el caso (Sector · Ciudad · Servicios · Duración). Vacío = no se muestra. */
+export type Ficha = { sector: string; ciudad?: string; servicios: string; duracion?: string };
+
+/** Paso del proceso real de un proyecto (si no hay, se muestra el proceso estándar de su servicio). */
+export type PasoProyecto = { titulo: string; texto: string; marca?: string };
 
 // Medición real: Lighthouse 12.6 móvil (3 corridas, mediana) y escritorio (2 corridas), 9 nov 2026.
 const FECHA_MEDICION = "noviembre de 2026";
@@ -40,6 +50,11 @@ export type Proyecto = {
   logra?: string;
   /** Puntajes de Google (Lighthouse, la medición detrás de PageSpeed) del sitio en vivo. Datos reales medidos. */
   puntajes?: Puntajes;
+  ficha: Ficha;
+  /** ◻ Proceso real del proyecto (lo cuenta Sergio). Sin esto, va el proceso estándar del servicio. */
+  proceso?: PasoProyecto[];
+  /** Qué preguntas frecuentes muestra el caso: las de páginas o las de catálogos y sistemas. */
+  servicio: "pagina" | "catalogo";
   // Color de acento solo para la vista previa provisional (hasta tener video)
   acento: string;
   video?: VideoProyecto; // D-026: video en loop, se agrega cuando exista
@@ -50,7 +65,10 @@ export type Proyecto = {
 export const proyectos: Proyecto[] = [
   {
     slug: "danrodedm",
-    puntajes: { celular: { rendimiento: 79, accesibilidad: 93, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 97 }, abreEnCelular: "5,2 s", fecha: FECHA_MEDICION, mostrar: false },
+    // ◻ faltan ciudad y duración (Sergio)
+    ficha: { sector: "Maquinaria de electroerosión", servicios: "Página con catálogo" },
+    servicio: "pagina",
+    puntajes: { celular: { rendimiento: 79, accesibilidad: 93, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 97 }, abreEnCelular: "5,2 s", fecha: FECHA_MEDICION, mostrar: "fuerte" },
     nombre: "Danrodedm",
     tipos: ["Catálogo"],
     etiqueta: "Catálogo · Maquinaria",
@@ -76,7 +94,10 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "boost-your-menu",
-    puntajes: { celular: { rendimiento: 70, accesibilidad: 90, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 88 }, abreEnCelular: "5,3 s", fecha: FECHA_MEDICION, mostrar: false },
+    // ◻ falta duración (Sergio)
+    ficha: { sector: "Menús digitales para restaurantes", ciudad: "New Jersey, EE. UU.", servicios: "Página que vende (landing)" },
+    servicio: "pagina",
+    puntajes: { celular: { rendimiento: 70, accesibilidad: 90, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 88 }, abreEnCelular: "5,3 s", fecha: FECHA_MEDICION, mostrar: "fuerte" },
     nombre: "Boost Your Menu",
     tipos: ["Página"],
     etiqueta: "Página · New Jersey, EE. UU.",
@@ -105,7 +126,10 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "arata-print",
-    puntajes: { celular: { rendimiento: 96, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,6 s", fecha: FECHA_MEDICION, mostrar: true },
+    // ◻ faltan ciudad y duración (Sergio)
+    ficha: { sector: "Camisetas estampadas bajo pedido", servicios: "Catálogo + sistema a medida" },
+    servicio: "catalogo",
+    puntajes: { celular: { rendimiento: 96, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,6 s", fecha: FECHA_MEDICION, mostrar: "todo" },
     nombre: "Arata Print",
     tipos: ["Catálogo", "Sistema"],
     etiqueta: "Catálogo · Sistema",
@@ -132,7 +156,10 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "caravana",
-    puntajes: { celular: { rendimiento: 99, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,0 s", fecha: FECHA_MEDICION, mostrar: true },
+    // ◻ faltan ciudad y duración (Sergio)
+    ficha: { sector: "Tecnología y accesorios", servicios: "Catálogo + panel de tienda" },
+    servicio: "catalogo",
+    puntajes: { celular: { rendimiento: 99, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,0 s", fecha: FECHA_MEDICION, mostrar: "todo" },
     nombre: "Caravana",
     tipos: ["Catálogo", "Sistema"],
     etiqueta: "Catálogo · Sistema · Tecnología",
@@ -190,6 +217,12 @@ export const casoTextos = {
   resultado: "El resultado",
   logra: "Qué logra la página",
   volver: "Volver al portafolio",
+  // ◻ copy nuevo por aprobar
+  ficha: { sector: "Sector", ciudad: "Ciudad", servicios: "Servicios", duracion: "Duración" },
+  proceso: "Cómo fue el proceso",
+  procesoEstandar: "Cómo trabajamos un proyecto así",
+  faqPagina: "Preguntas sobre páginas como esta",
+  faqCatalogo: "Preguntas sobre catálogos y sistemas",
   // ◻ copy nuevo por aprobar
   puntajes: {
     titulo: "Así sale en Google",

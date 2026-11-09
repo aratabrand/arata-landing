@@ -838,6 +838,9 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 | Casos · botón arriba | ← Volver al portafolio |
 | Casos · puntajes | **Así sale en Google** · *Medimos el sitio en vivo con Lighthouse, la herramienta de Google que está detrás de PageSpeed.* · En celular / En computador · Velocidad · Accesibilidad · Buenas prácticas · SEO · Se ve lo principal en · Medido en |
 | Casos · sin SEO | Este sitio aún está en un dominio de prueba, cerrado a Google; por eso no mostramos su SEO. |
+| Casos · franja del cliente | SECTOR · CIUDAD · SERVICIOS · DURACIÓN. Sectores: Maquinaria de electroerosión · Menús digitales para restaurantes · Camisetas estampadas bajo pedido · Tecnología y accesorios. Servicios: Página con catálogo · Página que vende (landing) · Catálogo + sistema a medida · Catálogo + panel de tienda |
+| Casos · proceso | Cómo fue el proceso (cuando haya proceso real) · Cómo trabajamos un proyecto así (mientras tanto) |
+| Casos · preguntas | Preguntas sobre páginas como esta · Preguntas sobre catálogos y sistemas |
 | Boost Your Menu · **Qué logra la página** | Explica de forma simple una oferta que junta software y hardware, muestra los restaurantes que ya confían en ellos y lleva a pedir una demo o a probar el menú interactivo. |
 | `/paginas-web` · lista de chequeo | Listo (en cada cosa marcada) · Día 1 … Día 5 |
 | `/paginas-web` · ilustraciones del bento | tunegocio.com · Ronda 1 / Ronda 2 · Guardar · Día 1 … Día 5 · Lista |
