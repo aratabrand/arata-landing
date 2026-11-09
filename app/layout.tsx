@@ -31,39 +31,38 @@ const body = localFont({
   preload: false,
 });
 
+// Metadatos por defecto del sitio (v2, lanzado — D-091). Cada página v2 arma los
+// suyos con lib/seo.ts; estos aplican a la 404 y a cualquier ruta sin metadatos.
+const descripcionV2 =
+  "Diseñamos páginas, catálogos y sistemas para negocios que quieren clientes por internet. Listos en 5 días hábiles, desde 400 USD, con garantía de velocidad de 90 o más en Google.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: "Arata San — Le montamos a tu negocio para vender por internet",
-  description: site.description,
+  title: "Arata San · Tu página lista en 5 días, hecha para vender desde el celular",
+  description: descripcionV2,
   alternates: { canonical: "/" },
   keywords: [
-    "vender por internet Colombia",
-    "chatbot WhatsApp para negocios",
-    "agencia digital Bogotá",
-    "landing pages que venden",
-    "automatización de negocios",
+    "diseño de páginas web Bogotá",
+    "landing page en 5 días",
+    "catálogo con pedidos por WhatsApp",
+    "tienda por WhatsApp Colombia",
+    "sistemas a medida para negocios",
+    "agencia de páginas web Colombia",
   ],
   openGraph: {
     type: "website",
     locale: "es_CO",
     url: site.url,
     siteName: site.name,
-    title: "Arata San — Vende más por internet, con quien atienda por ti",
-    description: site.description,
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Arata San — Automatiza tu negocio, ahorra tiempo y dinero",
-      },
-    ],
+    title: "Arata San · Tu página lista en 5 días",
+    description: descripcionV2,
+    images: [{ url: "/og/og-v2.png", width: 1200, height: 630, alt: "Arata San · Páginas, catálogos y sistemas listos en 5 días" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Arata San — Vende más por internet",
-    description: site.description,
-    images: ["/og.png"],
+    title: "Arata San · Tu página lista en 5 días",
+    description: descripcionV2,
+    images: ["/og/og-v2.png"],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/icon.svg" },

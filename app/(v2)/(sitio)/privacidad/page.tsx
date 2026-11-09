@@ -9,11 +9,10 @@ export const metadata: Metadata = paginaV2({ path: "/privacidad", title: c.meta.
 export default function Privacidad() {
   const filas = [
     ["Responsable", `${r.nombre} (${r.tipo.toLowerCase()}), marca ${r.marca}`],
-    r.rut ? ["RUT", r.rut] : null,
-    r.direccion ? ["Dirección", r.direccion] : null,
-    ["Ciudad", r.ciudad],
+    ["Domicilio", r.domicilio],
     ["Correo para tus datos", r.correo],
-  ].filter(Boolean) as [string, string][];
+    ["Teléfono y WhatsApp", r.telefono],
+  ] as [string, string][];
 
   return (
     <section className="pb-24 pt-28 sm:pt-32">

@@ -4,8 +4,8 @@
 import { site } from "@/lib/site";
 
 export const AGENDAR = "/agendar";
-// Muestra de la Fase 3 en /v2. En la Fase 4 (lanzamiento) se cambia a "/".
-export const INICIO = "/v2";
+// Inicio del sitio (lanzado, D-091). /v2 redirige aquí.
+export const INICIO = "/";
 export const PRECIOS = `${INICIO}#precios`;
 
 export const hero = {

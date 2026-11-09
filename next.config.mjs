@@ -54,6 +54,10 @@ const nextConfig = {
     // El CSS va dentro del HTML: quita la petición que bloqueaba el primer pintado (LCP)
     inlineCss: true,
   },
+  // Lanzamiento v2 (D-091): la muestra /v2 pasó a ser el Inicio.
+  async redirects() {
+    return [{ source: "/v2", destination: "/", permanent: true }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

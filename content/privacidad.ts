@@ -1,14 +1,15 @@
 // Política de tratamiento de datos (Ley 1581 de 2012 y Decreto 1377 de 2013, compilado en el 1074 de 2015).
-// Datos del responsable: D-055. ⚠ Antes de lanzar: completar `rut` y `direccion`
-// (si quedan vacíos, la página no los muestra) y que un abogado revise el texto.
+// Datos del responsable: D-055 y D-090. Decreto 1377 de 2013, art. 13: nombre, domicilio,
+// dirección, correo y teléfono del responsable. No se publica la cédula/NIT (decisión de
+// Sergio, no la exige el art. 13) ni se guarda en el código. Negocio digital sin oficina:
+// domicilio Bogotá + correo y teléfono como canales. Recomendado: revisión de un abogado.
 
 export const responsable = {
   nombre: "Sergio David Cuevas",
   tipo: "Persona natural",
   marca: "Arata San",
-  rut: "", // ◻ pendiente (D-055)
-  direccion: "", // ◻ pendiente (D-055)
-  ciudad: "Bogotá, Colombia",
+  domicilio: "Bogotá, Colombia (negocio digital, atención por correo y WhatsApp)",
+  telefono: "+57 313 401 1189",
   correo: "contacto@aratasan.com",
   vigencia: "noviembre de 2026",
 };

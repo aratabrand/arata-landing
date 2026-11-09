@@ -10,7 +10,7 @@ import { preguntas } from "@/lib/schema";
 import { faq, INICIO } from "@/content/inicio";
 
 // Inicio v2. Estructura: docs/blueprint/02-arquitectura.md §3.1.
-// Copy: content/inicio.ts (aprobado en 03-copy.md). En el lanzamiento (Fase 6) pasa a "/".
+// Copy: content/inicio.ts (aprobado en 03-copy.md). Es el Inicio desde el lanzamiento (D-091).
 export const metadata: Metadata = paginaV2({
   path: INICIO,
   title: "Arata San · Tu página lista en 5 días, hecha para vender desde el celular",

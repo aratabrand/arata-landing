@@ -51,11 +51,11 @@ export default function SistemaV2() {
     <>
       <header className="border-b border-white/6">
         <Container className="flex h-16 items-center justify-between">
-          <Link href="/v2" aria-label="Ver la muestra del Inicio v2">
+          <Link href="/" aria-label="Ir al Inicio">
             <Logo surface="dark" className="h-6 w-auto" />
           </Link>
-          <Button href="/v2" variant="secondary">
-            Ver muestra del Inicio
+          <Button href="/" variant="secondary">
+            Ver el Inicio
           </Button>
         </Container>
       </header>

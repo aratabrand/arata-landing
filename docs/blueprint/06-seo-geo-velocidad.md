@@ -87,7 +87,7 @@ Los objetos salen de `content/` (estáticos). `components/JsonLd.tsx` escapa `<`
 |---|---|
 | Política de datos (`/privacidad`, Ley 1581 de 2012) | ✅ Publicada con responsable, ciudad, correo, finalidades, derechos y plazos (D-075) |
 | Autorización en el formulario de `/agendar` | ✅ Casilla obligatoria con enlace a la política |
-| **RUT y dirección del responsable** | ◻ **Falta (Sergio). Bloquea el lanzamiento.** Se llenan en `content/privacidad.ts` |
+| Datos del responsable | ✅ Nombre, domicilio digital (Bogotá), correo y teléfono. Cédula/NIT no se publica (D-090) |
 | Revisión de un abogado | ◻ Recomendada antes de lanzar |
 
 ---
@@ -96,11 +96,11 @@ Los objetos salen de `content/` (estáticos). `components/JsonLd.tsx` escapa `<`
 
 En **un solo PR** a `main`:
 
-1. ◻ Llenar `rut` y `direccion` en `content/privacidad.ts`.
-2. ◻ `V2_PUBLICADO = true` en `lib/lanzamiento.ts`.
-3. ◻ Mover el Inicio v2 a `/`: `app/(v2)/(sitio)/v2/page.tsx` → `app/(v2)/(sitio)/page.tsx`, borrar `app/page.tsx` (v1) y poner `INICIO = "/"` en `content/inicio.ts`. Agregar en `next.config.mjs` una redirección permanente `/v2` → `/`.
-4. ◻ En `app/layout.tsx`, pasar `metadata` (título, descripción, Open Graph, palabras clave) a los textos v2 y la imagen `/og/og-v2.png`.
-5. ◻ `npm run build && npm run lint` limpios; revisar el preview.
+1. ✅ Datos del responsable sin cédula/NIT y con domicilio digital (D-090).
+2. ✅ `V2_PUBLICADO = true` (D-091).
+3. ✅ Mover el Inicio v2 a `/`: `app/(v2)/(sitio)/v2/page.tsx` → `app/(v2)/(sitio)/page.tsx`, borrar `app/page.tsx` (v1) y poner `INICIO = "/"` en `content/inicio.ts`. Agregar en `next.config.mjs` una redirección permanente `/v2` → `/`.
+4. ✅ En `app/layout.tsx`, pasar `metadata` (título, descripción, Open Graph, palabras clave) a los textos v2 y la imagen `/og/og-v2.png`.
+5. ✅ `npm run build && npm run lint` limpios; verificado en local (Inicio, redirección, sitemap, llms.txt, política).
 6. ◻ Merge → Vercel publica en www.aratasan.com.
 
 Después de publicar:

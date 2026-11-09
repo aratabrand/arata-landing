@@ -154,7 +154,7 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] **Preview de Vercel revisado — Fase 4 cerrada (D-086)**
 - [x] Fase 5: SEO por página, datos estructurados, imágenes para compartir, sitemap/llms.txt con interruptor, QA 360 px (`06-seo-geo-velocidad.md`, D-087 a D-089)
 - [ ] **PageSpeed ≥ 90 en la URL publicada (puerta de la Fase 5) — se mide al lanzar**
-- [ ] Fase 6: lanzamiento (lista en `06` §6)
+- [x] **Fase 6: sitio v2 lanzado (D-091)** — falta medir en la URL publicada y GSC/GA4 (`06` §6, pasos 7–12)
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento
