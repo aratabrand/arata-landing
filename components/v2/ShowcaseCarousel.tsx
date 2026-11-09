@@ -51,7 +51,7 @@ export default function ShowcaseCarousel({ items, slides }: { items: SlideMeta[]
       </Link>
 
       {/* Barra de progreso segmentada */}
-      <div className="mt-3 flex gap-1.5 px-1" role="group" aria-label="Elegir proyecto">
+      <div className="mt-1 flex gap-1.5 px-1" role="group" aria-label="Elegir proyecto">
         {items.map((it, i) => (
           <button
             key={it.slug}
@@ -59,7 +59,7 @@ export default function ShowcaseCarousel({ items, slides }: { items: SlideMeta[]
             aria-current={i === actual ? "true" : undefined}
             aria-label={`Ver ${it.nombre}`}
             onClick={() => setActual(i)}
-            className="group flex h-6 flex-1 items-center"
+            className="group flex h-10 flex-1 items-center"
           >
             <span className="relative block h-[3px] w-full overflow-hidden rounded-full bg-white/10 group-hover:bg-white/16">
               <span

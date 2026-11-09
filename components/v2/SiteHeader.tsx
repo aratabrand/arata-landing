@@ -122,7 +122,7 @@ export default function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 w-full max-w-v2 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href={INICIO} aria-label="Arata San — inicio" className="shrink-0" onClick={closeAll}>
+        <Link href={INICIO} aria-label="Arata San — inicio" className="flex h-11 shrink-0 items-center" onClick={closeAll}>
           <Logo surface="dark" className="h-6 w-auto" />
         </Link>
 

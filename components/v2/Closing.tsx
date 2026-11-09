@@ -97,17 +97,17 @@ export function SiteFooter() {
             {footer.columnas.map((col) => (
               <div key={col.titulo}>
                 <p className="text-sm font-semibold text-white">{col.titulo}</p>
-                <ul className="mt-4 space-y-2.5">
+                <ul className="mt-3 space-y-0.5 lg:mt-4 lg:space-y-2.5">
                   {col.links.map((l) => {
                     const externo = l.href.startsWith("http");
                     return (
                       <li key={l.label}>
                         {externo ? (
-                          <a href={l.href} target="_blank" rel="noopener noreferrer" className="text-sm text-fog hover:text-white">
+                          <a href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center text-sm text-fog hover:text-white lg:min-h-0">
                             {l.label}
                           </a>
                         ) : (
-                          <Link href={l.href} className="text-sm text-fog hover:text-white">
+                          <Link href={l.href} className="inline-flex min-h-10 items-center text-sm text-fog hover:text-white lg:min-h-0">
                             {l.label}
                           </Link>
                         )}

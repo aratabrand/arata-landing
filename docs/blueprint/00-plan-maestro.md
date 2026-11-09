@@ -152,7 +152,9 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Enlaces de Cal.com (D-076)
 - [ ] RUT y dirección (Sergio)
 - [x] **Preview de Vercel revisado — Fase 4 cerrada (D-086)**
-- [ ] Fase 5: SEO, GEO, velocidad y legal (`06-seo-geo-velocidad.md`)
+- [x] Fase 5: SEO por página, datos estructurados, imágenes para compartir, sitemap/llms.txt con interruptor, QA 360 px (`06-seo-geo-velocidad.md`, D-087 a D-089)
+- [ ] **PageSpeed ≥ 90 en la URL publicada (puerta de la Fase 5) — se mide al lanzar**
+- [ ] Fase 6: lanzamiento (lista en `06` §6)
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento
