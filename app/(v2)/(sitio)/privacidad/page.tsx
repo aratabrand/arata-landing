@@ -10,8 +10,9 @@ export default function Privacidad() {
   const filas = [
     ["Responsable", `${r.nombre} (${r.tipo.toLowerCase()}), marca ${r.marca}`],
     ["Domicilio", r.domicilio],
+    ["Dirección para notificaciones", r.notificaciones],
     ["Correo para tus datos", r.correo],
-    ["Teléfono y WhatsApp", r.telefono],
+    ["Teléfono", r.telefono],
   ] as [string, string][];
 
   return (
@@ -61,7 +62,7 @@ export default function Privacidad() {
           ))}
         </div>
 
-        <p className="mt-12 border-t border-white/8 pt-6 text-sm text-fog-dim">Vigente desde {r.vigencia}.</p>
+        <p className="mt-12 border-t border-white/8 pt-6 text-sm text-fog-dim">Vigente desde {r.vigencia}. Última actualización: {r.actualizacion}.</p>
       </Container>
     </section>
   );
