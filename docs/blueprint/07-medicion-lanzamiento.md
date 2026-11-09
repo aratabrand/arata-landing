@@ -81,4 +81,4 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 | Logo de Boost Your Menu para la franja de logos | Sergio |
 | Repositorios de Danrodedm y Boost Your Menu para subir su velocidad en celular a 90+ (mientras tanto, se muestra lo fuerte, D-082) | Sergio |
 | Revisar a dónde apuntan los anuncios activos de Meta | Sergio |
-| Revisión de la política de datos con un abogado | Sergio |
+| Revisión de la política de datos con un abogado (D-099): confirmar si el correo basta como dirección de notificaciones y el plazo de 2 años de conservación | Sergio |

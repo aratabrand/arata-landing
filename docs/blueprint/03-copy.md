@@ -845,7 +845,8 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 | Boost Your Menu · **Qué logra la página** | Explica de forma simple una oferta que junta software y hardware, muestra los restaurantes que ya confían en ellos y lleva a pedir una demo o a probar el menú interactivo. |
 | `/paginas-web` · lista de chequeo | Listo (en cada cosa marcada) · Día 1 … Día 5 |
 | `/paginas-web` · ilustraciones del bento | tunegocio.com · Ronda 1 / Ronda 2 · Guardar · Día 1 … Día 5 · Lista |
-| `/privacidad` · texto completo | Ver `content/privacidad.ts` (redactado con D-055; revisar con abogado) |
+| `/privacidad` · texto completo | Ver `content/privacidad.ts` (D-055, D-090, D-099: 10 secciones; revisar con abogado) |
+| `/agendar` · casilla de autorización (D-099) | Autorizo a Arata San a usar mis datos para atender mi solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (Cal.com y Google), que pueden estar fuera de Colombia, según la Política de tratamiento de datos. |
 
 ---
 

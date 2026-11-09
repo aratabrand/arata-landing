@@ -116,6 +116,8 @@ export default function BookingFlow() {
     `Cuándo empezar: ${cuando ?? "-"}`,
     !auditoria ? `Inversión: ${inversion ?? "-"}` : null,
     `WhatsApp: ${datos.whatsapp.trim()}`,
+    // Constancia de la autorización (Ley 1581: hay que poder probarla, D-099)
+    datos.autoriza ? `Autorización de datos: sí, ${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })} (hora de Bogotá)` : null,
   ]
     .filter(Boolean)
     .join("\n");

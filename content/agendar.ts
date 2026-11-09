@@ -51,7 +51,9 @@ export const agendar = {
       whatsappPlaceholder: "+57 300 000 0000",
       correo: "Tu correo",
       correoPlaceholder: "tucorreo@ejemplo.com",
-      autorizacion: "Autorizo a Arata San a usar mis datos para contactarme sobre mi solicitud, según la",
+      // D-099: autorización previa, expresa e informada, incluido el envío fuera de Colombia (art. 9 y 26)
+      autorizacion:
+        "Autorizo a Arata San a usar mis datos para atender mi solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (Cal.com y Google), que pueden estar fuera de Colombia, según la",
       autorizacionLink: "Política de tratamiento de datos",
     },
   },
