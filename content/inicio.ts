@@ -25,7 +25,13 @@ export const hero = {
 
 export const prueba = {
   titulo: "Han confiado en nosotros",
-  nombres: ["Danrodedm", "Boost Your Menu", "Arata Print", "Caravana"],
+  // D-094: logos reales que entregó Sergio. Boost Your Menu entra cuando llegue su logo.
+  // ancho/alto = proporción del SVG (para reservar el espacio y que no salte nada).
+  logos: [
+    { nombre: "Arata Print", src: "/logos/arata-print.svg", ancho: 361, alto: 168 },
+    { nombre: "Caravana", src: "/logos/caravana.svg", ancho: 794, alto: 220 },
+    { nombre: "Danrodedm", src: "/logos/danrodedm.svg", ancho: 850, alto: 195 },
+  ],
 };
 
 export const problema = {
@@ -101,13 +107,12 @@ export const portafolio = {
   boton: "Ver todo el portafolio",
 };
 
-// Velocidad real medida en Google PageSpeed (dato, no decoración — CLAUDE.md §3).
-// ⚠ Hoy es la medición del sitio v1 en producción (ago 2026). Al lanzar la v2,
-// se mide www.aratasan.com en PageSpeed y se actualizan estos números.
+// Velocidad real del sitio v2 publicado (D-093): Lighthouse móvil sobre www.aratasan.com,
+// 9 nov 2026 (Inicio 95–96 en celular, 100 en computador). Se muestra la nota más baja.
 export const velocidad = {
   escritorio: 100,
-  celular: 93,
-  fuente: "Medido en Google PageSpeed",
+  celular: 95,
+  fuente: "Medido con Google Lighthouse · nov 2026",
   titulo: "Así de rápido es nuestro sitio",
   nota: "Lo mismo que te garantizamos:",
   notaFuerte: "90 o más",

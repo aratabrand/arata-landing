@@ -17,7 +17,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2 y especificación de cada componente (hoy: dirección) | 3 |
 | [`blueprint/05-construccion.md`](blueprint/05-construccion.md) | Rutas, carpetas, flujo de agenda, eventos de GTM, configuración de Cal.com y pendientes de lanzamiento | 4 |
 | [`blueprint/06-seo-geo-velocidad.md`](blueprint/06-seo-geo-velocidad.md) | SEO por página, datos estructurados, GEO (`llms.txt`), velocidad medida, legal y **lista de lanzamiento** | 5 |
-| `blueprint/07-medicion-lanzamiento.md` | Eventos de GTM/GA4, QA y salida a producción | 6 |
+| [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
 | [`decisiones.md`](decisiones.md) | Bitácora de cada decisión: qué, cuándo, quién y por qué | Todas |
 

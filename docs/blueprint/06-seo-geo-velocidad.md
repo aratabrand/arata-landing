@@ -66,6 +66,20 @@ Los objetos salen de `content/` (estáticos). `components/JsonLd.tsx` escapa `<`
 | `/agendar` | 96 | 100 | 96 | 2,7 s | **0,12 s** | 0,003 |
 | `/privacidad` | 98 | 100 | 96 | 2,4 s | **0,11 s** | 0 |
 
+### En el sitio publicado (www.aratasan.com, 9 nov 2026) ✅ puerta cumplida (D-093)
+
+| Página | Rendimiento celular (2 corridas) | SEO | Accesibilidad | CLS |
+|---|---|---|---|---|
+| Inicio | 95 – 96 (computador 100) | 100 | 100 | 0 |
+| `/paginas-web` | 97 – 98 | 100 | 100 | 0 |
+| `/catalogos-y-sistemas` | 98 – 99 | 100 | 100 | 0 |
+| `/portafolio` | 97 – 99 | 100 | 100 | 0 |
+| Casos (4) | 97 – 99 | 100 | 100 | 0 |
+| `/agendar` | 99 | 100 | 100 | 0 |
+| `/privacidad` | 100 | 100 | 100 | 0 |
+
+En Vercel el servidor responde en 30–50 ms (en el entorno de prueba, ~460 ms): por eso lo publicado saca 5–8 puntos más que lo local.
+
 **Cómo leer esto (aprendido, reutilizable):**
 
 - El título se pinta en **0,1–0,2 s** en el navegador real. El "LCP simulado" de 3–3,8 s es la **simulación de un celular lento** de Lighthouse: suma la descarga de todo el JavaScript que la página pide antes de pintar (~193 KB) y el tiempo de respuesta de este servidor de prueba (~460 ms). En Vercel el servidor responde mucho más rápido.
@@ -105,9 +119,9 @@ En **un solo PR** a `main`:
 
 Después de publicar:
 
-7. ◻ **PageSpeed móvil en cada página** (puerta de la Fase 5: ≥ 90). Actualizar `velocidad` en `content/inicio.ts` con la medición real de la v2.
-8. ◻ Google Search Console y Bing: enviar el sitemap nuevo y pedir indexación de las páginas de servicio.
+7. ✅ **PageSpeed móvil en cada página** (D-093: 95–100) (puerta de la Fase 5: ≥ 90). Actualizar `velocidad` en `content/inicio.ts` con la medición real de la v2.
+8. ✅ Google Search Console y Bing: enviar el sitemap nuevo (Sergio, D-095) y pedir indexación de las páginas de servicio.
 9. ◻ Google Business: revisar que el enlace apunte al sitio.
-10. ◻ GA4 desde GTM: marcar `reunion_confirmada` como conversión principal y armar el embudo con `agendar_paso` (ver `05-construccion.md` §3).
+10. ◻ GA4 desde GTM (no está instalado; guía en `07-medicion-lanzamiento.md` §3): marcar `reunion_confirmada` como conversión principal y armar el embudo con `agendar_paso` (ver `05-construccion.md` §3).
 11. ◻ Revisar a dónde apuntan los anuncios activos (Meta Ads).
 12. ◻ Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar sus puntajes a `mostrar: "todo"` (D-082).
