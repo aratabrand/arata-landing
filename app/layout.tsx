@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
 import { GtmScript, GtmNoScript } from "@/components/GoogleTagManager";
+import { V2_PUBLICADO } from "@/lib/lanzamiento";
+import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
 
 // Fuentes de marca auto-hospedadas (sin dependencias de red en runtime)
@@ -73,7 +75,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const jsonLd = {
+// JSON-LD de la agencia: el de la v1 hasta lanzar; después, el de la v2 (lib/schema.ts).
+const jsonLdV1 = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "@id": `${site.url}/#agencia`,
@@ -108,6 +111,7 @@ const jsonLd = {
   ],
   sameAs: [site.instagram],
 };
+const jsonLd = V2_PUBLICADO ? agenciaV2 : jsonLdV1;
 
 export default function RootLayout({
   children,

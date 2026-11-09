@@ -12,6 +12,10 @@ import ProjectPreview from "@/components/v2/ProjectPreview";
 import { cn } from "@/lib/utils";
 import { casoTextos as t, proyectos } from "@/content/proyectos";
 import { catalogos, paginasWeb } from "@/content/servicios";
+import JsonLd from "@/components/JsonLd";
+import { paginaV2 } from "@/lib/seo";
+import { caso, migas, preguntas } from "@/lib/schema";
+import { INICIO } from "@/content/inicio";
 
 // Caso de estudio — estructura 02-arquitectura.md §3.5, copy 03-copy.md.
 // Regla: el resultado se dice como pasó. Si no hay dato, la sección no aparece.
@@ -27,11 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = proyectos.find((x) => x.slug === slug);
   if (!p) return {};
-  return {
+  return paginaV2({
+    path: `/portafolio/${p.slug}`,
     title: `${p.nombre} · ${p.etiqueta} · Caso de Arata San`,
     description: `${p.titulo} ${p.problema}`.slice(0, 158),
-    alternates: { canonical: `/portafolio/${p.slug}` },
-  };
+    image: `/og/og-caso-${p.slug}.png`,
+    imageAlt: `${p.nombre}: ${p.titulo}`,
+  });
 }
 
 export default async function Caso({ params }: Props) {
@@ -57,6 +63,13 @@ export default async function Caso({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          caso(p),
+          migas([{ nombre: "Inicio", path: INICIO }, { nombre: "Portafolio", path: "/portafolio" }, { nombre: p.nombre, path: `/portafolio/${p.slug}` }]),
+          preguntas(faq),
+        ]}
+      />
       {/* Hero del caso */}
       <section className="relative overflow-hidden pb-12 pt-28 sm:pb-16 sm:pt-32">
         <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />

@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/v2/primitives";
 import { privacidad as c, responsable as r } from "@/content/privacidad";
+import { paginaV2 } from "@/lib/seo";
 
 // Política de datos (02-arquitectura.md §3.8). Texto en content/privacidad.ts.
-export const metadata: Metadata = {
-  title: c.meta.title,
-  description: c.meta.description,
-  alternates: { canonical: "/privacidad" },
-};
+export const metadata: Metadata = paginaV2({ path: "/privacidad", title: c.meta.title, description: c.meta.description });
 
 export default function Privacidad() {
   const filas = [

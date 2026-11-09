@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "og": "node scripts/og-v2.cjs"
   },
   "dependencies": {
     "@fontsource/funnel-display": "^5.3.0",

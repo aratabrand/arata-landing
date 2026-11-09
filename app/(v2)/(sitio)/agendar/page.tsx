@@ -4,14 +4,11 @@ import { Gauge, Users } from "lucide-react";
 import BookingFlow from "@/components/v2/BookingFlow";
 import { Badge, Container, Glow } from "@/components/v2/primitives";
 import { agendar as c } from "@/content/agendar";
+import { paginaV2 } from "@/lib/seo";
 
 // Agendar — LA página que cuenta (02-arquitectura.md §2 y §3.6, copy D-053).
 // El formulario es el único JS pesado del sitio y Cal.com carga solo en el último paso.
-export const metadata: Metadata = {
-  title: c.meta.title,
-  description: c.meta.description,
-  alternates: { canonical: "/agendar" },
-};
+export const metadata: Metadata = paginaV2({ path: "/agendar", title: c.meta.title, description: c.meta.description });
 
 export default function Agendar() {
   return (

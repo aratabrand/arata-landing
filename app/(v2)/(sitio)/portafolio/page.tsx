@@ -4,17 +4,23 @@ import { Container, Glow } from "@/components/v2/primitives";
 import { CaseCard } from "@/components/v2/ServiceSections";
 import PortfolioFilter from "@/components/v2/PortfolioFilter";
 import { filtroATipo, portafolioPagina as c, proyectos } from "@/content/proyectos";
+import JsonLd from "@/components/JsonLd";
+import { paginaV2 } from "@/lib/seo";
+import { coleccion, migas } from "@/lib/schema";
+import { INICIO } from "@/content/inicio";
 
 // Portafolio — estructura 02-arquitectura.md §3.4, copy 03-copy.md (D-052).
-export const metadata: Metadata = {
+export const metadata: Metadata = paginaV2({
+  path: "/portafolio",
   title: c.meta.title,
   description: c.meta.description,
-  alternates: { canonical: "/portafolio" },
-};
+  image: "/og/og-portafolio.png",
+});
 
 export default function Portafolio() {
   return (
     <>
+      <JsonLd data={[coleccion(proyectos), migas([{ nombre: "Inicio", path: INICIO }, { nombre: "Portafolio", path: "/portafolio" }])]} />
       <section className="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32">
         <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative">
