@@ -163,11 +163,11 @@ Capturas en [`docs/referencias/21st-dev/`](../referencias/21st-dev/).
 
 | # | Captura | Qué se toma | Cómo se traduce a Arata | Dónde se usa |
 |---|---|---|---|---|
-| 01 | `01-tarjetas-bento.png` | Encabezado con botón a la derecha; grilla bento de tarjetas grandes; vista previa enmarcada dentro de la tarjeta; pie con título, descripción y "Ver todo →"; barra de progreso segmentada | Igual, con superficies `surface-1` de tinte morado y borde blanco al 6–10 % | Portafolio destacado, servicios, grilla del portafolio |
+| 01 | `01-tarjetas-bento.webp` | Encabezado con botón a la derecha; grilla bento de tarjetas grandes; vista previa enmarcada dentro de la tarjeta; pie con título, descripción y "Ver todo →"; barra de progreso segmentada | Igual, con superficies `surface-1` de tinte morado y borde blanco al 6–10 % | Portafolio destacado, servicios, grilla del portafolio |
 | 02 | `02-pagina-completa.webp` | Ritmo de la página: hero centrado + vista previa grande enmarcada, franja de prueba social, bento, FAQ en dos columnas, CTA en tarjeta grande, footer de varias columnas; luces azules borrosas entre secciones | Mismo ritmo para el Inicio; luces en morado | Estructura del Inicio (`02-arquitectura` §3.1) |
-| 03 | `03-precios.png` | Título enorme alineado a la izquierda con tracking negativo; prueba social con avatares; 3 tarjetas de precio; la recomendada con borde de color y brillo; precio grande; lista con íconos de línea | Borde y brillo en **morado**; botón principal **lima** solo en la recomendada; precio en Funnel Display | Sección de precios (`#precios`) |
+| 03 | `03-precios.webp` | Título enorme alineado a la izquierda con tracking negativo; prueba social con avatares; 3 tarjetas de precio; la recomendada con borde de color y brillo; precio grande; lista con íconos de línea | Borde y brillo en **morado**; botón principal **lima** solo en la recomendada; precio en Funnel Display | Sección de precios (`#precios`) |
 | 04 | `04-cta-final.webp` | Tarjeta grande redondeada con collage de pantallas tintado de color; título centrado; botón; nota pequeña ("No card needed") | Collage de **nuestros trabajos** tintado de morado; nota: *"30 minutos, sin costo"* | CTA final de cada página |
-| 05 | `05-mega-menu.png` | Menú en barra con ítem activo resaltado; desplegable grande con tarjetas de vista previa + título + descripción; botón principal a la derecha | Desplegable "Servicios" con 3 tarjetas: Páginas que venden · Catálogos y sistemas · Portafolio | Header |
+| 05 | `05-mega-menu.webp` | Menú en barra con ítem activo resaltado; desplegable grande con tarjetas de vista previa + título + descripción; botón principal a la derecha | Desplegable "Servicios" con 3 tarjetas: Páginas que venden · Catálogos y sistemas · Portafolio | Header |
 
 ### Lo que **no** se toma
 

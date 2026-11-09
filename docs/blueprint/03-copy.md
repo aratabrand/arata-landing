@@ -811,6 +811,18 @@ Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redac
 
 ---
 
+## `/agendar` · pregunta 2 sin afán (D-077) — elige una versión
+
+"Ya" sonaba a que estamos corriendo a la persona. Tres versiones que respetan el tiempo de los dos:
+
+| Versión | Pregunta | Opciones |
+|---|---|---|
+| **A** ✅ (puesta por defecto) | ¿Cuándo te gustaría empezar? | En las próximas semanas · En uno o dos meses · Más adelante, sin afán · Todavía lo estoy pensando |
+| B | ¿Qué tan pronto te gustaría tenerla? | Cuanto antes, si se puede · En uno o dos meses · Cuando tenga todo listo · Solo quiero conocer opciones |
+| C | ¿En qué momento estás? | Listo para arrancar · Lo estoy planeando · Más adelante · Solo estoy mirando |
+
+---
+
 ## Copy nuevo de la Fase 4 ◻ (por aprobar)
 
 Textos que no estaban en el copy aprobado y fueron necesarios al construir. Viven en `content/`.
@@ -822,8 +834,13 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 | `/agendar` · título del paso 5 | Elige la hora que te sirva |
 | `/agendar` · mientras abre el calendario | Abriendo el calendario… |
 | `/agendar` · sin calendario | Termina por WhatsApp: te mandamos los horarios disponibles. · **[Enviar por WhatsApp]** |
-| Casos · título de la galería | Así se ve |
 | Casos · ruta arriba del título | Portafolio / *nombre del proyecto* |
+| Casos · botón arriba | ← Volver al portafolio |
+| Casos · puntajes | **Así sale en Google** · *Medimos el sitio en vivo con Lighthouse, la herramienta de Google que está detrás de PageSpeed.* · En celular / En computador · Velocidad · Accesibilidad · Buenas prácticas · SEO · Se ve lo principal en · Medido en |
+| Casos · sin SEO | Este sitio aún está en un dominio de prueba, cerrado a Google; por eso no mostramos su SEO. |
+| Boost Your Menu · **Qué logra la página** | Explica de forma simple una oferta que junta software y hardware, muestra los restaurantes que ya confían en ellos y lleva a pedir una demo o a probar el menú interactivo. |
+| `/paginas-web` · lista de chequeo | Listo (en cada cosa marcada) · Día 1 … Día 5 |
+| `/paginas-web` · ilustraciones del bento | tunegocio.com · Ronda 1 / Ronda 2 · Guardar · Día 1 … Día 5 · Lista |
 | `/privacidad` · texto completo | Ver `content/privacidad.ts` (redactado con D-055; revisar con abogado) |
 
 ---

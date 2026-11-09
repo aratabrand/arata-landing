@@ -86,7 +86,16 @@ Se conectan a GA4 desde GTM en la Fase 6 (sin tocar código).
 
 ---
 
-## 4. Cal.com — lo que hay que configurar (Sergio)
+## 4. Cal.com ✅ conectado (D-076)
+
+| Evento | Enlace |
+|---|---|
+| Reunión | `arata-san/asesoria-30min` |
+| Auditoría (aviso mínimo 48 h) | `arata-san/auditoria` |
+
+Probado de punta a punta: el calendario abre en ~4 s, con nombre, correo y las respuestas en las notas. El idioma y la zona horaria salen del navegador de cada persona. Para cambiar de evento sin tocar código: `NEXT_PUBLIC_CAL_LINK` y `NEXT_PUBLIC_CAL_LINK_AUDITORIA` en Vercel.
+
+### Cómo se configuró (para repetir en otro proyecto)
 
 1. Crear cuenta en **cal.com** (gratis) y conectar el calendario de Google.
 2. Crear 2 tipos de evento de **30 minutos**:
@@ -99,6 +108,19 @@ Se conectan a GA4 desde GTM en la Fase 6 (sin tocar código).
 5. Volver a desplegar. La CSP ya permite `app.cal.com` y `cal.com`.
 
 ---
+
+## 4b. Puntajes de los proyectos del portafolio (D-080)
+
+Lighthouse 12.6 sobre el sitio en vivo, celular (mediana de 3) y computador (2), 9 nov 2026. Datos en `content/proyectos.ts` → `puntajes` (con `mostrar`).
+
+| Proyecto | Velocidad celular | Accesibilidad | Buenas prácticas | SEO | Se ve en (celular) | Computador | ¿Se publica? |
+|---|---|---|---|---|---|---|---|
+| Caravana | 99 | 98 | 100 | 63* | 2,0 s | 100 | ✅ |
+| Arata Print | 96 | 98 | 100 | 63* | 2,6 s | 100 | ✅ |
+| Danrodedm | 79 | 93 | 96 | 100 | 5,2 s | 97 | ⏸ debajo de 90 |
+| Boost Your Menu | 70 | 90 | 96 | 100 | 5,3 s | 86–90 | ⏸ debajo de 90 |
+
+\* Dominio de prueba (`vercel.app`) con `noindex` a propósito: el SEO no se muestra hasta que tengan su dominio.
 
 ## 5. Medición (Lighthouse móvil, local, 9 nov 2026)
 
@@ -121,7 +143,8 @@ Se conectan a GA4 desde GTM en la Fase 6 (sin tocar código).
 
 | Falta | Quién | Bloquea |
 |---|---|---|
-| Enlaces de Cal.com (§4) | Sergio | El paso 5 de `/agendar` (mientras tanto, termina por WhatsApp) |
+| Decidir puntajes de Danrodedm (79) y Boost Your Menu (70): optimizarlos o publicarlos (D-080) | Sergio | Nada (hoy no se muestran) |
+| Elegir versión de la pregunta 2 del formulario (D-077) | Sergio | Nada (va la A) |
 | RUT y dirección del responsable | Sergio | `/privacidad` (Ley 1581). Recomendado: revisión de un abogado |
 | Límite de productos del catálogo de 800 USD | Sergio | Una pregunta de la FAQ de catálogos |
 | Testimonios (Arata Print, Caravana) y cifras (Danrodedm, Boost Your Menu) | Sergio | Nada: se agregan en `content/proyectos.ts` cuando lleguen |

@@ -115,7 +115,7 @@ export default function BookingFlow() {
   const resumen = [
     `Necesito: ${tipoLabel}`,
     auditoria && datos.url ? `Mi página: ${datos.url.trim()}` : null,
-    `Para cuándo: ${cuando ?? "-"}`,
+    `Cuándo empezar: ${cuando ?? "-"}`,
     !auditoria ? `Inversión: ${inversion ?? "-"}` : null,
     `WhatsApp: ${datos.whatsapp.trim()}`,
   ]

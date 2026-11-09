@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import Ring from "@/components/Ring";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { CtaCard } from "@/components/v2/Closing";
@@ -43,14 +44,17 @@ export default async function Caso({ params }: Props) {
       <section className="relative overflow-hidden pb-12 pt-28 sm:pb-16 sm:pt-32">
         <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative">
-          <nav aria-label="Ruta" className="text-sm text-fog-dim">
-            <Link href="/portafolio" className="hover:text-white">
-              Portafolio
-            </Link>
-            <span aria-hidden className="mx-2">/</span>
-            <span className="text-fog">{p.nombre}</span>
-          </nav>
-          <Eyebrow className="mt-8">{p.etiqueta}</Eyebrow>
+          {/* Volver: flecha visible (no todos usan la miga de pan) */}
+          <Link
+            href="/portafolio"
+            className="group -ml-1 inline-flex h-11 items-center gap-2 rounded-btn pl-1 pr-3 text-sm font-medium text-fog transition-colors hover:text-white"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-surface-1 transition-colors group-hover:border-white/20">
+              <ArrowLeft aria-hidden className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            </span>
+            {t.volver}
+          </Link>
+          <Eyebrow className="mt-6">{p.etiqueta}</Eyebrow>
           <h1 className="mt-3 max-w-4xl font-display text-[clamp(2rem,6.4vw,3.75rem)] font-extrabold leading-[1.03] tracking-display text-white">
             {p.titulo}
           </h1>
@@ -95,38 +99,75 @@ export default async function Caso({ params }: Props) {
               ))}
             </ul>
           </Reveal>
-          {p.resultado && (
+          {(p.resultado || p.logra) && (
             <Reveal delay={160}>
               <div className="v2-glass h-full p-6" style={{ ["--glow" as string]: "rgba(182,255,0,0.12)" }}>
-                <h2 className="font-display text-v2-h3 font-bold tracking-heading text-white">{t.resultado}</h2>
-                <p className="mt-3 leading-relaxed text-white">{p.resultado}</p>
+                <h2 className="font-display text-v2-h3 font-bold tracking-heading text-white">
+                  {p.resultado ? t.resultado : t.logra}
+                </h2>
+                <p className="mt-3 leading-relaxed text-white">{p.resultado ?? p.logra}</p>
               </div>
             </Reveal>
           )}
         </Container>
       </section>
 
-      {/* Galería */}
-      {p.capturas.length > 1 && (
-        <section aria-labelledby="galeria" className="py-16 sm:py-24">
+      {/* Puntajes de Google del sitio en vivo (reemplaza la galería: la página ya se ve arriba y en vivo) */}
+      {p.puntajes?.mostrar && (
+        <section aria-labelledby="puntajes" className="py-16 sm:py-24">
           <Container>
-            <h2 id="galeria" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-              {t.galeria}
-            </h2>
-            <div className="mt-10 grid gap-4 md:grid-cols-2">
-              {p.capturas.slice(1).concat(p.capturas.slice(0, 1)).map((cap, k) => (
-                <Reveal key={cap.src} delay={k * 80}>
-                  <figure className="v2-card p-2">
-                    <div className="v2-frame aspect-[16/10]">
-                      <ProjectPreview
-                        proyecto={{ ...p, capturas: [cap] }}
-                        sizes="(min-width: 768px) 580px, 100vw"
-                      />
-                    </div>
-                    <figcaption className="px-2 pb-1 pt-3 text-sm text-fog-dim">{cap.alt}</figcaption>
-                  </figure>
-                </Reveal>
-              ))}
+            <div className="grid gap-8 rounded-[28px] border border-white/8 bg-surface-1 p-6 sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-12">
+              <div>
+                <h2 id="puntajes" className="font-display text-v2-h2 font-bold tracking-heading text-white">
+                  {t.puntajes.titulo}
+                </h2>
+                <p className="mt-4 text-fog">{t.puntajes.texto}</p>
+                <dl className="mt-8 grid grid-cols-2 gap-3">
+                  <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                    <dt className="text-xs text-fog-dim">{t.puntajes.abre}</dt>
+                    <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-lime">{p.puntajes.abreEnCelular}</dd>
+                    <dd className="text-xs text-fog-dim">{t.puntajes.celular.toLowerCase()}</dd>
+                  </div>
+                  <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                    <dt className="text-xs text-fog-dim">
+                      {t.puntajes.rendimiento} · {t.puntajes.escritorio.toLowerCase()}
+                    </dt>
+                    <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-white">
+                      {p.puntajes.escritorio.rendimiento}
+                      <span className="text-base font-bold text-fog-dim">/100</span>
+                    </dd>
+                  </div>
+                </dl>
+                <p className="mt-4 text-xs text-fog-dim">
+                  {t.puntajes.medido} {p.puntajes.fecha} · {new URL(p.url).hostname}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-brand-soft">{t.puntajes.celular}</p>
+                <div className="mt-4 flex flex-wrap justify-around gap-6">
+                  {(
+                    [
+                      ["rendimiento", p.puntajes.celular.rendimiento],
+                      ["accesibilidad", p.puntajes.celular.accesibilidad],
+                      ["buenasPracticas", p.puntajes.celular.buenasPracticas],
+                      ["seo", p.puntajes.celular.seo],
+                    ] as const
+                  )
+                    .filter((x): x is [typeof x[0], number] => x[1] !== null)
+                    .map(([k, val]) => (
+                    <Ring
+                      key={k}
+                      value={val}
+                      centerValue={val}
+                      size={112}
+                      stroke={9}
+                      label={t.puntajes[k]}
+                      arcColor={val >= 90 ? "#B6FF00" : "#7D53FF"}
+                    />
+                  ))}
+                </div>
+                {p.puntajes.celular.seo === null && <p className="mt-6 text-sm text-fog-dim">{t.puntajes.sinSeo}</p>}
+              </div>
             </div>
           </Container>
         </section>

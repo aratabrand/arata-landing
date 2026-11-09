@@ -339,25 +339,85 @@ export function NeedsSection({
   items: { titulo: string; texto: string }[];
   nota: string;
 }) {
+  // D-079: lista de chequeo. Al entrar en pantalla se marca cada cosa, una por una;
+  // con las 3 listas, el cronómetro arranca y los 5 días empiezan a llenarse.
+  const fin = 0.5 + items.length * 0.8; // segundo en que arranca el plazo
   return (
     <section aria-labelledby="necesitamos" className="py-20 sm:py-24">
-      <Container>
+      <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <SectionHeader id="necesitamos" title={titulo} />
-        <ol className="mt-10 grid gap-3 sm:grid-cols-3">
-          {items.map((it, i) => (
-            <Reveal as="li" key={it.titulo} delay={i * 80} className="h-full">
-              <div className="h-full rounded-card border border-white/8 bg-surface-1 p-6">
-                <span className="font-display text-4xl font-extrabold tracking-display text-brand-soft">{i + 1}</span>
-                <h3 className="mt-3 font-display text-xl font-bold tracking-heading text-white">{it.titulo}</h3>
-                {it.texto && <p className="mt-1.5 text-sm leading-relaxed text-fog">{it.texto}</p>}
+        <Reveal variant="right">
+          <div className="nd rounded-[28px] border border-white/8 bg-surface-1 p-3 sm:p-4">
+            <ol className="space-y-2">
+              {items.map((it, i) => (
+                <li
+                  key={it.titulo}
+                  className="nd-row flex items-center gap-4 rounded-frame border border-white/6 bg-ink/60 p-4"
+                  style={{ ["--d" as string]: `${0.5 + i * 0.8}s` }}
+                >
+                  <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-white/20">
+                    <span aria-hidden className="nd-fill absolute inset-[-2px] rounded-full bg-lime" />
+                    <svg viewBox="0 0 20 20" className="relative h-4 w-4" aria-hidden>
+                      <path
+                        d="M4.5 10.5 l3.5 3.5 l7.5 -8"
+                        fill="none"
+                        stroke="#03010B"
+                        strokeWidth="2.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        pathLength={100}
+                        strokeDasharray="100"
+                        className="nd-check"
+                      />
+                    </svg>
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-lg font-bold tracking-heading text-white">{it.titulo}</span>
+                    {it.texto && <span className="mt-0.5 block text-sm leading-relaxed text-fog">{it.texto}</span>}
+                  </span>
+                  <span aria-hidden className="nd-chip shrink-0 rounded-full bg-lime/10 px-2.5 py-1 text-xs font-semibold text-lime">
+                    Listo
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            {/* El plazo arranca */}
+            <div className="nd-plazo mt-3 rounded-frame border border-white/6 p-4 sm:p-5" style={{ ["--d" as string]: `${fin}s` }}>
+              <div className="flex items-center gap-3">
+                <svg viewBox="0 0 32 32" className="h-9 w-9 shrink-0" aria-hidden>
+                  <circle cx="16" cy="18" r="11" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2" />
+                  <circle
+                    cx="16"
+                    cy="18"
+                    r="11"
+                    fill="none"
+                    stroke="#B6FF00"
+                    strokeWidth="2"
+                    pathLength={100}
+                    strokeDasharray="100"
+                    transform="rotate(-90 16 18)"
+                    className="nd-ring"
+                  />
+                  <rect x="13" y="3" width="6" height="3" rx="1.5" fill="rgba(255,255,255,0.4)" />
+                  <line x1="16" y1="18" x2="16" y2="11" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" className="nd-hand" />
+                  <circle cx="16" cy="18" r="1.8" fill="#FFFFFF" />
+                </svg>
+                <p className="nd-nota font-medium">{nota}</p>
               </div>
-            </Reveal>
-          ))}
-        </ol>
-        <p className="mt-6 flex items-center gap-2 text-fog">
-          <CalendarCheck aria-hidden className="h-4 w-4 text-lime" />
-          <em className="not-italic">{nota}</em>
-        </p>
+              <div className="mt-4 grid grid-cols-5 gap-1.5" aria-hidden>
+                {[1, 2, 3, 4, 5].map((d) => (
+                  <div key={d}>
+                    <span className="block h-1.5 overflow-hidden rounded-full bg-white/10">
+                      <span className="nd-day block h-full rounded-full bg-lime" style={{ ["--k" as string]: d - 1 }} />
+                    </span>
+                    <span className="mt-1.5 block text-center text-[0.7rem] text-fog-dim">Día {d}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

@@ -3,13 +3,13 @@
 
 export type TipoAgenda = "pagina" | "catalogo" | "sistema" | "auditoria";
 
-// Enlaces de Cal.com (usuario/evento). No son secretos: van en .env como
-// NEXT_PUBLIC_CAL_LINK y NEXT_PUBLIC_CAL_LINK_AUDITORIA (este último con aviso
-// mínimo de 48 horas configurado en Cal.com, D-054). Sin ellos, el último paso
-// ofrece terminar por WhatsApp con las respuestas ya escritas.
+// Enlaces de Cal.com (usuario/evento), D-076. No son secretos (son públicos).
+// Se pueden cambiar sin tocar código con NEXT_PUBLIC_CAL_LINK y
+// NEXT_PUBLIC_CAL_LINK_AUDITORIA. La auditoría lleva aviso mínimo de 48 h en Cal.com (D-054).
+// Si Cal.com no abre, el último paso ofrece terminar por WhatsApp.
 export const calLinks = {
-  reunion: process.env.NEXT_PUBLIC_CAL_LINK ?? "",
-  auditoria: process.env.NEXT_PUBLIC_CAL_LINK_AUDITORIA ?? process.env.NEXT_PUBLIC_CAL_LINK ?? "",
+  reunion: process.env.NEXT_PUBLIC_CAL_LINK || "arata-san/asesoria-30min",
+  auditoria: process.env.NEXT_PUBLIC_CAL_LINK_AUDITORIA || "arata-san/auditoria",
 };
 
 export const agendar = {
@@ -34,9 +34,10 @@ export const agendar = {
       pregunta: "¿Cuál es tu página?",
       placeholder: "tunegocio.com",
     },
+    // D-077: sin afán. Versión A elegida por defecto; B y C en 03-copy.md.
     cuando: {
-      pregunta: "¿Para cuándo lo necesitas?",
-      opciones: ["Ya", "Este mes", "En 1 a 3 meses", "Solo estoy averiguando"],
+      pregunta: "¿Cuándo te gustaría empezar?",
+      opciones: ["En las próximas semanas", "En uno o dos meses", "Más adelante, sin afán", "Todavía lo estoy pensando"],
     },
     inversion: {
       pregunta: "¿Cuánto tienes pensado invertir?",

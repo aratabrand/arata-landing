@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { StepsSection } from "@/components/v2/HomeSections";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
+import IncludesBento from "@/components/v2/IncludesBento";
 import {
   AddonCallout,
   CasesSection,
   ForWhoSection,
-  IncludesSection,
   NeedsSection,
   PriceSection,
   ServiceHero,
@@ -24,7 +24,7 @@ export default function PaginasWeb() {
     <>
       <ServiceHero {...c.hero} tipo="pagina" />
       <ForWhoSection {...c.paraQuien} />
-      <IncludesSection id="incluye" {...c.incluye} conRejilla />
+      <IncludesBento id="incluye" {...c.incluye} />
       <AddonCallout {...c.panel} />
       <CasesSection {...c.casos} />
       <NeedsSection {...c.necesitamos} />
