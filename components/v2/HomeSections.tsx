@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { FileText, Hourglass, Images, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
+import { BarChart3, FileText, Hourglass, Images, MessageSquareWarning, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Container, SectionHeader } from "./primitives";
@@ -33,33 +33,42 @@ const ICONOS: Record<string, LucideIcon> = {
   pdf: FileText,
   google: SearchX,
   datos: PackageSearch,
+  pedidos: MessageSquareWarning,
+  ventas: BarChart3,
 };
+
+type ProblemaItem = { icono: string; titulo?: string; texto: string };
 
 /**
  * Problema (D-066): tarjetas apiladas dentro de un panel (ref. Sergio, lista con caja de ícono).
  * El resaltado recorre las tarjetas una por una con animación CSS (opacidad), sin JS.
  */
-export function ProblemSection() {
-  const n = problema.items.length;
+export function ProblemSection({
+  id = "problema",
+  titulo = problema.titulo,
+  cierre = problema.cierre,
+  items = problema.items,
+}: { id?: string; titulo?: string; cierre?: string; items?: ProblemaItem[] } = {}) {
+  const n = items.length;
   return (
-    <section aria-labelledby="problema" className="relative isolate py-20 sm:py-28">
+    <section aria-labelledby={id} className="relative isolate py-20 sm:py-28">
       {/* Rejilla sutil con la luz detrás de las tarjetas (D-071) */}
       <GridBackground orb="70% 50%" />
       <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <Reveal>
-          <h2 id="problema" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {problema.titulo}
+          <h2 id={id} className="font-display text-v2-h2 font-bold tracking-heading text-white">
+            {titulo}
           </h2>
-          <p className="mt-4 max-w-md text-v2-lead text-fog">{problema.cierre}</p>
+          {cierre && <p className="mt-4 max-w-md text-v2-lead text-fog">{cierre}</p>}
         </Reveal>
 
         <Reveal variant="right">
           <ul className="space-y-2 rounded-card border border-white/8 bg-surface-1/70 p-2 sm:p-3">
-            {problema.items.map((item, i) => {
+            {items.map((item, i) => {
               const Icono = ICONOS[item.icono] ?? Images;
               return (
                 <li
-                  key={item.titulo}
+                  key={item.texto}
                   className="v2-problem relative flex items-center gap-4 overflow-hidden rounded-frame border border-white/6 bg-ink/60 p-3 sm:p-4"
                   style={{ ["--i" as string]: i, ["--n" as string]: n } as CSSProperties}
                 >
@@ -69,8 +78,10 @@ export function ProblemSection() {
                     <Icono aria-hidden className="v2-problem-icon h-5 w-5 text-brand-soft" />
                   </span>
                   <span className="relative">
-                    <span className="block font-semibold text-white">{item.titulo}</span>
-                    <span className="mt-0.5 block text-sm leading-relaxed text-fog">{item.texto}</span>
+                    {item.titulo && <span className="block font-semibold text-white">{item.titulo}</span>}
+                    <span className={item.titulo ? "mt-0.5 block text-sm leading-relaxed text-fog" : "block leading-relaxed text-white"}>
+                      {item.texto}
+                    </span>
                   </span>
                 </li>
               );
@@ -101,22 +112,33 @@ export function ServicesSection() {
  * Escritorio horizontal, celular vertical (no cambia la orientación).
  * Todo sale de `--p` (ScrollPaint): transform en la línea, opacidad en cada paso.
  */
-export function StepsSection() {
-  const tramos = pasos.items.length - 1;
+type Paso = { titulo: string; texto: string; marca?: string };
+
+export function StepsSection({
+  id = "como",
+  titulo = pasos.titulo,
+  items = pasos.items,
+}: { id?: string; titulo?: string; items?: Paso[] } = {}) {
+  const tramos = items.length - 1;
+  // En escritorio la línea va del centro del primer círculo al del último.
+  const largo = `calc(${((tramos / items.length) * 100).toFixed(2)}% + 0.6rem)`;
   // Un paso se enciende cuando la línea llega a él: opacidad 0 → 1 en el último cuarto de su tramo.
   const encendido = (i: number) => `clamp(0, calc((var(--p) * ${tramos} - ${i}) * 4 + 1), 1)`;
   return (
-    <section aria-labelledby="como" className="relative isolate py-20 sm:py-28">
+    <section aria-labelledby={id} className="relative isolate py-20 sm:py-28">
       <GridBackground variant="lineas" orb="50% 60%" glow={0.1} />
       <Container>
-        <SectionHeader id="como" title={pasos.titulo} />
-        <ScrollPaint as="ol" className="relative mt-12 grid gap-8 lg:grid-cols-5 lg:gap-3">
+        <SectionHeader id={id} title={titulo} />
+        <ScrollPaint
+          as="ol"
+          className="relative mt-12 grid gap-8 lg:grid-flow-col lg:auto-cols-fr lg:gap-3"
+        >
           {/* Línea horizontal (escritorio): del centro del primer círculo al del último */}
-          <span aria-hidden className="absolute left-[1.125rem] top-[1.125rem] hidden h-px w-[calc(80%+0.6rem)] bg-white/10 lg:block" />
+          <span aria-hidden className="absolute left-[1.125rem] top-[1.125rem] hidden h-px bg-white/10 lg:block" style={{ width: largo }} />
           <span
             aria-hidden
-            className="absolute left-[1.125rem] top-[1.125rem] hidden h-[2px] w-[calc(80%+0.6rem)] origin-left bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:block"
-            style={{ transform: "scaleX(var(--p))" }}
+            className="absolute left-[1.125rem] top-[1.125rem] hidden h-[2px] origin-left bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:block"
+            style={{ width: largo, transform: "scaleX(var(--p))" }}
           />
           {/* Línea vertical (celular) */}
           <span aria-hidden className="absolute bottom-6 left-[1.125rem] top-4 w-px bg-white/10 lg:hidden" />
@@ -126,17 +148,17 @@ export function StepsSection() {
             style={{ transform: "scaleY(var(--p))" }}
           />
 
-          {pasos.items.map((p, i) => (
+          {items.map((p, i) => (
             <li key={p.titulo} className="relative flex gap-4 lg:flex-col lg:gap-5">
               <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-surface-2 font-display text-sm font-bold text-fog">
-                {i + 1}
+                {p.marca ?? i + 1}
                 {/* versión encendida: círculo lima con número ink */}
                 <span
                   aria-hidden
                   className="absolute inset-[-1px] flex items-center justify-center rounded-full bg-lime text-ink shadow-[0_0_18px_rgba(182,255,0,0.55)]"
                   style={{ opacity: encendido(i) }}
                 >
-                  {i + 1}
+                  {p.marca ?? i + 1}
                 </span>
               </span>
               <div className="pb-1">

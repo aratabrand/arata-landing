@@ -11,14 +11,18 @@ const isDev = process.env.NODE_ENV === "development";
 // administran dentro (GA4, etc.) envían datos a google-analytics.com /
 // analytics.google.com (incluidos endpoints regionales). El iframe de respaldo
 // sin JS de GTM requiere frame-src hacia googletagmanager.com.
+// Cal.com (calendario de /agendar, D-012): su embed.js carga desde app.cal.com y
+// pinta el calendario en un iframe de app.cal.com / cal.com. Solo se pide al
+// llegar al último paso del formulario.
+const cal = "https://app.cal.com https://cal.com";
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://app.cal.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self' data:",
-  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com${isDev ? " ws:" : ""}`,
-  "frame-src https://www.googletagmanager.com",
+  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com ${cal}${isDev ? " ws:" : ""}`,
+  `frame-src https://www.googletagmanager.com ${cal}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

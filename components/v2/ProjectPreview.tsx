@@ -15,6 +15,7 @@ export default function ProjectPreview({
   device = "desktop",
   sizes = "(min-width: 1024px) 50vw, 100vw",
   captura = 0,
+  priority = false,
 }: {
   proyecto: Pick<Proyecto, "nombre" | "tipos" | "acento" | "video"> & { capturas?: Proyecto["capturas"] };
   className?: string;
@@ -23,6 +24,8 @@ export default function ProjectPreview({
   sizes?: string;
   /** Cuál captura mostrar (0 = inicio del sitio). */
   captura?: number;
+  /** Para la imagen principal de un hero (es el LCP): se precarga con prioridad alta. */
+  priority?: boolean;
 }) {
   if (proyecto.video) {
     return (
@@ -37,7 +40,7 @@ export default function ProjectPreview({
   if (cap && device === "desktop") {
     return (
       <div className={cn("relative h-full w-full overflow-hidden bg-surface-2", className)}>
-        <Image src={cap.src} alt={cap.alt} fill sizes={sizes} className="object-cover object-top" />
+        <Image src={cap.src} alt={cap.alt} fill sizes={sizes} priority={priority} className="object-cover object-top" />
       </div>
     );
   }

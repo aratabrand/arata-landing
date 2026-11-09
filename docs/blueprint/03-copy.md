@@ -811,6 +811,23 @@ Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redac
 
 ---
 
+## Copy nuevo de la Fase 4 ◻ (por aprobar)
+
+Textos que no estaban en el copy aprobado y fueron necesarios al construir. Viven en `content/`.
+
+| Dónde | Texto ◻ |
+|---|---|
+| `/agendar` · error sin nombre | Escribe tu nombre. |
+| `/agendar` · error sin URL (auditoría) | Escribe la dirección de tu página. |
+| `/agendar` · título del paso 5 | Elige la hora que te sirva |
+| `/agendar` · mientras abre el calendario | Abriendo el calendario… |
+| `/agendar` · sin calendario | Termina por WhatsApp: te mandamos los horarios disponibles. · **[Enviar por WhatsApp]** |
+| Casos · título de la galería | Así se ve |
+| Casos · ruta arriba del título | Portafolio / *nombre del proyecto* |
+| `/privacidad` · texto completo | Ver `content/privacidad.ts` (redactado con D-055; revisar con abogado) |
+
+---
+
 ## Estado del resto del sitio
 
 > Copy **aprobado** (D-056). Lo que sigue en ◻ son datos que llegan después y se insertan sin cambiar la estructura.

@@ -9,19 +9,25 @@ import { proyectos } from "@/content/proyectos";
 
 // Cierre del Inicio: FAQ en dos columnas (captura 02), CTA en tarjeta grande con collage (captura 04) y footer.
 
-/** Preguntas frecuentes con <details>: funciona sin JavaScript. */
-export function FaqSection() {
+type Pregunta = { p: string; r: string };
+
+/** Preguntas frecuentes con <details>: funciona sin JavaScript. Cada página pasa las suyas. */
+export function FaqSection({
+  titulo = faq.titulo,
+  subtitulo = faq.subtitulo,
+  items = faq.items,
+}: { titulo?: string; subtitulo?: string; items?: Pregunta[] } = {}) {
   return (
     <section aria-labelledby="faq" className="py-20 sm:py-28">
       <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <h2 id="faq" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {faq.titulo}
+            {titulo}
           </h2>
-          <p className="mt-4 max-w-sm text-fog">{faq.subtitulo}</p>
+          {subtitulo && <p className="mt-4 max-w-sm text-fog">{subtitulo}</p>}
         </div>
         <div className="border-t border-white/8">
-          {faq.items.map((item) => (
+          {items.map((item) => (
             <details key={item.p} className="v2-faq group border-b border-white/8">
               <summary className="flex min-h-[3.5rem] cursor-pointer list-none items-center justify-between gap-6 py-4 text-left text-base font-medium text-white">
                 {item.p}
@@ -36,8 +42,10 @@ export function FaqSection() {
   );
 }
 
+type Cta = { titulo: string; texto: string; boton: string; nota?: string; href?: string };
+
 /** CTA final: tarjeta grande con collage de los trabajos tintado de morado (captura 04). */
-export function CtaCard() {
+export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.ReactNode } = {}) {
   return (
     <section aria-labelledby="cta-final" className="pb-24 pt-8 sm:pb-32">
       <Container>
@@ -58,16 +66,17 @@ export function CtaCard() {
           <div aria-hidden className="absolute inset-0 -z-10 bg-[#140A3A]/75" />
           <Glow className="left-1/2 top-1/2 -z-10 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2" />
 
+          {antes}
           <h2 id="cta-final" className="mx-auto max-w-3xl font-display text-v2-h2 font-bold tracking-heading text-white">
-            {ctaFinal.titulo}
+            {cta.titulo}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-v2-lead text-fog">{ctaFinal.texto}</p>
+          <p className="mx-auto mt-5 max-w-xl text-v2-lead text-fog">{cta.texto}</p>
           <div className="mt-9 flex justify-center">
-            <Button href={AGENDAR} size="lg" arrow>
-              {ctaFinal.boton}
+            <Button href={cta.href ?? AGENDAR} size="lg" arrow>
+              {cta.boton}
             </Button>
           </div>
-          <p className="mt-4 text-sm text-fog-dim">{ctaFinal.nota}</p>
+          {cta.nota && <p className="mt-4 text-sm text-fog-dim">{cta.nota}</p>}
         </div>
       </Container>
     </section>

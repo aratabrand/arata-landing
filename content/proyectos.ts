@@ -139,3 +139,44 @@ export function capturasIntercaladas() {
   for (let i = 0; i < max; i++) for (const p of proyectos) if (p.capturas[i]) out.push(p.capturas[i]);
   return out;
 }
+
+/* ── Textos de /portafolio y de los casos (03-copy.md, D-052) ─────────── */
+export const portafolioPagina = {
+  meta: {
+    title: "Portafolio · Páginas, catálogos y sistemas reales · Arata San",
+    description:
+      "Trabajos reales para negocios reales: Danrodedm, Boost Your Menu, Arata Print y Caravana. Mira qué problema resolvió cada proyecto.",
+  },
+  titulo: "Trabajos reales, negocios reales.",
+  texto: "Cada proyecto resolvió un problema concreto de un negocio. Mira cómo.",
+  filtros: ["Todos", "Páginas", "Catálogos", "Sistemas"] as const,
+  cta: {
+    titulo: "¿Quieres el tuyo?",
+    texto: "Agenda tu reunión y en 30 minutos te decimos cómo lo haríamos para tu negocio.",
+    boton: "Agendar reunión",
+    nota: "30 minutos, sin costo",
+  },
+};
+
+export const casoTextos = {
+  verSitio: "Ver sitio en vivo",
+  problema: "El problema",
+  solucion: "Lo que hicimos",
+  resultado: "El resultado",
+  galeria: "Así se ve",
+  siguiente: "Siguiente proyecto",
+  cta: {
+    titulo: "¿Tu negocio tiene un problema parecido?",
+    texto: "Agenda y lo vemos juntos en 30 minutos.",
+    boton: "Agendar reunión",
+    nota: "30 minutos, sin costo",
+  },
+};
+
+/** Filtro del portafolio → tipo de proyecto. */
+export const filtroATipo: Record<string, TipoProyecto | null> = {
+  Todos: null,
+  Páginas: "Página",
+  Catálogos: "Catálogo",
+  Sistemas: "Sistema",
+};

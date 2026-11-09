@@ -15,7 +15,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/02-arquitectura.md`](blueprint/02-arquitectura.md) | Menú, flujo de agendamiento y estructura sección por sección de cada página | 2 |
 | [`blueprint/03-copy.md`](blueprint/03-copy.md) | Copy de cada página con versiones para elegir (todas las páginas) | 2 |
 | [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2 y especificación de cada componente (hoy: dirección) | 3 |
-| `blueprint/05-construccion.md` | Decisiones técnicas, estructura de carpetas, datos del portafolio, agenda | 4 |
+| [`blueprint/05-construccion.md`](blueprint/05-construccion.md) | Rutas, carpetas, flujo de agenda, eventos de GTM, configuración de Cal.com y pendientes de lanzamiento | 4 |
 | `blueprint/06-seo-geo-velocidad.md` | Checklist de SEO, IA, velocidad, accesibilidad y legal por página | 5 |
 | `blueprint/07-medicion-lanzamiento.md` | Eventos de GTM/GA4, QA y salida a producción | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |

@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.2 | 7 nov 2026 | Sergio |
+| En revisión | 0.3 | 9 nov 2026 | Sergio |
 
 ---
 
@@ -147,7 +147,10 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] **Copy aprobado — Fase 2 cerrada (D-056)**. Datos pendientes en `03-copy.md`
 - [x] Sistema de diseño v2 en código: guía `/sistema` y muestra del Inicio `/v2` (D-057)
 - [x] Velocidad de la muestra: Lighthouse móvil 94–97, accesibilidad 100 (D-059)
-- [ ] **Aprobación visual de Sergio (puerta de la Fase 3)**
+- [x] **Aprobación visual de Sergio — Fase 3 cerrada (D-072)**
+- [x] Fase 4: páginas de servicio, portafolio, 4 casos, agendar, gracias, privacidad y 404 construidos (`05-construccion.md`, D-073 a D-075)
+- [ ] Enlaces de Cal.com, RUT y dirección (Sergio)
+- [ ] **Preview de Vercel revisado (puerta de la Fase 4)**
 - [ ] Construcción
 - [ ] SEO, IA, velocidad y legal
 - [ ] Medición y lanzamiento

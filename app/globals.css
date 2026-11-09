@@ -285,6 +285,26 @@
   pointer-events: auto;
 }
 
+/* Paso del formulario de /agendar: entra con un deslizamiento corto (D-072) */
+.v2-step {
+  animation: v2-step-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes v2-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-step {
+    animation: none;
+  }
+}
+
 /* Menú del celular (D-070): el panel entra con fundido y los elementos suben
    escalonados (--d). Al cerrar sale rápido, sin escalonar. Solo transform/opacity. */
 .v2-mnav {

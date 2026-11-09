@@ -226,7 +226,7 @@ La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de 
 - Toda decisión nueva se registra en `docs/decisiones.md`.
 - Solo se construye lo que está `Aprobado` en el blueprint. Orden: oferta → copy → diseño → construcción.
 - La base técnica de la sección 10 sigue vigente para la v2.
-- **Código v2:** componentes en `components/v2/`, contenido en `content/` (textos y portafolio se editan ahí), tokens v2 en `tailwind.config.ts`. Guía viva en `/sistema`, muestra del Inicio en `/v2` (noindex hasta el lanzamiento). Reglas de velocidad aprendidas: `docs/blueprint/04-sistema-de-diseno.md` §12.
+- **Código v2:** páginas en `app/(v2)/(sitio)/` (comparten menú y footer), componentes en `components/v2/`, contenido en `content/` (textos y portafolio se editan ahí), tokens v2 en `tailwind.config.ts`. Guía viva en `/sistema`, Inicio en `/v2` (todo noindex hasta el lanzamiento; la v1 sigue en `/`). Construcción y agenda: `docs/blueprint/05-construccion.md`. Reglas de velocidad aprendidas: `docs/blueprint/04-sistema-de-diseno.md` §12.
 
 ---
 
