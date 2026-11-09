@@ -30,4 +30,10 @@ export function medir(evento: string, datos: Datos = {}) {
   }
   window.dataLayer.push({ event: evento, ...datos });
   window.gtag("event", evento, datos);
+  // Si el contenedor aún no se pidió (se carga al interactuar, D-098), se pide ya:
+  // un evento de la agenda o una conversión no esperan.
+  // La marca cubre el caso en que el evento sale antes de que GtmLoader escuche
+  // (React monta la página antes que el layout: pasa en /agendar/gracias).
+  (window as Window & { __medirPendiente?: boolean }).__medirPendiente = true;
+  window.dispatchEvent(new Event("as:medir"));
 }

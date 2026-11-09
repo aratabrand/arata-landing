@@ -1,4 +1,3 @@
-import Script from "next/script";
 import { site } from "@/lib/site";
 
 // Google Tag Manager. Dos piezas: el loader (GtmScript) y el respaldo sin
@@ -21,21 +20,8 @@ export function GtmInit() {
   );
 }
 
-// Loader del contenedor: se carga después de que la página es interactiva. Se probó
-// lazyOnload (D-096) y fue peor: Lighthouse igual mide el script, solo que más tarde.
-export function GtmScript() {
-  const id = site.gtmId;
-  if (!id) return null;
-  return (
-    <Script id="gtm-loader" strategy="afterInteractive">
-      {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${id}');`}
-    </Script>
-  );
-}
+// Loader del contenedor: components/GtmLoader.tsx (carga al interactuar, D-098).
+export { default as GtmScript } from "./GtmLoader";
 
 // Respaldo para navegadores sin JavaScript. Va como primer hijo del <body>.
 export function GtmNoScript() {

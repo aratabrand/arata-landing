@@ -52,12 +52,12 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 **Lo que falta hacer en Analytics:**
 
-1. **Administrar → Eventos clave → Nuevo evento clave:** escribe `reunion_confirmada` y guarda. Repite con `cita_agendada`.
+1. ✅ `reunion_confirmada` creado como evento clave ("Crear con código"). `cita_agendada` **no** se marca como clave (se contaría doble la misma reunión) y no hay que crearlo: aparece solo. Dimensiones personalizadas `tipo`, `paso` y `motivo` creadas (Sergio).
 2. **Informes → Tiempo real:** abre www.aratasan.com en el celular y confirma que apareces.
 3. *(Recomendado)* **Administrar → Vinculaciones de productos → Search Console:** vincula `www.aratasan.com`.
 4. **Search Console:** si el sitio se verificó con el método **"Google Tag Manager"**, el contenedor viejo `GTM-TL7RLDMS` ya no está y hay que volver a verificar. Usa otro método: **Registro DNS** o **Google Analytics**, que ya está instalado.
 
-**Rendimiento:** el contenedor de GA4 pesa unos 178 KB. En local, el Inicio quedó en 87–90 (antes 90–93). Se probó cargarlo más tarde (`lazyOnload`) y fue peor, así que va con `afterInteractive`. En el sitio publicado se vuelve a medir.
+**Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
 ---
 
