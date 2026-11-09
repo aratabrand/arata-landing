@@ -6,13 +6,14 @@ import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "rea
 import { ArrowLeft, ArrowRight, Check, MessageCircle } from "lucide-react";
 import { agendar as c, calLinks, type TipoAgenda } from "@/content/agendar";
 import { site } from "@/lib/site";
+import { medir } from "@/lib/medir";
 import { cn } from "@/lib/utils";
 
 // Flujo de /agendar (02-arquitectura.md §2): 3 preguntas + datos + calendario.
 // - Tocar una opción la elige y pasa al siguiente paso (cómodo con el pulgar).
 // - En "auditoría" se pide la URL y se salta la pregunta de inversión (D-036).
 // - Las respuestas viajan con la cita en las notas de Cal.com (la reunión llega preparada).
-// - Cada paso empuja un evento a GTM (dataLayer) para medir dónde se sale la gente.
+// - Cada paso manda un evento a GA4 y a GTM (lib/medir.ts) para medir dónde se sale la gente.
 // - Cal.com se carga SOLO al llegar al último paso (el script no pesa al abrir la página).
 
 type Paso = "tipo" | "cuando" | "inversion" | "datos" | "calendario";
@@ -23,16 +24,13 @@ const TIPOS: TipoAgenda[] = ["pagina", "catalogo", "sistema", "auditoria"];
 
 declare global {
   interface Window {
-    dataLayer?: Record<string, unknown>[];
     Cal?: CalFn;
   }
 }
 type CalFn = ((...args: unknown[]) => void) & { loaded?: boolean; ns?: Record<string, unknown>; q?: unknown[] };
 
-function track(event: string, data: Record<string, unknown> = {}) {
-  window.dataLayer = window.dataLayer ?? [];
-  window.dataLayer.push({ event, ...data });
-}
+// Medición: a GA4 directo (gtag) y a GTM (dataLayer). Ver lib/medir.ts.
+const track = (event: string, data: Record<string, string | number | null> = {}) => medir(event, data);
 
 const soloDigitos = (s: string) => s.replace(/\D/g, "");
 const whatsappValido = (s: string) => {
