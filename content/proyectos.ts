@@ -65,8 +65,15 @@ export type Proyecto = {
 export const proyectos: Proyecto[] = [
   {
     slug: "danrodedm",
-    // ◻ faltan ciudad y duración (Sergio)
-    ficha: { sector: "Maquinaria de electroerosión", servicios: "Página con catálogo" },
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    ficha: { sector: "Maquinaria de electroerosión", ciudad: "Bogotá", servicios: "Página con catálogo", duracion: "5 días" },
+    proceso: [
+      { titulo: "Investigación", texto: "Recogimos la información del negocio y de sus máquinas." },
+      { titulo: "El problema principal", texto: "Atacamos lo que más frenaba: los PDF interminables de fichas técnicas." },
+      { titulo: "Propuesta para validar", texto: "Les mostramos el diseño y el recorrido de la página para que lo aprobaran." },
+      { titulo: "Construcción", texto: "La hicimos para celular y computador, con lo básico de SEO y GEO, y optimizada para que abra rápido." },
+      { titulo: "Entrega", texto: "Entregada en el plazo acordado: 5 días." },
+    ],
     servicio: "pagina",
     puntajes: { celular: { rendimiento: 79, accesibilidad: 93, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 97 }, abreEnCelular: "5,2 s", fecha: FECHA_MEDICION, mostrar: "fuerte" },
     nombre: "Danrodedm",
@@ -94,8 +101,15 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "boost-your-menu",
-    // ◻ falta duración (Sergio)
-    ficha: { sector: "Menús digitales para restaurantes", ciudad: "New Jersey, EE. UU.", servicios: "Página que vende (landing)" },
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    ficha: { sector: "Menús digitales para restaurantes", ciudad: "New Jersey, EE. UU.", servicios: "Página que vende (landing)", duracion: "3 días" },
+    proceso: [
+      { titulo: "Investigación", texto: "Revisamos su página anterior y la información del negocio." },
+      { titulo: "Propuesta de rediseño", texto: "Planteamos un rediseño para explicar simple su oferta de software y hardware." },
+      { titulo: "Validación", texto: "Les mostramos el diseño y el recorrido de la página para que lo aprobaran." },
+      { titulo: "Construcción", texto: "La hicimos para celular y computador, con lo básico de SEO y GEO, y optimizada para que abra rápido." },
+      { titulo: "Entrega", texto: "Lista en 3 días." },
+    ],
     servicio: "pagina",
     puntajes: { celular: { rendimiento: 70, accesibilidad: 90, buenasPracticas: 96, seo: 100 }, escritorio: { rendimiento: 88 }, abreEnCelular: "5,3 s", fecha: FECHA_MEDICION, mostrar: "fuerte" },
     nombre: "Boost Your Menu",
@@ -126,8 +140,15 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "arata-print",
-    // ◻ faltan ciudad y duración (Sergio)
-    ficha: { sector: "Camisetas estampadas bajo pedido", servicios: "Catálogo + sistema a medida" },
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    ficha: { sector: "Camisetas estampadas bajo pedido", ciudad: "Bogotá", servicios: "Catálogo + sistema a medida", duracion: "5 días" },
+    proceso: [
+      { titulo: "Primero, el flujo", texto: "Antes de lo visual, definimos cómo debía funcionar la venta." },
+      { titulo: "Orden en la venta", texto: "Resolvimos la venta desordenada por WhatsApp, que no dejaba medir nada." },
+      { titulo: "El recorrido de compra", texto: "Diseñamos cómo compra el cliente, paso a paso, con buenas prácticas de uso." },
+      { titulo: "Celular primero", texto: "Todo pensado para el celular, que es donde compran sus clientes." },
+      { titulo: "Entrega", texto: "Listo en 5 días." },
+    ],
     servicio: "catalogo",
     puntajes: { celular: { rendimiento: 96, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,6 s", fecha: FECHA_MEDICION, mostrar: "todo" },
     nombre: "Arata Print",
@@ -156,8 +177,15 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "caravana",
-    // ◻ faltan ciudad y duración (Sergio)
-    ficha: { sector: "Tecnología y accesorios", servicios: "Catálogo + panel de tienda" },
+    // Datos de Sergio (9 nov 2026): "igual que Arata Print" (ciudad, duración y proceso). Pasos ◻ por aprobar
+    ficha: { sector: "Tecnología y accesorios", ciudad: "Bogotá", servicios: "Catálogo + panel de tienda", duracion: "5 días" },
+    proceso: [
+      { titulo: "Primero, el flujo", texto: "Antes de lo visual, definimos cómo debía funcionar la venta." },
+      { titulo: "Orden en la venta", texto: "Resolvimos la venta por WhatsApp con fotos y más fotos, que no dejaba medir nada." },
+      { titulo: "El recorrido de compra", texto: "Diseñamos cómo compra el cliente, paso a paso, con buenas prácticas de uso." },
+      { titulo: "Celular primero", texto: "Todo pensado para el celular, que es donde compran sus clientes." },
+      { titulo: "Entrega", texto: "Lista en 5 días." },
+    ],
     servicio: "catalogo",
     puntajes: { celular: { rendimiento: 99, accesibilidad: 98, buenasPracticas: 100, seo: null }, escritorio: { rendimiento: 100 }, abreEnCelular: "2,0 s", fecha: FECHA_MEDICION, mostrar: "todo" },
     nombre: "Caravana",

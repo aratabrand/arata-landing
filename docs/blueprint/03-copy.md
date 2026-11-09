@@ -840,6 +840,7 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 | Casos · sin SEO | Este sitio aún está en un dominio de prueba, cerrado a Google; por eso no mostramos su SEO. |
 | Casos · franja del cliente | SECTOR · CIUDAD · SERVICIOS · DURACIÓN. Sectores: Maquinaria de electroerosión · Menús digitales para restaurantes · Camisetas estampadas bajo pedido · Tecnología y accesorios. Servicios: Página con catálogo · Página que vende (landing) · Catálogo + sistema a medida · Catálogo + panel de tienda |
 | Casos · proceso | Cómo fue el proceso (cuando haya proceso real) · Cómo trabajamos un proyecto así (mientras tanto) |
+| Casos · pasos del proceso (D-084) | Ver `content/proyectos.ts` → `proceso` de cada proyecto (5 pasos cada uno, redactados del relato de Sergio) |
 | Casos · preguntas | Preguntas sobre páginas como esta · Preguntas sobre catálogos y sistemas |
 | Boost Your Menu · **Qué logra la página** | Explica de forma simple una oferta que junta software y hardware, muestra los restaurantes que ya confían en ellos y lleva a pedir una demo o a probar el menú interactivo. |
 | `/paginas-web` · lista de chequeo | Listo (en cada cosa marcada) · Día 1 … Día 5 |

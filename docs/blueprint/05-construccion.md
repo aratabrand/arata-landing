@@ -144,7 +144,7 @@ Lighthouse 12.6 sobre el sitio en vivo, celular (mediana de 3) y computador (2),
 | Falta | Quién | Bloquea |
 |---|---|---|
 | Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar `mostrar` a `"todo"` (D-082) | Santiago / Claude (con acceso a sus repos) | Nada (hoy se muestra lo fuerte) |
-| Datos de cada caso: **ciudad** (Danrodedm, Arata Print, Caravana), **duración** (los 4) y **cómo fue el proceso** (los 4) → `content/proyectos.ts` (`ficha`, `proceso`) (D-083) | Sergio | Nada (se ve lo que hay) |
+| ~~Datos de cada caso: ciudad, duración y proceso~~ ✅ recibidos (D-084) | — | — |
 | Elegir versión de la pregunta 2 del formulario (D-077) | Sergio | Nada (va la A) |
 | RUT y dirección del responsable | Sergio | `/privacidad` (Ley 1581). Recomendado: revisión de un abogado |
 | Límite de productos del catálogo de 800 USD | Sergio | Una pregunta de la FAQ de catálogos |
