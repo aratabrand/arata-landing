@@ -15,9 +15,9 @@ El sitio v2 se lanzó el 9 nov 2026 (D-091). Este documento cubre lo que falta p
 | Sitio publicado en www.aratasan.com | ✅ D-091 |
 | PageSpeed celular 95–100 en todas las páginas | ✅ D-093 |
 | Sitemap enviado a Google Search Console y Bing | ✅ Sergio (D-095) |
-| Google Tag Manager `GTM-TL7RLDMS` en todas las páginas | ✅ instalado desde la v1 |
-| **Google Analytics 4** | ◻ **No está instalado.** El contenedor de GTM está publicado (versión 1) pero no tiene ninguna etiqueta (revisado el 9 nov 2026, D-095) |
-| Eventos de la agenda en el sitio (`dataLayer`) | ✅ el sitio ya los envía; falta que GA4 los reciba |
+| Google Tag Manager en todas las páginas | ✅ **`GTM-MVW5FKSQ`** (D-096). Reemplaza al contenedor vacío `GTM-TL7RLDMS` |
+| **Google Analytics 4** | ✅ **`G-PWBJXQML6S`**, dentro de `GTM-MVW5FKSQ`, con medición mejorada (páginas vistas, scroll, clics salientes, formularios). Probado: llegan todos los eventos (D-096) |
+| Eventos de la agenda | ✅ el sitio los manda **directo a GA4** (`gtag`) y también a GTM (`dataLayer`), con `lib/medir.ts` |
 
 ---
 
@@ -36,59 +36,28 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 ---
 
-## 3. Cómo instalar Google Analytics 4 (con GTM, unos 20 minutos)
+## 3. Google Analytics 4 — cómo quedó y qué falta (D-096)
 
-### A. Crear la propiedad en Google Analytics
+**Cómo quedó:**
 
-1. Entra a **analytics.google.com** con la cuenta de Arata San → **Administrar** (ícono de engranaje, abajo a la izquierda) → **Crear** → **Propiedad**.
-2. Nombre: **Arata San**. Zona horaria: **Colombia**. Moneda: **peso colombiano (COP)** o **dólar (USD)**. Siguiente y completa los datos del negocio.
-3. En **Flujos de datos**, elige **Web**: URL `www.aratasan.com`, nombre **Sitio web**. Deja activada la **Medición mejorada**.
-4. Copia el **ID de medición**: empieza por `G-` (ej. `G-AB12CD34EF`).
+- El sitio carga **`GTM-MVW5FKSQ`**, que trae la etiqueta de Google de GA4 (`G-PWBJXQML6S`) con medición mejorada.
+- La etiqueta de Google **no convierte sola** los eventos de `dataLayer` en eventos de GA4. Por eso `lib/medir.ts` manda cada evento de la agenda de dos formas:
+  - con `gtag("event", …)`, directo a GA4;
+  - con `dataLayer.push`, para usarlo en GTM más adelante (por ejemplo, el píxel de Meta).
+- `GtmInit` crea la cola y `gtag('js')` al principio de la página. Así, la conversión de `/agendar/gracias` no se pierde aunque se dispare antes de que el contenedor termine de abrir.
+- **Política de seguridad (CSP):** permite `*.google-analytics.com`, `*.analytics.google.com`, `*.googletagmanager.com` y `www.google.com`. GA4 manda una copia de cada evento a `www.google.com/g/collect`; sin ese permiso, quedaba bloqueada.
+- **Probado en el navegador:** llegan `page_view`, `agendar_paso`, `agendar_datos_completos`, `agendar_calendario`, `reunion_confirmada` y `form_start`, sin errores de seguridad.
 
-### B. Conectarlo en Google Tag Manager
+> ⚠ **No crear en GTM una etiqueta "Evento de GA4" para estos eventos**: ya llegan solos y se contarían doble. Los pasos 5–8 de la guía anterior ya no hacen falta.
 
-Entra a **tagmanager.google.com** → contenedor **GTM-TL7RLDMS**.
+**Lo que falta hacer en Analytics:**
 
-5. **Etiqueta base:**
-   - Ve a **Etiquetas** → **Nueva** → Configuración de la etiqueta: **Etiqueta de Google**.
-   - ID: tu `G-…`.
-   - Activación: **Initialization - All Pages**.
-   - Nombre: `GA4 - Etiqueta de Google` → **Guardar**.
-6. **Variables:**
-   - Ve a **Variables**.
-   - En "Variables integradas" → **Configurar** → activa **Event**.
-   - En "Variables definidas por el usuario" → **Nueva** → **Variable de capa de datos**:
-     - Una con nombre de variable `paso` (llámala `dlv - paso`).
-     - Otra con `tipo` (llámala `dlv - tipo`).
-7. **Activador:**
-   - Ve a **Activadores** → **Nuevo** → **Evento personalizado**.
-   - Nombre del evento: `^(agendar_.*|cita_agendada|reunion_confirmada)$`.
-   - Marca **Usar coincidencia de expresión regular**.
-   - Nombre: `Eventos de agenda`.
-8. **Etiqueta de eventos:**
-   - Ve a **Etiquetas** → **Nueva** → **Google Analytics: evento de GA4**.
-   - ID de medición: tu `G-…`.
-   - Nombre del evento: `{{Event}}`.
-   - En **Parámetros del evento**: `paso` = `{{dlv - paso}}` y `tipo` = `{{dlv - tipo}}`.
-   - Activación: `Eventos de agenda`.
-   - Nombre: `GA4 - Eventos de agenda` → **Guardar**.
-9. **Probar:**
-   - Haz clic en **Vista previa** → escribe `https://www.aratasan.com` → **Connect**.
-   - En la pestaña que se abre, ve a `/agendar` y avanza en el formulario.
-   - En Tag Assistant deben aparecer `agendar_paso` y la etiqueta **GA4 - Eventos de agenda** como *Fired*.
-10. **Publicar:**
-    - **Enviar** → nombre de versión `GA4 + embudo de agenda` → **Publicar**.
+1. **Administrar → Eventos clave → Nuevo evento clave:** escribe `reunion_confirmada` y guarda. Repite con `cita_agendada`.
+2. **Informes → Tiempo real:** abre www.aratasan.com en el celular y confirma que apareces.
+3. *(Recomendado)* **Administrar → Vinculaciones de productos → Search Console:** vincula `www.aratasan.com`.
+4. **Search Console:** si el sitio se verificó con el método **"Google Tag Manager"**, el contenedor viejo `GTM-TL7RLDMS` ya no está y hay que volver a verificar. Usa otro método: **Registro DNS** o **Google Analytics**, que ya está instalado.
 
-### C. Marcar las conversiones en Analytics
-
-11. En Analytics → **Administrar** → **Eventos clave** → **Nuevo evento clave**: escribe `reunion_confirmada` y guarda. Repite con `cita_agendada`.
-12. Revisa **Informes → Tiempo real** mientras haces una prueba en el sitio. Los informes normales tardan hasta 24 horas.
-13. *(Recomendado)* **Administrar → Vinculaciones de productos → Search Console** → vincula `www.aratasan.com`, para ver en Analytics las búsquedas de Google que traen visitas.
-
-**Ya está listo en el sitio:**
-
-- La política de seguridad (CSP) ya permite Analytics (`googletagmanager.com`, `google-analytics.com`).
-- La política de datos ya menciona Google Analytics.
+**Rendimiento:** el contenedor de GA4 pesa unos 178 KB. En local, el Inicio quedó en 87–90 (antes 90–93). Se probó cargarlo más tarde (`lazyOnload`) y fue peor, así que va con `afterInteractive`. En el sitio publicado se vuelve a medir.
 
 ---
 
@@ -108,7 +77,7 @@ Entra a **tagmanager.google.com** → contenedor **GTM-TL7RLDMS**.
 
 | Pendiente | Quién |
 |---|---|
-| Instalar GA4 (§3) | Sergio (o Claude, con el ID `G-…` si se prefiere instalar directo en el código) |
+| Marcar eventos clave en GA4 y revisar la verificación de Search Console (§3) | Sergio |
 | Logo de Boost Your Menu para la franja de logos | Sergio |
 | Repositorios de Danrodedm y Boost Your Menu para subir su velocidad en celular a 90+ (mientras tanto, se muestra lo fuerte, D-082) | Sergio |
 | Revisar a dónde apuntan los anuncios activos de Meta | Sergio |

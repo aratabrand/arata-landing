@@ -6,7 +6,23 @@ import { site } from "@/lib/site";
 // el panel de GTM se administran GA4, el píxel de Meta, etc., sin tocar código.
 // Si no hay ID configurado, ninguna pieza renderiza nada.
 
-// Loader del contenedor: se carga después de que la página es interactiva.
+// Arranque de la medición, lo primero de la página (D-096): crea dataLayer y el mismo
+// `gtag()` del código de instalación de GA4, y registra gtag('js'). Así, cualquier
+// evento (p. ej. la conversión de /agendar/gracias) queda en cola en el orden correcto
+// aunque se dispare antes de que el contenedor termine de abrir. Son ~150 bytes.
+export function GtmInit() {
+  if (!site.gtmId) return null;
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: "window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};gtag('js',new Date());",
+      }}
+    />
+  );
+}
+
+// Loader del contenedor: se carga después de que la página es interactiva. Se probó
+// lazyOnload (D-096) y fue peor: Lighthouse igual mide el script, solo que más tarde.
 export function GtmScript() {
   const id = site.gtmId;
   if (!id) return null;

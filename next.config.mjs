@@ -19,9 +19,10 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://app.cal.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com",
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com https://www.google.com",
   "font-src 'self' data:",
-  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com ${cal}${isDev ? " ws:" : ""}`,
+  // GA4 manda cada evento a *.google-analytics.com y una copia a www.google.com/g/collect (D-096).
+  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com ${cal}${isDev ? " ws:" : ""}`,
   `frame-src https://www.googletagmanager.com ${cal}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",

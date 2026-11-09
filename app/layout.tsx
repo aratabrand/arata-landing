@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
-import { GtmScript, GtmNoScript } from "@/components/GoogleTagManager";
+import { GtmInit, GtmScript, GtmNoScript } from "@/components/GoogleTagManager";
 import { V2_PUBLICADO } from "@/lib/lanzamiento";
 import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
@@ -120,6 +120,7 @@ export default function RootLayout({
   return (
     <html lang="es-CO" className={`${display.variable} ${body.variable}`}>
       <body className="font-body antialiased">
+        <GtmInit />
         <GtmNoScript />
         <script
           type="application/ld+json"
