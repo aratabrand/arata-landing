@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
 import { Container, SectionHeader } from "./primitives";
 import { AGENDAR, precios, type Paquete } from "@/content/inicio";
@@ -188,7 +189,9 @@ export function Assurances({ className }: { className?: string }) {
 
 export default function PricingSection() {
   return (
-    <section id="precios" aria-labelledby="precios-titulo" className="scroll-mt-20 py-20 sm:py-28">
+    <section id="precios" aria-labelledby="precios-titulo" className="relative isolate scroll-mt-20 py-20 sm:py-28">
+      {/* Luz detrás de la tarjeta recomendada (D-071) */}
+      <GridBackground orb="50% 38%" />
       <Container>
         <SectionHeader id="precios-titulo" title={precios.titulo} />
         <div className="mt-12 grid gap-5 lg:grid-cols-3 lg:items-stretch">

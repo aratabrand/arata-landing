@@ -115,6 +115,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Banda de CTA | **Tarjeta grande** redondeada con collage de los trabajos al fondo, tintado de morado; título centrado, botón lima y nota corta debajo (captura 04) | P1 |
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
+| Fondo de rejilla | `components/ui/grid-background.tsx` (ref. 21st.dev): líneas blancas al 5 %, celda de 40 px, luz morada suave y bordes desvanecidos. Variantes *rejilla* (Problema, Precios) y *líneas* (Cómo trabajamos). Solo CSS, sin JS. **Nunca en el hero** y nunca en dos secciones seguidas con la misma variante (D-071) | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
 

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { FileText, Hourglass, Images, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import { GridBackground } from "@/components/ui/grid-background";
 import { Container, SectionHeader } from "./primitives";
 import ScrollPaint from "./ScrollPaint";
 import ServicesBento from "./ServicesBento";
@@ -41,7 +42,9 @@ const ICONOS: Record<string, LucideIcon> = {
 export function ProblemSection() {
   const n = problema.items.length;
   return (
-    <section aria-labelledby="problema" className="py-20 sm:py-28">
+    <section aria-labelledby="problema" className="relative isolate py-20 sm:py-28">
+      {/* Rejilla sutil con la luz detrás de las tarjetas (D-071) */}
+      <GridBackground orb="70% 50%" />
       <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <Reveal>
           <h2 id="problema" className="font-display text-v2-h2 font-bold tracking-heading text-white">
@@ -103,7 +106,8 @@ export function StepsSection() {
   // Un paso se enciende cuando la línea llega a él: opacidad 0 → 1 en el último cuarto de su tramo.
   const encendido = (i: number) => `clamp(0, calc((var(--p) * ${tramos} - ${i}) * 4 + 1), 1)`;
   return (
-    <section aria-labelledby="como" className="py-20 sm:py-28">
+    <section aria-labelledby="como" className="relative isolate py-20 sm:py-28">
+      <GridBackground variant="lineas" orb="50% 60%" glow={0.1} />
       <Container>
         <SectionHeader id="como" title={pasos.titulo} />
         <ScrollPaint as="ol" className="relative mt-12 grid gap-8 lg:grid-cols-5 lg:gap-3">

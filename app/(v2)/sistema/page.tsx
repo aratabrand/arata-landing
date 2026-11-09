@@ -7,6 +7,7 @@ import { Button } from "@/components/v2/Button";
 import { Badge, Container, Eyebrow, Glow, SectionHeader } from "@/components/v2/primitives";
 import Spotlight from "@/components/v2/Spotlight";
 import ProjectPreview from "@/components/v2/ProjectPreview";
+import { GridBackground } from "@/components/ui/grid-background";
 import { Assurances, PricingCard } from "@/components/v2/Pricing";
 import { precios } from "@/content/inicio";
 
@@ -214,6 +215,20 @@ export default function SistemaV2() {
                 </Button>
               }
             />
+          </Bloque>
+
+          <Bloque id="b-rejilla" titulo="Fondo de rejilla · sutil, en secciones alternas (nunca en el hero)">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(["rejilla", "lineas"] as const).map((v) => (
+                <div key={v} className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
+                  <GridBackground variant={v} />
+                  <p className="text-sm text-fog">
+                    <span className="font-semibold text-white">{v === "rejilla" ? "Rejilla" : "Líneas"}</span> ·{" "}
+                    {v === "rejilla" ? "Problema y Precios" : "Cómo trabajamos"}
+                  </p>
+                </div>
+              ))}
+            </div>
           </Bloque>
 
           <Bloque id="b-movimiento" titulo="Movimiento">
