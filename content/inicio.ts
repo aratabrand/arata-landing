@@ -25,7 +25,13 @@ export const hero = {
 
 export const prueba = {
   titulo: "Han confiado en nosotros",
-  nombres: ["Danrodedm", "Boost Your Menu", "Arata Print", "Caravana"],
+  // D-094: logos reales que entregó Sergio. Boost Your Menu entra cuando llegue su logo.
+  // ancho/alto = proporción del SVG (para reservar el espacio y que no salte nada).
+  logos: [
+    { nombre: "Arata Print", src: "/logos/arata-print.svg", ancho: 361, alto: 168 },
+    { nombre: "Caravana", src: "/logos/caravana.svg", ancho: 794, alto: 220 },
+    { nombre: "Danrodedm", src: "/logos/danrodedm.svg", ancho: 850, alto: 195 },
+  ],
 };
 
 export const problema = {

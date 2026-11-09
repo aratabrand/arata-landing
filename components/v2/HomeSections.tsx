@@ -9,20 +9,46 @@ import { pasos, problema, prueba, servicios } from "@/content/inicio";
 
 // Secciones del Inicio v2.
 
-/** Franja de prueba: "Han confiado en nosotros" + nombres (ref. captura 02). */
+/**
+ * Franja de prueba (D-094): logos de los clientes que pasan solos, en bucle, con los
+ * bordes difuminados contra el fondo para que no se note dónde empieza ni termina.
+ * Todos los logos viven en la misma caja (alto y ancho fijos, object-contain): misma
+ * proporción visual aunque cada logo tenga su forma. Solo CSS (transform); se pausa al
+ * pasar el mouse y con movimiento reducido queda quieto.
+ */
 export function ProofStrip() {
+  // Se repite la lista para que la tira sea más ancha que cualquier pantalla y el
+  // bucle (-50 %) quede continuo. La primera copia es la que leen los lectores de pantalla.
+  const tanda = [...prueba.logos, ...prueba.logos, ...prueba.logos];
   return (
     <section aria-label={prueba.titulo} className="border-y border-white/6 py-10">
-      <Container className="flex flex-col items-center gap-5 text-center lg:flex-row lg:justify-between lg:text-left">
-        <p className="text-sm text-fog-dim">{prueba.titulo}</p>
-        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-12">
-          {prueba.nombres.map((n) => (
-            <li key={n} className="font-display text-xl font-bold tracking-heading text-white/60 sm:text-2xl">
-              {n}
-            </li>
-          ))}
-        </ul>
+      <Container>
+        <p className="text-center text-sm text-fog-dim">{prueba.titulo}</p>
       </Container>
+      <div className="v2-marquee mt-7 overflow-hidden">
+        <ul className="v2-marquee-track flex w-max items-center">
+          {[0, 1].map((copia) =>
+            tanda.map((l, k) => (
+              <li
+                key={`${copia}-${k}`}
+                aria-hidden={copia > 0 || k >= prueba.logos.length}
+                className="mx-4 flex h-12 w-36 shrink-0 items-center justify-center sm:mx-7 sm:w-44"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={l.src}
+                  alt={copia > 0 || k >= prueba.logos.length ? "" : l.nombre}
+                  width={l.ancho}
+                  height={l.alto}
+                  decoding="async"
+                  draggable={false}
+                  className="h-full w-full object-contain opacity-80 transition-opacity duration-300 hover:opacity-100"
+                />
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </section>
   );
 }

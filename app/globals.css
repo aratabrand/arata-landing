@@ -437,6 +437,18 @@
 @keyframes v2l-cuenta { to { --v2l-n: 100; } }
 @media (prefers-reduced-motion: reduce) { .v2l { display: none; } }
 
+/* Franja de logos (D-094): bucle continuo con bordes difuminados contra el fondo */
+.v2-marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+.v2-marquee-track { animation: v2-marquee 32s linear infinite; will-change: transform; }
+.v2-marquee:hover .v2-marquee-track { animation-play-state: paused; }
+@keyframes v2-marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .v2-marquee-track { animation: none; }
+}
+
 /* Paso del formulario de /agendar: entra con un deslizamiento corto (D-072) */
 .v2-step {
   animation: v2-step-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;

@@ -120,8 +120,8 @@ En **un solo PR** a `main`:
 Después de publicar:
 
 7. ✅ **PageSpeed móvil en cada página** (D-093: 95–100) (puerta de la Fase 5: ≥ 90). Actualizar `velocidad` en `content/inicio.ts` con la medición real de la v2.
-8. ◻ Google Search Console y Bing: enviar el sitemap nuevo y pedir indexación de las páginas de servicio.
+8. ✅ Google Search Console y Bing: enviar el sitemap nuevo (Sergio, D-095) y pedir indexación de las páginas de servicio.
 9. ◻ Google Business: revisar que el enlace apunte al sitio.
-10. ◻ GA4 desde GTM: marcar `reunion_confirmada` como conversión principal y armar el embudo con `agendar_paso` (ver `05-construccion.md` §3).
+10. ◻ GA4 desde GTM (no está instalado; guía en `07-medicion-lanzamiento.md` §3): marcar `reunion_confirmada` como conversión principal y armar el embudo con `agendar_paso` (ver `05-construccion.md` §3).
 11. ◻ Revisar a dónde apuntan los anuncios activos (Meta Ads).
 12. ◻ Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar sus puntajes a `mostrar: "todo"` (D-082).
