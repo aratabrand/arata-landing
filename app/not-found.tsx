@@ -1,44 +1,40 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
-import { site } from "@/lib/site";
-import { WhatsAppIcon } from "@/components/icons";
+import { Button } from "@/components/v2/Button";
+import { Glow } from "@/components/v2/primitives";
+import { GridBackground } from "@/components/ui/grid-background";
 
+// 404 de marca, estilo v2 (02-arquitectura.md §3.9, copy 03-copy.md). Vale para todo el sitio.
 export const metadata: Metadata = {
-  title: "Página no encontrada — Arata San",
+  title: "Página no encontrada · Arata San",
   robots: { index: false, follow: true },
 };
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-ink px-5 text-center text-paper">
-      <Logo surface="dark" className="mb-10 h-7 w-auto" />
+    <main className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-ink px-4 text-center text-white [color-scheme:dark]">
+      <style>{`html,body{background:#03010B}`}</style>
+      <GridBackground orb="50% 45%" glow={0.16} />
+      <Glow className="left-1/2 top-1/2 -z-10 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2" />
 
-      <p className="font-display text-7xl font-extrabold text-lime sm:text-8xl">404</p>
-      <h1 className="mt-4 font-display text-2xl font-bold sm:text-3xl">
-        Esta página se perdió.
-      </h1>
-      <p className="mt-3 max-w-md text-white/70">
-        El enlace no existe o cambió de lugar. Volvamos a lo importante: que tu negocio
-        venda por internet.
-      </p>
+      <Link href="/" aria-label="Arata San — inicio">
+        <Logo surface="dark" className="mb-12 h-7 w-auto" />
+      </Link>
+      <p className="font-display text-[clamp(5rem,22vw,9rem)] font-extrabold leading-none tracking-display text-lime">404</p>
+      <h1 className="mt-4 font-display text-[clamp(1.75rem,5vw,2.5rem)] font-bold tracking-heading">Esta página no existe.</h1>
+      <p className="mt-3 max-w-md text-fog">Puede que el enlace esté mal escrito o que la página ya no esté.</p>
 
-      <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center rounded-full bg-lime px-6 py-3.5 text-[15px] font-bold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand hover:text-white"
-        >
-          Volver al inicio
-        </Link>
-        <a
-          href={site.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-6 py-3.5 text-[15px] font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-lime hover:text-lime"
-        >
-          <WhatsAppIcon className="h-[18px] w-[18px]" />
-          Escríbenos
-        </a>
+      <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
+        <Button href="/" size="lg" arrow>
+          Ir al inicio
+        </Button>
+        <Button href="/portafolio" size="lg" variant="secondary">
+          Ver portafolio
+        </Button>
+        <Button href="/agendar" size="lg" variant="ghost" arrow className="justify-center">
+          Agendar reunión
+        </Button>
       </div>
     </main>
   );

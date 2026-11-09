@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { onInView } from "@/lib/inview";
 
 // Cuenta de 0 al valor objetivo cuando entra en vista. Respeta reduced-motion.
+// El HTML del servidor trae el VALOR REAL (lo que leen Google, la IA y quien no tiene JS);
+// el conteo desde 0 solo ocurre en el navegador.
 export default function CountUp({
   value,
   prefix = "",
@@ -21,7 +23,7 @@ export default function CountUp({
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const started = useRef(false);
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
@@ -31,6 +33,9 @@ export default function CountUp({
       setDisplay(value);
       return;
     }
+
+    started.current = false;
+    setDisplay(0);
 
     const animate = () => {
       if (started.current) return;

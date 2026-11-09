@@ -13,6 +13,7 @@ export const site = {
   // secreto. Desde el panel de GTM se conectan GA4, el píxel de Meta, etc., sin
   // volver a tocar el código. Se puede sobreescribir con NEXT_PUBLIC_GTM_ID.
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-TL7RLDMS",
+  // v1 (se conserva para el JSON-LD histórico de la v1; el sitio usa los textos de content/ y lib/schema.ts)
   description:
     "Le montamos a tu negocio la estructura digital para vender más por internet: páginas que convierten, chatbots con IA que contestan y agendan, y datos claros para decidir mejor.",
 } as const;

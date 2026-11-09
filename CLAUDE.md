@@ -218,4 +218,16 @@ Estándar técnico para toda landing en Next.js. Todo esto quedó implementado y
 
 ---
 
+## 11. Proyecto en curso — sitio de agencia v2 (desde nov 2026)
+
+La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de agencia** con un único objetivo: **agendar reuniones**. Servicios: (1) páginas que venden (landing desde 400 USD, 5 días hábiles), (2) catálogos y sistemas a medida (catálogo desde 800 USD, 5 días hábiles; sistemas cotizados). Promesa central: mobile-first y optimización. Estrategia de captación: método Hormozi. **Diseño v2: solo fondo oscuro `#03010B`** (reemplaza la alternancia blanco/oscuro de la v1) y **paquetes con precio visibles** (reemplaza "sin precios" de la v1).
+
+- **Antes de trabajar en el sitio, lee [`docs/README.md`](docs/README.md)** y el plan maestro en `docs/blueprint/00-plan-maestro.md` (fase actual, decisiones pendientes).
+- Toda decisión nueva se registra en `docs/decisiones.md`.
+- Solo se construye lo que está `Aprobado` en el blueprint. Orden: oferta → copy → diseño → construcción.
+- La base técnica de la sección 10 sigue vigente para la v2.
+- **Sitio v2 lanzado el 9 nov 2026 (D-091):** el Inicio v2 está en `/` y `/v2` redirige allí. Páginas en `app/(v2)/(sitio)/` (comparten menú y footer), componentes en `components/v2/`, contenido en `content/` (textos y portafolio se editan ahí), tokens v2 en `tailwind.config.ts`. Guía viva en `/sistema` (noindex). Interruptor de lanzamiento y SEO: `lib/lanzamiento.ts`, `lib/seo.ts`, `lib/schema.ts`; lista de lanzamiento en `docs/blueprint/06-seo-geo-velocidad.md` §6. Construcción y agenda: `docs/blueprint/05-construccion.md`. Reglas de velocidad aprendidas: `docs/blueprint/04-sistema-de-diseno.md` §12.
+
+---
+
 *Este archivo reemplaza cualquier versión previa del sistema de marca. Última consolidación de contexto.*

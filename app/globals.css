@@ -70,6 +70,421 @@
   }
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   v2 · sitio de agencia (solo fondo oscuro)
+   Especificación: docs/blueprint/04-sistema-de-diseno.md
+   Todo lo animado usa solo transform/opacity (compuesto por GPU).
+   ────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
+  .v2-card {
+    background: #0a0714;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 24px;
+  }
+
+  /* Vista previa enmarcada DENTRO de una tarjeta (ref. 21st.dev captura 01) */
+  .v2-frame {
+    background: #110c20;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* Luz que sigue el cursor. El componente actualiza --mx / --my.
+     Solo se anima la opacidad del pseudo-elemento. */
+  .v2-spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .v2-spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(125, 83, 255, 0.16),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .v2-spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Brillo que recorre el botón principal al pasar el mouse */
+  .v2-shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .v2-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .v2-shine:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Luces de fondo (atmósfera). Gradiente radial sin filter:blur → barato. */
+  .v2-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: radial-gradient(
+      closest-side,
+      rgba(125, 83, 255, 0.28),
+      rgba(59, 29, 153, 0.12) 45%,
+      transparent 100%
+    );
+  }
+
+  /* Rejilla muy sutil para superficies */
+  .v2-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Acordeón con <details>: el ícono gira (transform) */
+  .v2-faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .v2-faq[open] .v2-faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* Barra de progreso segmentada del carrusel */
+  .v2-progress-fill {
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  .v2-progress-fill.is-active {
+    animation: v2-progress var(--dur, 6s) linear forwards;
+  }
+  .v2-progress-fill.is-done {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes v2-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Problema (D-066): el resaltado recorre las tarjetas una por una.
+   Cada tarjeta ocupa 1/n del ciclo → solo una encendida a la vez. Solo opacidad. */
+.v2-problem-hl {
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  opacity: 0;
+  animation: v2-problem-cycle calc(var(--n, 5) * 2.2s) infinite;
+  animation-delay: calc(var(--i, 0) * 2.2s);
+}
+.v2-problem-icon {
+  animation: v2-problem-icon calc(var(--n, 5) * 2.2s) infinite;
+  animation-delay: calc(var(--i, 0) * 2.2s);
+}
+.v2-problem:hover .v2-problem-hl {
+  animation: none;
+  opacity: 1;
+}
+@keyframes v2-problem-cycle {
+  0% { opacity: 0; }
+  4%, 16% { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+@keyframes v2-problem-icon {
+  0% { color: #b9a4ff; }
+  4%, 16% { color: #b6ff00; }
+  20%, 100% { color: #b9a4ff; }
+}
+
+/* Tarjetas glass de garantía, pago y mantenimiento (D-068).
+   Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
+.v2-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 60%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 30px 60px -40px rgba(0, 0, 0, 0.8);
+}
+.v2-glass::before {
+  /* luz de color en una esquina, detrás del vidrio */
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  top: -35%;
+  right: -25%;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--glow, rgba(125, 83, 255, 0.35)), transparent);
+}
+.v2-draw {
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+.is-visible .v2-draw {
+  stroke-dashoffset: var(--to, 0);
+}
+.v2-needle {
+  transform-box: view-box;
+  transform-origin: 50px 52px;
+  transform: rotate(-90deg);
+  transition: transform 1.5s cubic-bezier(0.34, 1.4, 0.5, 1) 0.25s;
+}
+.is-visible .v2-needle {
+  transform: rotate(var(--deg, 72deg));
+}
+.v2-spin {
+  transform-box: view-box;
+  transform-origin: 50px 50px;
+  animation: v2-spin 14s linear infinite;
+}
+.v2-beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: v2-beat 2.4s ease-in-out infinite;
+}
+@keyframes v2-spin { to { transform: rotate(360deg); } }
+@keyframes v2-beat { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.6); } }
+
+/* Entrada del panel del mega menú */
+.v2-pop {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.985);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+.v2-pop.is-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ── Bento "Todo lo que trae tu página" (D-078) ──────────────────────────
+   Estado inicial en la clase base; la animación corre con .is-visible (Reveal).
+   Solo transform/opacity. Con movimiento reducido: estado final, sin bucles. */
+.ib-tap, .ib-twinkle, .ib-ripple, .ib-type, .ib-bar, .ib-pop { transform-box: fill-box; }
+.ib-rise { opacity: 0; transform: translateY(8px); }
+.is-visible .ib-rise { animation: ib-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i, 0) * 0.22s + 0.2s) both; }
+@keyframes ib-rise { to { opacity: 1; transform: none; } }
+
+.is-visible .ib-scroll { animation: ib-scroll 9s ease-in-out 0.8s infinite alternate; }
+@keyframes ib-scroll { 0%, 12% { transform: none; } 88%, 100% { transform: translateY(-84px); } }
+.is-visible .ib-pulse { animation: ib-pulse 2.6s ease-in-out infinite; }
+@keyframes ib-pulse { 50% { opacity: 0.72; } }
+.ib-tap { opacity: 0; transform-origin: center; }
+.is-visible .ib-tap { animation: ib-tap 3.2s ease-out 1.2s infinite; }
+@keyframes ib-tap { 0% { opacity: 0.55; transform: scale(0.4); } 40%, 100% { opacity: 0; transform: scale(1.6); } }
+
+.ib-needle { transform-box: view-box; transform-origin: 100px 110px; transform: rotate(-90deg); transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s; }
+.is-visible .ib-needle { transform: rotate(72deg); }
+.ib-fade { opacity: 0; }
+.is-visible .ib-fade { animation: ib-fade 0.6s ease calc(var(--i, 0) * 0.3s + 0.2s) both; }
+@keyframes ib-fade { to { opacity: 1; } }
+
+.ib-type { transform-origin: left center; transform: scaleX(0); }
+.is-visible .ib-type { animation: ib-type 1.1s steps(12) 0.3s both; }
+@keyframes ib-type { to { transform: scaleX(1); } }
+.is-visible .ib-caret { animation: ib-caret 1s steps(1) infinite; }
+@keyframes ib-caret { 50% { opacity: 0; } }
+.ib-climb { transform: translateY(52px); }
+.is-visible .ib-climb { animation: ib-climb 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both; }
+@keyframes ib-climb { to { transform: none; } }
+.is-visible .ib-down { animation: ib-down 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both; }
+@keyframes ib-down { to { transform: translateY(26px); } }
+.ib-twinkle { transform-origin: center; }
+.is-visible .ib-twinkle { animation: ib-twinkle 2.8s ease-in-out infinite; }
+@keyframes ib-twinkle { 50% { opacity: 0.35; transform: scale(0.6) rotate(45deg); } }
+
+.ib-orbit { offset-path: path("M44,0 A44,14 0 1,1 -44,0 A44,14 0 1,1 44,0"); offset-rotate: 0deg; }
+.is-visible .ib-orbit { animation: ib-orbit 7s linear infinite; }
+@keyframes ib-orbit { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+.ib-btn { opacity: 0; }
+.ib-cursor { transform: translate(186px, 104px); opacity: 0; }
+.ib-ripple { opacity: 0; transform-origin: center; }
+.is-visible .ib-cursor { animation: ib-cursor 4.8s ease-in-out 0.4s infinite; }
+.is-visible .ib-btn { animation: ib-btn 4.8s ease 0.4s infinite; }
+.is-visible .ib-ripple { animation: ib-ripple 4.8s ease-out 0.4s infinite; }
+@keyframes ib-cursor {
+  0% { transform: translate(186px, 104px); opacity: 0; }
+  10% { opacity: 1; }
+  42% { transform: translate(106px, 72px); }
+  48% { transform: translate(106px, 72px) scale(0.85); }
+  54%, 88% { transform: translate(106px, 72px); opacity: 1; }
+  100% { transform: translate(106px, 72px); opacity: 0; }
+}
+@keyframes ib-btn { 0%, 47% { opacity: 0; } 50%, 90% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes ib-ripple { 0%, 47% { opacity: 0; transform: scale(0.3); } 50% { opacity: 0.9; } 70%, 100% { opacity: 0; transform: scale(1.7); } }
+
+.ib-bar { transform-origin: left center; transform: scaleX(0); }
+.is-visible .ib-bar { animation: ib-type 2.2s linear 0.3s both; animation-timing-function: linear; }
+.ib-day { opacity: 0; }
+.is-visible .ib-day { animation: ib-fade 0.35s ease calc(var(--i, 0) * 0.55s + 0.3s) both; }
+.ib-pop { transform-origin: center; transform: scale(0); }
+.is-visible .ib-pop { animation: ib-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2.7s both; }
+@keyframes ib-pop { to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ib-rise, .ib-fade, .ib-day, .ib-btn { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .ib-scroll, .ib-pulse, .ib-twinkle, .ib-caret, .ib-orbit { animation: none !important; }
+  .ib-tap, .ib-ripple, .ib-cursor { display: none; }
+  .ib-needle { transform: rotate(72deg) !important; transition: none !important; }
+  .ib-type, .ib-bar, .ib-pop, .ib-climb { transform: none !important; animation: none !important; }
+  .ib-down { transform: translateY(26px) !important; animation: none !important; }
+}
+
+/* ── Lista "Para entregarte en 5 días" (D-079) ───────────────────────────
+   Cada fila se marca en su turno (--d); al final el cronómetro gira y los
+   5 días se llenan. Solo transform/opacity. */
+.nd-fill { transform: scale(0); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.nd-check { stroke-dashoffset: 100; transition: stroke-dashoffset 0.35s ease 0.15s; }
+.nd-chip { opacity: 0; transform: translateX(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
+.nd-row { transition: border-color 0.3s ease; }
+.is-visible .nd-row { border-color: rgba(182, 255, 0, 0.22); transition-delay: var(--d); }
+.is-visible .nd-fill { transform: scale(1); transition-delay: var(--d); }
+.is-visible .nd-check { stroke-dashoffset: 0; transition-delay: calc(var(--d) + 0.15s); }
+.is-visible .nd-chip { opacity: 1; transform: none; transition-delay: calc(var(--d) + 0.2s); }
+
+.nd-nota { color: rgba(180, 174, 203, 0.55); transition: color 0.4s ease; }
+.is-visible .nd-nota { color: #FFFFFF; transition-delay: var(--d); }
+.nd-plazo { transition: border-color 0.4s ease, background-color 0.4s ease; }
+.is-visible .nd-plazo { border-color: rgba(182, 255, 0, 0.3); background-color: rgba(182, 255, 0, 0.04); transition-delay: var(--d); }
+.nd-ring { stroke-dashoffset: 100; }
+.is-visible .nd-ring { animation: nd-ring 4s linear var(--d) both; }
+@keyframes nd-ring { to { stroke-dashoffset: 0; } }
+.nd-hand { transform-box: view-box; transform-origin: 16px 18px; }
+.is-visible .nd-hand { animation: v2-spin 1.6s linear var(--d) infinite; }
+.nd-day { transform-origin: left center; transform: scaleX(0); }
+.is-visible .nd-day { animation: ib-type 0.7s ease-out calc(var(--d) + var(--k) * 0.75s + 0.2s) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-fill, .nd-day { transform: none !important; animation: none !important; transition: none !important; }
+  .nd-check, .nd-ring { stroke-dashoffset: 0 !important; animation: none !important; transition: none !important; }
+  .nd-chip { opacity: 1 !important; transform: none !important; }
+  .nd-hand { animation: none !important; }
+}
+
+/* Cápsula "Ver proyecto" que sigue al mouse (D-085). La capa externa solo se
+   mueve (sin transición, para que no se atrase); la interna aparece con escala. */
+@media (hover: hover) and (pointer: fine) {
+  .v2-capsule-zone { cursor: none; }
+}
+.v2-capsule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+  transform: translate3d(var(--cx, 50%), var(--cy, 50%), 0) translate(-50%, -50%);
+}
+.v2-capsule-in {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.18s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-capsule-zone[data-on] .v2-capsule-in {
+  opacity: 1;
+  transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-capsule-in { transition: none; }
+}
+
+/* Paso del formulario de /agendar: entra con un deslizamiento corto (D-072) */
+.v2-step {
+  animation: v2-step-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes v2-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-step {
+    animation: none;
+  }
+}
+
+/* Menú del celular (D-070): el panel entra con fundido y los elementos suben
+   escalonados (--d). Al cerrar sale rápido, sin escalonar. Solo transform/opacity. */
+.v2-mnav {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+}
+.v2-mnav.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+.v2-mnav-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.v2-mnav.is-open .v2-mnav-item {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0) * 45ms + 60ms),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--d, 0) * 45ms + 60ms);
+}
+/* Hamburguesa → X */
+.v2-burger-l {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-burger-l:first-child {
+  transform: translateY(-4px);
+}
+.v2-burger-l:last-child {
+  transform: translateY(3px);
+}
+.v2-burger.is-open .v2-burger-l:first-child {
+  transform: translateY(-0.5px) rotate(45deg);
+}
+.v2-burger.is-open .v2-burger-l:last-child {
+  transform: translateY(-0.5px) rotate(-45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-mnav,
+  .v2-mnav.is-open,
+  .v2-mnav-item,
+  .v2-mnav.is-open .v2-mnav-item,
+  .v2-burger-l {
+    transition: none !important;
+  }
+}
+
 /* Reveal en scroll con variantes direccionales — respeta reduce-motion */
 .reveal {
   opacity: 0;
