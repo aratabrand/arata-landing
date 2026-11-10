@@ -102,7 +102,5 @@ Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que 
 
 | Pendiente | Quién |
 |---|---|
-| Logo de Boost Your Menu para la franja de logos | Sergio |
-| Repositorios de Danrodedm y Boost Your Menu para subir su velocidad en celular a 90+ (mientras tanto, se muestra lo fuerte, D-082) | Sergio |
 | Cuando vuelvan los anuncios de Meta: apuntarlos a `/agendar` o a la página del servicio (hoy no hay anuncios activos) | Sergio |
 | Revisión de la política de datos con un abogado (D-099): confirmar si el correo basta como dirección de notificaciones y el plazo de 2 años de conservación | Sergio |

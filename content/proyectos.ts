@@ -51,7 +51,7 @@ export type Proyecto = {
   /** Puntajes de Google (Lighthouse, la medición detrás de PageSpeed) del sitio en vivo. Datos reales medidos. */
   puntajes?: Puntajes;
   ficha: Ficha;
-  /** ◻ Proceso real del proyecto (lo cuenta Sergio). Sin esto, va el proceso estándar del servicio. */
+  /** Proceso real del proyecto (lo cuenta Sergio). Sin esto, va el proceso estándar del servicio. */
   proceso?: PasoProyecto[];
   /** Qué preguntas frecuentes muestra el caso: las de páginas o las de catálogos y sistemas. */
   servicio: "pagina" | "catalogo";
@@ -65,7 +65,7 @@ export type Proyecto = {
 export const proyectos: Proyecto[] = [
   {
     slug: "danrodedm",
-    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato, aprobada (D-100)
     ficha: { sector: "Maquinaria de electroerosión", ciudad: "Bogotá", servicios: "Página con catálogo", duracion: "5 días" },
     proceso: [
       { titulo: "Investigación", texto: "Recogimos la información del negocio y de sus máquinas." },
@@ -101,7 +101,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "boost-your-menu",
-    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato, aprobada (D-100)
     ficha: { sector: "Menús digitales para restaurantes", ciudad: "New Jersey, EE. UU.", servicios: "Página que vende (landing)", duracion: "3 días" },
     proceso: [
       { titulo: "Investigación", texto: "Revisamos su página anterior y la información del negocio." },
@@ -128,8 +128,8 @@ export const proyectos: Proyecto[] = [
       "Su método de trabajo, paso a paso",
       "La oferta de software + hardware explicada simple",
     ],
-    resultado: undefined, // ◻ falta el dato (interesados o reuniones)
-    // ◻ copy nuevo por aprobar (03-copy.md): reemplaza "El resultado" mientras no haya cifra
+    resultado: undefined, // sin cifra: se muestra "Qué logra la página" (D-100)
+    // copy aprobado (D-100): reemplaza "El resultado"; no se esperan cifras
     logra:
       "Explica de forma simple una oferta que junta software y hardware, muestra los restaurantes que ya confían en ellos y lleva a pedir una demo o a probar el menú interactivo.",
     acento: "#B6FF00",
@@ -140,7 +140,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "arata-print",
-    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato ◻ por aprobar
+    // Datos de Sergio (9 nov 2026). Pasos: redacción de Claude a partir de su relato, aprobada (D-100)
     ficha: { sector: "Camisetas estampadas bajo pedido", ciudad: "Bogotá", servicios: "Catálogo + sistema a medida", duracion: "5 días" },
     proceso: [
       { titulo: "Primero, el flujo", texto: "Antes de lo visual, definimos cómo debía funcionar la venta." },
@@ -177,7 +177,7 @@ export const proyectos: Proyecto[] = [
   },
   {
     slug: "caravana",
-    // Datos de Sergio (9 nov 2026): "igual que Arata Print" (ciudad, duración y proceso). Pasos ◻ por aprobar
+    // Datos de Sergio (9 nov 2026): "igual que Arata Print" (ciudad, duración y proceso). Pasos aprobados (D-100)
     ficha: { sector: "Tecnología y accesorios", ciudad: "Bogotá", servicios: "Catálogo + panel de tienda", duracion: "5 días" },
     proceso: [
       { titulo: "Primero, el flujo", texto: "Antes de lo visual, definimos cómo debía funcionar la venta." },
@@ -245,13 +245,13 @@ export const casoTextos = {
   resultado: "El resultado",
   logra: "Qué logra la página",
   volver: "Volver al portafolio",
-  // ◻ copy nuevo por aprobar
+  // copy aprobado (D-100)
   ficha: { sector: "Sector", ciudad: "Ciudad", servicios: "Servicios", duracion: "Duración" },
   proceso: "Cómo fue el proceso",
   procesoEstandar: "Cómo trabajamos un proyecto así",
   faqPagina: "Preguntas sobre páginas como esta",
   faqCatalogo: "Preguntas sobre catálogos y sistemas",
-  // ◻ copy nuevo por aprobar
+  // copy aprobado (D-100)
   puntajes: {
     titulo: "Así sale en Google",
     texto: "Medimos el sitio en vivo con Lighthouse, la herramienta de Google que está detrás de PageSpeed.",

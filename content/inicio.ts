@@ -25,7 +25,7 @@ export const hero = {
 
 export const prueba = {
   titulo: "Han confiado en nosotros",
-  // D-094: logos reales que entregó Sergio. Boost Your Menu entra cuando llegue su logo.
+  // D-094: logos reales que entregó Sergio. Boost Your Menu no va en la franja (D-100).
   // ancho/alto = proporción del SVG (para reservar el espacio y que no salte nada).
   logos: [
     { nombre: "Arata Print", src: "/logos/arata-print.svg", ancho: 361, alto: 168 },
@@ -36,7 +36,7 @@ export const prueba = {
 
 export const problema = {
   titulo: "¿Tu negocio vive en el chat?",
-  // Tarjetas (D-066). `texto` es el copy aprobado; ◻ `titulo` es nuevo (por aprobar).
+  // Tarjetas (D-066). Copy aprobado (D-100).
   items: [
     { icono: "fotos", titulo: "Fotos sin fin", texto: "Mandas fotos por WhatsApp y el cliente se pierde en la galería." },
     { icono: "lenta", titulo: "Página lenta", texto: "Tu página se demora en abrir en el celular y la gente se sale." },
@@ -68,7 +68,7 @@ export const servicios = {
     },
   ],
   // Bento de diagramas vivos (D-065). Textos tomados del copy aprobado;
-  // ◻ `datos` es copy nuevo, pendiente de aprobación de Sergio.
+  // `datos`: copy aprobado (D-100).
   bento: {
     catalogo: {
       etiqueta: "Catálogos y sistemas a medida · desde 800 USD",

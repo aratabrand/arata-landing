@@ -124,4 +124,4 @@ Después de publicar:
 9. ✅ Google Business: el enlace apunta al sitio (Sergio).
 10. ✅ GA4 desde GTM con `reunion_confirmada` como evento clave (D-096). ✅ Vinculado con Search Console (10 nov 2026).
 11. — Meta Ads: no hay anuncios activos. Cuando vuelvan, apuntarlos a `/agendar` o a la página del servicio.
-12. ◻ Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar sus puntajes a `mostrar: "todo"` (D-082).
+12. — Danrodedm y Boost Your Menu se quedan mostrando lo fuerte (D-082, D-100). No se optimizan por ahora.
