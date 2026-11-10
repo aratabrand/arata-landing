@@ -29,7 +29,9 @@ function useVisto<T extends Element>() {
 }
 
 // Curva suave (Catmull-Rom → Bézier) que pasa por todos los puntos.
-function curva(p: [number, number][]) {
+// `piso` (y en pantalla de la línea de 0): los puntos de control no lo cruzan,
+// así la curva nunca dibuja valores negativos que no existen.
+function curva(p: [number, number][], piso?: number) {
   if (p.length < 2) return "";
   let d = `M${p[0][0]},${p[0][1]}`;
   for (let i = 0; i < p.length - 1; i++) {
@@ -40,6 +42,15 @@ function curva(p: [number, number][]) {
     const t = 0.18;
     const c1 = [p1[0] + (p2[0] - p0[0]) * t, p1[1] + (p2[1] - p0[1]) * t];
     const c2 = [p2[0] - (p3[0] - p1[0]) * t, p2[1] - (p3[1] - p1[1]) * t];
+    if (piso !== undefined) {
+      c1[1] = Math.min(c1[1], piso);
+      c2[1] = Math.min(c2[1], piso);
+      // Tramo plano (dos puntos en el mismo valor): línea recta, sin ondas
+      if (p1[1] === p2[1]) {
+        c1[1] = p1[1];
+        c2[1] = p2[1];
+      }
+    }
     d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
   }
   return d;
@@ -82,7 +93,7 @@ export function GraficoArea({
   const x = (i: number) => pad.l + (i * (W - pad.l - pad.r)) / Math.max(1, puntos.length - 1);
   const y = (v: number) => pad.t + (1 - v / max) * (H - pad.t - pad.b);
   const coords = puntos.map((p, i) => [x(i), y(p.valor)] as [number, number]);
-  const linea = curva(coords);
+  const linea = curva(coords, H - pad.b);
   const area = `${linea} L${x(puntos.length - 1)},${H - pad.b} L${x(0)},${H - pad.b} Z`;
   const marcas = [0, 0.25, 0.5, 0.75, 1];
   const cadaEtiqueta = Math.ceil(puntos.length / 6);
@@ -125,7 +136,8 @@ export function GraficoArea({
         ))}
 
         {puntos.map((p, i) =>
-          i % cadaEtiqueta === 0 || i === puntos.length - 1 ? (
+          // Cada N puntos y el último; se salta la penúltima si quedaría encima del último
+          (i % cadaEtiqueta === 0 && puntos.length - 1 - i >= Math.max(1, cadaEtiqueta * 0.75)) || i === puntos.length - 1 ? (
             <text key={i} x={x(i)} y={H - 8} textAnchor={i === 0 ? "start" : i === puntos.length - 1 ? "end" : "middle"} fontSize="11" fill="#8A84A8">
               {p.etiqueta}
             </text>

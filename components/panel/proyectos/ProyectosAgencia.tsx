@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Calendar, Plus } from "lucide-react";
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
-import { avance, etapas, etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
+import { avance, estaEntregado, etapas, etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta } from "@/lib/panel/formato";
 import { Hoja } from "../Clientes";
 import { PanelHeader, PanelPage, Pill } from "../ui";
@@ -29,7 +29,9 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
   const filas = useMemo(
     () =>
       datos.proyectos.map((p) => {
-        const a = avance(datos.tareas.filter((t) => t.proyectoId === p.id));
+        const base = avance(datos.tareas.filter((t) => t.proyectoId === p.id));
+        // Cerrado sin pasos = proyecto viejo ya entregado
+        const a = { ...base, entregado: estaEntregado(p.estado, base) };
         const vence = p.fechaLimite && !a.entregado ? diasHasta(hoy, p.fechaLimite) : null;
         return { p, a, vence };
       }),
@@ -57,7 +59,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
           ) : undefined
         }
       />
-      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} />
+      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es solo de Sergio." />
 
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
         {[

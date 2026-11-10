@@ -206,14 +206,17 @@ export async function cargarProceso(proyectoId: string) {
   });
 }
 
-/** Marca o desmarca un paso. */
+/** Marca o desmarca un paso. Cualquier miembro de la agencia puede (D-112); queda quién fue. */
 export async function marcarPaso(tareaId: string, hecha: boolean) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    if (!panelActivo) throw new Error("El panel está en modo ejemplo: los cambios no se guardan.");
+    const ctx = await contextoAgencia();
+    if (!ctx) throw new Error("Tu sesión terminó. Vuelve a entrar.");
     const r = await db().query(
-      `update fin_tareas t set hecha = $3, hecha_en = case when $3 then now() else null end
+      `update fin_tareas t set hecha = $3, hecha_en = case when $3 then now() else null end,
+              hecha_por = case when $3 then $4 else null end
          from fin_proyectos p where t.id = $1 and t.proyecto_id = p.id and p.negocio_id = $2`,
-      [uuid(tareaId), ctx.negocioId, Boolean(hecha)]
+      [uuid(tareaId), ctx.negocioId, Boolean(hecha), ctx.usuarioId]
     );
     return r.rowCount ? SI : NO("Ese paso no existe.");
   });

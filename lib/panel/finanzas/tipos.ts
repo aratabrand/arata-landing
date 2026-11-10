@@ -104,6 +104,8 @@ export const nombreCliente = (c: ClienteRef | undefined | null) => (!c ? "Sin cl
 export type DatosFinanzas = {
   negocioId: string;
   puedeEditar: boolean;
+  /** Cualquier miembro del equipo puede marcar pasos de los proyectos (D-112). */
+  puedeMarcarPasos: boolean;
   /** Persona del equipo de quien mira (para resaltar "lo tuyo"). */
   miPersonaId: string | null;
   demo: boolean;

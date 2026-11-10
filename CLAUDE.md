@@ -241,6 +241,7 @@ Panel **primero para Arata San** y después **solo para clientes de página web*
 - **Finanzas y Equipo (`/panel/finanzas`, `/panel/equipo`): solo Arata San** (D-108), nunca para clientes. Venta = proyecto cerrado (COP). Ganancia = valor − gastos; bolsa de trabajo por horas + % fijos de socios y empresa; % congelados al cerrar. Sergio (`dueno`) edita; Andrés y Santiago (`equipo`) solo ven. Cálculos en `lib/panel/finanzas/calculo.ts` (prueba: `npx -y tsx scripts/prueba-finanzas.ts`), guía en `docs/panel-cliente/06-finanzas.md`.
 - **Clientes y servicios son listas** (tablas `clientes`, `servicios`): en los proyectos se eligen, nunca texto libre (D-109). Clientes de Arata y "Mi sitio" ya leen datos reales; Mi sitio parte de `content/inicio.ts` y guarda en Neon sin publicar todavía al sitio (D-110).
 - **Proyectos de Arata (`/panel/proyectos`)**: grid + detalle `/panel/proyectos/[id]`; etapa y avance se calculan de los pasos (`fin_tareas`), plantillas por servicio en `lib/panel/finanzas/procesos.ts` (D-111).
+- **Resumen de Arata con datos reales** (`lib/panel/resumen/agencia.ts`, prueba `scripts/prueba-resumen.ts`); visitas e Instagram pendientes de n8n (D-113). El equipo puede **marcar pasos** de proyectos, no editar (D-112).
 - Datos: n8n (GA4, Instagram, ventas) llena métricas. Panel siempre `noindex` y bloqueado en `robots.txt`.
 - Palabras del panel: "clientes que compran" (no "conversión"), "visitas", "visualizaciones", "portada", "botón" (glosario en `docs/panel-cliente/03-sistema-de-diseno.md` §7).
 

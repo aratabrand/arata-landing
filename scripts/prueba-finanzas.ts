@@ -38,7 +38,7 @@ ok(rc.empresa === 315_000, "reglas congeladas: cambiar % después no altera el p
 ok(validarReglas(reglas, personas).length === 0, "reglas válidas");
 ok(validarReglas({ ...reglas, reparto: reglas.reparto.map((x) => ({ ...x, pct: 20 })) }, personas)[0]?.includes("suman 80"), "detecta que no suman 100");
 // Resumen y fondos
-const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, miPersonaId: "S", demo: false, personas, config: { ...reglas, reservaMeses: 3, actualizado: null }, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, horas, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [], tareas: [] };
+const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, puedeMarcarPasos: true, miPersonaId: "S", demo: false, personas, config: { ...reglas, reservaMeses: 3, actualizado: null }, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, horas, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [], tareas: [] };
 const res = resumenFinanzas(d);
 ok(res.cerrados === 1 && res.ingresos === 2_000_000, "resumen solo cuenta cerrados");
 ok(res.fondos === 265_000, "fondos = 315.000 − 50.000 gasto empresa = " + res.fondos);

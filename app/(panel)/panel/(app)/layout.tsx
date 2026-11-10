@@ -23,7 +23,8 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
     const real = ctx ? await negocioAgencia(ctx.negocioId) : null;
     if (real) {
       negocio = real;
-      sinFranja = [...sinFranja, "/panel/clientes", "/panel/sitio", "/panel/proyectos"]; // D-109, D-110, D-111
+      // Todo el panel de Arata ya usa datos reales (D-109 a D-113): sin franja de ejemplo
+      sinFranja = ["/panel"];
     }
   }
   return (

@@ -165,6 +165,27 @@ Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda
 
 Migración `db/panel/005_proceso.sql`: `fin_proyectos.fecha_inicio`, `fecha_limite` y tabla `fin_tareas`.
 
+## 8d. Resumen con datos reales y equipo que marca pasos (D-112, D-113)
+
+**Resumen (`/panel`) de Arata**, con selector 30 días · 90 días · 1 año y comparación con el periodo anterior:
+
+| Pieza | Dato |
+|---|---|
+| Ventas | Suma de proyectos **cerrados** en el periodo (por fecha de cierre) |
+| Ganancia | Ventas − gastos de esos proyectos · margen |
+| Clientes nuevos | Clientes creados en el periodo |
+| Proyectos en proceso | Con pasos sin terminar (o en curso sin pasos) · cuántos van tarde |
+| Cómo van las ventas | Ventas por mes, últimos 12 meses · en curso por cobrar · propuestas abiertas · ticket promedio |
+| Clientes que compran | Clientes con al menos un proyecto cerrado ÷ total · embudo Clientes → Con propuesta o proyecto → Compraron |
+| De dónde llegan | Clientes por origen y cuántos compraron |
+| Lo que más se vende | Servicios por ventas del periodo |
+| Últimas ventas | 5 proyectos cerrados más recientes |
+| Visitas e Instagram | **Pendiente** (Google Analytics y Meta por n8n). No se muestran números inventados |
+
+Regla: un proyecto **cerrado sin pasos** cuenta como entregado (proyectos viejos de antes del panel). Cálculos en `lib/panel/resumen/agencia.ts`, prueba `npx -y tsx scripts/prueba-resumen.ts` (12 casos).
+
+**Equipo marca pasos (D-112):** Andrés y Santiago pueden **marcar y desmarcar** pasos de los proyectos; agregar, quitar o editar sigue siendo de Sergio, igual que todo el dinero. Cada paso guarda quién lo marcó y cuándo ("Lo marcó Andrés · 10 nov"). Migración `006_quien_marca.sql`.
+
 ## 9. Pendiente
 
 | # | Qué | Quién |

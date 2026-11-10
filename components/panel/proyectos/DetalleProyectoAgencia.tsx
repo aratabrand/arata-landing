@@ -57,7 +57,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
           </BotonSecundario>
         )}
       </div>
-      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} />
+      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es solo de Sergio." />
 
       {/* Proceso */}
       <Tarjeta titulo="Proceso" bajada={a.entregado ? "Todos los pasos están hechos." : a.siguiente ? `Sigue: ${a.siguiente}` : undefined}>
@@ -108,7 +108,18 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
         <Tarjeta titulo="Pasos por etapa">
           <div className="space-y-5">
             {etapas.map((e, i) => (
-              <EtapaPasos key={e.valor} etapa={e.valor} label={e.label} numero={i + 1} proyectoId={p.id} tareas={tareas.filter((t) => t.etapa === e.valor).sort((x, y) => x.orden - y.orden)} edita={edita} actual={i === actual && !a.entregado} />
+              <EtapaPasos
+                key={e.valor}
+                etapa={e.valor}
+                label={e.label}
+                numero={i + 1}
+                proyectoId={p.id}
+                tareas={tareas.filter((t) => t.etapa === e.valor).sort((x, y) => x.orden - y.orden)}
+                edita={edita}
+                marca={datos.puedeMarcarPasos}
+                personas={datos.personas}
+                actual={i === actual && !a.entregado}
+              />
             ))}
           </div>
         </Tarjeta>
@@ -173,6 +184,8 @@ function EtapaPasos({
   proyectoId,
   tareas,
   edita,
+  marca,
+  personas,
   actual,
 }: {
   etapa: Etapa;
@@ -181,6 +194,9 @@ function EtapaPasos({
   proyectoId: string;
   tareas: ReturnType<typeof avance>["lista"];
   edita: boolean;
+  /** Puede marcar y desmarcar (todo el equipo); agregar y quitar es solo de Sergio. */
+  marca: boolean;
+  personas: DatosFinanzas["personas"];
   actual: boolean;
 }) {
   const acc = useAccion();
@@ -192,6 +208,7 @@ function EtapaPasos({
     acc.correr(() => agregarPaso({ proyectoId, etapa, texto: nuevo }), () => (setNuevo(""), setAbierto(false)));
   };
   if (!tareas.length && !edita) return null;
+  const quien = (id?: string | null) => (id ? personas.find((x) => x.id === id)?.nombre : null);
   return (
     <section>
       <h3 className={cn("mb-2 flex items-center gap-2 text-sm font-semibold", actual ? "text-white" : "text-fog")}>
@@ -206,14 +223,22 @@ function EtapaPasos({
                 type="button"
                 role="checkbox"
                 aria-checked={t.hecha}
-                disabled={!edita || acc.pendiente}
+                disabled={!marca || acc.pendiente}
                 onClick={() => acc.correr(() => marcarPaso(t.id, !t.hecha))}
                 className="flex min-h-11 flex-1 items-center gap-3 rounded-btn border border-white/8 bg-surface-1 px-3 text-left text-sm disabled:cursor-default"
               >
                 <span className={cn("flex h-5 w-5 shrink-0 items-center justify-center rounded-md border", t.hecha ? "border-lime bg-lime text-ink" : "border-white/20")}>
                   {t.hecha && <Check aria-hidden className="h-3.5 w-3.5" strokeWidth={3} />}
                 </span>
-                <span className={cn(t.hecha ? "text-fog-dim line-through" : "text-white")}>{t.texto}</span>
+                <span className="min-w-0 flex-1">
+                  <span className={cn("block", t.hecha ? "text-fog-dim line-through" : "text-white")}>{t.texto}</span>
+                  {t.hecha && (quien(t.hechaPor) || t.hechaEn) && (
+                    <span className="block text-[0.68rem] text-fog-dim">
+                      {quien(t.hechaPor) ? `Lo marcó ${quien(t.hechaPor)}` : "Hecho"}
+                      {t.hechaEn ? ` · ${fechaCorta(t.hechaEn)}` : ""}
+                    </span>
+                  )}
+                </span>
               </button>
               {edita && (
                 <button

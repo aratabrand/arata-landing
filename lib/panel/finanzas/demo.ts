@@ -18,6 +18,7 @@ export function finanzasDemo(): DatosFinanzas {
   return {
     negocioId: "demo",
     puedeEditar: false,
+    puedeMarcarPasos: false,
     miPersonaId: "d-sergio",
     demo: true,
     personas,

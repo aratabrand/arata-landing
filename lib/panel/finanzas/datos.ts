@@ -68,7 +68,8 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     q.query(`select id, nombre, categoria, activo from servicios where negocio_id = $1 order by orden, nombre`, [n]),
     q.query(`select id, nombre, empresa from clientes where negocio_id = $1 order by lower(coalesce(empresa, nombre)), lower(nombre)`, [n]),
     q.query(
-      `select t.id, t.proyecto_id, t.etapa, t.texto, t.hecha, t.orden
+      `select t.id, t.proyecto_id, t.etapa, t.texto, t.hecha, t.orden, t.hecha_en,
+              (select e.id from equipo_personas e where e.usuario_id = t.hecha_por and e.negocio_id = p.negocio_id) hecha_por
          from fin_tareas t join fin_proyectos p on p.id = t.proyecto_id
         where p.negocio_id = $1 order by t.orden, t.creado`,
       [n]
@@ -91,6 +92,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
   return {
     negocioId: n,
     puedeEditar: ctx.puedeEditar,
+    puedeMarcarPasos: true,
     miPersonaId: lista.find((p) => p.usuarioId === ctx.usuarioId)?.id ?? null,
     demo: false,
     personas: lista,
@@ -127,6 +129,17 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     gastosFijos: fijos.rows.map((r): GastoFijo => ({ id: r.id, concepto: r.concepto, valorMensual: Number(r.valor_mensual), activo: r.activo })),
     servicios: servicios.rows.map((r): Servicio => ({ id: r.id, nombre: r.nombre, categoria: r.categoria, activo: r.activo })),
     clientes: clientes.rows.map((r): ClienteRef => ({ id: r.id, nombre: r.nombre, empresa: r.empresa })),
-    tareas: tareas.rows.map((r): FinTarea => ({ id: r.id, proyectoId: r.proyecto_id, etapa: r.etapa, texto: r.texto, hecha: r.hecha, orden: r.orden })),
+    tareas: tareas.rows.map(
+      (r): FinTarea => ({
+        id: r.id,
+        proyectoId: r.proyecto_id,
+        etapa: r.etapa,
+        texto: r.texto,
+        hecha: r.hecha,
+        orden: r.orden,
+        hechaPor: r.hecha_por,
+        hechaEn: r.hecha_en ? iso(r.hecha_en) : null,
+      })
+    ),
   };
 }

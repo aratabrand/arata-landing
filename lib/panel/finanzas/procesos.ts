@@ -13,7 +13,17 @@ export const etapas = [
 ] as const;
 export type Etapa = (typeof etapas)[number]["valor"];
 
-export type FinTarea = { id: string; proyectoId: string; etapa: Etapa; texto: string; hecha: boolean; orden: number };
+export type FinTarea = {
+  id: string;
+  proyectoId: string;
+  etapa: Etapa;
+  texto: string;
+  hecha: boolean;
+  orden: number;
+  /** Persona del equipo que lo marcó (si se sabe). */
+  hechaPor?: string | null;
+  hechaEn?: string | null;
+};
 
 export const plantillas: Record<CategoriaServicio, { etapa: Etapa; texto: string }[]> = {
   "pagina-web": [
@@ -77,3 +87,10 @@ export function avance(tareas: FinTarea[]) {
 }
 
 export const etiquetaEtapa = (e: Etapa | null, entregado = false) => (entregado ? "Entregado" : e ? etapas.find((x) => x.valor === e)!.label : "Sin proceso");
+
+/**
+ * ¿El proyecto ya se entregó? Sí si todos sus pasos están hechos, o si se cerró la
+ * venta y nunca tuvo pasos (proyectos viejos, de antes del panel). D-113.
+ */
+export const estaEntregado = (estado: "propuesta" | "en-curso" | "cerrado", a: ReturnType<typeof avance>) =>
+  a.entregado || (a.total === 0 && estado === "cerrado");

@@ -40,7 +40,7 @@ export function MensajeError({ error }: { error: string }) {
 }
 
 /** Aviso de solo lectura o de modo ejemplo. */
-export function AvisoAcceso({ demo, puedeEditar }: { demo: boolean; puedeEditar: boolean }) {
+export function AvisoAcceso({ demo, puedeEditar, texto }: { demo: boolean; puedeEditar: boolean; texto?: string }) {
   if (demo)
     return (
       <div className="rounded-frame border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand-soft">
@@ -51,7 +51,7 @@ export function AvisoAcceso({ demo, puedeEditar }: { demo: boolean; puedeEditar:
   return (
     <div className="flex items-center gap-2 rounded-frame border border-white/8 bg-surface-1 px-4 py-3 text-sm text-fog">
       <Lock aria-hidden className="h-4 w-4 text-brand-soft" />
-      Puedes ver todo. Solo Sergio puede cambiar datos y porcentajes.
+      {texto ?? "Puedes ver todo. Solo Sergio puede cambiar datos y porcentajes."}
     </div>
   );
 }
