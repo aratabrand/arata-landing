@@ -150,14 +150,12 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] **Aprobación visual de Sergio — Fase 3 cerrada (D-072)**
 - [x] Fase 4: páginas de servicio, portafolio, 4 casos, agendar, gracias, privacidad y 404 construidos (`05-construccion.md`, D-073 a D-075)
 - [x] Enlaces de Cal.com (D-076)
-- [ ] RUT y dirección (Sergio)
+- [x] RUT y dirección: no se publican; negocio digital (D-090)
 - [x] **Preview de Vercel revisado — Fase 4 cerrada (D-086)**
 - [x] Fase 5: SEO por página, datos estructurados, imágenes para compartir, sitemap/llms.txt con interruptor, QA 360 px (`06-seo-geo-velocidad.md`, D-087 a D-089)
-- [ ] **PageSpeed ≥ 90 en la URL publicada (puerta de la Fase 5) — se mide al lanzar**
-- [x] **Fase 6: sitio v2 lanzado (D-091)** — falta medir en la URL publicada y GSC/GA4 (`06` §6, pasos 7–12)
-- [ ] Construcción
-- [ ] SEO, IA, velocidad y legal
-- [ ] Medición y lanzamiento
+- [x] **PageSpeed ≥ 90 en la URL publicada (puerta de la Fase 5)** — 93–99 con GA4 (D-093, D-098)
+- [x] **Fase 6: sitio v2 lanzado (D-091)**, medido, con GA4, Search Console y Google Business listos (D-096 a D-100)
+- [ ] ⏸ Pendiente: prueba de Astro para páginas de clientes (D-101)
 - [ ] Blueprint consolidado
 
 ---
