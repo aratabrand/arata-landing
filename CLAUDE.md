@@ -232,12 +232,13 @@ La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de 
 
 ## 12. Panel del cliente (desde nov 2026)
 
-Panel que se le entrega a cada cliente: **Resumen** (ventas, visitas, Instagram, clientes que compran), **Clientes**, **Proyectos** (tablero por fases) y **Mi sitio** (títulos, descripciones, botones). Mismo sistema v2 (solo fondo `#03010B`).
+Panel **primero para Arata San** y después **solo para clientes de página web** (D-105). **Los clientes de catálogo NO usan este panel**: tienen su propio sistema y su propia base; nunca mezclarlos. Módulos: **Resumen** (ventas, visitas, Instagram, clientes que compran), **Clientes**, **Proyectos** (tablero por fases) y **Mi sitio** (títulos, descripciones, botones). Mismo sistema v2 (solo fondo `#03010B`).
 
 - **Antes de trabajar en el panel, lee [`docs/panel-cliente/README.md`](docs/panel-cliente/README.md).** Es el blueprint para repetirlo en cada cliente.
 - Rutas en `app/(panel)/panel/`, componentes en `components/panel/`, contrato de datos en `content/panel/tipos.ts`, datos solo por `lib/panel/datos.ts` (`obtenerPanel()`).
 - Hoy usa un negocio **de ejemplo** marcado en pantalla (`negocio.demo`). Nunca mostrar datos demo a un cliente real.
-- Fase real: Supabase con RLS por `negocio_id` + n8n (GA4, Instagram, ventas). Panel siempre `noindex` y bloqueado en `robots.txt`.
+- **Base: Neon (solo este proyecto) + acceso con Better Auth: contraseña + doble factor (TOTP) + códigos de respaldo** (D-107; reemplaza Supabase en el panel). La base nunca se expone al navegador: solo el servidor consulta, por `lib/panel/sesion.ts`. Barreras: `proxy.ts` + layout de `(app)`. Migraciones en `db/panel/`, scripts `scripts/panel-migrar.mjs` y `scripts/panel-crear-usuario.mjs`, guía en `docs/panel-cliente/05-acceso-y-seguridad.md`. Sin `DATABASE_URL`/`BETTER_AUTH_SECRET`, el panel queda en modo ejemplo. Nunca apuntar a la base de un catálogo.
+- Datos: n8n (GA4, Instagram, ventas) llena métricas. Panel siempre `noindex` y bloqueado en `robots.txt`.
 - Palabras del panel: "clientes que compran" (no "conversión"), "visitas", "visualizaciones", "portada", "botón" (glosario en `docs/panel-cliente/03-sistema-de-diseno.md` §7).
 
 ---

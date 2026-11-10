@@ -117,7 +117,7 @@ Se trabaja sobre un **borrador**: nada cambia en la página hasta **Guardar camb
 
 | Igual para todos | Cambia por cliente |
 |---|---|
-| Rutas, componentes, gráficos, estilos | Datos (Supabase, filtrados por `negocio_id`) |
+| Rutas, componentes, gráficos, estilos | Datos (Neon, filtrados por los negocios del usuario) |
 | Tipos y definición de métricas | Nombre, contacto, plan, URL, Instagram, WhatsApp (`negocios`) |
 | Fases de proyectos | Botones y textos del sitio (`config_sitio`) |
 | Estados de clientes | Qué fuentes de venta se conectan (P-3) |

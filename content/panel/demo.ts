@@ -16,6 +16,7 @@ import type {
 
 export const negocio: Negocio = {
   id: "demo-panaderia",
+  tipo: "pagina-web",
   nombre: "Panadería La Espiga",
   contacto: "Rosa",
   rubro: "Panadería y pastelería",
@@ -23,7 +24,7 @@ export const negocio: Negocio = {
   sitio: "https://ejemplo.aratasan.com",
   instagram: "@laespiga.ejemplo",
   whatsapp: "573000000000",
-  plan: "Catálogo + mantenimiento",
+  plan: "Página web + mantenimiento",
   demo: true,
 };
 
@@ -116,8 +117,8 @@ export const clientes: Cliente[] = [
 export const proyectos: Proyecto[] = [
   {
     id: "p-01",
-    titulo: "Catálogo con pedidos por WhatsApp",
-    descripcion: "Catálogo de 40 productos con carrito que arma el pedido y lo manda al WhatsApp del negocio.",
+    titulo: "Página web con pedidos por WhatsApp",
+    descripcion: "Página de una sola vista con los productos estrella y botones que abren el WhatsApp del negocio con el pedido escrito.",
     fase: "entregado",
     responsable: "Arata San",
     prioridad: "alta",
@@ -125,7 +126,7 @@ export const proyectos: Proyecto[] = [
     tareas: [
       { id: "t1", texto: "Fotos y precios de los productos", hecha: true },
       { id: "t2", texto: "Diseño en celular aprobado", hecha: true },
-      { id: "t3", texto: "Carrito y mensaje de WhatsApp", hecha: true },
+      { id: "t3", texto: "Botones y mensaje de WhatsApp", hecha: true },
       { id: "t4", texto: "Publicar en el dominio", hecha: true },
     ],
   },
@@ -198,7 +199,7 @@ export const configSitio: ConfigSitio = {
   anuncio: { activo: true, texto: "Ya puedes encargar tus anchetas de Navidad" },
   botones: [
     { id: "b-1", ubicacion: "Portada · principal", texto: "Pedir por WhatsApp", enlace: "https://wa.me/573000000000", estilo: "principal" },
-    { id: "b-2", ubicacion: "Portada · secundario", texto: "Ver el catálogo", enlace: "/catalogo", estilo: "secundario" },
+    { id: "b-2", ubicacion: "Portada · secundario", texto: "Ver productos", enlace: "/#productos", estilo: "secundario" },
     { id: "b-3", ubicacion: "Menú", texto: "Hacer pedido", enlace: "https://wa.me/573000000000", estilo: "principal" },
   ],
   actualizado: null,

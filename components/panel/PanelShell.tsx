@@ -3,10 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { ArrowUpRight, Globe, LayoutDashboard, MessageCircle, SquareKanban, Users } from "lucide-react";
+import { ArrowUpRight, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users } from "lucide-react";
 import Logo from "@/components/Logo";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
+import { RUTA_ENTRAR } from "@/lib/panel/config";
+import { authCliente } from "@/lib/panel/auth-cliente";
+
+async function salir() {
+  await authCliente.signOut();
+  window.location.assign(RUTA_ENTRAR);
+}
 
 // Marco del panel (docs/panel-cliente/03-sistema-de-diseno.md §3):
 // - Escritorio (≥1024 px): barra lateral fija de 248 px.
@@ -22,7 +29,7 @@ export const navPanel = [
 
 const activo = (path: string, href: string) => (href === "/panel" ? path === href : path.startsWith(href));
 
-export default function PanelShell({ negocio, children }: { negocio: Negocio; children: ReactNode }) {
+export default function PanelShell({ negocio, conSesion = false, children }: { negocio: Negocio; conSesion?: boolean; children: ReactNode }) {
   const path = usePathname() ?? "/panel";
   const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
 
@@ -82,6 +89,15 @@ export default function PanelShell({ negocio, children }: { negocio: Negocio; ch
             <MessageCircle aria-hidden className="h-4 w-4 text-lime" />
             Escribirle a Arata San
           </a>
+          {conSesion && (
+            <button
+              type="button"
+              onClick={salir}
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-btn text-xs text-fog-dim transition-colors hover:text-white"
+            >
+              <LogOut aria-hidden className="h-3.5 w-3.5" /> Salir
+            </button>
+          )}
         </div>
       </aside>
 
@@ -90,7 +106,14 @@ export default function PanelShell({ negocio, children }: { negocio: Negocio; ch
         <Link href="/panel" aria-label="Inicio del panel">
           <Logo className="h-4 w-auto" />
         </Link>
-        <span className="max-w-[55%] truncate text-xs font-medium text-fog">{negocio.nombre}</span>
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="truncate text-xs font-medium text-fog">{negocio.nombre}</span>
+          {conSesion && (
+            <button type="button" onClick={salir} aria-label="Salir del panel" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+              <LogOut aria-hidden className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </header>
 
       {negocio.demo && (

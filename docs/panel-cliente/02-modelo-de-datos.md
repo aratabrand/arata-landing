@@ -4,6 +4,13 @@
 |---|---|---|---|
 | Borrador | 0.1 | 10 nov 2026 | Santiago |
 
+**Base: Neon, proyecto `arata-panel`** (D-107). Nunca la base de un catálogo. El SQL real y probado está en `db/panel/` (`001_cuentas.sql` de Better Auth y `002_panel.sql` del panel); lo de abajo es el **resumen de la primera versión, escrita para Supabase**. Diferencias con lo real:
+
+- No hay RLS ni `auth.users`: la base no se expone al navegador; solo el servidor consulta y filtra por `negociosDe(usuarioId)` (`lib/panel/sesion.ts`).
+- Los usuarios están en la tabla `"user"` de Better Auth (`miembros.usuario_id` es `text`).
+- `negocios` tiene `slug` y `tipo` (`agencia` | `pagina-web`; no admite catálogo).
+- Variables: `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` (no las de Supabase).
+
 El contrato es `content/panel/tipos.ts`. Todo lo que venga de Supabase **debe devolver esas formas** a través de `lib/panel/datos.ts`, así la interfaz no cambia.
 
 ---
