@@ -1,8 +1,11 @@
 // Crea una cuenta del panel y le da acceso a un negocio.
 // El panel no tiene registro abierto: esta es la única forma de crear cuentas.
 //
-// Uso:  node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [rol]
+// Uso:  node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [rol] ["<persona del equipo>"]
 // Ej.:  node --env-file=.env.local scripts/panel-crear-usuario.mjs sergio@... "Sergio" arata-san dueno
+//       node --env-file=.env.local scripts/panel-crear-usuario.mjs andres@... "Andrés" arata-san equipo "Andrés"
+// rol: dueno (edita todo) · equipo (ve Finanzas y Equipo sin editar).
+// persona: nombre en Equipo (solo agencia). Enlaza la cuenta para que el panel le marque "Tú".
 //
 // Genera una contraseña fuerte y la muestra UNA vez: guárdala en tu gestor de contraseñas.
 // Al entrar por primera vez, el panel obliga a activar el doble factor.
@@ -15,9 +18,9 @@ const conexionSegura = (url = "") => url.replace(/([?&]sslmode=)(prefer|require|
 import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins";
 
-const [correo, nombre, slug, rol = "dueno"] = process.argv.slice(2);
-if (!correo || !nombre || !slug) {
-  console.error('Uso: node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [dueno|equipo|arata]');
+const [correo, nombre, slug, rol = "dueno", persona] = process.argv.slice(2);
+if (!correo || !nombre || !slug || !["dueno", "equipo", "arata"].includes(rol)) {
+  console.error('Uso: node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [dueno|equipo|arata] ["<persona del equipo>"]');
   process.exit(1);
 }
 if (!process.env.DATABASE_URL || !process.env.BETTER_AUTH_SECRET) {
@@ -56,6 +59,16 @@ try {
   );
 
   console.log(`✓ ${correo} tiene acceso a "${slug}" como ${rol}.`);
+
+  if (persona) {
+    const r = await pool.query(
+      `update equipo_personas set usuario_id = $3
+        where negocio_id = $1 and lower(nombre) = lower($2) and (usuario_id is null or usuario_id = $3)
+        returning nombre`,
+      [negocio.id, persona, usuarioId]
+    );
+    console.log(r.rowCount ? `✓ Enlazado con "${r.rows[0].nombre}" en Equipo.` : `⚠ No encontré a "${persona}" libre en Equipo (revisa el nombre exacto).`);
+  }
   if (clave) {
     console.log("\nContraseña (se muestra UNA sola vez, guárdala ya en tu gestor de contraseñas):\n");
     console.log(`   ${clave}\n`);

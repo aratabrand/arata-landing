@@ -10,7 +10,8 @@ export const numero = (n: number) => num.format(n);
 export const porcentaje = (n: number, dec = 1) => `${n.toFixed(dec).replace(".", ",")} %`;
 
 /** Pesos cortos para ejes y pills: $1,2 M · $850 mil. */
-export function pesosCorto(n: number) {
+export function pesosCorto(n: number): string {
+  if (n < 0) return `−${pesosCorto(-n)}`;
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1).replace(".", ",").replace(",0", "")} M`;
   if (n >= 1_000) return `$${Math.round(n / 1_000)} mil`;
   return `$${n}`;

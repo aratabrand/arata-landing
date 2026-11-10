@@ -27,6 +27,7 @@ Este folder documenta **el panel** para ver cómo va el negocio y manejarlo desd
 | [`02-modelo-de-datos.md`](02-modelo-de-datos.md) | Tablas (Neon), acceso por negocio, definición exacta de cada métrica e integraciones (GA4, Instagram, ventas, n8n) |
 | [`03-sistema-de-diseno.md`](03-sistema-de-diseno.md) | Cómo se aplica el sistema v2 de Arata al panel: marco, componentes, gráficos, movimiento, accesibilidad y palabras del panel |
 | [`04-construccion.md`](04-construccion.md) | Carpetas y archivos, cómo montar el panel de un cliente nuevo (lista paso a paso), cómo pasar de datos de ejemplo a Supabase, seguridad y verificación |
+| [`06-finanzas.md`](06-finanzas.md) | **Finanzas y Equipo (solo Arata San):** reparto de ganancia (bolsa por horas + % de socios y empresa), gastos, fondos, punto de equilibrio, proyección y quién ve qué |
 | [`05-acceso-y-seguridad.md`](05-acceso-y-seguridad.md) | **Acceso con doble factor** (Neon + Better Auth), cómo crear la base y el usuario de Sergio, qué hacer si se pierde el celular y pruebas de seguridad |
 
 ## Dónde se ve
@@ -37,6 +38,8 @@ Este folder documenta **el panel** para ver cómo va el negocio y manejarlo desd
 | `/panel/clientes` | Lista de clientes con búsqueda, filtros, ficha y alta |
 | `/panel/proyectos` | Tablero tipo to-do por fases |
 | `/panel/sitio` | Títulos, descripciones, portada, franja de anuncio y botones, con vista previa |
+| `/panel/finanzas` | **Solo Arata San.** Resumen, proyectos, gastos, reparto y proyección (datos reales en Neon) |
+| `/panel/equipo` | **Solo Arata San.** Cuánto gana cada uno, por proyecto y en total |
 | `/panel/entrar` | Paso 1 del acceso: correo y contraseña |
 | `/panel/doble-factor` | Paso 2: código de la app de autenticación (la primera vez, se activa con un QR) |
 

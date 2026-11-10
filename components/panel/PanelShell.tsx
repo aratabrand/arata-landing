@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { ArrowUpRight, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users } from "lucide-react";
+import { ArrowUpRight, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users, UsersRound, Wallet } from "lucide-react";
 import Logo from "@/components/Logo";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -17,20 +17,37 @@ async function salir() {
 
 // Marco del panel (docs/panel-cliente/03-sistema-de-diseno.md §3):
 // - Escritorio (≥1024 px): barra lateral fija de 248 px.
-// - Celular: barra superior + pestañas abajo (zona del pulgar), 4 opciones.
+// - Celular: barra superior + pestañas abajo (zona del pulgar). 4 opciones, o 6 en la agencia.
 // Fondo único ink, igual que el sitio v2.
 
 export const navPanel = [
-  { href: "/panel", label: "Resumen", icon: LayoutDashboard },
-  { href: "/panel/clientes", label: "Clientes", icon: Users },
-  { href: "/panel/proyectos", label: "Proyectos", icon: SquareKanban },
-  { href: "/panel/sitio", label: "Mi sitio", icon: Globe },
+  { href: "/panel", label: "Resumen", icon: LayoutDashboard, agencia: false },
+  { href: "/panel/clientes", label: "Clientes", icon: Users, agencia: false },
+  { href: "/panel/proyectos", label: "Proyectos", icon: SquareKanban, agencia: false },
+  // Solo Arata San (D-108): nunca se muestran a clientes de página web
+  { href: "/panel/finanzas", label: "Finanzas", icon: Wallet, agencia: true },
+  { href: "/panel/equipo", label: "Equipo", icon: UsersRound, agencia: true },
+  { href: "/panel/sitio", label: "Mi sitio", icon: Globe, agencia: false },
 ] as const;
 
 const activo = (path: string, href: string) => (href === "/panel" ? path === href : path.startsWith(href));
 
-export default function PanelShell({ negocio, conSesion = false, children }: { negocio: Negocio; conSesion?: boolean; children: ReactNode }) {
+export default function PanelShell({
+  negocio,
+  conSesion = false,
+  conFinanzas = false,
+  children,
+}: {
+  negocio: Negocio;
+  conSesion?: boolean;
+  conFinanzas?: boolean;
+  children: ReactNode;
+}) {
   const path = usePathname() ?? "/panel";
+  const nav = navPanel.filter((n) => conFinanzas || !n.agencia);
+  const enFinanzas = path.startsWith("/panel/finanzas") || path.startsWith("/panel/equipo");
+  // Resumen, Clientes, Proyectos y Mi sitio todavía muestran datos de ejemplo (aunque haya sesión real):
+  // llevan la franja. Finanzas y Equipo tienen su propio aviso (ejemplo o solo lectura).
   const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
 
   return (
@@ -50,7 +67,7 @@ export default function PanelShell({ negocio, conSesion = false, children }: { n
         </div>
 
         <nav aria-label="Panel" className="flex flex-1 flex-col gap-1 px-3">
-          {navPanel.map(({ href, label, icon: Icon }) => {
+          {nav.map(({ href, label, icon: Icon }) => {
             const on = activo(path, href);
             return (
               <Link
@@ -116,7 +133,7 @@ export default function PanelShell({ negocio, conSesion = false, children }: { n
         </div>
       </header>
 
-      {negocio.demo && (
+      {!enFinanzas && (
         <div className="border-b border-brand/30 bg-brand/10 px-4 py-2 text-center text-xs text-brand-soft">
           Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
         </div>
@@ -129,15 +146,15 @@ export default function PanelShell({ negocio, conSesion = false, children }: { n
         aria-label="Panel"
         className="fixed inset-x-0 bottom-0 z-30 border-t border-white/8 bg-[#06040F]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
       >
-        <ul className="grid grid-cols-4">
-          {navPanel.map(({ href, label, icon: Icon }) => {
+        <ul className="grid" style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}>
+          {nav.map(({ href, label, icon: Icon }) => {
             const on = activo(path, href);
             return (
               <li key={href}>
                 <Link
                   href={href}
                   aria-current={on ? "page" : undefined}
-                  className={cn("flex h-16 flex-col items-center justify-center gap-1 text-[0.7rem] font-medium", on ? "text-white" : "text-fog-dim")}
+                  className={cn("flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
                   <Icon aria-hidden className={cn("h-5 w-5", on && "text-lime")} />
                   {label}
