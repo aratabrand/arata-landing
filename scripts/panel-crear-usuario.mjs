@@ -9,6 +9,9 @@
 // ⚠ Mismas opciones de tablas que lib/panel/auth.ts (correo+contraseña y twoFactor).
 import { randomBytes } from "node:crypto";
 import pg from "pg";
+
+// Mismo ajuste que lib/panel/db.ts: pide verify-full explícito (sin aviso de pg).
+const conexionSegura = (url = "") => url.replace(/([?&]sslmode=)(prefer|require|verify-ca)\b/, "$1verify-full");
 import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins";
 
@@ -22,7 +25,7 @@ if (!process.env.DATABASE_URL || !process.env.BETTER_AUTH_SECRET) {
   process.exit(1);
 }
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
+const pool = new pg.Pool({ connectionString: conexionSegura(process.env.DATABASE_URL), max: 1 });
 try {
   const negocio = (await pool.query("select id, tipo from negocios where slug = $1", [slug])).rows[0];
   if (!negocio) throw new Error(`No existe el negocio "${slug}".`);

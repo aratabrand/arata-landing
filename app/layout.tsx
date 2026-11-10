@@ -119,7 +119,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es-CO" className={`${display.variable} ${body.variable}`}>
-      <body className="font-body antialiased">
+      {/* suppressHydrationWarning: extensiones del navegador (Grammarly, traductores…)
+          agregan atributos al <body> antes de que cargue React. Solo ignora atributos
+          del <body>, no su contenido. */}
+      <body className="font-body antialiased" suppressHydrationWarning>
         <GtmInit />
         <GtmNoScript />
         <script

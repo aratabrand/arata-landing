@@ -5,6 +5,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import pg from "pg";
 
+// Mismo ajuste que lib/panel/db.ts: pide verify-full explícito (sin aviso de pg).
+const conexionSegura = (url = "") => url.replace(/([?&]sslmode=)(prefer|require|verify-ca)\b/, "$1verify-full");
+
 const url = process.env.DATABASE_URL;
 if (!url) {
   console.error("Falta DATABASE_URL (usa --env-file=.env.local).");
@@ -13,7 +16,7 @@ if (!url) {
 
 const dir = join(import.meta.dirname, "..", "db", "panel");
 const archivos = readdirSync(dir).filter((f) => /^\d{3}_.+\.sql$/.test(f)).sort();
-const cliente = new pg.Client({ connectionString: url });
+const cliente = new pg.Client({ connectionString: conexionSegura(url) });
 await cliente.connect();
 try {
   await cliente.query(`create table if not exists _migraciones_panel (archivo text primary key, aplicado timestamptz not null default now())`);
