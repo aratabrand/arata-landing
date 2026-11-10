@@ -67,6 +67,10 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 Si después quieres quitarle el acceso a esa cuenta en GA4, el vínculo sigue funcionando.
 
+> Si en el paso 4 sale **"No hay resultados"**, la sesión abierta en GA4 no es la de Search Console. Cambia de cuenta (o abre una ventana de incógnito con la cuenta de Search Console).
+>
+> **No sirve verificar Search Console con el método "Google Analytics" o "Google Tag Manager":** el sitio carga GTM después del primer toque o a los 7 s (D-098), y el verificador de Google busca la etiqueta en el HTML inicial. Para verificar otra cuenta, usa **otro registro TXT en el DNS**.
+
 **Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
 ---
