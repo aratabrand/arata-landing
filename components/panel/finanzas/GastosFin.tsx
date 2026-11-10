@@ -104,7 +104,7 @@ function GastosFijos({ datos }: { datos: DatosFinanzas }) {
                     onClick={() => acc.correr(() => guardarGastoFijo({ id: g.id, concepto: g.concepto, valorMensual: g.valorMensual, activo: !g.activo }))}
                     className={cn("relative h-6 w-10 shrink-0 rounded-full border transition-colors", g.activo ? "border-lime bg-lime" : "border-white/15 bg-surface-2")}
                   >
-                    <span className={cn("absolute top-0.5 h-4 w-4 rounded-full transition-transform", g.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
+                    <span className={cn("absolute left-0 top-0.5 h-4 w-4 rounded-full transition-transform", g.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
                   </button>
                   <button
                     type="button"

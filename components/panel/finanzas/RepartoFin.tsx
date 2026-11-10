@@ -36,7 +36,7 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
   // Ejemplo: proyecto con horas iguales entre los socios activos
   const activos = datos.personas.filter((p) => p.activo);
   const ej = calcularProyecto(
-    { id: "ej", nombre: "", clienteId: null, servicioId: null, estado: "cerrado", valor: ejemplo, fechaCierre: null, repartoCongelado: null, notas: null },
+    { id: "ej", nombre: "", clienteId: null, servicioId: null, estado: "cerrado", valor: ejemplo, fechaCierre: null, fechaInicio: null, fechaLimite: null, repartoCongelado: null, notas: null },
     [],
     activos.map((p, i) => ({ id: `h${i}`, proyectoId: "ej", personaId: p.id, area: p.area, horas: 10, fecha: "", nota: null })),
     reglas,

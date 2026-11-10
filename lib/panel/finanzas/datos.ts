@@ -3,6 +3,7 @@ import { panelActivo } from "../config";
 import { estadoSesion, negociosDe } from "../sesion";
 import type { ClienteRef, DatosFinanzas, FinConfig, FinProyecto, Gasto, GastoFijo, Persona, RegistroHoras, ReglasReparto, Servicio } from "./tipos";
 import { finanzasDemo } from "./demo";
+import type { FinTarea } from "./procesos";
 
 // Lectura de Finanzas y Equipo (solo servidor). Solo el negocio de tipo 'agencia'
 // donde la persona en sesión es miembro. Rol 'dueno' edita; los demás solo ven (D-108).
@@ -47,11 +48,11 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
   const q = db();
   const n = ctx.negocioId;
 
-  const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes] = await Promise.all([
+  const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes, tareas] = await Promise.all([
     q.query(`select id, nombre, area, es_socio, usuario_id, activo from equipo_personas where negocio_id = $1 order by orden, creado`, [n]),
     q.query(`select bolsa_trabajo_pct, reparto, reserva_meses, actualizado from fin_config where negocio_id = $1`, [n]),
     q.query(
-      `select id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas
+      `select id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, fecha_inicio, fecha_limite, reparto_congelado, notas
          from fin_proyectos where negocio_id = $1
         order by (estado = 'cerrado'), fecha_cierre desc nulls last, creado desc`,
       [n]
@@ -66,6 +67,12 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     q.query(`select id, concepto, valor_mensual, activo from fin_gastos_fijos where negocio_id = $1 order by creado`, [n]),
     q.query(`select id, nombre, categoria, activo from servicios where negocio_id = $1 order by orden, nombre`, [n]),
     q.query(`select id, nombre, empresa from clientes where negocio_id = $1 order by lower(coalesce(empresa, nombre)), lower(nombre)`, [n]),
+    q.query(
+      `select t.id, t.proyecto_id, t.etapa, t.texto, t.hecha, t.orden
+         from fin_tareas t join fin_proyectos p on p.id = t.proyecto_id
+        where p.negocio_id = $1 order by t.orden, t.creado`,
+      [n]
+    ),
   ]);
 
   const lista: Persona[] = personas.rows.map((r) => ({
@@ -97,6 +104,8 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
         estado: r.estado,
         valor: Number(r.valor),
         fechaCierre: iso(r.fecha_cierre),
+        fechaInicio: iso(r.fecha_inicio),
+        fechaLimite: iso(r.fecha_limite),
         repartoCongelado: (r.reparto_congelado as ReglasReparto | null) ?? null,
         notas: r.notas,
       })
@@ -118,5 +127,6 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     gastosFijos: fijos.rows.map((r): GastoFijo => ({ id: r.id, concepto: r.concepto, valorMensual: Number(r.valor_mensual), activo: r.activo })),
     servicios: servicios.rows.map((r): Servicio => ({ id: r.id, nombre: r.nombre, categoria: r.categoria, activo: r.activo })),
     clientes: clientes.rows.map((r): ClienteRef => ({ id: r.id, nombre: r.nombre, empresa: r.empresa })),
+    tareas: tareas.rows.map((r): FinTarea => ({ id: r.id, proyectoId: r.proyecto_id, etapa: r.etapa, texto: r.texto, hecha: r.hecha, orden: r.orden })),
   };
 }

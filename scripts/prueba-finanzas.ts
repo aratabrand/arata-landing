@@ -11,7 +11,7 @@ const reglas = { bolsaTrabajoPct: 30, reparto: [{ beneficiario: "S", pct: 25 }, 
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 // Proyecto: 2.000.000, gastos 200.000 → ganancia 1.800.000; bolsa 540.000; resto 1.260.000 (315.000 c/u)
 // Horas: S 10, T 20 → S trabajo 180.000, T 360.000
-const p = { id: "p1", nombre: "Landing", clienteId: null, servicioId: null, estado: "cerrado" as const, valor: 2_000_000, fechaCierre: "2026-11-05", repartoCongelado: null, notas: null };
+const p = { id: "p1", nombre: "Landing", clienteId: null, servicioId: null, estado: "cerrado" as const, valor: 2_000_000, fechaCierre: "2026-11-05", fechaInicio: null, fechaLimite: null, repartoCongelado: null, notas: null };
 const gastos = [{ id: "g1", proyectoId: "p1", concepto: "Plantilla", categoria: "herramientas" as const, valor: 200_000, fecha: "2026-11-01" }, { id: "g2", proyectoId: null, concepto: "Canva", categoria: "herramientas" as const, valor: 50_000, fecha: "2026-11-02" }];
 const horas = [{ id: "h1", proyectoId: "p1", personaId: "S", area: "Diseño", horas: 10, fecha: "2026-11-02", nota: null }, { id: "h2", proyectoId: "p1", personaId: "T", area: "Tecnología", horas: 20, fecha: "2026-11-03", nota: null }];
 const r = calcularProyecto(p, gastos, horas, reglas, personas);
@@ -38,7 +38,7 @@ ok(rc.empresa === 315_000, "reglas congeladas: cambiar % después no altera el p
 ok(validarReglas(reglas, personas).length === 0, "reglas válidas");
 ok(validarReglas({ ...reglas, reparto: reglas.reparto.map((x) => ({ ...x, pct: 20 })) }, personas)[0]?.includes("suman 80"), "detecta que no suman 100");
 // Resumen y fondos
-const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, miPersonaId: "S", demo: false, personas, config: { ...reglas, reservaMeses: 3, actualizado: null }, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, horas, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [] };
+const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, miPersonaId: "S", demo: false, personas, config: { ...reglas, reservaMeses: 3, actualizado: null }, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, horas, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [], tareas: [] };
 const res = resumenFinanzas(d);
 ok(res.cerrados === 1 && res.ingresos === 2_000_000, "resumen solo cuenta cerrados");
 ok(res.fondos === 265_000, "fondos = 315.000 − 50.000 gasto empresa = " + res.fondos);

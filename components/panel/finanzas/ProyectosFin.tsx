@@ -140,7 +140,7 @@ export default function ProyectosFin({ datos, hoy }: { datos: DatosFinanzas; hoy
   );
 }
 
-function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; datos: DatosFinanzas; hoy: string; onListo: () => void }) {
+export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; datos: DatosFinanzas; hoy: string; onListo: () => void }) {
   const { pendiente, error, correr } = useAccion();
   const [estado, setEstado] = useState<EstadoProyecto>(p?.estado ?? "en-curso");
   const [clienteId, setClienteId] = useState(p?.clienteId ?? "");
@@ -158,6 +158,7 @@ function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; datos: Dato
           estado,
           valor: String(f.get("valor") ?? ""),
           fechaCierre: String(f.get("fechaCierre") ?? ""),
+          fechaLimite: String(f.get("fechaLimite") ?? ""),
           notas: String(f.get("notas") ?? ""),
         }),
       onListo
@@ -171,6 +172,9 @@ function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; datos: Dato
       <SelectorCliente datos={datos} valor={clienteId} onCambio={setClienteId} />
       <SelectorServicio datos={datos} valor={servicioId} onCambio={setServicioId} />
       <CampoPesos name="valor" etiqueta="Valor que paga el cliente (COP)" valorInicial={p?.valor} requerido />
+      <Campo etiqueta="Fecha de entrega prometida" ayuda="Para avisar si el proyecto va tarde.">
+        <input name="fechaLimite" type="date" defaultValue={p?.fechaLimite ?? ""} className="pn-input" />
+      </Campo>
       <div className="grid grid-cols-2 gap-3">
         <Campo etiqueta="Estado">
           <select value={estado} onChange={(e) => setEstado(e.target.value as EstadoProyecto)} className="pn-input">
@@ -648,7 +652,7 @@ function ListaServicios({ datos }: { datos: DatosFinanzas }) {
                     onClick={() => acc.correr(() => guardarServicio({ id: x.id, nombre: x.nombre, categoria: x.categoria, activo: !x.activo }))}
                     className={cn("relative h-6 w-10 shrink-0 rounded-full border transition-colors", x.activo ? "border-lime bg-lime" : "border-white/15 bg-surface-2")}
                   >
-                    <span className={cn("absolute top-0.5 h-4 w-4 rounded-full transition-transform", x.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
+                    <span className={cn("absolute left-0 top-0.5 h-4 w-4 rounded-full transition-transform", x.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
                   </button>
                 </>
               ))}

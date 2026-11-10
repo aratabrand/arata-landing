@@ -148,6 +148,23 @@ Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda
 
 **Módulo Clientes (datos reales, solo Arata):** lista con búsqueda, filtro "En curso" y por origen; cada cliente muestra estado, "Proyecto en curso", último servicio y cuánto ha comprado (proyectos cerrados). La ficha trae datos de contacto, de dónde llegó (origen + detalle), todos sus servicios y proyectos con estado y valor, notas y botón de WhatsApp. Sergio edita; Andrés y Santiago solo ven.
 
+## 8c. Proyectos en grid con su proceso (D-111)
+
+`/panel/proyectos` (Arata con sesión) muestra **una tarjeta por proyecto**: servicio, nombre, cliente, estado comercial, **etapa actual** con el siguiente paso, las 5 etapas, la fecha de entrega (aviso si va tarde) y **abajo la barra de avance** (pasos hechos / total). Filtros: En proceso · Entregados · Todos; resumen con cuántos van tarde. Cada tarjeta abre `/panel/proyectos/[id]`.
+
+| Detalle del proyecto | |
+|---|---|
+| Proceso | 5 etapas (Arranque → Diseño → Construcción → Revisión → Entrega) con ✓, "Aquí vas" y % |
+| Pasos por etapa | Casillas para marcar (Sergio), agregar o quitar pasos |
+| Datos | Cliente, servicio, valor, inicio, **entrega prometida** (días que faltan o que pasaron), cierre |
+| Horas | Horas por persona, con enlace a Finanzas |
+
+**Regla:** la etapa y el avance **se calculan de los pasos** (etapa = la del primer paso sin terminar). No hay que actualizar dos cosas.
+
+**Plantillas por tipo de servicio** (`lib/panel/finanzas/procesos.ts`): al crear un proyecto se cargan solas. La de página web sigue los 5 días que promete el sitio: propuesta → textos/logo/fotos → estructura de 5 secciones (día 1) → diseño en celular y computador (días 2 y 3) → construir (días 2 y 3) → 2 rondas de ajustes (día 4) → publicar, medir 90+ en Google y capacitar (día 5). Catálogo, sistema, mantenimiento y "otro" tienen la suya. Un proyecto sin pasos tiene el botón "Cargar el proceso". Sergio marca pasos; Andrés y Santiago los ven sin marcar.
+
+Migración `db/panel/005_proceso.sql`: `fin_proyectos.fecha_inicio`, `fecha_limite` y tabla `fin_tareas`.
+
 ## 9. Pendiente
 
 | # | Qué | Quién |

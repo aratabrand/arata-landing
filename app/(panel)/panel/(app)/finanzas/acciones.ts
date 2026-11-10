@@ -5,7 +5,8 @@ import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { validarReglas } from "@/lib/panel/finanzas/calculo";
-import { categoriasGasto, categoriasServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
+import { categoriasGasto, categoriasServicio, type CategoriaServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
+import { etapas, plantillas } from "@/lib/panel/finanzas/procesos";
 
 // Acciones de Finanzas (D-108). Cada una, en el servidor:
 //   1. sesión completa con doble factor, 2. negocio de tipo 'agencia',
@@ -31,6 +32,7 @@ async function ejecutar(fn: () => Promise<Resultado>): Promise<Resultado> {
     if (r.ok) {
       revalidatePath("/panel/finanzas", "layout");
       revalidatePath("/panel/equipo");
+      revalidatePath("/panel/proyectos", "layout");
     }
     return r;
   } catch (e) {
@@ -109,6 +111,7 @@ export async function guardarProyecto(entrada: {
   estado: string;
   valor: string | number;
   fechaCierre?: string;
+  fechaLimite?: string;
   notas?: string;
 }) {
   return ejecutar(async () => {
@@ -131,6 +134,7 @@ export async function guardarProyecto(entrada: {
     if (!["propuesta", "en-curso", "cerrado"].includes(estado)) return NO("Estado no válido.");
     const valor = pesos(entrada.valor, "Valor del proyecto");
     const cierre = estado === "cerrado" ? fecha(entrada.fechaCierre, "Fecha de cierre") : null;
+    const limite = entrada.fechaLimite ? fecha(entrada.fechaLimite, "Fecha de entrega") : null;
 
     if (entrada.id) {
       const id = uuid(entrada.id);
@@ -140,16 +144,19 @@ export async function guardarProyecto(entrada: {
       const congelado = estado === "cerrado" ? (prev.reparto_congelado ?? (await reglasActuales(ctx.negocioId))) : null;
       await db().query(
         `update fin_proyectos set nombre = $3, cliente_id = $4, servicio_id = $5, estado = $6, valor = $7, fecha_cierre = $8,
-           reparto_congelado = $9, notas = $10 where id = $1 and negocio_id = $2`,
-        [id, ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas]
+           reparto_congelado = $9, notas = $10, fecha_limite = $11 where id = $1 and negocio_id = $2`,
+        [id, ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite]
       );
     } else {
       const congelado = estado === "cerrado" ? await reglasActuales(ctx.negocioId) : null;
-      await db().query(
-        `insert into fin_proyectos (negocio_id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas)
-         values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas]
+      const nuevo = await db().query(
+        `insert into fin_proyectos (negocio_id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas, fecha_limite)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`,
+        [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite]
       );
+      // El proceso de entrega arranca con los pasos del servicio (D-111)
+      await cargarPasos(nuevo.rows[0].id, servicio);
+      return { ok: true, id: nuevo.rows[0].id };
     }
     return SI;
   });
@@ -173,6 +180,69 @@ export async function borrarProyecto(proyectoId: string) {
     const ctx = await dueno();
     const r = await db().query(`delete from fin_proyectos where id = $1 and negocio_id = $2`, [uuid(proyectoId), ctx.negocioId]);
     return r.rowCount ? SI : NO("Ese proyecto no existe.");
+  });
+}
+
+// ── Proceso de entrega (pasos) ──────────────────────────────────────
+async function cargarPasos(proyectoId: string, servicioId: string) {
+  const cat = (await db().query(`select categoria from servicios where id = $1`, [servicioId])).rows[0]?.categoria as CategoriaServicio | undefined;
+  const pasos = plantillas[cat ?? "otro"];
+  for (const [i, t] of pasos.entries()) {
+    await db().query(`insert into fin_tareas (proyecto_id, etapa, texto, orden) values ($1, $2, $3, $4)`, [proyectoId, t.etapa, t.texto, i]);
+  }
+}
+
+/** Carga los pasos de la plantilla del servicio en un proyecto que no tiene. */
+export async function cargarProceso(proyectoId: string) {
+  return ejecutar(async () => {
+    const ctx = await dueno();
+    const p = (await db().query(`select servicio_id from fin_proyectos where id = $1 and negocio_id = $2`, [uuid(proyectoId), ctx.negocioId])).rows[0];
+    if (!p) return NO("Ese proyecto no existe.");
+    if (!p.servicio_id) return NO("Primero elige el servicio del proyecto.");
+    const ya = await db().query(`select count(*)::int n from fin_tareas where proyecto_id = $1`, [proyectoId]);
+    if (ya.rows[0].n) return NO("Este proyecto ya tiene pasos.");
+    await cargarPasos(proyectoId, p.servicio_id);
+    return SI;
+  });
+}
+
+/** Marca o desmarca un paso. */
+export async function marcarPaso(tareaId: string, hecha: boolean) {
+  return ejecutar(async () => {
+    const ctx = await dueno();
+    const r = await db().query(
+      `update fin_tareas t set hecha = $3, hecha_en = case when $3 then now() else null end
+         from fin_proyectos p where t.id = $1 and t.proyecto_id = p.id and p.negocio_id = $2`,
+      [uuid(tareaId), ctx.negocioId, Boolean(hecha)]
+    );
+    return r.rowCount ? SI : NO("Ese paso no existe.");
+  });
+}
+
+export async function agregarPaso(entrada: { proyectoId: string; etapa: string; texto: string }) {
+  return ejecutar(async () => {
+    const ctx = await dueno();
+    const proyectoId = uuid(entrada.proyectoId);
+    if (!etapas.some((e) => e.valor === entrada.etapa)) return NO("Etapa no válida.");
+    const ok = await db().query(`select 1 from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId]);
+    if (!ok.rowCount) return NO("Ese proyecto no existe.");
+    await db().query(
+      `insert into fin_tareas (proyecto_id, etapa, texto, orden)
+       values ($1, $2, $3, coalesce((select max(orden) + 1 from fin_tareas where proyecto_id = $1), 0))`,
+      [proyectoId, entrada.etapa, texto(entrada.texto, 2, 120, "Paso")]
+    );
+    return SI;
+  });
+}
+
+export async function borrarPaso(tareaId: string) {
+  return ejecutar(async () => {
+    const ctx = await dueno();
+    const r = await db().query(
+      `delete from fin_tareas t using fin_proyectos p where t.id = $1 and t.proyecto_id = p.id and p.negocio_id = $2`,
+      [uuid(tareaId), ctx.negocioId]
+    );
+    return r.rowCount ? SI : NO("Ese paso no existe.");
   });
 }
 
