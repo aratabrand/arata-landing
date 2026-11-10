@@ -71,6 +71,17 @@ Si después quieres quitarle el acceso a esa cuenta en GA4, el vínculo sigue fu
 >
 > **No sirve verificar Search Console con el método "Google Analytics" o "Google Tag Manager":** el sitio carga GTM después del primer toque o a los 7 s (D-098), y el verificador de Google busca la etiqueta en el HTML inicial. Para verificar otra cuenta, usa **otro registro TXT en el DNS**.
 
+**Pasar todo a la cuenta de Google de Search Console (nov 2026):** en Google no se "mueven" las herramientas de una cuenta a otra: se le da a la otra cuenta acceso de **Administrador** y, si se quiere, se le quita a la vieja. Así se conservan los mismos ID (`GTM-MVW5FKSQ`, `G-PWBJXQML6S`) y **no hay que tocar el código del sitio**. No crear contenedores ni propiedades nuevas.
+
+| Herramienta | Dónde (con la cuenta vieja) | Qué dar a la cuenta nueva |
+|---|---|---|
+| GA4 | Administrar → Gestión del acceso a la cuenta | Administrador ✅ (ya está) |
+| Tag Manager | Administrar → Gestión de usuarios (de la **cuenta**) | Cuenta: Administrador · Contenedor `GTM-MVW5FKSQ`: Publicar |
+| Google Business | Configuración del perfil → Personas y acceso | Propietario → luego "Transferir la propiedad principal" |
+| Search Console | — | Ya está en la cuenta nueva |
+
+Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que ve y edita todo. Recomendado: dejar la vieja como segunda administradora de respaldo.
+
 **Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
 ---
