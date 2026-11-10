@@ -159,7 +159,7 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 
 | Fecha | Qué pasó | Qué se hizo |
 |---|---|---|
-| 10 nov 2026 | La contraseña del rol `neondb_owner` quedó visible en una captura del `.env.local` compartida en el chat de trabajo | Sergio la cambió en Neon (Postgres database → Roles → Restablecer contraseña, 14:49 hora Colombia); se verificó que la vieja ya no conecta. No se cambió con el conector para que la nueva no quedara escrita en el chat. `.gitignore` ahora bloquea cualquier archivo `.env*` (menos `.env.example`) |
+| 10 nov 2026 | La contraseña del rol `neondb_owner` quedó visible en una captura del `.env.local` compartida en el chat de trabajo | Sergio la cambió en Neon (Postgres database → Roles → Restablecer contraseña, 14:49 hora Colombia); se verificó que la vieja ya no conecta. Vercel actualizó sus variables solo; `.env.local` actualizado en todas sus líneas. No se cambió con el conector para que la nueva no quedara escrita en el chat. `.gitignore` ahora bloquea cualquier archivo `.env*` (menos `.env.example`) |
 
 **Reglas que salen de esto:**
 - Nunca compartir capturas ni texto de `.env.local`. Para revisar variables, usar comandos que respondan sí/no (ver 05 §3.2) sin mostrar valores.
@@ -176,4 +176,4 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 | 4 | Los módulos leen y escriben en Neon (hoy siguen con datos de ejemplo) | Siguiente paso |
 | 5 | Pantalla "olvidé mi contraseña" (hoy la cambia Arata) | Después |
 | 6 | Rol `panel_app` con permisos mínimos (§5) | Santiago |
-| 7 | Confirmar que Vercel tenga la contraseña nueva de la base (si no, actualizar sus variables) | Sergio |
+| 7 | ~~Confirmar que Vercel tenga la contraseña nueva de la base~~ ✅ Vercel se sincronizó solo (cuentas administradas por Vercel) | Sergio |
