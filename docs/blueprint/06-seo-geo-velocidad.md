@@ -122,6 +122,6 @@ Después de publicar:
 7. ✅ **PageSpeed móvil en cada página** (D-093: 95–100) (puerta de la Fase 5: ≥ 90). Actualizar `velocidad` en `content/inicio.ts` con la medición real de la v2.
 8. ✅ Google Search Console y Bing: enviar el sitemap nuevo (Sergio, D-095) y pedir indexación de las páginas de servicio.
 9. ✅ Google Business: el enlace apunta al sitio (Sergio).
-10. ✅ GA4 desde GTM con `reunion_confirmada` como evento clave (D-096). ◻ Vincular con Search Console (`07-medicion-lanzamiento.md` §3).
+10. ✅ GA4 desde GTM con `reunion_confirmada` como evento clave (D-096). ✅ Vinculado con Search Console (10 nov 2026).
 11. — Meta Ads: no hay anuncios activos. Cuando vuelvan, apuntarlos a `/agendar` o a la página del servicio.
 12. ◻ Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar sus puntajes a `mostrar: "todo"` (D-082).

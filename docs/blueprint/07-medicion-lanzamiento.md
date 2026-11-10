@@ -54,7 +54,7 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 1. ✅ `reunion_confirmada` creado como evento clave ("Crear con código"). `cita_agendada` **no** se marca como clave (se contaría doble la misma reunión) y no hay que crearlo: aparece solo. Dimensiones personalizadas `tipo`, `paso` y `motivo` creadas (Sergio).
 2. **Informes → Tiempo real:** abre www.aratasan.com en el celular y confirma que apareces.
-3. *(Recomendado)* **Administrar → Vinculaciones de productos → Search Console:** vincula `www.aratasan.com`.
+3. ✅ **GA4 vinculado con Search Console** (`aratasan.com` → flujo `www.aratasan.com`), hecho desde la cuenta dueña de Search Console (Sergio, 10 nov 2026). Los datos se ven desde el día siguiente en **Informes → Search Console**.
 4. ✅ **Search Console:** verificado por **proveedor de nombres de dominio (DNS)**. No depende de GTM ni de GA4, así que cambiar de contenedor no lo afecta (Sergio, 9 nov 2026).
 
 **Vincular GA4 con Search Console cuando están en cuentas de Google distintas:** Google exige que **una misma cuenta** sea a la vez *propietaria verificada* en Search Console y *Editor o Administrador* en la propiedad de GA4. Lo más simple:
@@ -102,7 +102,6 @@ Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que 
 
 | Pendiente | Quién |
 |---|---|
-| Vincular GA4 con Search Console (§3) | Sergio |
 | Logo de Boost Your Menu para la franja de logos | Sergio |
 | Repositorios de Danrodedm y Boost Your Menu para subir su velocidad en celular a 90+ (mientras tanto, se muestra lo fuerte, D-082) | Sergio |
 | Cuando vuelvan los anuncios de Meta: apuntarlos a `/agendar` o a la página del servicio (hoy no hay anuncios activos) | Sergio |
