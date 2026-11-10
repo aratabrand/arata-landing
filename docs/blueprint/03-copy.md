@@ -83,9 +83,9 @@
 
 **Cierre:** *Todo esto tiene arreglo, y no tarda meses.*
 
-**Títulos cortos de las tarjetas (D-066) — ◻ nuevo, por aprobar:**
+**Títulos cortos de las tarjetas (D-066) — ✅ aprobado (D-100):**
 
-| Ícono | Título ◻ | Texto (aprobado) |
+| Ícono | Título | Texto (aprobado) |
 |---|---|---|
 | Fotos | Fotos sin fin | Mandas fotos por WhatsApp y el cliente se pierde en la galería. |
 | Reloj | Página lenta | Tu página se demora en abrir en el celular y la gente se sale. |
@@ -104,13 +104,13 @@
 | **Páginas que venden** | Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar. | *Página Lista en 5 Días* · desde 400 USD | Ver páginas |
 | **Catálogos y sistemas a medida** | Tu catálogo con carrito, inventario y pedidos que te llegan por WhatsApp. O un sistema hecho para tu negocio: reservas, menús digitales o registro de clientes (CRM). | *Tienda por WhatsApp en 5 Días* · desde 800 USD | Ver catálogos y sistemas |
 
-**Bento (D-065):** las tarjetas usan el copy aprobado de arriba y de las páginas de servicio ("Tienda por WhatsApp en 5 Días", "Tu Negocio en Orden"). Se suma una cuarta tarjeta — ◻ nuevo, por aprobar:
+**Bento (D-065):** las tarjetas usan el copy aprobado de arriba y de las páginas de servicio ("Tienda por WhatsApp en 5 Días", "Tu Negocio en Orden"). Se suma una cuarta tarjeta — ✅ aprobada (D-100):
 
-| Etiqueta | Título ◻ | Texto ◻ |
+| Etiqueta | Título | Texto |
 |---|---|---|
 | En tu panel | **Tus datos, a la vista** | Mira cómo van tus ventas y qué te compran, desde el celular. |
 
-- ◻ **Confirmar:** ¿el panel del Catálogo de verdad muestra ventas y qué compra la gente? Si no, se cambia la tarjeta.
+- ✅ Sergio aprueba el texto (D-100): el panel del Catálogo muestra ventas y qué compra la gente.
 - La gráfica dice **"EJEMPLO · VENTAS POR SEMANA"**: los valores son ilustrativos, no de un cliente.
 
 ---
@@ -266,8 +266,8 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 - [x] Permiso de clientes (D-042)
 - [x] Sin sección de equipo por ahora (D-043)
 - [x] Facilidad de pago 50/50 en precios y FAQ (D-040)
-- [ ] ◻ Títulos cortos de las tarjetas del problema (D-066)
-- [ ] ◻ Tarjeta "Tus datos, a la vista" del bento y si el panel incluye ventas (D-065)
+- [x] Títulos cortos de las tarjetas del problema (D-066, D-100)
+- [x] Tarjeta "Tus datos, a la vista" del bento (D-065, D-100)
 - [x] Menú del celular: bajo el botón va *"30 minutos, sin costo."* (texto ya aprobado en D-053)
 
 ---
@@ -663,7 +663,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 - Su método de trabajo, paso a paso
 - La oferta de software + hardware explicada simple
 
-**El resultado.** ◻ *Falta el dato (interesados o reuniones). Si no hay, esta sección se reemplaza por "Qué logra la página".*
+**El resultado.** Se reemplaza por **"Qué logra la página"** (D-100: no se esperan cifras).
 
 ### Arata Print — `/portafolio/arata-print`
 
@@ -811,7 +811,7 @@ Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redac
 
 ---
 
-## `/agendar` · pregunta 2 sin afán (D-077) — elige una versión
+## `/agendar` · pregunta 2 sin afán (D-077) — ✅ versión A aprobada (D-100)
 
 "Ya" sonaba a que estamos corriendo a la persona. Tres versiones que respetan el tiempo de los dos:
 
@@ -823,11 +823,11 @@ Texto legal según la Ley 1581 de 2012 y el Decreto 1377 de 2013. Antes de redac
 
 ---
 
-## Copy nuevo de la Fase 4 ◻ (por aprobar)
+## Copy nuevo de la Fase 4 · ✅ aprobado (D-100)
 
 Textos que no estaban en el copy aprobado y fueron necesarios al construir. Viven en `content/`.
 
-| Dónde | Texto ◻ |
+| Dónde | Texto |
 |---|---|
 | `/agendar` · error sin nombre | Escribe tu nombre. |
 | `/agendar` · error sin URL (auditoría) | Escribe la dirección de tu página. |

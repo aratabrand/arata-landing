@@ -54,8 +54,33 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 1. ✅ `reunion_confirmada` creado como evento clave ("Crear con código"). `cita_agendada` **no** se marca como clave (se contaría doble la misma reunión) y no hay que crearlo: aparece solo. Dimensiones personalizadas `tipo`, `paso` y `motivo` creadas (Sergio).
 2. **Informes → Tiempo real:** abre www.aratasan.com en el celular y confirma que apareces.
-3. *(Recomendado)* **Administrar → Vinculaciones de productos → Search Console:** vincula `www.aratasan.com`.
-4. **Search Console:** si el sitio se verificó con el método **"Google Tag Manager"**, el contenedor viejo `GTM-TL7RLDMS` ya no está y hay que volver a verificar. Usa otro método: **Registro DNS** o **Google Analytics**, que ya está instalado.
+3. ✅ **GA4 vinculado con Search Console** (`aratasan.com` → flujo `www.aratasan.com`), hecho desde la cuenta dueña de Search Console (Sergio, 10 nov 2026). Los datos se ven desde el día siguiente en **Informes → Search Console**.
+4. ✅ **Search Console:** verificado por **proveedor de nombres de dominio (DNS)**. No depende de GTM ni de GA4, así que cambiar de contenedor no lo afecta (Sergio, 9 nov 2026).
+
+**Vincular GA4 con Search Console cuando están en cuentas de Google distintas:** Google exige que **una misma cuenta** sea a la vez *propietaria verificada* en Search Console y *Editor o Administrador* en la propiedad de GA4. Lo más simple:
+
+1. Entra a GA4 con la cuenta que lo administra → **Administrar → Gestión del acceso a la propiedad → + → Añadir usuarios**.
+2. Escribe el correo de la cuenta dueña de Search Console, con rol **Administrador** (o Editor), sin marcar notificaciones si no quieres. Guarda.
+3. Cierra sesión y entra a GA4 **con la cuenta de Search Console** → elige la propiedad de Arata → **Administrar → Vinculaciones de productos → Vínculos de Search Console → Vincular**.
+4. **Elegir cuentas** → marca `aratasan.com` (sc-domain) → **Siguiente** → elige el flujo web de `www.aratasan.com` → **Enviar**.
+5. Al día siguiente aparecen los informes en **Informes → Search Console** (si no salen, en **Biblioteca** publica la colección "Search Console").
+
+Si después quieres quitarle el acceso a esa cuenta en GA4, el vínculo sigue funcionando.
+
+> Si en el paso 4 sale **"No hay resultados"**, la sesión abierta en GA4 no es la de Search Console. Cambia de cuenta (o abre una ventana de incógnito con la cuenta de Search Console).
+>
+> **No sirve verificar Search Console con el método "Google Analytics" o "Google Tag Manager":** el sitio carga GTM después del primer toque o a los 7 s (D-098), y el verificador de Google busca la etiqueta en el HTML inicial. Para verificar otra cuenta, usa **otro registro TXT en el DNS**.
+
+**Pasar todo a la cuenta de Google de Search Console (nov 2026):** en Google no se "mueven" las herramientas de una cuenta a otra: se le da a la otra cuenta acceso de **Administrador** y, si se quiere, se le quita a la vieja. Así se conservan los mismos ID (`GTM-MVW5FKSQ`, `G-PWBJXQML6S`) y **no hay que tocar el código del sitio**. No crear contenedores ni propiedades nuevas.
+
+| Herramienta | Dónde (con la cuenta vieja) | Qué dar a la cuenta nueva |
+|---|---|---|
+| GA4 | Administrar → Gestión del acceso a la cuenta | Administrador ✅ (ya está) |
+| Tag Manager | Administrar → Gestión de usuarios (de la **cuenta**) | Cuenta: Administrador · Contenedor `GTM-MVW5FKSQ`: Publicar |
+| Google Business | Configuración del perfil → Personas y acceso | Propietario → luego "Transferir la propiedad principal" |
+| Search Console | — | Ya está en la cuenta nueva |
+
+Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que ve y edita todo. Recomendado: dejar la vieja como segunda administradora de respaldo.
 
 **Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
@@ -77,8 +102,5 @@ No hay que tocar código: estos eventos salen solos hacia GTM (`05-construccion.
 
 | Pendiente | Quién |
 |---|---|
-| Marcar eventos clave en GA4 y revisar la verificación de Search Console (§3) | Sergio |
-| Logo de Boost Your Menu para la franja de logos | Sergio |
-| Repositorios de Danrodedm y Boost Your Menu para subir su velocidad en celular a 90+ (mientras tanto, se muestra lo fuerte, D-082) | Sergio |
-| Revisar a dónde apuntan los anuncios activos de Meta | Sergio |
+| Cuando vuelvan los anuncios de Meta: apuntarlos a `/agendar` o a la página del servicio (hoy no hay anuncios activos) | Sergio |
 | Revisión de la política de datos con un abogado (D-099): confirmar si el correo basta como dirección de notificaciones y el plazo de 2 años de conservación | Sergio |

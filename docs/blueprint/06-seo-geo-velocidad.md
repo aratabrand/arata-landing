@@ -99,10 +99,10 @@ En Vercel el servidor responde en 30–50 ms (en el entorno de prueba, ~460 ms):
 
 | Qué | Estado |
 |---|---|
-| Política de datos (`/privacidad`, Ley 1581 de 2012) | ✅ Publicada con responsable, ciudad, correo, finalidades, derechos y plazos (D-075) |
-| Autorización en el formulario de `/agendar` | ✅ Casilla obligatoria con enlace a la política |
+| Política de datos (`/privacidad`, Ley 1581 de 2012) | ✅ Publicada (D-075) y reforzada (D-099): autorización con prueba, envío fuera de Colombia (art. 26), dirección para notificaciones, plazo de conservación, cookies y seguridad |
+| Autorización en el formulario de `/agendar` | ✅ Casilla obligatoria que nombra a Cal.com y Google y el envío fuera de Colombia; la fecha y hora de la autorización viajan en las notas de cada cita (D-099) |
 | Datos del responsable | ✅ Nombre, domicilio digital (Bogotá), correo y teléfono. Cédula/NIT no se publica (D-090) |
-| Revisión de un abogado | ◻ Recomendada antes de lanzar |
+| Revisión de un abogado | ◻ Pendiente: confirmar el correo como dirección de notificaciones y el plazo de 2 años (`07-medicion-lanzamiento.md` §5) |
 
 ---
 
@@ -121,7 +121,7 @@ Después de publicar:
 
 7. ✅ **PageSpeed móvil en cada página** (D-093: 95–100) (puerta de la Fase 5: ≥ 90). Actualizar `velocidad` en `content/inicio.ts` con la medición real de la v2.
 8. ✅ Google Search Console y Bing: enviar el sitemap nuevo (Sergio, D-095) y pedir indexación de las páginas de servicio.
-9. ◻ Google Business: revisar que el enlace apunte al sitio.
-10. ◻ GA4 desde GTM (no está instalado; guía en `07-medicion-lanzamiento.md` §3): marcar `reunion_confirmada` como conversión principal y armar el embudo con `agendar_paso` (ver `05-construccion.md` §3).
-11. ◻ Revisar a dónde apuntan los anuncios activos (Meta Ads).
-12. ◻ Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar sus puntajes a `mostrar: "todo"` (D-082).
+9. ✅ Google Business: el enlace apunta al sitio (Sergio).
+10. ✅ GA4 desde GTM con `reunion_confirmada` como evento clave (D-096). ✅ Vinculado con Search Console (10 nov 2026).
+11. — Meta Ads: no hay anuncios activos. Cuando vuelvan, apuntarlos a `/agendar` o a la página del servicio.
+12. — Danrodedm y Boost Your Menu se quedan mostrando lo fuerte (D-082, D-100). No se optimizan por ahora.

@@ -117,8 +117,8 @@ Lighthouse 12.6 sobre el sitio en vivo, celular (mediana de 3) y computador (2),
 |---|---|---|---|---|---|---|---|
 | Caravana | 99 | 98 | 100 | 63* | 2,0 s | 100 | ✅ |
 | Arata Print | 96 | 98 | 100 | 63* | 2,6 s | 100 | ✅ |
-| Danrodedm | 79 | 93 | 96 | 100 | 5,2 s | 97 | ⏸ debajo de 90 |
-| Boost Your Menu | 70 | 90 | 96 | 100 | 5,3 s | 86–90 | ⏸ debajo de 90 |
+| Danrodedm | 79 | 93 | 96 | 100 | 5,2 s | 97 | Se muestra lo fuerte (D-082, D-100) |
+| Boost Your Menu | 70 | 90 | 96 | 100 | 5,3 s | 86–90 | Se muestra lo fuerte (D-082, D-100) |
 
 \* Dominio de prueba (`vercel.app`) con `noindex` a propósito: el SEO no se muestra hasta que tengan su dominio.
 
@@ -143,7 +143,6 @@ Lighthouse 12.6 sobre el sitio en vivo, celular (mediana de 3) y computador (2),
 
 | Falta | Quién | Bloquea |
 |---|---|---|
-| Optimizar Danrodedm y Boost Your Menu a 90+ en celular y pasar `mostrar` a `"todo"` (D-082) | Santiago / Claude (con acceso a sus repos) | Nada (hoy se muestra lo fuerte) |
 | ~~Datos de cada caso: ciudad, duración y proceso~~ ✅ recibidos (D-084) | — | — |
 | Elegir versión de la pregunta 2 del formulario (D-077) | Sergio | Nada (va la A) |
 | RUT y dirección del responsable | Sergio | `/privacidad` (Ley 1581). Recomendado: revisión de un abogado |

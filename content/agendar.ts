@@ -63,13 +63,13 @@ export const agendar = {
     whatsapp: "Escribe tu WhatsApp con el indicativo, por ejemplo +57 300 000 0000.",
     correo: "Revisa tu correo, parece que le falta algo.",
     autorizacion: "Necesitamos tu autorización para poder contactarte.",
-    // ◻ nuevos (no estaban en 03-copy.md): por aprobar
+    // aprobados en D-100
     nombre: "Escribe tu nombre.",
     url: "Escribe la dirección de tu página.",
   },
   auditoriaNota: "Te la entregamos en 48 horas y la revisamos juntos en la reunión.",
   calendario: {
-    // ◻ nuevos: textos del último paso
+    // textos del último paso (aprobados en D-100)
     titulo: "Elige la hora que te sirva",
     cargando: "Abriendo el calendario…",
     sinCalendario: "Termina por WhatsApp: te mandamos los horarios disponibles.",
