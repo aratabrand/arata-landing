@@ -58,10 +58,18 @@
 
 ## 3. Puesta en marcha (una sola vez)
 
-### 3.1 Neon
+### 3.1 Neon ✅ (10 nov 2026)
 
-- [ ] Crear cuenta en [neon.tech](https://neon.tech) (plan gratis) y un proyecto **`arata-panel`**, región **AWS us-east-1** (la más cercana a Colombia y a Vercel).
-- [ ] En **Connect**, copiar la cadena con **Pooled connection** (termina en `?sslmode=require`).
+| Dato | Valor |
+|---|---|
+| Proyecto | `arata-panel` (id `rapid-hall-95972367`) |
+| Región | AWS us-east-1 · Postgres 18 |
+| Base / rol dueño | `neondb` / `neondb_owner` |
+| Cuenta | Organización de Neon **administrada por Vercel** (plan gratis): los proyectos se crean y se borran **desde Vercel → Storage**, no desde Neon. Neon rechaza crearlos por API ("organization is managed by Vercel") |
+| Conectado a | Proyecto de Vercel de la landing de Arata (Vercel pone `DATABASE_URL` sola) |
+| Migraciones | `001_cuentas.sql` y `002_panel.sql` aplicadas con el conector de Neon; anotadas en `_migraciones_panel` (el script `panel-migrar` las salta) |
+| Negocio inicial | `arata-san` (tipo `agencia`). Probado: la base rechaza `tipo = 'catalogo'` |
+| Esquema `neon_auth` | Lo crea Vercel/Neon solo (Neon Auth). **No se usa**: el panel tiene sus tablas de Better Auth en `public`. No borrar sin revisar |
 
 ### 3.2 Variables
 
@@ -69,7 +77,7 @@ Crear `.env.local` en la raíz (está en `.gitignore`; la plantilla es `.env.exa
 
 ```
 DATABASE_URL=postgresql://…-pooler….neon.tech/neondb?sslmode=require
-BETTER_AUTH_SECRET=   ← generar con: openssl rand -base64 32
+BETTER_AUTH_SECRET=   ← generar con: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 BETTER_AUTH_URL=http://localhost:3000
 ```
 
@@ -151,8 +159,8 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 
 | # | Qué | Quién |
 |---|---|---|
-| 1 | Crear el proyecto Neon `arata-panel` y `.env.local` (§3.1–3.2) | Sergio |
-| 2 | Correr la migración y crear tu usuario (§3.3), primera entrada (§3.4) | Sergio |
+| 1 | ~~Crear el proyecto Neon `arata-panel`~~ ✅ y `.env.local` (§3.2) | Sergio |
+| 2 | ~~Correr la migración~~ ✅ · crear tu usuario (§3.3) y primera entrada (§3.4) | Sergio |
 | 3 | Variables en Vercel y nuevo despliegue (§3.5) | Santiago |
 | 4 | Los módulos leen y escriben en Neon (hoy siguen con datos de ejemplo) | Siguiente paso |
 | 5 | Pantalla "olvidé mi contraseña" (hoy la cambia Arata) | Después |
