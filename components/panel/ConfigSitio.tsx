@@ -4,39 +4,58 @@ import { useEffect, useMemo, useState } from "react";
 import { CircleCheck, Megaphone, Monitor, Plus, RotateCcw, Smartphone, Trash2 } from "lucide-react";
 import type { BotonSitio, ConfigSitio as Config, Negocio } from "@/content/panel/tipos";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
+import { LIM, enlaceValido, errores } from "@/lib/panel/sitio/reglas";
+import { guardarSitio } from "@/app/(panel)/panel/(app)/sitio/acciones";
 import { PanelHeader, PanelPage, Tarjeta } from "./ui";
+import { AvisoAcceso, useAccion } from "./finanzas/comun";
+
+export { enlaceValido };
 import { cn } from "@/lib/utils";
 
 // Módulo 4 · Mi sitio (docs/panel-cliente/01-arquitectura.md §2.4)
 // Edita títulos, descripciones y botones con vista previa en vivo (Google + celular).
 // Se trabaja sobre un BORRADOR: nada cambia hasta "Guardar cambios".
-// En producción, guardar escribe en Supabase y revalida la página del cliente.
+// Dos modos:
+// - Ejemplo (sin conexión): guarda en el navegador (useGuardado).
+// - Arata San (D-110): arranca con lo que publica aratasan.com y guarda en Neon con historial.
 
-const LIM = { seoTitulo: 60, seoDesc: 155, titulo: 70, subtitulo: 140, anuncio: 60, boton: 28 };
+/** Datos del modo real de Arata San. */
+export type Remoto = { puedeEditar: boolean; fuente: "sitio" | "panel"; publicado: Config };
 
-/** Enlaces permitidos: https, rutas internas, wa.me, tel: y mailto:. Nada de javascript:. */
-export function enlaceValido(url: string) {
-  const u = url.trim();
-  if (u.startsWith("/")) return !u.startsWith("//");
-  return /^(https:\/\/[^\s]+|tel:\+?[\d\s-]{7,}|mailto:[^\s@]+@[^\s@]+)$/i.test(u);
+export default function ConfigSitio({ inicial, negocio, remoto }: { inicial: Config; negocio: Negocio; remoto?: Remoto }) {
+  return remoto ? <SitioRemoto inicial={inicial} negocio={negocio} remoto={remoto} /> : <SitioLocal inicial={inicial} negocio={negocio} />;
 }
 
-function errores(c: Config) {
-  const e: Record<string, string> = {};
-  if (!c.seo.titulo.trim()) e.seoTitulo = "El título no puede quedar vacío.";
-  if (c.seo.titulo.length > LIM.seoTitulo) e.seoTitulo = `Google corta el título después de ${LIM.seoTitulo} caracteres.`;
-  if (c.seo.descripcion.length > LIM.seoDesc) e.seoDesc = `Google corta la descripción después de ${LIM.seoDesc} caracteres.`;
-  if (!c.portada.titulo.trim()) e.titulo = "La portada necesita un título.";
-  c.botones.forEach((b) => {
-    if (!b.texto.trim()) e[`bt-${b.id}`] = "Escribe el texto del botón.";
-    else if (!enlaceValido(b.enlace)) e[`bl-${b.id}`] = "Usa un enlace que empiece por https://, / o wa.me.";
-  });
-  return e;
-}
-
-export default function ConfigSitio({ inicial, negocio }: { inicial: Config; negocio: Negocio }) {
+function SitioLocal({ inicial, negocio }: { inicial: Config; negocio: Negocio }) {
   const [guardado, setGuardado, listo, restablecer] = useGuardado<Config>("sitio", inicial);
+  return <EditorSitio inicial={inicial} negocio={negocio} guardado={guardado} setGuardado={setGuardado} listo={listo} restablecer={restablecer} />;
+}
+
+function SitioRemoto({ inicial, negocio, remoto }: { inicial: Config; negocio: Negocio; remoto: Remoto }) {
+  const [guardado, setGuardado] = useState<Config>(inicial);
+  return <EditorSitio inicial={inicial} negocio={negocio} guardado={guardado} setGuardado={setGuardado} listo remoto={remoto} />;
+}
+
+function EditorSitio({
+  inicial,
+  negocio,
+  guardado,
+  setGuardado,
+  listo,
+  restablecer,
+  remoto,
+}: {
+  inicial: Config;
+  negocio: Negocio;
+  guardado: Config;
+  setGuardado: (c: Config) => void;
+  listo: boolean;
+  restablecer?: () => void;
+  remoto?: Remoto;
+}) {
   const [borrador, setBorrador] = useState<Config>(inicial);
+  const acc = useAccion();
+  const edita = !remoto || remoto.puedeEditar;
   const [vista, setVista] = useState<"celular" | "google">("celular");
   const [aviso, setAviso] = useState(false);
 
@@ -53,14 +72,29 @@ export default function ConfigSitio({ inicial, negocio }: { inicial: Config; neg
   const set = <K extends keyof Config>(k: K, v: Config[K]) => setBorrador((b) => ({ ...b, [k]: v }));
   const setBoton = (id: string, cambios: Partial<BotonSitio>) => set("botones", borrador.botones.map((b) => (b.id === id ? { ...b, ...cambios } : b)));
 
-  const guardar = () => {
-    if (hayErrores) return;
-    const nuevo = { ...borrador, actualizado: new Date().toISOString() };
+  const listoGuardado = (nuevo: Config) => {
     setGuardado(nuevo);
     setBorrador(nuevo);
     setAviso(true);
     window.setTimeout(() => setAviso(false), 2600);
   };
+  const guardar = () => {
+    if (hayErrores || !edita) return;
+    const nuevo = { ...borrador, actualizado: new Date().toISOString() };
+    if (remoto) acc.correr(() => guardarSitio(nuevo), () => listoGuardado(nuevo));
+    else listoGuardado(nuevo);
+  };
+  // Qué difiere de lo que hoy publica aratasan.com
+  const pendientes = remoto
+    ? [
+        guardado.seo.titulo !== remoto.publicado.seo.titulo && "título de Google",
+        guardado.seo.descripcion !== remoto.publicado.seo.descripcion && "descripción de Google",
+        guardado.portada.titulo !== remoto.publicado.portada.titulo && "título de la portada",
+        guardado.portada.subtitulo !== remoto.publicado.portada.subtitulo && "texto de la portada",
+        JSON.stringify(guardado.anuncio) !== JSON.stringify(remoto.publicado.anuncio) && "franja de anuncio",
+        JSON.stringify(guardado.botones) !== JSON.stringify(remoto.publicado.botones) && "botones",
+      ].filter(Boolean)
+    : [];
 
   const dominio = negocio.sitio.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
@@ -76,8 +110,24 @@ export default function ConfigSitio({ inicial, negocio }: { inicial: Config; neg
         }
       />
 
+      {remoto && (
+        <>
+          <AvisoAcceso demo={false} puedeEditar={remoto.puedeEditar} />
+          <div className="rounded-frame border border-white/8 bg-surface-1 px-4 py-3 text-sm text-fog">
+            {remoto.fuente === "sitio" && pendientes.length === 0 ? (
+              <>Estos son los textos y botones que <strong className="text-white">hoy publica {negocio.sitio.replace(/^https:\/\//, "")}</strong>, tomados del sitio.</>
+            ) : pendientes.length ? (
+              <>Guardado en el panel y <strong className="text-white">pendiente de publicar</strong> en el sitio: {pendientes.join(", ")}.</>
+            ) : (
+              <>Lo guardado en el panel es igual a lo que publica el sitio.</>
+            )}{" "}
+            <span className="text-fog-dim">Guardar deja los cambios en el panel con historial; todavía no se publican solos en el sitio.</span>
+          </div>
+        </>
+      )}
+
       <div className="grid gap-4 xl:grid-cols-[1fr_400px]">
-        <div className="space-y-4">
+        <fieldset disabled={!edita} className="min-w-0 space-y-4 disabled:opacity-80">
           <Tarjeta titulo="Cómo sale en Google" bajada="Lo que la gente lee antes de entrar">
             <div className="space-y-4">
               <Campo label="Título" usado={borrador.seo.titulo.length} limite={LIM.seoTitulo} error={errs.seoTitulo}>
@@ -172,7 +222,7 @@ export default function ConfigSitio({ inicial, negocio }: { inicial: Config; neg
               ))}
             </ul>
           </Tarjeta>
-        </div>
+        </fieldset>
 
         {/* Vista previa */}
         <div className="xl:sticky xl:top-8 xl:self-start">
@@ -257,7 +307,9 @@ export default function ConfigSitio({ inicial, negocio }: { inicial: Config; neg
       <div className="sticky bottom-20 z-20 lg:bottom-6">
         <div className={cn("flex flex-col gap-3 rounded-card border p-3 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:p-4", sucio ? "border-brand/50 bg-surface-3/90" : "border-white/8 bg-surface-1/90")}>
           <p className="text-sm text-fog" aria-live="polite">
-            {aviso ? (
+            {acc.error ? (
+              <span className="text-[#FF9BB0]">{acc.error}</span>
+            ) : aviso ? (
               <span className="inline-flex items-center gap-2 text-lime"><CircleCheck aria-hidden className="h-4 w-4" /> Cambios guardados</span>
             ) : hayErrores ? (
               <span className="text-[#FF9BB0]">Revisa los campos marcados antes de guardar.</span>
@@ -280,27 +332,35 @@ export default function ConfigSitio({ inicial, negocio }: { inicial: Config; neg
             </button>
             <button
               type="button"
-              disabled={!sucio || hayErrores}
+              disabled={!sucio || hayErrores || !edita || acc.pendiente}
               onClick={guardar}
               className="v2-shine h-11 flex-1 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-30 sm:flex-none"
             >
-              Guardar cambios
+              {acc.pendiente ? "Guardando…" : "Guardar cambios"}
             </button>
           </div>
         </div>
       </div>
 
       <div className="flex justify-end text-xs text-fog-dim">
-        <button
-          type="button"
-          onClick={() => {
-            restablecer();
-            setBorrador(inicial);
-          }}
-          className="inline-flex items-center gap-1.5 hover:text-white"
-        >
-          <RotateCcw aria-hidden className="h-3.5 w-3.5" /> Volver a los datos de ejemplo
-        </button>
+        {remoto ? (
+          edita && (
+            <button type="button" onClick={() => setBorrador(remoto.publicado)} className="inline-flex items-center gap-1.5 hover:text-white">
+              <RotateCcw aria-hidden className="h-3.5 w-3.5" /> Volver a lo que publica el sitio
+            </button>
+          )
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              restablecer?.();
+              setBorrador(inicial);
+            }}
+            className="inline-flex items-center gap-1.5 hover:text-white"
+          >
+            <RotateCcw aria-hidden className="h-3.5 w-3.5" /> Volver a los datos de ejemplo
+          </button>
+        )}
       </div>
     </PanelPage>
   );

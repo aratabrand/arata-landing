@@ -5,14 +5,14 @@ import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { validarReglas } from "@/lib/panel/finanzas/calculo";
-import { categoriasGasto, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
+import { categoriasGasto, categoriasServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
 
 // Acciones de Finanzas (D-108). Cada una, en el servidor:
 //   1. sesión completa con doble factor, 2. negocio de tipo 'agencia',
 //   3. rol 'dueno' (Andrés y Santiago solo ven), 4. valida los datos,
 //   5. escribe filtrando SIEMPRE por negocio_id (nunca confía en el id que manda el navegador).
 
-export type Resultado = { ok: true } | { ok: false; error: string };
+export type Resultado = { ok: true; id?: string } | { ok: false; error: string };
 
 const NO = (error: string): Resultado => ({ ok: false, error });
 const SI: Resultado = { ok: true };
@@ -104,8 +104,8 @@ export async function guardarReglas(entrada: { bolsaTrabajoPct: number; reparto:
 export async function guardarProyecto(entrada: {
   id?: string;
   nombre: string;
-  cliente?: string;
-  servicio?: string;
+  clienteId?: string;
+  servicioId?: string;
   estado: string;
   valor: string | number;
   fechaCierre?: string;
@@ -114,8 +114,18 @@ export async function guardarProyecto(entrada: {
   return ejecutar(async () => {
     const ctx = await dueno();
     const nombre = texto(entrada.nombre, 2, 90, "Nombre del proyecto");
-    const cliente = opcional(entrada.cliente, 90);
-    const servicio = opcional(entrada.servicio, 60);
+    // Cliente y servicio: solo de sus tablas y del mismo negocio (D-109)
+    const cliente = entrada.clienteId ? uuid(entrada.clienteId) : null;
+    const servicio = entrada.servicioId ? uuid(entrada.servicioId) : null;
+    if (!cliente) return NO("Elige el cliente de la lista.");
+    if (!servicio) return NO("Elige el servicio de la lista.");
+    const refs = await db().query(
+      `select (select count(*) from clientes where id = $1 and negocio_id = $3)::int c,
+              (select count(*) from servicios where id = $2 and negocio_id = $3)::int s`,
+      [cliente, servicio, ctx.negocioId]
+    );
+    if (!refs.rows[0].c) return NO("Ese cliente no existe.");
+    if (!refs.rows[0].s) return NO("Ese servicio no existe.");
     const notas = opcional(entrada.notas, 1000);
     const estado = String(entrada.estado);
     if (!["propuesta", "en-curso", "cerrado"].includes(estado)) return NO("Estado no válido.");
@@ -129,14 +139,14 @@ export async function guardarProyecto(entrada: {
       // Al cerrar se congelan los % actuales; si se reabre, se sueltan
       const congelado = estado === "cerrado" ? (prev.reparto_congelado ?? (await reglasActuales(ctx.negocioId))) : null;
       await db().query(
-        `update fin_proyectos set nombre = $3, cliente = $4, servicio = $5, estado = $6, valor = $7, fecha_cierre = $8,
+        `update fin_proyectos set nombre = $3, cliente_id = $4, servicio_id = $5, estado = $6, valor = $7, fecha_cierre = $8,
            reparto_congelado = $9, notas = $10 where id = $1 and negocio_id = $2`,
         [id, ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas]
       );
     } else {
       const congelado = estado === "cerrado" ? await reglasActuales(ctx.negocioId) : null;
       await db().query(
-        `insert into fin_proyectos (negocio_id, nombre, cliente, servicio, estado, valor, fecha_cierre, reparto_congelado, notas)
+        `insert into fin_proyectos (negocio_id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas)
          values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas]
       );
@@ -222,6 +232,33 @@ export async function borrarHoras(horasId: string) {
       [uuid(horasId), ctx.negocioId]
     );
     return r.rowCount ? SI : NO("Ese registro no existe.");
+  });
+}
+
+// ── Servicios (lista para elegir en los proyectos) ──────────────────
+export async function guardarServicio(entrada: { id?: string; nombre: string; categoria: string; activo?: boolean }): Promise<Resultado> {
+  return ejecutar(async () => {
+    const ctx = await dueno();
+    const nombre = texto(entrada.nombre, 2, 80, "Nombre del servicio").replace(/\s+/g, " ");
+    if (!categoriasServicio.some((c) => c.valor === entrada.categoria)) return NO("Elige la categoría.");
+    const repetido = await db().query(
+      `select id from servicios where negocio_id = $1 and lower(btrim(nombre)) = lower($2) and ($3::uuid is null or id <> $3::uuid)`,
+      [ctx.negocioId, nombre, entrada.id ?? null]
+    );
+    if (repetido.rowCount) return NO(`Ya existe el servicio "${nombre}".`);
+    if (entrada.id) {
+      const r = await db().query(
+        `update servicios set nombre = $3, categoria = $4, activo = $5 where id = $1 and negocio_id = $2`,
+        [uuid(entrada.id), ctx.negocioId, nombre, entrada.categoria, entrada.activo ?? true]
+      );
+      return r.rowCount ? SI : NO("Ese servicio no existe.");
+    }
+    const r = await db().query(
+      `insert into servicios (negocio_id, nombre, categoria, orden)
+       values ($1, $2, $3, coalesce((select max(orden) + 1 from servicios where negocio_id = $1), 1)) returning id`,
+      [ctx.negocioId, nombre, entrada.categoria]
+    );
+    return { ok: true, id: r.rows[0].id };
   });
 }
 

@@ -135,6 +135,19 @@ Base local (PGlite), `next build` + `next start`, Chromium. 22 de 22 ✅:
 | La base rechaza crear finanzas para un cliente de página web | ✅ |
 | Celular (iPhone 13): las 5 pestañas y Equipo sin scroll horizontal | ✅ |
 
+## 8b. Clientes y servicios como listas (D-109)
+
+En un proyecto, **cliente y servicio se eligen de una lista**: no se escriben a mano, para que no haya dos formas de escribir lo mismo.
+
+| Lista | Tabla | Cómo se agrega | Regla contra repetidos |
+|---|---|---|---|
+| Clientes | `clientes` (con empresa, contacto, celular, de dónde llegó y detalle) | En Clientes → "Agregar cliente", o en el proyecto con "＋ Agregar cliente nuevo…" | Mismo celular, o misma empresa + contacto sin importar mayúsculas, tildes ni espacios |
+| Servicios | `servicios` (nombre + categoría) | Finanzas → Proyectos → "Servicios", o en el proyecto con "＋ Agregar servicio nuevo…" | Mismo nombre sin importar mayúsculas ni espacios (también lo exige la base con un índice único) |
+
+Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda por WhatsApp en 5 Días · Tu Negocio en Orden · Mantenimiento mensual. Un servicio se puede **renombrar** o **desactivar** (deja de salir en proyectos nuevos; los viejos lo conservan). Un cliente con proyectos **no se puede borrar** (la base lo impide): se marca inactivo.
+
+**Módulo Clientes (datos reales, solo Arata):** lista con búsqueda, filtro "En curso" y por origen; cada cliente muestra estado, "Proyecto en curso", último servicio y cuánto ha comprado (proyectos cerrados). La ficha trae datos de contacto, de dónde llegó (origen + detalle), todos sus servicios y proyectos con estado y valor, notas y botón de WhatsApp. Sergio edita; Andrés y Santiago solo ven.
+
 ## 9. Pendiente
 
 | # | Qué | Quién |
@@ -144,4 +157,5 @@ Base local (PGlite), `next build` + `next start`, Chromium. 22 de 22 ✅:
 | 3 | Publicar el panel (merge a `main` + `BETTER_AUTH_SECRET` y `BETTER_AUTH_URL` en Vercel) para que Andrés y Santiago entren | Sergio aprueba · Santiago |
 | 4 | Crear las cuentas de Andrés y Santiago (§7) | Sergio |
 | 5 | Que el Resumen general del panel muestre las ventas reales (proyectos cerrados) | Siguiente paso |
+| 7 | Cargar los clientes reales de Arata en Clientes | Sergio |
 | 6 | Que cada uno registre sus propias horas (hoy solo Sergio) | Si se decide |

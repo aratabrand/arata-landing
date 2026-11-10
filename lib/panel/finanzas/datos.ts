@@ -1,7 +1,7 @@
 import { db } from "../db";
 import { panelActivo } from "../config";
 import { estadoSesion, negociosDe } from "../sesion";
-import type { DatosFinanzas, FinConfig, FinProyecto, Gasto, GastoFijo, Persona, RegistroHoras, ReglasReparto } from "./tipos";
+import type { ClienteRef, DatosFinanzas, FinConfig, FinProyecto, Gasto, GastoFijo, Persona, RegistroHoras, ReglasReparto, Servicio } from "./tipos";
 import { finanzasDemo } from "./demo";
 
 // Lectura de Finanzas y Equipo (solo servidor). Solo el negocio de tipo 'agencia'
@@ -47,11 +47,11 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
   const q = db();
   const n = ctx.negocioId;
 
-  const [personas, config, proyectos, gastos, horas, fijos] = await Promise.all([
+  const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes] = await Promise.all([
     q.query(`select id, nombre, area, es_socio, usuario_id, activo from equipo_personas where negocio_id = $1 order by orden, creado`, [n]),
     q.query(`select bolsa_trabajo_pct, reparto, reserva_meses, actualizado from fin_config where negocio_id = $1`, [n]),
     q.query(
-      `select id, nombre, cliente, servicio, estado, valor, fecha_cierre, reparto_congelado, notas
+      `select id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas
          from fin_proyectos where negocio_id = $1
         order by (estado = 'cerrado'), fecha_cierre desc nulls last, creado desc`,
       [n]
@@ -64,6 +64,8 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
       [n]
     ),
     q.query(`select id, concepto, valor_mensual, activo from fin_gastos_fijos where negocio_id = $1 order by creado`, [n]),
+    q.query(`select id, nombre, categoria, activo from servicios where negocio_id = $1 order by orden, nombre`, [n]),
+    q.query(`select id, nombre, empresa from clientes where negocio_id = $1 order by lower(coalesce(empresa, nombre)), lower(nombre)`, [n]),
   ]);
 
   const lista: Persona[] = personas.rows.map((r) => ({
@@ -90,8 +92,8 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
       (r): FinProyecto => ({
         id: r.id,
         nombre: r.nombre,
-        cliente: r.cliente,
-        servicio: r.servicio,
+        clienteId: r.cliente_id,
+        servicioId: r.servicio_id,
         estado: r.estado,
         valor: Number(r.valor),
         fechaCierre: iso(r.fecha_cierre),
@@ -114,5 +116,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
       })
     ),
     gastosFijos: fijos.rows.map((r): GastoFijo => ({ id: r.id, concepto: r.concepto, valorMensual: Number(r.valor_mensual), activo: r.activo })),
+    servicios: servicios.rows.map((r): Servicio => ({ id: r.id, nombre: r.nombre, categoria: r.categoria, activo: r.activo })),
+    clientes: clientes.rows.map((r): ClienteRef => ({ id: r.id, nombre: r.nombre, empresa: r.empresa })),
   };
 }

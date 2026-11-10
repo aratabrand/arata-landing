@@ -22,11 +22,11 @@ export function finanzasDemo(): DatosFinanzas {
     personas,
     config: { ...reglas, reservaMeses: 3, actualizado: null },
     proyectos: [
-      { id: "dp-1", nombre: "Landing restaurante", cliente: "Cliente de ejemplo 1", servicio: "Página web", estado: "cerrado", valor: 1_800_000, fechaCierre: "2026-09-18", repartoCongelado: reglas, notas: null },
-      { id: "dp-2", nombre: "Sitio de servicios", cliente: "Cliente de ejemplo 2", servicio: "Página web", estado: "cerrado", valor: 2_600_000, fechaCierre: "2026-10-09", repartoCongelado: reglas, notas: null },
-      { id: "dp-3", nombre: "Landing con agenda", cliente: "Cliente de ejemplo 3", servicio: "Página web", estado: "cerrado", valor: 2_000_000, fechaCierre: "2026-10-30", repartoCongelado: reglas, notas: null },
-      { id: "dp-4", nombre: "Rediseño de página", cliente: "Cliente de ejemplo 4", servicio: "Página web", estado: "en-curso", valor: 2_200_000, fechaCierre: null, repartoCongelado: null, notas: null },
-      { id: "dp-5", nombre: "Landing de lanzamiento", cliente: "Cliente de ejemplo 5", servicio: "Página web", estado: "propuesta", valor: 1_600_000, fechaCierre: null, repartoCongelado: null, notas: null },
+      { id: "dp-1", nombre: "Landing restaurante", clienteId: "dc-1", servicioId: "ds-1", estado: "cerrado", valor: 1_800_000, fechaCierre: "2026-09-18", repartoCongelado: reglas, notas: null },
+      { id: "dp-2", nombre: "Sitio de servicios", clienteId: "dc-2", servicioId: "ds-1", estado: "cerrado", valor: 2_600_000, fechaCierre: "2026-10-09", repartoCongelado: reglas, notas: null },
+      { id: "dp-3", nombre: "Landing con agenda", clienteId: "dc-3", servicioId: "ds-1", estado: "cerrado", valor: 2_000_000, fechaCierre: "2026-10-30", repartoCongelado: reglas, notas: null },
+      { id: "dp-4", nombre: "Rediseño de página", clienteId: "dc-4", servicioId: "ds-1", estado: "en-curso", valor: 2_200_000, fechaCierre: null, repartoCongelado: null, notas: null },
+      { id: "dp-5", nombre: "Landing de lanzamiento", clienteId: "dc-5", servicioId: "ds-1", estado: "propuesta", valor: 1_600_000, fechaCierre: null, repartoCongelado: null, notas: null },
     ],
     gastos: [
       { id: "dg-1", proyectoId: "dp-1", concepto: "Fotos de banco", categoria: "herramientas", valor: 120_000, fecha: "2026-09-10" },
@@ -47,6 +47,13 @@ export function finanzasDemo(): DatosFinanzas {
       { id: "dh-8", proyectoId: "dp-3", personaId: "d-santiago", area: "Tecnología", horas: 16, fecha: "2026-10-28", nota: null },
       { id: "dh-9", proyectoId: "dp-4", personaId: "d-sergio", area: "Estrategia y diseño", horas: 6, fecha: "2026-11-05", nota: null },
     ],
+    servicios: [
+      { id: "ds-1", nombre: "Página Lista en 5 Días", categoria: "pagina-web", activo: true },
+      { id: "ds-2", nombre: "Tienda por WhatsApp en 5 Días", categoria: "catalogo", activo: true },
+      { id: "ds-3", nombre: "Tu Negocio en Orden", categoria: "sistema", activo: true },
+      { id: "ds-4", nombre: "Mantenimiento mensual", categoria: "mantenimiento", activo: true },
+    ],
+    clientes: [1, 2, 3, 4, 5].map((i) => ({ id: `dc-${i}`, nombre: `Contacto ${i}`, empresa: `Negocio de ejemplo ${i}` })),
     gastosFijos: [
       { id: "df-1", concepto: "Herramientas y suscripciones", valorMensual: 180_000, activo: true },
       { id: "df-2", concepto: "Publicidad propia", valorMensual: 250_000, activo: true },

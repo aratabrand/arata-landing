@@ -36,16 +36,19 @@ export default function PanelShell({
   negocio,
   conSesion = false,
   conFinanzas = false,
+  sinFranja = ["/panel/finanzas", "/panel/equipo"],
   children,
 }: {
   negocio: Negocio;
   conSesion?: boolean;
   conFinanzas?: boolean;
+  /** Rutas con datos reales o aviso propio: no llevan la franja de ejemplo. */
+  sinFranja?: string[];
   children: ReactNode;
 }) {
   const path = usePathname() ?? "/panel";
   const nav = navPanel.filter((n) => conFinanzas || !n.agencia);
-  const enFinanzas = path.startsWith("/panel/finanzas") || path.startsWith("/panel/equipo");
+  const conFranja = !sinFranja.some((r) => path.startsWith(r));
   // Resumen, Clientes, Proyectos y Mi sitio todavía muestran datos de ejemplo (aunque haya sesión real):
   // llevan la franja. Finanzas y Equipo tienen su propio aviso (ejemplo o solo lectura).
   const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
@@ -133,7 +136,7 @@ export default function PanelShell({
         </div>
       </header>
 
-      {!enFinanzas && (
+      {conFranja && (
         <div className="border-b border-brand/30 bg-brand/10 px-4 py-2 text-center text-xs text-brand-soft">
           Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
         </div>

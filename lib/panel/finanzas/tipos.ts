@@ -33,8 +33,9 @@ export type EstadoProyecto = "propuesta" | "en-curso" | "cerrado";
 export type FinProyecto = {
   id: string;
   nombre: string;
-  cliente: string | null;
-  servicio: string | null;
+  /** Cliente y servicio salen de sus tablas (no texto libre, D-109). */
+  clienteId: string | null;
+  servicioId: string | null;
   estado: EstadoProyecto;
   valor: number;
   fechaCierre: string | null; // AAAA-MM-DD
@@ -77,6 +78,23 @@ export type RegistroHoras = {
 
 export type GastoFijo = { id: string; concepto: string; valorMensual: number; activo: boolean };
 
+export const categoriasServicio = [
+  { valor: "pagina-web", label: "Página web" },
+  { valor: "catalogo", label: "Catálogo" },
+  { valor: "sistema", label: "Sistema a medida" },
+  { valor: "mantenimiento", label: "Mantenimiento" },
+  { valor: "otro", label: "Otro" },
+] as const;
+export type CategoriaServicio = (typeof categoriasServicio)[number]["valor"];
+
+export type Servicio = { id: string; nombre: string; categoria: CategoriaServicio; activo: boolean };
+
+/** Cliente para elegir en una lista (los datos completos están en el módulo Clientes). */
+export type ClienteRef = { id: string; nombre: string; empresa: string | null };
+
+/** "Empresa · Contacto" o solo el nombre. */
+export const nombreCliente = (c: ClienteRef | undefined | null) => (!c ? "Sin cliente" : c.empresa ? `${c.empresa} · ${c.nombre}` : c.nombre);
+
 /** Todo lo que necesita la sección de finanzas. */
 export type DatosFinanzas = {
   negocioId: string;
@@ -90,4 +108,6 @@ export type DatosFinanzas = {
   gastos: Gasto[];
   horas: RegistroHoras[];
   gastosFijos: GastoFijo[];
+  servicios: Servicio[];
+  clientes: ClienteRef[];
 };
