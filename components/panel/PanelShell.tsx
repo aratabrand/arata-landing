@@ -1,0 +1,129 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+import { ArrowUpRight, Globe, LayoutDashboard, MessageCircle, SquareKanban, Users } from "lucide-react";
+import Logo from "@/components/Logo";
+import type { Negocio } from "@/content/panel/tipos";
+import { cn } from "@/lib/utils";
+
+// Marco del panel (docs/panel-cliente/03-sistema-de-diseno.md §3):
+// - Escritorio (≥1024 px): barra lateral fija de 248 px.
+// - Celular: barra superior + pestañas abajo (zona del pulgar), 4 opciones.
+// Fondo único ink, igual que el sitio v2.
+
+export const navPanel = [
+  { href: "/panel", label: "Resumen", icon: LayoutDashboard },
+  { href: "/panel/clientes", label: "Clientes", icon: Users },
+  { href: "/panel/proyectos", label: "Proyectos", icon: SquareKanban },
+  { href: "/panel/sitio", label: "Mi sitio", icon: Globe },
+] as const;
+
+const activo = (path: string, href: string) => (href === "/panel" ? path === href : path.startsWith(href));
+
+export default function PanelShell({ negocio, children }: { negocio: Negocio; children: ReactNode }) {
+  const path = usePathname() ?? "/panel";
+  const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
+
+  return (
+    <div className="min-h-screen lg:pl-[248px]">
+      {/* ── Barra lateral (escritorio) ── */}
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col border-r border-white/8 bg-[#06040F] lg:flex">
+        <div className="flex h-16 items-center px-6">
+          <Link href="/panel" aria-label="Inicio del panel">
+            <Logo className="h-[18px] w-auto" />
+          </Link>
+        </div>
+
+        <div className="mx-4 mb-4 rounded-frame border border-white/8 bg-surface-1 p-3">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Tu negocio</p>
+          <p className="mt-1 truncate font-display text-[0.95rem] font-bold text-white">{negocio.nombre}</p>
+          <p className="truncate text-xs text-fog-dim">{negocio.plan}</p>
+        </div>
+
+        <nav aria-label="Panel" className="flex flex-1 flex-col gap-1 px-3">
+          {navPanel.map(({ href, label, icon: Icon }) => {
+            const on = activo(path, href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={on ? "page" : undefined}
+                className={cn(
+                  "group flex h-11 items-center gap-3 rounded-btn px-3 text-sm font-medium transition-colors",
+                  on ? "bg-surface-2 text-white" : "text-fog hover:bg-surface-1 hover:text-white"
+                )}
+              >
+                <Icon aria-hidden className={cn("h-[18px] w-[18px]", on ? "text-lime" : "text-fog-dim group-hover:text-white")} />
+                {label}
+                {on && <span aria-hidden className="ml-auto h-1.5 w-1.5 rounded-full bg-lime" />}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="space-y-2 p-4">
+          <a
+            href={negocio.sitio}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-10 items-center justify-between rounded-btn px-3 text-sm text-fog transition-colors hover:bg-surface-1 hover:text-white"
+          >
+            Ver mi página
+            <ArrowUpRight aria-hidden className="h-4 w-4" />
+          </a>
+          <a
+            href={soporte}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 items-center justify-center gap-2 rounded-btn border border-white/10 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-brand/60"
+          >
+            <MessageCircle aria-hidden className="h-4 w-4 text-lime" />
+            Escribirle a Arata San
+          </a>
+        </div>
+      </aside>
+
+      {/* ── Barra superior (celular) ── */}
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/8 bg-ink/85 px-4 backdrop-blur-xl lg:hidden">
+        <Link href="/panel" aria-label="Inicio del panel">
+          <Logo className="h-4 w-auto" />
+        </Link>
+        <span className="max-w-[55%] truncate text-xs font-medium text-fog">{negocio.nombre}</span>
+      </header>
+
+      {negocio.demo && (
+        <div className="border-b border-brand/30 bg-brand/10 px-4 py-2 text-center text-xs text-brand-soft">
+          Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
+        </div>
+      )}
+
+      <main className="pb-28 lg:pb-12">{children}</main>
+
+      {/* ── Pestañas abajo (celular) ── */}
+      <nav
+        aria-label="Panel"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-white/8 bg-[#06040F]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+      >
+        <ul className="grid grid-cols-4">
+          {navPanel.map(({ href, label, icon: Icon }) => {
+            const on = activo(path, href);
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  aria-current={on ? "page" : undefined}
+                  className={cn("flex h-16 flex-col items-center justify-center gap-1 text-[0.7rem] font-medium", on ? "text-white" : "text-fog-dim")}
+                >
+                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-lime")} />
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
+  );
+}

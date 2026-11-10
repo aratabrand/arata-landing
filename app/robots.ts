@@ -5,7 +5,8 @@ import { site } from "@/lib/site";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: "*", allow: "/" },
+      // El panel del cliente es privado (docs/panel-cliente/): no se rastrea.
+      { userAgent: "*", allow: "/", disallow: ["/panel"] },
       {
         userAgent: [
           "GPTBot",
@@ -21,6 +22,7 @@ export default function robots(): MetadataRoute.Robots {
           "CCBot",
         ],
         allow: "/",
+        disallow: ["/panel"],
       },
     ],
     sitemap: `${site.url}/sitemap.xml`,

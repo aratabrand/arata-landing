@@ -230,4 +230,16 @@ La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de 
 
 ---
 
+## 12. Panel del cliente (desde nov 2026)
+
+Panel que se le entrega a cada cliente: **Resumen** (ventas, visitas, Instagram, clientes que compran), **Clientes**, **Proyectos** (tablero por fases) y **Mi sitio** (títulos, descripciones, botones). Mismo sistema v2 (solo fondo `#03010B`).
+
+- **Antes de trabajar en el panel, lee [`docs/panel-cliente/README.md`](docs/panel-cliente/README.md).** Es el blueprint para repetirlo en cada cliente.
+- Rutas en `app/(panel)/panel/`, componentes en `components/panel/`, contrato de datos en `content/panel/tipos.ts`, datos solo por `lib/panel/datos.ts` (`obtenerPanel()`).
+- Hoy usa un negocio **de ejemplo** marcado en pantalla (`negocio.demo`). Nunca mostrar datos demo a un cliente real.
+- Fase real: Supabase con RLS por `negocio_id` + n8n (GA4, Instagram, ventas). Panel siempre `noindex` y bloqueado en `robots.txt`.
+- Palabras del panel: "clientes que compran" (no "conversión"), "visitas", "visualizaciones", "portada", "botón" (glosario en `docs/panel-cliente/03-sistema-de-diseno.md` §7).
+
+---
+
 *Este archivo reemplaza cualquier versión previa del sistema de marca. Última consolidación de contexto.*
