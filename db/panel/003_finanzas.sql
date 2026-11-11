@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════
--- Panel de Arata San · 003 · Finanzas y equipo (D-108)
+-- Panel de Arata San · 003 · Finanzas y equipo (D-109)
 -- SOLO para el negocio de tipo 'agencia' (Arata San). Nunca para clientes
 -- de página web ni catálogos: la base lo impide con un trigger.
 --

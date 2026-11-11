@@ -6,7 +6,7 @@ import { finanzasDemo } from "./demo";
 import type { FinTarea } from "./procesos";
 
 // Lectura de Finanzas y Equipo (solo servidor). Solo el negocio de tipo 'agencia'
-// donde la persona en sesión es miembro. Rol 'dueno' edita; los demás solo ven (D-108).
+// donde la persona en sesión es miembro. Rol 'dueno' edita; los demás solo ven (D-109).
 
 export type ContextoAgencia = { negocioId: string; usuarioId: string; rol: string; puedeEditar: boolean };
 

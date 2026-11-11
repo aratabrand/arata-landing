@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 // Se trabaja sobre un BORRADOR: nada cambia hasta "Guardar cambios".
 // Dos modos:
 // - Ejemplo (sin conexión): guarda en el navegador (useGuardado).
-// - Arata San (D-110): arranca con lo que publica aratasan.com y guarda en Neon con historial.
+// - Arata San (D-111): arranca con lo que publica aratasan.com y guarda en Neon con historial.
 
 /** Datos del modo real de Arata San. */
 export type Remoto = { puedeEditar: boolean; fuente: "sitio" | "panel"; publicado: Config };

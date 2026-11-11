@@ -4,7 +4,7 @@
 |---|---|---|---|
 | En revisión | 0.1 | 10 nov 2026 | Sergio |
 
-> **Solo para la agencia (D-108).** Finanzas y Equipo existen únicamente para el negocio de tipo `agencia` (Arata San). Nunca aparecen en el panel de un cliente de página web, y la base de datos rechaza finanzas para cualquier otro negocio (trigger `exigir_agencia`).
+> **Solo para la agencia (D-109).** Finanzas y Equipo existen únicamente para el negocio de tipo `agencia` (Arata San). Nunca aparecen en el panel de un cliente de página web, y la base de datos rechaza finanzas para cualquier otro negocio (trigger `exigir_agencia`).
 
 ---
 
@@ -135,7 +135,7 @@ Base local (PGlite), `next build` + `next start`, Chromium. 22 de 22 ✅:
 | La base rechaza crear finanzas para un cliente de página web | ✅ |
 | Celular (iPhone 13): las 5 pestañas y Equipo sin scroll horizontal | ✅ |
 
-## 8b. Clientes y servicios como listas (D-109)
+## 8b. Clientes y servicios como listas (D-110)
 
 En un proyecto, **cliente y servicio se eligen de una lista**: no se escriben a mano, para que no haya dos formas de escribir lo mismo.
 
@@ -148,7 +148,7 @@ Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda
 
 **Módulo Clientes (datos reales, solo Arata):** lista con búsqueda, filtro "En curso" y por origen; cada cliente muestra estado, "Proyecto en curso", último servicio y cuánto ha comprado (proyectos cerrados). La ficha trae datos de contacto, de dónde llegó (origen + detalle), todos sus servicios y proyectos con estado y valor, notas y botón de WhatsApp. Sergio edita; Andrés y Santiago solo ven.
 
-## 8c. Proyectos en grid con su proceso (D-111)
+## 8c. Proyectos en grid con su proceso (D-112)
 
 `/panel/proyectos` (Arata con sesión) muestra **una tarjeta por proyecto**: servicio, nombre, cliente, estado comercial, **etapa actual** con el siguiente paso, las 5 etapas, la fecha de entrega (aviso si va tarde) y **abajo la barra de avance** (pasos hechos / total). Filtros: En proceso · Entregados · Todos; resumen con cuántos van tarde. Cada tarjeta abre `/panel/proyectos/[id]`.
 
@@ -165,7 +165,7 @@ Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda
 
 Migración `db/panel/005_proceso.sql`: `fin_proyectos.fecha_inicio`, `fecha_limite` y tabla `fin_tareas`.
 
-## 8d. Resumen con datos reales y equipo que marca pasos (D-112, D-113)
+## 8d. Resumen con datos reales y equipo que marca pasos (D-113, D-114)
 
 **Resumen (`/panel`) de Arata**, con selector 30 días · 90 días · 1 año y comparación con el periodo anterior:
 
@@ -184,7 +184,7 @@ Migración `db/panel/005_proceso.sql`: `fin_proyectos.fecha_inicio`, `fecha_limi
 
 Regla: un proyecto **cerrado sin pasos** cuenta como entregado (proyectos viejos de antes del panel). Cálculos en `lib/panel/resumen/agencia.ts`, prueba `npx -y tsx scripts/prueba-resumen.ts` (12 casos).
 
-**Equipo marca pasos (D-112):** Andrés y Santiago pueden **marcar y desmarcar** pasos de los proyectos; agregar, quitar o editar sigue siendo de Sergio, igual que todo el dinero. Cada paso guarda quién lo marcó y cuándo ("Lo marcó Andrés · 10 nov"). Migración `006_quien_marca.sql`.
+**Equipo marca pasos (D-113):** Andrés y Santiago pueden **marcar y desmarcar** pasos de los proyectos; agregar, quitar o editar sigue siendo de Sergio, igual que todo el dinero. Cada paso guarda quién lo marcó y cuándo ("Lo marcó Andrés · 10 nov"). Migración `006_quien_marca.sql`.
 
 ## 9. Pendiente
 

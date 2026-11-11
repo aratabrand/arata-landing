@@ -15,7 +15,7 @@ import GastosFin from "./GastosFin";
 import RepartoFin from "./RepartoFin";
 import { cn } from "@/lib/utils";
 
-// Módulo Finanzas (solo Arata San, D-108): resumen, proyectos, gastos, reparto y proyección.
+// Módulo Finanzas (solo Arata San, D-109): resumen, proyectos, gastos, reparto y proyección.
 // docs/panel-cliente/06-finanzas.md
 
 type Vista = "resumen" | "proyectos" | "gastos" | "reparto" | "proyeccion";

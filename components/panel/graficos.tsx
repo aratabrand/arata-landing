@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { onInView } from "@/lib/inview";
+import { onInView } from "@/lib/panel/inview";
 import { cn } from "@/lib/utils";
 
 // Gráficos del panel en SVG propio, sin librerías (CLAUDE.md §9-10).

@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════
--- Panel de Arata San · 005 · Proceso de entrega de cada proyecto (D-111)
+-- Panel de Arata San · 005 · Proceso de entrega de cada proyecto (D-112)
 -- Cada proyecto tiene pasos por etapa (arranque → diseño → construcción →
 -- revisión → entrega). La etapa actual y el avance se CALCULAN de los pasos:
 -- etapa = la del primer paso sin terminar; avance = hechos / total.

@@ -14,7 +14,7 @@ import { FormProyecto } from "../finanzas/ProyectosFin";
 import { diasHasta } from "./ProyectosAgencia";
 import { cn } from "@/lib/utils";
 
-// Detalle de un proyecto de Arata (D-111): proceso por etapas con sus pasos,
+// Detalle de un proyecto de Arata (D-112): proceso por etapas con sus pasos,
 // avance, fechas, cliente, servicio y horas. Sergio marca pasos; el equipo ve.
 
 const comercial = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "En curso", t: "morado" }, cerrado: { l: "Cerrado", t: "lima" } } as const;

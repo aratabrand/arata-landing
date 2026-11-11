@@ -5,7 +5,7 @@ import type { ConfigSitio } from "@/content/panel/tipos";
 import { AGENDAR, hero, menu, seoInicio } from "@/content/inicio";
 import { site } from "@/lib/site";
 
-// "Mi sitio" de Arata San con datos reales (D-110).
+// "Mi sitio" de Arata San con datos reales (D-111).
 // Fuente: lo que hoy publica aratasan.com (content/inicio.ts). Si Sergio ya guardó
 // cambios en el panel, se muestra lo guardado (config_sitio) y se avisa qué difiere.
 

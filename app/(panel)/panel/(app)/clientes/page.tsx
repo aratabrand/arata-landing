@@ -6,7 +6,7 @@ import { cargarClientesAgencia } from "@/lib/panel/clientes/datos";
 
 export const metadata: Metadata = { title: "Clientes" };
 
-// Arata San con sesión: clientes reales desde Neon (D-109). Si no, el ejemplo.
+// Arata San con sesión: clientes reales desde Neon (D-110). Si no, el ejemplo.
 export default async function PanelClientesPage() {
   const real = await cargarClientesAgencia();
   if (real) return <ClientesAgencia datos={real} />;

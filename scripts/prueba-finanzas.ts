@@ -1,4 +1,4 @@
-// Prueba de los cálculos de finanzas (D-108). Correr:  npx -y tsx scripts/prueba-finanzas.ts
+// Prueba de los cálculos de finanzas (D-109). Correr:  npx -y tsx scripts/prueba-finanzas.ts
 // Cada línea debe salir con ✓. Si cambias lib/panel/finanzas/calculo.ts, córrela antes de subir.
 import { calcularProyecto, resumenFinanzas, proyectar, validarReglas, participacionHistorica } from "../lib/panel/finanzas/calculo";
 import type { DatosFinanzas } from "../lib/panel/finanzas/tipos";

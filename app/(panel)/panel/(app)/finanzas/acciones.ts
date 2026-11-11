@@ -8,7 +8,7 @@ import { validarReglas } from "@/lib/panel/finanzas/calculo";
 import { categoriasGasto, categoriasServicio, type CategoriaServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
 import { etapas, plantillas } from "@/lib/panel/finanzas/procesos";
 
-// Acciones de Finanzas (D-108). Cada una, en el servidor:
+// Acciones de Finanzas (D-109). Cada una, en el servidor:
 //   1. sesión completa con doble factor, 2. negocio de tipo 'agencia',
 //   3. rol 'dueno' (Andrés y Santiago solo ven), 4. valida los datos,
 //   5. escribe filtrando SIEMPRE por negocio_id (nunca confía en el id que manda el navegador).
@@ -117,7 +117,7 @@ export async function guardarProyecto(entrada: {
   return ejecutar(async () => {
     const ctx = await dueno();
     const nombre = texto(entrada.nombre, 2, 90, "Nombre del proyecto");
-    // Cliente y servicio: solo de sus tablas y del mismo negocio (D-109)
+    // Cliente y servicio: solo de sus tablas y del mismo negocio (D-110)
     const cliente = entrada.clienteId ? uuid(entrada.clienteId) : null;
     const servicio = entrada.servicioId ? uuid(entrada.servicioId) : null;
     if (!cliente) return NO("Elige el cliente de la lista.");
@@ -154,7 +154,7 @@ export async function guardarProyecto(entrada: {
          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`,
         [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite]
       );
-      // El proceso de entrega arranca con los pasos del servicio (D-111)
+      // El proceso de entrega arranca con los pasos del servicio (D-112)
       await cargarPasos(nuevo.rows[0].id, servicio);
       return { ok: true, id: nuevo.rows[0].id };
     }
@@ -206,7 +206,7 @@ export async function cargarProceso(proyectoId: string) {
   });
 }
 
-/** Marca o desmarca un paso. Cualquier miembro de la agencia puede (D-112); queda quién fue. */
+/** Marca o desmarca un paso. Cualquier miembro de la agencia puede (D-113); queda quién fue. */
 export async function marcarPaso(tareaId: string, hecha: boolean) {
   return ejecutar(async () => {
     if (!panelActivo) throw new Error("El panel está en modo ejemplo: los cambios no se guardan.");

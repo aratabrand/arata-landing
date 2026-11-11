@@ -2,7 +2,7 @@ import { db } from "../db";
 import { panelActivo } from "../config";
 import { contextoAgencia } from "../finanzas/datos";
 
-// Clientes de Arata San (solo servidor, D-109): datos de cada cliente, de dónde
+// Clientes de Arata San (solo servidor, D-110): datos de cada cliente, de dónde
 // vino y sus proyectos (servicio, estado, valor) desde Finanzas.
 
 export const origenesCliente = ["Instagram", "Google", "WhatsApp", "Referido", "Página", "Publicidad", "Evento", "Otro"] as const;

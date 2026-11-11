@@ -47,6 +47,37 @@ const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
 ];
 
+// Panel en su propio proyecto de Vercel (D-115): el MISMO repositorio se publica dos veces.
+// - Proyecto del panel: PANEL_SOLO=1 → panel.aratasan.com abre el panel y todo lo demás va a www.
+// - Proyecto del sitio: PANEL_URL=https://panel.aratasan.com → /panel… redirige al subdominio.
+// - Local (sin ninguna): todo igual, el panel en localhost:3000/panel.
+// Son redirecciones fijas (no corren código): las páginas públicas no pagan nada extra.
+const PANEL_SOLO = process.env.PANEL_SOLO === "1";
+const PANEL_URL = (process.env.PANEL_URL ?? "").replace(/\/$/, "");
+const SITIO = "https://www.aratasan.com";
+
+function redireccionesPanel() {
+  if (PANEL_SOLO) {
+    return [
+      { source: "/", destination: "/panel", permanent: false },
+      // Todo lo que no sea panel, su API, los archivos de Next o robots/ícono → al sitio público
+      {
+        source: "/:ruta((?!panel(?:/|$)|api/auth/|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
+        destination: `${SITIO}/:ruta`,
+        permanent: false,
+      },
+    ];
+  }
+  if (PANEL_URL) {
+    return [
+      { source: "/panel", destination: `${PANEL_URL}/panel`, permanent: false },
+      { source: "/panel/:ruta*", destination: `${PANEL_URL}/panel/:ruta*`, permanent: false },
+      { source: "/api/auth/:ruta*", destination: `${PANEL_URL}/api/auth/:ruta*`, permanent: false },
+    ];
+  }
+  return [];
+}
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // no revelar "X-Powered-By: Next.js"
@@ -57,7 +88,7 @@ const nextConfig = {
   },
   // Lanzamiento v2 (D-091): la muestra /v2 pasó a ser el Inicio.
   async redirects() {
-    return [{ source: "/v2", destination: "/", permanent: true }];
+    return [{ source: "/v2", destination: "/", permanent: true }, ...redireccionesPanel()];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

@@ -3,7 +3,7 @@ import { calcularProyecto } from "../finanzas/calculo";
 import { avance, estaEntregado } from "../finanzas/procesos";
 import type { ClienteAgencia } from "../clientes/datos";
 
-// Resumen de Arata San con datos reales (D-113). Funciones puras.
+// Resumen de Arata San con datos reales (D-114). Funciones puras.
 // Venta = proyecto cerrado (por fecha de cierre). Compara el periodo con el anterior del mismo largo.
 
 export type PeriodoResumen = 30 | 90 | 365;

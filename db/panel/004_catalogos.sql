@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════
--- Panel de Arata San · 004 · Clientes y servicios como listas (D-109)
+-- Panel de Arata San · 004 · Clientes y servicios como listas (D-110)
 -- Los proyectos ya no guardan el cliente ni el servicio como texto libre:
 -- se eligen de una tabla, para que no haya dos formas de escribir lo mismo.
 -- ════════════════════════════════════════════════════════════════════

@@ -9,7 +9,7 @@ import { hoyColombia } from "@/lib/panel/fecha";
 
 export const metadata: Metadata = { title: "Resumen" };
 
-// Arata San con sesión: resumen con datos reales (D-113). Si no, el ejemplo.
+// Arata San con sesión: resumen con datos reales (D-114). Si no, el ejemplo.
 export default async function PanelResumenPage() {
   if (panelActivo) {
     const [fin, cli] = await Promise.all([cargarFinanzas(), cargarClientesAgencia()]);

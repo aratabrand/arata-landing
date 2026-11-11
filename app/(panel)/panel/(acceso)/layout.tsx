@@ -1,12 +1,11 @@
 import Link from "next/link";
-import Logo from "@/components/Logo";
-import { Glow } from "@/components/v2/primitives";
+import Logo from "@/components/panel/LogoPanel";
 
 // Pantallas de acceso: centradas, sin menú del panel.
 export default function AccesoLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-12">
-      <Glow className="left-1/2 top-[-12%] h-[420px] w-[640px] -translate-x-1/2" />
+      <div aria-hidden className="v2-glow left-1/2 top-[-12%] h-[420px] w-[640px] -translate-x-1/2" />
       <Link href="/" aria-label="Arata San, ir al sitio" className="mb-8">
         <Logo className="h-5 w-auto" />
       </Link>

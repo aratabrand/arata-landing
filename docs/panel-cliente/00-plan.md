@@ -23,7 +23,7 @@ Que Arata San (primero) y después cada cliente de página web **vea en un solo 
 
 ## 2. Para quién
 
-> **A quién aplica (D-105):** primero **Arata San** (Sergio lo prueba con la agencia). Después, solo clientes de **página web**. Los clientes de **catálogo** (Arata Print, Caravana…) **no** usan este panel: tienen su propio sistema y su propia base de datos. No se mezclan ni en código ni en base de datos.
+> **A quién aplica (D-106):** primero **Arata San** (Sergio lo prueba con la agencia). Después, solo clientes de **página web**. Los clientes de **catálogo** (Arata Print, Caravana…) **no** usan este panel: tienen su propio sistema y su propia base de datos. No se mezclan ni en código ni en base de datos.
 
 | Orden | Quién | Para qué |
 |---|---|---|
@@ -59,7 +59,7 @@ Consecuencias de diseño:
 
 ### Fase siguiente (para el primer cliente real)
 
-- ✅ Inicio de sesión con contraseña + doble factor (Better Auth, D-107).
+- ✅ Inicio de sesión con contraseña + doble factor (Better Auth, D-108).
 - ✅ Tablas en Neon; cada consulta se limita a los negocios del usuario.
 - Flujos de n8n que llenan las métricas diarias (GA4, Instagram, ventas).
 - "Guardar" en Mi sitio escribe en Neon y actualiza la página del cliente.
@@ -79,8 +79,8 @@ Consecuencias de diseño:
 | 0 | Plan y módulos (este archivo) | Sergio aprueba alcance | En revisión |
 | 1 | Arquitectura y copy de cada módulo | Sergio aprueba textos y orden | En revisión |
 | 2 | Diseño (sistema v2 aplicado al panel) | Sergio aprueba en el preview | En revisión |
-| 3 | Construcción con datos de ejemplo | Funciona en celular y escritorio | ✅ Hecho (D-101) |
-| 4a | Acceso (contraseña + doble factor) y base de datos | Prueba de seguridad pasa (05 §6) | ✅ Código, SQL y pruebas listos (D-107); falta crear el proyecto en Neon |
+| 3 | Construcción con datos de ejemplo | Funciona en celular y escritorio | ✅ Hecho (D-102) |
+| 4a | Acceso (contraseña + doble factor) y base de datos | Prueba de seguridad pasa (05 §6) | ✅ Código, SQL y pruebas listos (D-108); falta crear el proyecto en Neon |
 | 4b | Módulos leen y escriben en Neon; n8n llena métricas | Sergio lo usa con datos de Arata | Pendiente |
 | 5 | Prueba con Arata San | Sergio lo usa 2 semanas | Pendiente |
 | 6 | Primer cliente de página web | El cliente lo usa 2 semanas | Pendiente |
@@ -92,7 +92,7 @@ Consecuencias de diseño:
 | # | Pregunta | Opciones | Quién decide |
 |---|---|---|---|
 | P-1 | ¿El panel va incluido en la mensualidad o es un adicional? | Incluido en el mantenimiento (15 %) · Adicional mensual | Sergio + Andrés |
-| P-2 | ¿Dónde vive cada panel? | Un solo proyecto multi-cliente (`panel.aratasan.com`, recomendado) · Un despliegue por cliente. **Base de datos: decidido**, Neon `arata-panel` + Better Auth (D-107) | Santiago |
+| P-2 | ¿Dónde vive cada panel? | Un solo proyecto multi-cliente (`panel.aratasan.com`, recomendado) · Un despliegue por cliente. **Base de datos: decidido**, Neon `arata-panel` + Better Auth (D-108) | Santiago |
 | P-3 | ¿Qué cuenta como "venta" para clientes sin tienda en línea? | Pedido registrado a mano en el panel · Pedido que llega por WhatsApp (n8n) · Ventas de Shopify/Wompi | Santiago, por cliente |
 | P-4 | ¿Qué campos del sitio puede editar el cliente? | Hoy: SEO, portada, anuncio y botones. ¿Precios, fotos, horarios? | Sergio |
 | P-5 | Nombre del producto para venderlo | "Panel", "Tu tablero", otro | Sergio |

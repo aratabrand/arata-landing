@@ -13,7 +13,7 @@ import { Delta, PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { Segmentado } from "./Resumen";
 import { cn } from "@/lib/utils";
 
-// Resumen de Arata San con datos reales (D-113).
+// Resumen de Arata San con datos reales (D-114).
 // Venta = proyecto cerrado. Visitas e Instagram quedan marcados como pendientes
 // hasta conectar Google Analytics y Meta (no se muestran números inventados).
 

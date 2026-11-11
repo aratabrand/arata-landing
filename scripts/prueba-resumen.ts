@@ -1,4 +1,4 @@
-// Prueba del Resumen de Arata (D-113). Correr:  npx -y tsx scripts/prueba-resumen.ts  — todo debe salir con ✓.
+// Prueba del Resumen de Arata (D-114). Correr:  npx -y tsx scripts/prueba-resumen.ts  — todo debe salir con ✓.
 import { resumenAgencia } from "../lib/panel/resumen/agencia";
 const ok=(c:boolean,m:string)=>{console.log((c?"✓ ":"✗ ")+m); if(!c) process.exitCode=1;};
 const reglas={bolsaTrabajoPct:30,reparto:[{beneficiario:"empresa",pct:100}]};

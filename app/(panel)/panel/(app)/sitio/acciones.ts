@@ -8,7 +8,7 @@ import { errores, LIM } from "@/lib/panel/sitio/reglas";
 import type { ConfigSitio } from "@/content/panel/tipos";
 import type { Resultado } from "../finanzas/acciones";
 
-// Guarda "Mi sitio" de Arata San (D-110). Revalida en el servidor con las mismas reglas
+// Guarda "Mi sitio" de Arata San (D-111). Revalida en el servidor con las mismas reglas
 // de la pantalla. Cada guardado deja una versión (config_sitio_versiones).
 export async function guardarSitio(entrada: ConfigSitio): Promise<Resultado> {
   try {

@@ -1,8 +1,8 @@
 -- ════════════════════════════════════════════════════════════════════
 -- Panel de Arata San · 002 · Datos del panel
--- Base: Neon, proyecto "arata-panel" (D-107).
+-- Base: Neon, proyecto "arata-panel" (D-108).
 -- ⚠ Solo Arata San y clientes de PÁGINA WEB. Los catálogos (Arata Print,
---   Caravana) tienen su propio sistema y su propia base: no van aquí (D-105).
+--   Caravana) tienen su propio sistema y su propia base: no van aquí (D-106).
 --
 -- Seguridad: la base NO se expone al navegador. Solo el servidor de Next se
 -- conecta (DATABASE_URL) y cada consulta filtra por los negocios del usuario

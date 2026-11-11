@@ -9,7 +9,7 @@ import {
   type ReglasReparto,
 } from "./tipos";
 
-// Cálculos de finanzas (D-108). Funciones puras: sin base de datos ni pantalla.
+// Cálculos de finanzas (D-109). Funciones puras: sin base de datos ni pantalla.
 // docs/panel-cliente/06-finanzas.md §2 explica cada fórmula con un ejemplo.
 //
 //   ganancia        = valor − gastos del proyecto

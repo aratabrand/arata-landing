@@ -3,6 +3,8 @@ import { site } from "@/lib/site";
 
 // Permite a todos los buscadores y, explícitamente, a los bots de IA (GEO).
 export default function robots(): MetadataRoute.Robots {
+  // Proyecto del panel (panel.aratasan.com, D-115): nada se rastrea
+  if (process.env.PANEL_SOLO === "1") return { rules: [{ userAgent: "*", disallow: "/" }] };
   return {
     rules: [
       // El panel del cliente es privado (docs/panel-cliente/): no se rastrea.

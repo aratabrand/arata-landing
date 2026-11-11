@@ -1,6 +1,6 @@
 import type { CategoriaServicio } from "./tipos";
 
-// Proceso de entrega por servicio (D-111). Los pasos de "Página Lista en 5 Días"
+// Proceso de entrega por servicio (D-112). Los pasos de "Página Lista en 5 Días"
 // son los que promete el sitio (content/servicios.ts: "Cómo son los 5 días" y
 // "Para entregarte en 5 días, necesitamos"). Funciones puras.
 
@@ -90,7 +90,7 @@ export const etiquetaEtapa = (e: Etapa | null, entregado = false) => (entregado 
 
 /**
  * ¿El proyecto ya se entregó? Sí si todos sus pasos están hechos, o si se cerró la
- * venta y nunca tuvo pasos (proyectos viejos, de antes del panel). D-113.
+ * venta y nunca tuvo pasos (proyectos viejos, de antes del panel). D-114.
  */
 export const estaEntregado = (estado: "propuesta" | "en-curso" | "cerrado", a: ReturnType<typeof avance>) =>
   a.entregado || (a.total === 0 && estado === "cerrado");

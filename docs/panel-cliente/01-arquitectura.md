@@ -93,7 +93,7 @@ Tablero tipo to-do con **5 fases**:
 
 ### 2.4 Mi sitio (`/panel/sitio`)
 
-> **Arata San (D-110):** arranca con los textos y botones que **hoy publica aratasan.com** (`content/inicio.ts`: `seoInicio`, `hero`, `menu.cta`). Guardar los deja en Neon (`config_sitio` + historial) y el panel avisa qué queda **pendiente de publicar**. Todavía no se publican solos en el sitio: falta conectar el sitio a esa tabla (pendiente, requiere aprobación porque toca el sitio publicado). Al importar, el panel mostró que el título de Google del Inicio tiene **73 caracteres** y la descripción **178** (Google muestra ~60 y ~155).
+> **Arata San (D-111):** arranca con los textos y botones que **hoy publica aratasan.com** (`content/inicio.ts`: `seoInicio`, `hero`, `menu.cta`). Guardar los deja en Neon (`config_sitio` + historial) y el panel avisa qué queda **pendiente de publicar**. Todavía no se publican solos en el sitio: falta conectar el sitio a esa tabla (pendiente, requiere aprobación porque toca el sitio publicado). Al importar, el panel mostró que el título de Google del Inicio tiene **73 caracteres** y la descripción **178** (Google muestra ~60 y ~155).
 
 Se trabaja sobre un **borrador**: nada cambia en la página hasta **Guardar cambios**.
 

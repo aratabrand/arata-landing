@@ -7,7 +7,7 @@ import { contextoAgencia, negocioAgencia } from "@/lib/panel/finanzas/datos";
 
 // Barrera real del panel: sesión válida en la base + doble factor activo.
 // Finanzas y Equipo solo aparecen para miembros de la agencia (Arata San), nunca
-// para clientes de página web (D-108).
+// para clientes de página web (D-109).
 export default async function PanelAppLayout({ children }: { children: React.ReactNode }) {
   let conFinanzas = true; // modo ejemplo: se muestran con datos ficticios
   // Rutas que no llevan la franja de "panel de ejemplo" (tienen datos reales o su propio aviso)
@@ -23,7 +23,7 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
     const real = ctx ? await negocioAgencia(ctx.negocioId) : null;
     if (real) {
       negocio = real;
-      // Todo el panel de Arata ya usa datos reales (D-109 a D-113): sin franja de ejemplo
+      // Todo el panel de Arata ya usa datos reales (D-110 a D-114): sin franja de ejemplo
       sinFranja = ["/panel"];
     }
   }

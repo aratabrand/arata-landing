@@ -10,7 +10,7 @@ import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
-// Clientes de Arata San con datos reales (D-109): quién es, de dónde llegó,
+// Clientes de Arata San con datos reales (D-110): quién es, de dónde llegó,
 // qué servicios ha pedido y si hay un proyecto en curso. Los proyectos vienen de Finanzas.
 
 const ORIGENES = ["Instagram", "Google", "WhatsApp", "Referido", "Página", "Publicidad", "Evento", "Otro"] as const;

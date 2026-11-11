@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { ArrowUpRight, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users, UsersRound, Wallet } from "lucide-react";
-import Logo from "@/components/Logo";
+import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
 import { RUTA_ENTRAR } from "@/lib/panel/config";
@@ -24,7 +24,7 @@ export const navPanel = [
   { href: "/panel", label: "Resumen", icon: LayoutDashboard, agencia: false },
   { href: "/panel/clientes", label: "Clientes", icon: Users, agencia: false },
   { href: "/panel/proyectos", label: "Proyectos", icon: SquareKanban, agencia: false },
-  // Solo Arata San (D-108): nunca se muestran a clientes de página web
+  // Solo Arata San (D-109): nunca se muestran a clientes de página web
   { href: "/panel/finanzas", label: "Finanzas", icon: Wallet, agencia: true },
   { href: "/panel/equipo", label: "Equipo", icon: UsersRound, agencia: true },
   { href: "/panel/sitio", label: "Mi sitio", icon: Globe, agencia: false },

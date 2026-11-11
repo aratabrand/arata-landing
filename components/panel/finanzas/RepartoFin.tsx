@@ -11,7 +11,7 @@ import { BotonPrincipal, BotonSecundario, MensajeError, nombreDe, useAccion } fr
 import { cn } from "@/lib/utils";
 
 // Reglas del reparto: % de la bolsa de trabajo, % de cada socio y de la empresa, y meses de reserva.
-// Los proyectos cerrados conservan los % con que se cerraron (D-108).
+// Los proyectos cerrados conservan los % con que se cerraron (D-109).
 export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
   const edita = datos.puedeEditar;
   // Filas: cada persona activa + la empresa (las que ya tenían % se conservan)

@@ -12,7 +12,7 @@ import { AvisoAcceso, BotonPrincipal } from "../finanzas/comun";
 import { FormProyecto } from "../finanzas/ProyectosFin";
 import { cn } from "@/lib/utils";
 
-// Proyectos de Arata San en grid (D-111): cada tarjeta muestra en qué etapa va,
+// Proyectos de Arata San en grid (D-112): cada tarjeta muestra en qué etapa va,
 // el siguiente paso, la fecha de entrega y abajo el avance. Clic → detalle.
 
 type Filtro = "proceso" | "entregados" | "todos";

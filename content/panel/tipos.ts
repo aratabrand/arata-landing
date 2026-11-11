@@ -5,7 +5,7 @@
 /** Negocio dueño del panel. Una fila por cliente de Arata San. */
 export type Negocio = {
   id: string;
-  /** Solo la agencia y clientes de página web. Los catálogos tienen su propio sistema (D-105). */
+  /** Solo la agencia y clientes de página web. Los catálogos tienen su propio sistema (D-106). */
   tipo: "agencia" | "pagina-web";
   nombre: string;
   /** Cómo saludar en el panel ("Hola, Rosa"). */

@@ -7,7 +7,7 @@ import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { estadosCliente, origenesCliente } from "@/lib/panel/clientes/datos";
 import type { Resultado } from "../finanzas/acciones";
 
-// Acciones de Clientes de Arata San (D-109). Mismas reglas que Finanzas:
+// Acciones de Clientes de Arata San (D-110). Mismas reglas que Finanzas:
 // sesión con doble factor, negocio agencia, rol dueno y filtro por negocio_id.
 
 const NO = (error: string): Resultado => ({ ok: false, error });

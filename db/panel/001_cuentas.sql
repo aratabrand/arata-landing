@@ -1,6 +1,6 @@
 -- ════════════════════════════════════════════════════════════════════
 -- Panel de Arata San · 001 · Cuentas y doble factor (Better Auth)
--- Base: Neon, proyecto "arata-panel" (D-107). NO es la de ningún catálogo.
+-- Base: Neon, proyecto "arata-panel" (D-108). NO es la de ningún catálogo.
 -- Generado con el propio Better Auth (getMigrations) para las opciones de
 -- lib/panel/auth.ts: correo+contraseña, doble factor (TOTP + códigos de
 -- respaldo) y límite de intentos en la base. Si cambian esas opciones,

@@ -4,9 +4,9 @@
 |---|---|---|---|
 | Borrador | 0.2 | 10 nov 2026 | Santiago |
 
-> **Alcance (D-105):** este acceso es para el panel de **Arata San** y, más adelante, para clientes de **página web**. Los catálogos (Arata Print, Caravana) tienen su propio sistema y su propia base de datos: no se tocan.
+> **Alcance (D-106):** este acceso es para el panel de **Arata San** y, más adelante, para clientes de **página web**. Los catálogos (Arata Print, Caravana) tienen su propio sistema y su propia base de datos: no se tocan.
 >
-> **Base de datos: Neon** (D-107, solo para este proyecto). Reemplaza la primera versión con Supabase (D-106). El resto de la agencia sigue con Supabase.
+> **Base de datos: Neon** (D-108, solo para este proyecto). Reemplaza la primera versión con Supabase (D-107). El resto de la agencia sigue con Supabase.
 
 ---
 
@@ -107,6 +107,29 @@ El segundo comando muestra **una sola vez** una contraseña fuerte generada al a
 - [ ] Vercel → Settings → Environment Variables: `DATABASE_URL`, `BETTER_AUTH_SECRET` (**distinto** al de local) y `BETTER_AUTH_URL=https://www.aratasan.com`, en Production. Para Preview, usar una **rama de Neon** aparte, no la base de producción.
 - [ ] Volver a desplegar: las páginas del panel pasan de "modo ejemplo" a pedir acceso.
 
+## 3b. Publicación: `panel.aratasan.com` (D-115)
+
+El mismo repositorio se publica en **dos proyectos de Vercel**:
+
+| Proyecto | Dominio | Variables | Qué hace |
+|---|---|---|---|
+| Sitio (el actual) | `www.aratasan.com` | `PANEL_URL=https://panel.aratasan.com` · **sin** claves de la base | `/panel…` y `/api/auth…` redirigen al subdominio |
+| Panel (nuevo, `arata-panel`) | `panel.aratasan.com` | `PANEL_SOLO=1` · `DATABASE_URL` (conexión de Neon) · `BETTER_AUTH_SECRET` · `BETTER_AUTH_URL=https://panel.aratasan.com` | `/` abre el panel; cualquier página del sitio redirige a www; `robots.txt` bloquea todo |
+
+Sin ninguna de las dos variables (en local) todo sigue igual: `localhost:3000/panel`.
+
+**Por qué no afecta la velocidad del sitio:** las redirecciones son fijas (`next.config.mjs`, no corren código en cada visita); `proxy.ts` solo corre en `/panel`; el CSS del panel no entra al CSS del sitio (que va en línea en cada página); el panel usa copias propias del logo y del detector de vista. Medido en local antes de publicar: CSS del Inicio 63,1 KB igual que hoy; Lighthouse móvil Inicio mediana 90 (sitio de hoy 89,5), dentro del margen de variación.
+
+**Pasos en Vercel y Cloudflare (Sergio):**
+1. Proyecto del sitio → Settings → Environment Variables: agregar `PANEL_URL` = `https://panel.aratasan.com` (Production).
+2. Vercel → Add New → Project → importar `aratabrand/arata-landing` → nombre `arata-panel`. En Environment Variables (Production): `PANEL_SOLO` = `1`, `BETTER_AUTH_SECRET` = uno **nuevo** (no el de tu computador), `BETTER_AUTH_URL` = `https://panel.aratasan.com`.
+3. Storage → `arata-panel` (Neon) → Connect Project → elegir el proyecto `arata-panel` (Production). Esto pone `DATABASE_URL`.
+4. Proyecto `arata-panel` → Settings → Domains → agregar `panel.aratasan.com`. Vercel muestra un registro CNAME.
+5. Cloudflare → DNS → agregar ese CNAME `panel` (nube naranja; SSL ya está en Full strict).
+6. Unir la rama a `main` (Claude, con permiso). Se publican los dos proyectos.
+7. Storage → `arata-panel` → Projects → **quitar la conexión con el proyecto del sitio** (así el sitio público no guarda la clave de la base).
+8. Verificar: `panel.aratasan.com` pide entrar; `aratasan.com/panel` redirige; Lighthouse del sitio publicado igual que antes.
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.
@@ -172,7 +195,7 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 |---|---|---|
 | 1 | ~~Crear el proyecto Neon `arata-panel`~~ ✅ y `.env.local` (§3.2) | Sergio |
 | 2 | ~~Correr la migración~~ ✅ · crear tu usuario (§3.3) y primera entrada (§3.4) | Sergio |
-| 3 | Variables en Vercel y nuevo despliegue (§3.5) | Santiago |
+| 3 | Publicar en `panel.aratasan.com` (§3b) | Sergio · Claude |
 | 4 | Los módulos leen y escriben en Neon (hoy siguen con datos de ejemplo) | Siguiente paso |
 | 5 | Pantalla "olvidé mi contraseña" (hoy la cambia Arata) | Después |
 | 6 | Rol `panel_app` con permisos mínimos (§5) | Santiago |

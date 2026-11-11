@@ -7,6 +7,7 @@ import { proyectos } from "@/content/proyectos";
 // Antes de lanzar: solo la v1. Con V2_PUBLICADO: todas las páginas públicas de la v2
 // (no van /sistema, /agendar/gracias ni /v2 una vez el Inicio pase a "/").
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (process.env.PANEL_SOLO === "1") return []; // el panel no va en Google (D-115)
   const ahora = new Date();
   if (!V2_PUBLICADO) {
     return [{ url: site.url, lastModified: ahora, changeFrequency: "monthly", priority: 1 }];

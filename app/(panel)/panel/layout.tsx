@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./panel.css";
 
 // Panel (docs/panel-cliente/). Privado: nunca se indexa, no va en el sitemap
 // y robots.txt lo bloquea. Mismo sistema v2: solo fondo ink.

@@ -1,4 +1,4 @@
-// Tipos de Finanzas y Equipo (solo Arata San, D-108). Todo en COP, sin decimales.
+// Tipos de Finanzas y Equipo (solo Arata San, D-109). Todo en COP, sin decimales.
 // docs/panel-cliente/06-finanzas.md
 
 import type { FinTarea } from "./procesos";
@@ -35,7 +35,7 @@ export type EstadoProyecto = "propuesta" | "en-curso" | "cerrado";
 export type FinProyecto = {
   id: string;
   nombre: string;
-  /** Cliente y servicio salen de sus tablas (no texto libre, D-109). */
+  /** Cliente y servicio salen de sus tablas (no texto libre, D-110). */
   clienteId: string | null;
   servicioId: string | null;
   estado: EstadoProyecto;
@@ -104,7 +104,7 @@ export const nombreCliente = (c: ClienteRef | undefined | null) => (!c ? "Sin cl
 export type DatosFinanzas = {
   negocioId: string;
   puedeEditar: boolean;
-  /** Cualquier miembro del equipo puede marcar pasos de los proyectos (D-112). */
+  /** Cualquier miembro del equipo puede marcar pasos de los proyectos (D-113). */
   puedeMarcarPasos: boolean;
   /** Persona del equipo de quien mira (para resaltar "lo tuyo"). */
   miPersonaId: string | null;
@@ -117,6 +117,6 @@ export type DatosFinanzas = {
   gastosFijos: GastoFijo[];
   servicios: Servicio[];
   clientes: ClienteRef[];
-  /** Pasos del proceso de entrega de cada proyecto (D-111). */
+  /** Pasos del proceso de entrega de cada proyecto (D-112). */
   tareas: FinTarea[];
 };

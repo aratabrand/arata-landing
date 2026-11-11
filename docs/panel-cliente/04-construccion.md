@@ -62,7 +62,7 @@ Con datos reales (fase 4 en adelante):
 
 ## 3. Pasar de demo a Supabase (una sola vez, para todos los clientes)
 
-> **Actualizado (D-107): la base es Neon y el acceso es Better Auth**, no Supabase. Hechos el 10 nov 2026: base (`db/panel/`), acceso con doble factor, protección con `proxy.ts` (Next 16 reemplaza `middleware.ts`) y pantallas de entrada. Los pasos 1–5 de abajo quedan como referencia de la versión con Supabase; la guía vigente es `05-acceso-y-seguridad.md`. Pendientes: 6, 7 y 8 (que los módulos lean y escriban en Neon).
+> **Actualizado (D-108): la base es Neon y el acceso es Better Auth**, no Supabase. Hechos el 10 nov 2026: base (`db/panel/`), acceso con doble factor, protección con `proxy.ts` (Next 16 reemplaza `middleware.ts`) y pantallas de entrada. Los pasos 1–5 de abajo quedan como referencia de la versión con Supabase; la guía vigente es `05-acceso-y-seguridad.md`. Pendientes: 6, 7 y 8 (que los módulos lean y escriban en Neon).
 
 1. Crear tablas, vistas y políticas de `02-modelo-de-datos.md` §2 como migraciones.
 2. Instalar `@supabase/supabase-js` y `@supabase/ssr`. Variables en `.env.local` (nunca commiteado): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. La service key **no** va en Next.

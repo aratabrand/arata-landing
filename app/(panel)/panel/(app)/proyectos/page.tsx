@@ -8,7 +8,7 @@ import { hoyColombia } from "@/lib/panel/fecha";
 
 export const metadata: Metadata = { title: "Proyectos" };
 
-// Arata San con sesión: grid de proyectos reales con su proceso (D-111).
+// Arata San con sesión: grid de proyectos reales con su proceso (D-112).
 // Sin conexión o para otros negocios: el tablero de ejemplo.
 export default async function PanelProyectosPage() {
   const real = panelActivo ? await cargarFinanzas() : null;

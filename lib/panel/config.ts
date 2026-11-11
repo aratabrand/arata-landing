@@ -1,6 +1,6 @@
-// Panel de Arata San: acceso con Neon (Postgres) + Better Auth (D-107).
+// Panel de Arata San: acceso con Neon (Postgres) + Better Auth (D-108).
 // ⚠ Base de datos PROPIA del panel (proyecto Neon "arata-panel"). No es la de
-// Arata Print ni la de Caravana (esos son catálogos, con su propio sistema, D-105).
+// Arata Print ni la de Caravana (esos son catálogos, con su propio sistema, D-106).
 //
 // Variables del SERVIDOR (en .env.local y en Vercel; nunca commiteadas, nunca NEXT_PUBLIC_):
 //   DATABASE_URL         cadena de conexión de Neon (con pooler y sslmode=require)

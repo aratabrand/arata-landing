@@ -11,7 +11,7 @@ import { PanelHeader, PanelPage, Pill, Tarjeta } from "../ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, colorPersona, useAccion } from "./comun";
 import { cn } from "@/lib/utils";
 
-// Módulo Equipo (solo Arata San, D-108): cuánto gana cada uno, por proyecto y en total.
+// Módulo Equipo (solo Arata San, D-109): cuánto gana cada uno, por proyecto y en total.
 // Andrés y Santiago lo ven todo sin poder editar. Sergio administra las personas.
 const horasTxt = (h: number) => `${String(Math.round(h * 10) / 10).replace(".", ",")} h`;
 
