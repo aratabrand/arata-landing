@@ -1,4 +1,5 @@
 import { db } from "../db";
+import { fechaBogota } from "../fecha";
 import { panelActivo } from "../config";
 import { contextoAgencia } from "../finanzas/datos";
 
@@ -38,7 +39,8 @@ export type ClienteAgencia = {
 
 export type DatosClientes = { puedeEditar: boolean; clientes: ClienteAgencia[] };
 
-const iso = (d: Date | string | null) => (d ? (typeof d === "string" ? d.slice(0, 10) : d.toISOString().slice(0, 10)) : null);
+// Fechas siempre en Bogotá, sin depender de la zona del servidor
+const iso = fechaBogota;
 
 /** null = no hay acceso real (modo ejemplo o no es la agencia): el módulo usa el ejemplo. */
 export async function cargarClientesAgencia(): Promise<DatosClientes | null> {

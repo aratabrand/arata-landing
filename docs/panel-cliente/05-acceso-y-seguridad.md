@@ -186,12 +186,14 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 |---|---|---|
 | 10 nov 2026 | La contraseña del rol `neondb_owner` quedó visible en una captura del `.env.local` compartida en el chat de trabajo | Sergio la cambió en Neon (Postgres database → Roles → Restablecer contraseña, 14:49 hora Colombia); se verificó que la vieja ya no conecta. Vercel actualizó sus variables solo; `.env.local` actualizado en todas sus líneas. No se cambió con el conector para que la nueva no quedara escrita en el chat. `.gitignore` ahora bloquea cualquier archivo `.env*` (menos `.env.example`) |
 | 11 nov 2026 | Al publicar `panel.aratasan.com`, los códigos del doble factor no funcionaban | Vercel tenía un `BETTER_AUTH_SECRET` distinto al del computador y los dos usan la misma base: el secreto del TOTP se cifra con esa clave. Se puso la misma clave en los dos (§3b) |
+| 11 nov 2026 | Revisión de diferencias computador ↔ publicado (D-116) | Base en hora de Bogotá; fechas sin depender de la zona del servidor; panel sin Google Analytics |
 
 
 **Reglas que salen de esto:**
 - Nunca compartir capturas ni texto de `.env.local`. Para revisar variables, usar comandos que respondan sí/no (ver 05 §3.2) sin mostrar valores.
 - Para cambiar una contraseña: hacerlo en la consola de Neon (la ve solo quien la cambia), actualizar `.env.local` y Vercel, y borrar el `.env` descargado.
 - La consola de Neon puede salir traducida por el navegador: "panel arata" = `arata-panel`, "principal" = `main`.
+- Antes de publicar algo que dependa de configuración, revisar qué cambia entre el computador y Vercel: **claves** (mismo `BETTER_AUTH_SECRET` si comparten base), **zona horaria** (servidor y base en UTC; el panel trabaja en Bogotá con `lib/panel/fecha.ts`) y **medición** (Analytics solo en el sitio).
 
 ## 7. Pendiente
 

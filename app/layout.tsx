@@ -111,6 +111,9 @@ const jsonLdV1 = {
   sameAs: [site.instagram],
 };
 const jsonLd = V2_PUBLICADO ? agenciaV2 : jsonLdV1;
+// En panel.aratasan.com (D-116) no se carga Google Analytics: las visitas del equipo
+// al panel no deben contarse como visitas de aratasan.com.
+const conMedicion = process.env.PANEL_SOLO !== "1";
 
 export default function RootLayout({
   children,
@@ -123,14 +126,14 @@ export default function RootLayout({
           agregan atributos al <body> antes de que cargue React. Solo ignora atributos
           del <body>, no su contenido. */}
       <body className="font-body antialiased" suppressHydrationWarning>
-        <GtmInit />
-        <GtmNoScript />
+        {conMedicion && <GtmInit />}
+        {conMedicion && <GtmNoScript />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
-        <GtmScript />
+        {conMedicion && <GtmScript />}
       </body>
     </html>
   );

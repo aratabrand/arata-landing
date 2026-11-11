@@ -1,4 +1,8 @@
-import { Pool } from "pg";
+import { Pool, types } from "pg";
+
+// Columnas `date` como texto (AAAA-MM-DD), sin pasar por la zona horaria del servidor:
+// si no, en un servidor al este de UTC saldrían con un día menos.
+types.setTypeParser(1082, (v) => v);
 
 // Conexión a Neon. SOLO servidor: el navegador nunca recibe DATABASE_URL.
 // Una sola pool por proceso (en desarrollo, Next recarga módulos; se guarda en global).

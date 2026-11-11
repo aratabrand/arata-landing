@@ -1,4 +1,5 @@
 import { db } from "../db";
+import { fechaBogota } from "../fecha";
 import { panelActivo } from "../config";
 import { estadoSesion, negociosDe } from "../sesion";
 import type { ClienteRef, DatosFinanzas, FinConfig, FinProyecto, Gasto, GastoFijo, Persona, RegistroHoras, ReglasReparto, Servicio } from "./tipos";
@@ -19,7 +20,8 @@ export async function contextoAgencia(): Promise<ContextoAgencia | null> {
   return { negocioId: agencia.id, usuarioId: s.usuarioId, rol: agencia.rol, puedeEditar: agencia.rol === "dueno" };
 }
 
-const iso = (d: Date | string | null) => (d ? (typeof d === "string" ? d.slice(0, 10) : d.toISOString().slice(0, 10)) : null);
+// Fechas siempre en Bogotá, sin depender de la zona del servidor
+const iso = fechaBogota;
 
 /** Negocio de la agencia para el marco del panel (nombre, plan, sitio). */
 export async function negocioAgencia(negocioId: string) {
