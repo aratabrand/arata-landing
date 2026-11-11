@@ -29,7 +29,11 @@ export type DatosSitio = {
   config: ConfigSitio;
   /** "sitio" = leído de aratasan.com; "panel" = lo último guardado en el panel. */
   fuente: "sitio" | "panel";
+  /** Lo que hoy está en aratasan.com: lo último publicado desde el panel o, si nunca, content/inicio.ts. */
   publicado: ConfigSitio;
+  publicadoEn: string | null;
+  /** ¿Está configurado el enlace de Vercel para reconstruir el sitio? (SITIO_DEPLOY_HOOK) */
+  puedePublicar: boolean;
   url: string;
 };
 
@@ -37,8 +41,17 @@ export async function cargarSitioAgencia(): Promise<DatosSitio | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const publicado = sitioPublicado();
-  const r = (await db().query(`select datos, actualizado from config_sitio where negocio_id = $1`, [ctx.negocioId])).rows[0];
+  const base = sitioPublicado();
+  const r = (await db().query(`select datos, actualizado, publicado, publicado_en from config_sitio where negocio_id = $1`, [ctx.negocioId])).rows[0];
+  const publicado: ConfigSitio = r?.publicado ? { ...base, ...(r.publicado as ConfigSitio), anuncio: base.anuncio, actualizado: null } : base;
   const config: ConfigSitio = r ? { ...(r.datos as ConfigSitio), actualizado: r.actualizado?.toISOString?.() ?? null } : publicado;
-  return { puedeEditar: ctx.puedeEditar, config, fuente: r ? "panel" : "sitio", publicado, url: site.url };
+  return {
+    puedeEditar: ctx.puedeEditar,
+    config,
+    fuente: r ? "panel" : "sitio",
+    publicado,
+    publicadoEn: r?.publicado_en?.toISOString?.() ?? null,
+    puedePublicar: Boolean(process.env.SITIO_DEPLOY_HOOK),
+    url: site.url,
+  };
 }

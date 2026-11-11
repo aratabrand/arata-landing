@@ -47,3 +47,45 @@ export async function guardarSitio(entrada: ConfigSitio): Promise<Resultado> {
     return { ok: false, error: "No se pudo guardar. Intenta otra vez." };
   }
 }
+
+// Publica en aratasan.com (D-117): copia lo GUARDADO a `publicado` y pide a Vercel
+// reconstruir el sitio (Deploy Hook). El sitio lee lo publicado al construirse, así
+// las páginas siguen estáticas. Tarda 1–2 minutos; si algo falla, sigue la versión anterior.
+export async function publicarSitio(): Promise<Resultado> {
+  try {
+    if (!panelActivo) return { ok: false, error: "El panel está en modo ejemplo." };
+    const ctx = await contextoAgencia();
+    if (!ctx) return { ok: false, error: "Tu sesión terminó. Vuelve a entrar." };
+    if (!ctx.puedeEditar) return { ok: false, error: "Solo Sergio puede publicar el sitio." };
+    const hook = process.env.SITIO_DEPLOY_HOOK ?? "";
+    // En producción solo el Deploy Hook de Vercel; en local se puede probar con un servidor propio
+    const local = process.env.NODE_ENV !== "production" && /^http:\/\/localhost:\d+\//.test(hook);
+    if (!/^https:\/\/api\.vercel\.com\//.test(hook) && !local) return { ok: false, error: "Falta conectar el panel con Vercel (SITIO_DEPLOY_HOOK)." };
+
+    const r = (await db().query(`select datos, publicado, publicado_en, publicado_por from config_sitio where negocio_id = $1`, [ctx.negocioId])).rows[0];
+    if (!r) return { ok: false, error: "Primero guarda los cambios." };
+    const primero = Object.values(errores(r.datos as ConfigSitio))[0];
+    if (primero) return { ok: false, error: primero };
+
+    // Primero se marca publicado (el sitio lee esta columna al construirse) y luego se
+    // avisa a Vercel. Si Vercel no acepta, se deja todo como estaba.
+    await db().query(`update config_sitio set publicado = datos, publicado_en = now(), publicado_por = $2 where negocio_id = $1`, [
+      ctx.negocioId,
+      ctx.usuarioId,
+    ]);
+    const res = await fetch(hook, { method: "POST", cache: "no-store", signal: AbortSignal.timeout(10_000) }).catch(() => null);
+    if (!res?.ok) {
+      await db().query(`update config_sitio set publicado = $2, publicado_en = $3, publicado_por = $4 where negocio_id = $1`, [
+        ctx.negocioId,
+        r.publicado ? JSON.stringify(r.publicado) : null,
+        r.publicado_en,
+        r.publicado_por,
+      ]);
+      return { ok: false, error: "Vercel no respondió. No se publicó nada; intenta otra vez." };
+    }
+    revalidatePath("/panel/sitio");
+    return { ok: true };
+  } catch {
+    return { ok: false, error: "No se pudo publicar. Intenta otra vez." };
+  }
+}

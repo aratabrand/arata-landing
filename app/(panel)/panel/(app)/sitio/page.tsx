@@ -14,7 +14,7 @@ export default async function PanelSitioPage() {
       <ConfigSitio
         inicial={real.config}
         negocio={{ ...negocio, nombre: "Arata San", sitio: real.url, whatsapp: "573134011189", demo: false }}
-        remoto={{ puedeEditar: real.puedeEditar, fuente: real.fuente, publicado: real.publicado }}
+        remoto={{ puedeEditar: real.puedeEditar, fuente: real.fuente, publicado: real.publicado, publicadoEn: real.publicadoEn, puedePublicar: real.puedePublicar }}
       />
     );
   }

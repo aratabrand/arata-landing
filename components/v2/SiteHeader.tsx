@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import ProjectPreview from "./ProjectPreview";
 import { AGENDAR, INICIO, menu } from "@/content/inicio";
+import type { Boton } from "@/lib/sitio-textos";
 import { proyectos } from "@/content/proyectos";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +27,8 @@ const previews = [
   proyectos.find((p) => p.slug === "danrodedm")!,
 ];
 
-export default function SiteHeader() {
+export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } }: { cta?: Boton }) {
+  const ctaExterno = /^https:\/\//i.test(cta.enlace);
   const [scrolled, setScrolled] = useState(false);
   const [mega, setMega] = useState(false);
   // Las vistas previas del mega menú se crean recién la primera vez que se abre (menos DOM al cargar)
@@ -194,8 +196,8 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button href={AGENDAR} size="md" className="hidden h-10 sm:inline-flex">
-            {menu.cta}
+          <Button href={cta.enlace} external={ctaExterno} size="md" className="hidden h-10 sm:inline-flex">
+            {cta.texto}
           </Button>
           <button
             ref={toggleRef}
@@ -287,8 +289,8 @@ export default function SiteHeader() {
           className="v2-mnav-item relative border-t border-white/8 bg-ink px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4"
           style={{ ["--d" as string]: 5 }}
         >
-          <Button href={AGENDAR} size="lg" arrow className="w-full" onClick={closeAll}>
-            {menu.cta}
+          <Button href={cta.enlace} external={ctaExterno} size="lg" arrow className="w-full" onClick={closeAll}>
+            {cta.texto}
           </Button>
           <p className="mt-2.5 text-center text-xs text-fog-dim">30 minutos, sin costo.</p>
         </div>

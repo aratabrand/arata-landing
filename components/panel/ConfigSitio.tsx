@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CircleCheck, Megaphone, Monitor, Plus, RotateCcw, Smartphone, Trash2 } from "lucide-react";
+import { CircleCheck, Megaphone, Monitor, Plus, RotateCcw, Send, Smartphone, Trash2 } from "lucide-react";
 import type { BotonSitio, ConfigSitio as Config, Negocio } from "@/content/panel/tipos";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
 import { LIM, enlaceValido, errores } from "@/lib/panel/sitio/reglas";
-import { guardarSitio } from "@/app/(panel)/panel/(app)/sitio/acciones";
+import { guardarSitio, publicarSitio } from "@/app/(panel)/panel/(app)/sitio/acciones";
 import { PanelHeader, PanelPage, Tarjeta } from "./ui";
 import { AvisoAcceso, useAccion } from "./finanzas/comun";
 
@@ -18,9 +18,11 @@ import { cn } from "@/lib/utils";
 // Dos modos:
 // - Ejemplo (sin conexión): guarda en el navegador (useGuardado).
 // - Arata San (D-111): arranca con lo que publica aratasan.com y guarda en Neon con historial.
+//   "Publicar" (D-117) sube lo guardado a aratasan.com: Vercel reconstruye el sitio (1–2 min).
+//   El sitio solo tiene los 3 botones fijos y no tiene franja de anuncio: aquí no se agregan.
 
 /** Datos del modo real de Arata San. */
-export type Remoto = { puedeEditar: boolean; fuente: "sitio" | "panel"; publicado: Config };
+export type Remoto = { puedeEditar: boolean; fuente: "sitio" | "panel"; publicado: Config; publicadoEn: string | null; puedePublicar: boolean };
 
 export default function ConfigSitio({ inicial, negocio, remoto }: { inicial: Config; negocio: Negocio; remoto?: Remoto }) {
   return remoto ? <SitioRemoto inicial={inicial} negocio={negocio} remoto={remoto} /> : <SitioLocal inicial={inicial} negocio={negocio} />;
@@ -55,6 +57,8 @@ function EditorSitio({
 }) {
   const [borrador, setBorrador] = useState<Config>(inicial);
   const acc = useAccion();
+  const pub = useAccion();
+  const [publicando, setPublicando] = useState(false);
   const edita = !remoto || remoto.puedeEditar;
   const [vista, setVista] = useState<"celular" | "google">("celular");
   const [aviso, setAviso] = useState(false);
@@ -91,12 +95,13 @@ function EditorSitio({
         guardado.seo.descripcion !== remoto.publicado.seo.descripcion && "descripción de Google",
         guardado.portada.titulo !== remoto.publicado.portada.titulo && "título de la portada",
         guardado.portada.subtitulo !== remoto.publicado.portada.subtitulo && "texto de la portada",
-        JSON.stringify(guardado.anuncio) !== JSON.stringify(remoto.publicado.anuncio) && "franja de anuncio",
-        JSON.stringify(guardado.botones) !== JSON.stringify(remoto.publicado.botones) && "botones",
+        // Campo por campo: la base (jsonb) reordena las llaves y JSON.stringify daría diferencias falsas
+        (guardado.anuncio.activo !== remoto.publicado.anuncio.activo || guardado.anuncio.texto !== remoto.publicado.anuncio.texto) && "franja de anuncio",
+        claveBotones(guardado.botones) !== claveBotones(remoto.publicado.botones) && "botones",
       ].filter(Boolean)
     : [];
 
-  const dominio = negocio.sitio.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const dominio = dominioDe(negocio.sitio);
 
   return (
     <PanelPage>
@@ -121,7 +126,32 @@ function EditorSitio({
             ) : (
               <>Lo guardado en el panel es igual a lo que publica el sitio.</>
             )}{" "}
-            <span className="text-fog-dim">Guardar deja los cambios en el panel con historial; todavía no se publican solos en el sitio.</span>
+            <span className="text-fog-dim">Guardar deja los cambios en el panel con historial. Publicar los sube a la página (tarda 1–2 minutos).</span>
+            {remoto.publicadoEn && (
+              <span className="mt-1 block text-xs text-fog-dim">
+                Última publicación: {new Date(remoto.publicadoEn).toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Bogota" })}
+              </span>
+            )}
+            {remoto.puedeEditar && pendientes.length > 0 && !sucio && (
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <button
+                  type="button"
+                  disabled={!remoto.puedePublicar || pub.pendiente || hayErrores}
+                  onClick={() => pub.correr(() => publicarSitio(), () => setPublicando(true))}
+                  className="v2-shine inline-flex h-11 items-center justify-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-30"
+                >
+                  <Send aria-hidden className="h-4 w-4" />
+                  {pub.pendiente ? "Publicando…" : `Publicar en ${dominioDe(negocio.sitio)}`}
+                </button>
+                {!remoto.puedePublicar && <span className="text-xs text-fog-dim">Falta conectar el panel con Vercel (SITIO_DEPLOY_HOOK).</span>}
+                {pub.error && <span role="alert" className="text-xs text-[#FF9BB0]">{pub.error}</span>}
+              </div>
+            )}
+            {publicando && pendientes.length === 0 && (
+              <p className="mt-3 inline-flex items-center gap-2 text-sm text-lime" aria-live="polite">
+                <CircleCheck aria-hidden className="h-4 w-4" /> Enviado. La página se actualiza en 1–2 minutos.
+              </p>
+            )}
           </div>
         </>
       )}
@@ -144,12 +174,14 @@ function EditorSitio({
               <Campo label="Título" usado={borrador.portada.titulo.length} limite={LIM.titulo} error={errs.titulo}>
                 <input value={borrador.portada.titulo} onChange={(e) => set("portada", { ...borrador.portada, titulo: e.target.value })} className="pn-input" maxLength={LIM.titulo} />
               </Campo>
+              {remoto && <p className="-mt-2 text-xs text-fog-dim">La primera frase sale en blanco y lo que sigue, en lima.</p>}
               <Campo label="Texto de apoyo" usado={borrador.portada.subtitulo.length} limite={LIM.subtitulo}>
                 <textarea value={borrador.portada.subtitulo} onChange={(e) => set("portada", { ...borrador.portada, subtitulo: e.target.value })} rows={2} className="pn-input h-auto py-2.5" maxLength={LIM.subtitulo} />
               </Campo>
             </div>
           </Tarjeta>
 
+          {!remoto && (
           <Tarjeta
             titulo="Franja de anuncio"
             bajada="Una línea arriba de todo para promociones o avisos"
@@ -176,12 +208,13 @@ function EditorSitio({
               />
             </Campo>
           </Tarjeta>
+          )}
 
           <Tarjeta
             titulo="Botones"
             bajada="Texto y a dónde lleva cada botón"
             accion={
-              <button
+              !remoto && <button
                 type="button"
                 onClick={() => set("botones", [...borrador.botones, { id: nuevoId("b"), ubicacion: "Portada · extra", texto: "", enlace: `https://wa.me/${negocio.whatsapp}`, estilo: "secundario" }])}
                 className="inline-flex h-9 items-center gap-1.5 rounded-btn border border-white/10 px-3 text-xs font-semibold text-white hover:border-white/20"
@@ -195,28 +228,30 @@ function EditorSitio({
                 <li key={b.id} className="rounded-frame border border-white/8 bg-surface-2/50 p-3 sm:p-4">
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-soft">{b.ubicacion}</p>
-                    <button
+                    {!remoto && <button
                       type="button"
                       onClick={() => set("botones", borrador.botones.filter((x) => x.id !== b.id))}
                       aria-label={`Quitar botón ${b.texto || b.ubicacion}`}
                       className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white"
                     >
                       <Trash2 aria-hidden className="h-4 w-4" />
-                    </button>
+                    </button>}
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-[1fr_1.4fr_auto]">
+                  <div className={cn("grid gap-3", remoto ? "sm:grid-cols-[1fr_1.4fr]" : "sm:grid-cols-[1fr_1.4fr_auto]")}>
                     <Campo label="Texto" usado={b.texto.length} limite={LIM.boton} error={errs[`bt-${b.id}`]}>
                       <input value={b.texto} onChange={(e) => setBoton(b.id, { texto: e.target.value })} className="pn-input" maxLength={LIM.boton} />
                     </Campo>
                     <Campo label="Enlace" error={errs[`bl-${b.id}`]}>
                       <input value={b.enlace} onChange={(e) => setBoton(b.id, { enlace: e.target.value })} className="pn-input" inputMode="url" maxLength={300} spellCheck={false} />
                     </Campo>
-                    <Campo label="Estilo">
-                      <select value={b.estilo} onChange={(e) => setBoton(b.id, { estilo: e.target.value as BotonSitio["estilo"] })} className="pn-input">
-                        <option value="principal">Principal</option>
-                        <option value="secundario">Secundario</option>
-                      </select>
-                    </Campo>
+                    {!remoto && (
+                      <Campo label="Estilo">
+                        <select value={b.estilo} onChange={(e) => setBoton(b.id, { estilo: e.target.value as BotonSitio["estilo"] })} className="pn-input">
+                          <option value="principal">Principal</option>
+                          <option value="secundario">Secundario</option>
+                        </select>
+                      </Campo>
+                    )}
                   </div>
                 </li>
               ))}
@@ -277,7 +312,7 @@ function EditorSitio({
                     )}
                   </div>
                   <div className="px-4 pb-8 pt-6">
-                    <p className="font-display text-[1.45rem] font-bold leading-[1.05] tracking-heading text-white">{borrador.portada.titulo || "Título de la portada"}</p>
+                    <p className="font-display text-[1.45rem] font-bold leading-[1.05] tracking-heading text-white">{remoto ? <TituloDosColores texto={borrador.portada.titulo} /> : borrador.portada.titulo || "Título de la portada"}</p>
                     <p className="mt-3 text-[0.78rem] leading-relaxed text-fog">{borrador.portada.subtitulo}</p>
                     <div className="mt-5 flex flex-col gap-2">
                       {borrador.botones
@@ -364,6 +399,25 @@ function EditorSitio({
       </div>
     </PanelPage>
   );
+}
+
+/** Igual que el sitio (lib/sitio-textos.ts · partirTitulo): primera frase en blanco, el resto en lima. */
+function TituloDosColores({ texto }: { texto: string }) {
+  const m = texto.trim().match(/^(.+?[.!?])\s+(.+)$/);
+  if (!m) return <>{texto || "Título de la portada"}</>;
+  return (
+    <>
+      {m[1]} <span className="text-lime">{m[2]}</span>
+    </>
+  );
+}
+
+function claveBotones(b: BotonSitio[]) {
+  return b.map((x) => [x.id, x.texto, x.enlace, x.estilo].join("\u0000")).join("\u0001");
+}
+
+function dominioDe(url: string) {
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
 function recortar(t: string, n: number) {

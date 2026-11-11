@@ -2,13 +2,14 @@ import CountUp from "@/components/CountUp";
 import { TiltedGridHero } from "@/components/ui/tilted-grid-hero";
 import { Button } from "./Button";
 import { Badge, Container, Glow } from "./primitives";
-import { AGENDAR, hero } from "@/content/inicio";
+import { hero } from "@/content/inicio";
+import { esExterno, textosBase, type TextosSitio } from "@/lib/sitio-textos";
 import { capturasIntercaladas } from "@/content/proyectos";
 
 // Hero v2 (copy D-038). Debajo del texto, una banda curva con las capturas
 // reales de los proyectos pasando (TiltedGridHero, D-064).
 // Rendimiento: el <h1> NO se anima (es el LCP); las capturas bajan con prioridad baja.
-export default function Hero() {
+export default function Hero({ textos = textosBase.portada }: { textos?: TextosSitio["portada"] }) {
   const imagenes = capturasIntercaladas();
   return (
     <section className="relative overflow-hidden pt-28 sm:pt-32">
@@ -24,19 +25,19 @@ export default function Hero() {
         </div>
 
         <h1 className="mx-auto mt-6 max-w-6xl font-display text-v2-hero font-extrabold tracking-display text-white">
-          {hero.titulo} <span className="text-lime lg:block">{hero.tituloSigue}</span>
+          {textos.titulo}{textos.tituloSigue && <> <span className="text-lime lg:block">{textos.tituloSigue}</span></>}
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl animate-fade-up text-v2-lead text-fog [animation-delay:80ms]">
-          {hero.subtitulo}
+          {textos.subtitulo}
         </p>
 
         <div className="mt-8 flex animate-fade-up flex-col items-stretch justify-center gap-3 [animation-delay:140ms] sm:flex-row sm:items-center">
-          <Button href={AGENDAR} size="lg" arrow>
-            {hero.ctaPrincipal}
+          <Button href={textos.principal.enlace} external={esExterno(textos.principal.enlace)} size="lg" arrow>
+            {textos.principal.texto}
           </Button>
-          <Button href="#trabajos" size="lg" variant="secondary">
-            {hero.ctaSecundario}
+          <Button href={textos.secundario.enlace} external={esExterno(textos.secundario.enlace)} size="lg" variant="secondary">
+            {textos.secundario.texto}
           </Button>
         </div>
       </Container>

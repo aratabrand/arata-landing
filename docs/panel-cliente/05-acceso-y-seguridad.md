@@ -132,6 +132,26 @@ Sin ninguna de las dos variables (en local) todo sigue igual: `localhost:3000/pa
 7. Storage → `arata-panel` → Projects → **quitar la conexión con el proyecto del sitio** (así el sitio público no guarda la clave de la base).
 8. Verificar: `panel.aratasan.com` pide entrar; `aratasan.com/panel` redirige; Lighthouse del sitio publicado igual que antes.
 
+## 3c. Publicar "Mi sitio" en aratasan.com (D-117)
+
+```
+Sergio guarda ─► config_sitio.datos (borrador + historial)
+Sergio publica ─► config_sitio.publicado ─► Deploy Hook ─► Vercel reconstruye www
+                                   ▲                              │
+                                   └── GET panel.aratasan.com/api/sitio (al construir)
+```
+
+- Las páginas siguen **estáticas**: los textos se leen una vez al construir, no en cada visita.
+- `/api/sitio` solo devuelve textos que ya son públicos (Google, portada, 3 botones). Nunca el borrador ni quién publicó.
+- Si el panel no responde durante la construcción, **la construcción falla** y queda la versión anterior. Para construir sin el panel: variable `SITIO_SIN_PANEL=1` en el proyecto del sitio.
+- Si Vercel rechaza el aviso, el panel deshace la publicación y lo dice en pantalla.
+
+**Pasos (Sergio, una sola vez):**
+1. Vercel → proyecto del **sitio** (`arata-landing`) → Settings → Git → **Deploy Hooks** → nombre `panel`, rama `main` → Create. Copia el enlace (**es secreto**: no lo pegues en el chat).
+2. Vercel → proyecto **`arata-panel`** → Settings → Environment Variables → `SITIO_DEPLOY_HOOK` = ese enlace (Production) → Save → Redeploy.
+3. El sitio ya tiene `PANEL_URL`; no necesita nada más.
+4. Prueba: en el panel, Mi sitio → cambia un texto → Guardar → **Publicar en www.aratasan.com** → en 1–2 minutos aparece en la página (Vercel → Deployments muestra la construcción "Deploy Hook").
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.
@@ -202,7 +222,7 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 | 1 | ~~Crear el proyecto Neon `arata-panel`~~ ✅ y `.env.local` (§3.2) | Sergio |
 | 2 | ~~Correr la migración~~ ✅ · crear tu usuario (§3.3) y primera entrada (§3.4) | Sergio |
 | 3 | ~~Publicar en `panel.aratasan.com`~~ ✅ 11 nov 2026: dominio válido, base conectada solo al panel, sitio sin claves | — |
-| 4 | Los módulos leen y escriben en Neon (hoy siguen con datos de ejemplo) | Siguiente paso |
+| 4 | ~~Los módulos leen y escriben en Neon~~ ✅ · Mi sitio publica (§3c): falta `SITIO_DEPLOY_HOOK` | Sergio |
 | 5 | Pantalla "olvidé mi contraseña" (hoy la cambia Arata) | Después |
 | 6 | Rol `panel_app` con permisos mínimos (§5) | Santiago |
 | 7 | ~~Confirmar que Vercel tenga la contraseña nueva de la base~~ ✅ Vercel se sincronizó solo (cuentas administradas por Vercel) | Sergio |

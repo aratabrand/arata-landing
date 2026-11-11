@@ -60,9 +60,9 @@ function redireccionesPanel() {
   if (PANEL_SOLO) {
     return [
       { source: "/", destination: "/panel", permanent: false },
-      // Todo lo que no sea panel, su API, los archivos de Next o robots/ícono → al sitio público
+      // Todo lo que no sea panel, su API (acceso y textos publicados), los archivos de Next o robots/ícono → al sitio público
       {
-        source: "/:ruta((?!panel(?:/|$)|api/auth/|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
+        source: "/:ruta((?!panel(?:/|$)|api/auth/|api/sitio$|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
         destination: `${SITIO}/:ruta`,
         permanent: false,
       },

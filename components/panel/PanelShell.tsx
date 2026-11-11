@@ -100,15 +100,18 @@ export default function PanelShell({
             Ver mi página
             <ArrowUpRight aria-hidden className="h-4 w-4" />
           </a>
-          <a
-            href={soporte}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 items-center justify-center gap-2 rounded-btn border border-white/10 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-brand/60"
-          >
-            <MessageCircle aria-hidden className="h-4 w-4 text-lime" />
-            Escribirle a Arata San
-          </a>
+          {/* En el panel de la propia agencia no tiene sentido escribirse a sí mismos */}
+          {negocio.tipo !== "agencia" && (
+            <a
+              href={soporte}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-11 items-center justify-center gap-2 rounded-btn border border-white/10 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-brand/60"
+            >
+              <MessageCircle aria-hidden className="h-4 w-4 text-lime" />
+              Escribirle a Arata San
+            </a>
+          )}
           {conSesion && (
             <button
               type="button"
