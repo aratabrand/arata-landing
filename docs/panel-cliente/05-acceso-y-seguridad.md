@@ -104,7 +104,7 @@ El segundo comando muestra **una sola vez** una contraseña fuerte generada al a
 
 ### 3.5 Producción (Vercel)
 
-- [ ] Vercel → Settings → Environment Variables: `DATABASE_URL`, `BETTER_AUTH_SECRET` (**distinto** al de local) y `BETTER_AUTH_URL=https://www.aratasan.com`, en Production. Para Preview, usar una **rama de Neon** aparte, no la base de producción.
+- [ ] Vercel → Settings → Environment Variables: `DATABASE_URL`, `BETTER_AUTH_SECRET` (**el mismo** de local si comparten base; ver §3b) y `BETTER_AUTH_URL`, en Production. Para Preview, usar una **rama de Neon** aparte, no la base de producción.
 - [ ] Volver a desplegar: las páginas del panel pasan de "modo ejemplo" a pedir acceso.
 
 ## 3b. Publicación: `panel.aratasan.com` (D-115)
@@ -122,7 +122,9 @@ Sin ninguna de las dos variables (en local) todo sigue igual: `localhost:3000/pa
 
 **Pasos en Vercel y Cloudflare (Sergio):**
 1. Proyecto del sitio → Settings → Environment Variables: agregar `PANEL_URL` = `https://panel.aratasan.com` (Production).
-2. Vercel → Add New → Project → importar `aratabrand/arata-landing` → nombre `arata-panel`. En Environment Variables (Production): `PANEL_SOLO` = `1`, `BETTER_AUTH_SECRET` = uno **nuevo** (no el de tu computador), `BETTER_AUTH_URL` = `https://panel.aratasan.com`.
+2. Vercel → Add New → Project → importar `aratabrand/arata-landing` → nombre `arata-panel`. En Environment Variables (Production): `PANEL_SOLO` = `1`, `BETTER_AUTH_URL` = `https://panel.aratasan.com` y `BETTER_AUTH_SECRET` = **el mismo** que usa cualquier otro lugar conectado a esa base (ver aviso abajo).
+
+> ⚠️ **`BETTER_AUTH_SECRET` debe ser igual en todos los lugares que usan la misma base.** Better Auth guarda **cifrados con esa clave** el secreto del doble factor (TOTP) y los códigos de respaldo. Si el computador de Sergio y Vercel apuntan a la misma base con claves distintas, la contraseña funciona pero **los códigos de la app nunca coinciden**. Pasó el 11 nov 2026 al publicar; se arregló poniendo en Vercel la misma clave del `.env.local`. Si algún día se quiere una clave distinta en producción, el computador debe usar **otra base** (una rama de Neon para pruebas). Cambiar la clave obliga a todos a activar el doble factor de nuevo.
 3. Storage → `arata-panel` (Neon) → Connect Project → elegir el proyecto `arata-panel` (Production). Esto pone `DATABASE_URL`.
 4. Proyecto `arata-panel` → Settings → Domains → agregar `panel.aratasan.com`. Vercel muestra un registro CNAME.
 5. Cloudflare → DNS → agregar ese CNAME `panel` (nube naranja; SSL ya está en Full strict).
@@ -183,6 +185,8 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 | Fecha | Qué pasó | Qué se hizo |
 |---|---|---|
 | 10 nov 2026 | La contraseña del rol `neondb_owner` quedó visible en una captura del `.env.local` compartida en el chat de trabajo | Sergio la cambió en Neon (Postgres database → Roles → Restablecer contraseña, 14:49 hora Colombia); se verificó que la vieja ya no conecta. Vercel actualizó sus variables solo; `.env.local` actualizado en todas sus líneas. No se cambió con el conector para que la nueva no quedara escrita en el chat. `.gitignore` ahora bloquea cualquier archivo `.env*` (menos `.env.example`) |
+
+| 11 nov 2026 | Al publicar `panel.aratasan.com`, los códigos del doble factor no funcionaban | Vercel tenía un `BETTER_AUTH_SECRET` distinto al del computador y los dos usan la misma base: el secreto del TOTP se cifra con esa clave. Se puso la misma clave en los dos (§3b) |
 
 **Reglas que salen de esto:**
 - Nunca compartir capturas ni texto de `.env.local`. Para revisar variables, usar comandos que respondan sí/no (ver 05 §3.2) sin mostrar valores.
