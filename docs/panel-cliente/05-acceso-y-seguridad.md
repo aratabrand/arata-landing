@@ -201,7 +201,7 @@ Repetir 1–14 en Neon real antes de dar acceso a cualquier cliente de página w
 |---|---|---|
 | 1 | ~~Crear el proyecto Neon `arata-panel`~~ ✅ y `.env.local` (§3.2) | Sergio |
 | 2 | ~~Correr la migración~~ ✅ · crear tu usuario (§3.3) y primera entrada (§3.4) | Sergio |
-| 3 | Publicar en `panel.aratasan.com` (§3b) | Sergio · Claude |
+| 3 | ~~Publicar en `panel.aratasan.com`~~ ✅ 11 nov 2026: dominio válido, base conectada solo al panel, sitio sin claves | — |
 | 4 | Los módulos leen y escriben en Neon (hoy siguen con datos de ejemplo) | Siguiente paso |
 | 5 | Pantalla "olvidé mi contraseña" (hoy la cambia Arata) | Después |
 | 6 | Rol `panel_app` con permisos mínimos (§5) | Santiago |

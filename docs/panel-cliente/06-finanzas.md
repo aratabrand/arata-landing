@@ -192,8 +192,8 @@ Regla: un proyecto **cerrado sin pasos** cuenta como entregado (proyectos viejos
 |---|---|---|
 | 1 | Poner los % reales de bolsa y de cada socio, y los gastos fijos | Sergio |
 | 2 | Cargar los proyectos cerrados de este año para tener historia | Sergio |
-| 3 | Publicar el panel (merge a `main` + `BETTER_AUTH_SECRET` y `BETTER_AUTH_URL` en Vercel) para que Andrés y Santiago entren | Sergio aprueba · Santiago |
-| 4 | Crear las cuentas de Andrés y Santiago (§7) | Sergio |
+| 3 | ~~Publicar el panel~~ ✅ en `panel.aratasan.com` (11 nov 2026, D-115) | — |
+| 4 | ~~Crear las cuentas de Andrés y Santiago~~ ✅ (11 nov 2026, rol `equipo`, enlazadas en Equipo). Falta que cada uno active su doble factor al entrar | Andrés · Santiago |
 | 5 | Que el Resumen general del panel muestre las ventas reales (proyectos cerrados) | Siguiente paso |
 | 7 | Cargar los clientes reales de Arata en Clientes | Sergio |
 | 6 | Que cada uno registre sus propias horas (hoy solo Sergio) | Si se decide |
