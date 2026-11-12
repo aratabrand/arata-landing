@@ -22,10 +22,15 @@ export type ProyectoDeCliente = {
 
 export type ClienteAgencia = {
   id: string;
-  nombre: string; // contacto
+  /** Nombre de la persona de contacto. */
+  nombre: string;
   empresa: string | null;
+  /** Celular (WhatsApp), solo números. Es el único dato de contacto (D-119). */
   telefono: string;
-  correo: string | null;
+  /** Código ISO del país (CO, US…). */
+  pais: string;
+  paisNombre: string;
+  ciudadId: string | null;
   ciudad: string | null;
   sitioWeb: string | null;
   instagram: string | null;
@@ -37,7 +42,25 @@ export type ClienteAgencia = {
   proyectos: ProyectoDeCliente[];
 };
 
-export type DatosClientes = { puedeEditar: boolean; puedeBorrar: boolean; clientes: ClienteAgencia[] };
+export type Pais = { codigo: string; nombre: string };
+export type Ciudad = { id: string; pais: string; nombre: string; departamento: string | null };
+
+export type DatosClientes = { puedeEditar: boolean; puedeBorrar: boolean; clientes: ClienteAgencia[]; paises: Pais[]; ciudades: Ciudad[] };
+
+/** País con lista de ciudades (D-119): en los demás la ciudad queda bloqueada. */
+export const PAIS_CON_CIUDADES = "CO";
+
+/** Países y ciudades para las listas (Colombia primero). */
+export async function cargarLugares(): Promise<{ paises: Pais[]; ciudades: Ciudad[] }> {
+  const [p, c] = await Promise.all([
+    db().query(`select codigo, nombre from paises order by (codigo = 'CO') desc, nombre`),
+    db().query(`select id, pais, nombre, departamento from ciudades order by nombre`),
+  ]);
+  return {
+    paises: p.rows.map((x) => ({ codigo: x.codigo, nombre: x.nombre })),
+    ciudades: c.rows.map((x) => ({ id: x.id, pais: x.pais, nombre: x.nombre, departamento: x.departamento })),
+  };
+}
 
 // Fechas siempre en Bogotá, sin depender de la zona del servidor
 const iso = fechaBogota;
@@ -47,10 +70,12 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [cl, pr] = await Promise.all([
+  const [cl, pr, lugares] = await Promise.all([
     db().query(
-      `select id, nombre, empresa, telefono, correo, ciudad, sitio_web, instagram, estado, origen, origen_detalle, notas, creado
-         from clientes where negocio_id = $1 order by lower(coalesce(empresa, nombre)), lower(nombre)`,
+      `select c.id, c.nombre, c.empresa, c.telefono, c.pais, pa.nombre pais_nombre, c.ciudad_id, ci.nombre ciudad,
+              c.sitio_web, c.instagram, c.estado, c.origen, c.origen_detalle, c.notas, c.creado
+         from clientes c join paises pa on pa.codigo = c.pais left join ciudades ci on ci.id = c.ciudad_id
+        where c.negocio_id = $1 order by lower(coalesce(c.empresa, c.nombre)), lower(c.nombre)`,
       [ctx.negocioId]
     ),
     db().query(
@@ -60,6 +85,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
         order by p.creado desc`,
       [ctx.negocioId]
     ),
+    cargarLugares(),
   ]);
   const porCliente = new Map<string, ProyectoDeCliente[]>();
   pr.rows.forEach((r) => {
@@ -70,12 +96,15 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   return {
     puedeEditar: ctx.editaFinanzas,
     puedeBorrar: ctx.esDueno,
+    ...lugares,
     clientes: cl.rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,
       empresa: r.empresa,
       telefono: r.telefono,
-      correo: r.correo,
+      pais: r.pais,
+      paisNombre: r.pais_nombre,
+      ciudadId: r.ciudad_id,
       ciudad: r.ciudad,
       sitioWeb: r.sitio_web,
       instagram: r.instagram,

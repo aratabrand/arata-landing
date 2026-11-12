@@ -69,16 +69,14 @@ export function CampoPesos({
   name: string;
   valorInicial?: number;
   etiqueta: string;
+  /** true = obligatorio (*); false o vacío = "Opcional". */
   requerido?: boolean;
   onCambio?: (n: number) => void;
 }) {
   const [v, setV] = useState(valorInicial ? fmt.format(valorInicial) : "");
   return (
     <label className="block min-w-0">
-      <span className="mb-1.5 block text-xs font-medium text-fog">
-        {etiqueta}
-        {requerido && " *"}
-      </span>
+      <Etiqueta texto={etiqueta} obligatorio={requerido ?? false} />
       <div className="relative">
         <span aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-fog-dim">
           $
@@ -100,10 +98,39 @@ export function CampoPesos({
   );
 }
 
-export function Campo({ etiqueta, children, ayuda }: { etiqueta: string; children: ReactNode; ayuda?: ReactNode }) {
+/** Etiqueta de un campo: "*" en lima si es obligatorio, "Opcional" si no (D-119). */
+export function Etiqueta({ texto, obligatorio }: { texto: string; obligatorio?: boolean }) {
+  const req = obligatorio ?? /\*\s*$/.test(texto);
+  const limpio = texto.replace(/\s*\*\s*$/, "");
+  return (
+    <span className="mb-1.5 flex items-baseline justify-between gap-2 text-xs font-medium text-fog">
+      <span>
+        {limpio}
+        {req && (
+          <>
+            <span aria-hidden className="ml-0.5 text-lime">*</span>
+            <span className="sr-only"> (obligatorio)</span>
+          </>
+        )}
+      </span>
+      {obligatorio === false && <span className="text-[0.68rem] font-normal text-fog-dim">Opcional</span>}
+    </span>
+  );
+}
+
+/** Nota al inicio de cada formulario. */
+export function LeyendaObligatorios() {
+  return (
+    <p className="text-[0.72rem] text-fog-dim">
+      Los campos con <span className="text-lime">*</span> son obligatorios.
+    </p>
+  );
+}
+
+export function Campo({ etiqueta, children, ayuda, obligatorio }: { etiqueta: string; children: ReactNode; ayuda?: ReactNode; obligatorio?: boolean }) {
   return (
     <label className="block min-w-0">
-      <span className="mb-1.5 block text-xs font-medium text-fog">{etiqueta}</span>
+      <Etiqueta texto={etiqueta} obligatorio={obligatorio} />
       {children}
       {ayuda && <span className="mt-1 block text-[0.7rem] text-fog-dim">{ayuda}</span>}
     </label>

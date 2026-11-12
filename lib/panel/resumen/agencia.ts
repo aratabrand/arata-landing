@@ -46,6 +46,22 @@ export function resumenAgencia(d: DatosFinanzas, clientes: ClienteAgencia[], hoy
     .sort((x, y) => (x.vence ?? 9999) - (y.vence ?? 9999));
   const tarde = abiertos.filter((x) => x.vence !== null && x.vence < 0).length;
 
+  // Proyectos terminados (D-119): todos los pasos hechos, o cerrados sin pasos.
+  // Fecha de entrega real = el último paso marcado; si no hay, la fecha de cierre.
+  const terminados = d.proyectos
+    .map((p) => {
+      const tareas = d.tareas.filter((t) => t.proyectoId === p.id);
+      const a = avance(tareas);
+      const ultimo = tareas.map((t) => t.hechaEn ?? "").filter(Boolean).sort().pop() ?? null;
+      const entregado = ultimo ?? p.fechaCierre;
+      // A tiempo = se entregó el día prometido o antes
+      const aTiempo = p.fechaLimite && entregado ? entregado <= p.fechaLimite : null;
+      return { p, a, entregado, aTiempo };
+    })
+    .filter((x) => estaEntregado(x.p.estado, x.a))
+    .sort((x, y) => (y.entregado ?? "").localeCompare(x.entregado ?? ""));
+  const terminadosPeriodo = terminados.filter((x) => x.entregado && entre(x.entregado, desde, hoy));
+
   // Clientes que compran: de todos los clientes, cuántos tienen al menos un proyecto cerrado
   const conProyecto = clientes.filter((c) => c.proyectos.length > 0).length;
   const compraron = clientes.filter((c) => c.proyectos.some((p) => p.estado === "cerrado")).length;
@@ -96,6 +112,9 @@ export function resumenAgencia(d: DatosFinanzas, clientes: ClienteAgencia[], hoy
     enProceso: abiertos.length,
     tarde,
     abiertos,
+    terminados,
+    terminadosPeriodo: terminadosPeriodo.length,
+    aTiempo: terminadosPeriodo.filter((x) => x.aTiempo === true).length,
     embudo: { clientes: clientes.length, conProyecto, compraron },
     tasa,
     origenes: [...origenes.entries()].map(([origen, v]) => ({ origen, ...v })).sort((a, b) => b.clientes - a.clientes),

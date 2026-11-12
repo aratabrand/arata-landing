@@ -8,7 +8,7 @@ import { fechaCorta, pesos } from "@/lib/panel/formato";
 import { guardarPersona } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { Hoja } from "../Clientes";
 import { PanelHeader, PanelPage, Pill, Tarjeta } from "../ui";
-import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, colorPersona, useAccion } from "./comun";
+import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, colorPersona, useAccion, LeyendaObligatorios } from "./comun";
 import { cn } from "@/lib/utils";
 
 // Módulo Equipo (solo Arata San, D-109): cuánto gana cada uno, por proyecto y en total.
@@ -167,11 +167,12 @@ function FormPersona({ p, onListo }: { p?: Persona; onListo: () => void }) {
   };
   return (
     <form onSubmit={enviar} noValidate className="space-y-4">
+      <LeyendaObligatorios />
       <Campo etiqueta="Nombre *">
-        <input name="nombre" defaultValue={p?.nombre} maxLength={60} className="pn-input" />
+        <input name="nombre" defaultValue={p?.nombre} maxLength={60} autoComplete="off" autoCapitalize="words" className="pn-input" />
       </Campo>
       <Campo etiqueta="Área *" ayuda="Su área principal en el equipo.">
-        <input name="area" defaultValue={p?.area} maxLength={60} placeholder="Diseño, Comercial, Tecnología…" className="pn-input" />
+        <input name="area" defaultValue={p?.area} maxLength={60} autoComplete="off" placeholder="Diseño, Comercial, Tecnología…" className="pn-input" />
       </Campo>
       <div className="flex flex-wrap gap-2">
         <BotonSecundario type="button" aria-pressed={esSocio} onClick={() => setEsSocio((v) => !v)} className={cn(esSocio && "border-brand bg-brand/20")}>

@@ -11,14 +11,16 @@ import {
   aplicarReglasActuales,
   borrarGasto,
   borrarTrabajo,
-  borrarProyecto,
   guardarProyecto,
   guardarServicio,
 } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { guardarCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import { Hoja } from "../Clientes";
+import BorrarProyecto from "./BorrarProyecto";
 import { Pill, Tarjeta } from "../ui";
-import { BotonPrincipal, BotonSecundario, Campo, CampoPesos, MensajeError, colorPersona, nombreDe, useAccion } from "./comun";
+import { BotonPrincipal, BotonSecundario, Campo, CampoPesos, LeyendaObligatorios, MensajeError, colorPersona, nombreDe, useAccion } from "./comun";
+import { diasValidos, mascaraDias, mascaraNombre, mascaraPesos } from "@/lib/panel/mascaras";
+import { InputCelular, SelectorLugar } from "../campos";
 import { cn } from "@/lib/utils";
 
 const estados: { valor: EstadoProyecto; label: string; tono: "neutro" | "morado" | "lima" }[] = [
@@ -167,26 +169,35 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
   };
   return (
     <form onSubmit={enviar} noValidate className="space-y-4">
+      <LeyendaObligatorios />
       <Campo etiqueta="Nombre del proyecto *">
-        <input name="nombre" defaultValue={p?.nombre} maxLength={90} className="pn-input" />
+        <input name="nombre" defaultValue={p?.nombre} maxLength={90} autoComplete="off" onChange={(e) => (e.target.value = mascaraNombre(e.target.value))} className="pn-input" />
       </Campo>
       <SelectorCliente datos={datos} valor={clienteId} onCambio={setClienteId} />
       <SelectorServicio datos={datos} valor={servicioId} onCambio={setServicioId} />
       <CampoPesos name="valor" etiqueta="Valor que paga el cliente (COP)" valorInicial={p?.valor} requerido />
       {datos.esDueno ? (
-        <Campo etiqueta="Valor del día de este proyecto (opcional)" ayuda={`Vacío = el de Reparto (${pesos(datos.config.tarifaDia)}). Solo tú lo cambias.`}>
-          <input name="tarifaDia" inputMode="numeric" defaultValue={p?.tarifaDia ? new Intl.NumberFormat("es-CO").format(p.tarifaDia) : ""} placeholder={new Intl.NumberFormat("es-CO").format(datos.config.tarifaDia)} className="pn-input tabular-nums" />
+        <Campo etiqueta="Valor del día de este proyecto" obligatorio={false} ayuda={`Vacío = el de Reparto (${pesos(datos.config.tarifaDia)}). Solo tú lo cambias.`}>
+          <input
+            name="tarifaDia"
+            inputMode="numeric"
+            autoComplete="off"
+            defaultValue={p?.tarifaDia ? mascaraPesos(String(p.tarifaDia)) : ""}
+            placeholder={mascaraPesos(String(datos.config.tarifaDia))}
+            onChange={(e) => (e.target.value = mascaraPesos(e.target.value, 8))}
+            className="pn-input tabular-nums"
+          />
         </Campo>
       ) : (
         <p className="flex items-center gap-2 text-xs text-fog-dim">
           <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Valor del día: {pesos(p?.tarifaDia ?? datos.config.tarifaDia)} (solo Sergio lo cambia).
         </p>
       )}
-      <Campo etiqueta="Fecha de entrega prometida" ayuda="Para avisar si el proyecto va tarde.">
+      <Campo etiqueta="Fecha de entrega prometida" obligatorio={false} ayuda="Para avisar si el proyecto va tarde (2 días antes, el día y si se pasa).">
         <input name="fechaLimite" type="date" defaultValue={p?.fechaLimite ?? ""} className="pn-input" />
       </Campo>
       <div className="grid grid-cols-2 gap-3">
-        <Campo etiqueta="Estado">
+        <Campo etiqueta="Estado *">
           <select value={estado} onChange={(e) => setEstado(e.target.value as EstadoProyecto)} className="pn-input">
             {estados.map((x) => (
               <option key={x.valor} value={x.valor}>{x.label}</option>
@@ -194,7 +205,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
           </select>
         </Campo>
         {estado === "cerrado" && (
-          <Campo etiqueta="Fecha de cierre">
+          <Campo etiqueta="Fecha de cierre *">
             <input name="fechaCierre" type="date" defaultValue={p?.fechaCierre ?? hoy} className="pn-input" />
           </Campo>
         )}
@@ -205,7 +216,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
           Al cerrar, el proyecto guarda su valor del día y quiénes reciben parte igual. Si después cambia el reparto o el equipo, este proyecto no cambia.
         </p>
       )}
-      <Campo etiqueta="Notas">
+      <Campo etiqueta="Notas" obligatorio={false}>
         <textarea name="notas" defaultValue={p?.notas ?? ""} rows={2} maxLength={1000} className="pn-input h-auto py-2.5" />
       </Campo>
       <MensajeError error={error} />
@@ -378,15 +389,8 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
           <BotonSecundario type="button" onClick={() => setEditando(true)}>
             Editar proyecto
           </BotonSecundario>
-          <BotonSecundario
-            type="button"
-            className="text-[#FF9BB0]"
-            onClick={() =>
-              window.confirm(`¿Borrar "${p.nombre}" con sus gastos y días trabajados? No se puede deshacer.`) && acc.correr(() => borrarProyecto(p.id), onBorrado)
-            }
-          >
-            <Trash2 aria-hidden className="h-4 w-4" /> Borrar
-          </BotonSecundario>
+          {/* Borrar: solo Sergio, con alerta que muestra todo lo que se borra (D-119) */}
+          {datos.esDueno && <BorrarProyecto proyectoId={p.id} nombre={p.nombre} onBorrado={onBorrado} />}
         </div>
       )}
     </div>
@@ -438,7 +442,7 @@ function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; d
   const [clave, setClave] = useState(0);
   const [dias, setDias] = useState("");
   const n = Number(dias.replace(",", "."));
-  const valido = n > 0 && n <= 365 && Math.round(n * 2) === n * 2;
+  const valido = diasValidos(dias);
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -461,23 +465,31 @@ function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; d
   return (
     <form key={clave} onSubmit={enviar} noValidate className="mt-3 space-y-2">
       <div className="grid grid-cols-2 gap-2">
-        <select name="persona" aria-label="Quién lo hizo" className="pn-input" defaultValue={datos.miPersonaId ?? datos.personas[0]?.id}>
-          {datos.personas
-            .filter((pe) => pe.activo)
-            .map((pe) => (
-              <option key={pe.id} value={pe.id}>{pe.nombre}</option>
+        <Campo etiqueta="Quién lo hizo *">
+          <select name="persona" className="pn-input" defaultValue={datos.miPersonaId ?? datos.personas[0]?.id}>
+            {datos.personas
+              .filter((pe) => pe.activo)
+              .map((pe) => (
+                <option key={pe.id} value={pe.id}>{pe.nombre}</option>
+              ))}
+          </select>
+        </Campo>
+        <Campo etiqueta="Qué hizo *">
+          <select name="actividad" className="pn-input" defaultValue="">
+            <option value="" disabled>Elige…</option>
+            {actividades.map((a) => (
+              <option key={a} value={a}>{a}</option>
             ))}
-        </select>
-        <select name="actividad" aria-label="Qué hizo" className="pn-input" defaultValue="">
-          <option value="" disabled>Qué hizo…</option>
-          {actividades.map((a) => (
-            <option key={a} value={a}>{a}</option>
-          ))}
-        </select>
+          </select>
+        </Campo>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <input value={dias} onChange={(e) => setDias(e.target.value)} inputMode="decimal" placeholder="Días (ej. 2 o 2,5)" aria-label="Días trabajados" className="pn-input" />
-        <input name="fecha" type="date" defaultValue={hoy} aria-label="Fecha" className="pn-input" />
+        <Campo etiqueta="Días trabajados *" ayuda="1 día = 8 h. Ej. 2 o 2,5">
+          <input value={dias} onChange={(e) => setDias(mascaraDias(e.target.value))} inputMode="decimal" autoComplete="off" placeholder="2,5" className="pn-input tabular-nums" />
+        </Campo>
+        <Campo etiqueta="Fecha *">
+          <input name="fecha" type="date" defaultValue={hoy} max={hoy} className="pn-input" />
+        </Campo>
       </div>
       {valido && (
         <p className="text-xs text-fog">
@@ -485,7 +497,7 @@ function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; d
         </p>
       )}
       <div className="grid grid-cols-[1fr_auto] gap-2">
-        <input name="nota" placeholder="Detalle (opcional)" maxLength={200} aria-label="Detalle" className="pn-input" />
+        <input name="nota" placeholder="Detalle (opcional)" maxLength={200} aria-label="Detalle (opcional)" className="pn-input" />
         <BotonSecundario type="submit" disabled={acc.pendiente} className="h-11">
           <Plus aria-hidden className="h-4 w-4" /> Días
         </BotonSecundario>
@@ -516,16 +528,24 @@ export function FormGasto({ proyectoId, hoy, empresa = false }: { proyectoId: st
   return (
     <form key={clave} onSubmit={enviar} noValidate className="mt-3 space-y-2">
       <div className="grid grid-cols-2 gap-2">
-        <input name="concepto" placeholder="Concepto" aria-label="Concepto" maxLength={90} className="pn-input col-span-2" />
-        <select name="categoria" aria-label="Categoría" defaultValue={empresa ? "herramientas" : "freelance"} className="pn-input">
-          {categoriasGasto.map((c) => (
-            <option key={c.valor} value={c.valor}>{c.label}</option>
-          ))}
-        </select>
-        <input name="fecha" type="date" defaultValue={hoy} aria-label="Fecha" className="pn-input" />
+        <div className="col-span-2">
+          <Campo etiqueta="Concepto *">
+            <input name="concepto" placeholder="Ej. Plantilla, dominio, fotos" maxLength={90} autoComplete="off" className="pn-input" />
+          </Campo>
+        </div>
+        <Campo etiqueta="Categoría *">
+          <select name="categoria" defaultValue={empresa ? "herramientas" : "freelance"} className="pn-input">
+            {categoriasGasto.map((c) => (
+              <option key={c.valor} value={c.valor}>{c.label}</option>
+            ))}
+          </select>
+        </Campo>
+        <Campo etiqueta="Fecha *">
+          <input name="fecha" type="date" defaultValue={hoy} className="pn-input" />
+        </Campo>
       </div>
       <div className="grid grid-cols-[1fr_auto] items-end gap-2">
-        <CampoPesos name="valor" etiqueta="Valor (COP)" />
+        <CampoPesos name="valor" etiqueta="Valor (COP)" requerido />
         <BotonSecundario type="submit" disabled={acc.pendiente} className="h-11">
           <Plus aria-hidden className="h-4 w-4" /> Gasto
         </BotonSecundario>
@@ -541,7 +561,7 @@ const NUEVO = "__nuevo__";
 function SelectorCliente({ datos, valor, onCambio }: { datos: DatosFinanzas; valor: string; onCambio: (id: string) => void }) {
   const [creando, setCreando] = useState(false);
   const acc = useAccion();
-  const [nuevo, setNuevo] = useState({ empresa: "", nombre: "", telefono: "", origen: "WhatsApp" });
+  const [nuevo, setNuevo] = useState({ empresa: "", nombre: "", telefono: "", origen: "WhatsApp", pais: "CO", ciudadId: "" });
   const crear = () =>
     acc.correr(async () => {
       const r = await guardarCliente({ ...nuevo, estado: "nuevo" });
@@ -570,15 +590,29 @@ function SelectorCliente({ datos, valor, onCambio }: { datos: DatosFinanzas; val
         <div className="space-y-2 rounded-frame border border-brand/40 bg-brand/5 p-3">
           <p className="text-xs font-semibold text-brand-soft">Cliente nuevo (queda guardado en Clientes)</p>
           <div className="grid grid-cols-2 gap-2">
-            <input placeholder="Negocio o empresa" aria-label="Negocio o empresa" maxLength={90} value={nuevo.empresa} onChange={(e) => setNuevo({ ...nuevo, empresa: e.target.value })} className="pn-input" />
-            <input placeholder="Contacto *" aria-label="Nombre del contacto" maxLength={80} value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })} className="pn-input" />
-            <input placeholder="Celular *" aria-label="Celular" inputMode="tel" maxLength={20} value={nuevo.telefono} onChange={(e) => setNuevo({ ...nuevo, telefono: e.target.value })} className="pn-input" />
-            <select aria-label="De dónde llegó" value={nuevo.origen} onChange={(e) => setNuevo({ ...nuevo, origen: e.target.value })} className="pn-input">
-              {["Instagram", "Google", "WhatsApp", "Referido", "Página", "Publicidad", "Evento", "Otro"].map((o) => (
-                <option key={o}>{o}</option>
-              ))}
-            </select>
+            <Campo etiqueta="Nombre de la persona *">
+              <input maxLength={80} autoComplete="off" value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: mascaraNombre(e.target.value) })} className="pn-input" />
+            </Campo>
+            <Campo etiqueta="Negocio o empresa" obligatorio={false}>
+              <input maxLength={90} autoComplete="off" value={nuevo.empresa} onChange={(e) => setNuevo({ ...nuevo, empresa: mascaraNombre(e.target.value) })} className="pn-input" />
+            </Campo>
+            <InputCelular key={nuevo.pais} name="nuevoTelefono" pais={nuevo.pais} onCambio={(v) => setNuevo((x) => ({ ...x, telefono: v }))} />
+            <Campo etiqueta="De dónde llegó" obligatorio={false}>
+              <select value={nuevo.origen} onChange={(e) => setNuevo({ ...nuevo, origen: e.target.value })} className="pn-input">
+                {["Instagram", "Google", "WhatsApp", "Referido", "Página", "Publicidad", "Evento", "Otro"].map((o) => (
+                  <option key={o}>{o}</option>
+                ))}
+              </select>
+            </Campo>
           </div>
+          <SelectorLugar
+            paises={datos.lugares.paises}
+            ciudades={datos.lugares.ciudades}
+            pais={nuevo.pais}
+            ciudadId={nuevo.ciudadId}
+            puedeAgregar={datos.puedeEditar}
+            onCambio={(pais, ciudadId) => setNuevo((x) => ({ ...x, pais, ciudadId, telefono: pais === x.pais ? x.telefono : "" }))}
+          />
           <MensajeError error={acc.error} />
           <div className="flex gap-2">
             <BotonSecundario type="button" onClick={() => setCreando(false)}>Cancelar</BotonSecundario>
@@ -626,12 +660,16 @@ function SelectorServicio({ datos, valor, onCambio }: { datos: DatosFinanzas; va
         <div className="space-y-2 rounded-frame border border-brand/40 bg-brand/5 p-3">
           <p className="text-xs font-semibold text-brand-soft">Servicio nuevo (queda en la lista para todos los proyectos)</p>
           <div className="grid grid-cols-[1.4fr_1fr] gap-2">
-            <input placeholder="Nombre del servicio *" aria-label="Nombre del servicio" maxLength={80} value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })} className="pn-input" />
-            <select aria-label="Categoría" value={nuevo.categoria} onChange={(e) => setNuevo({ ...nuevo, categoria: e.target.value })} className="pn-input">
-              {categoriasServicio.map((c) => (
-                <option key={c.valor} value={c.valor}>{c.label}</option>
-              ))}
-            </select>
+            <Campo etiqueta="Nombre del servicio *">
+              <input maxLength={80} value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: mascaraNombre(e.target.value) })} className="pn-input" />
+            </Campo>
+            <Campo etiqueta="Categoría *">
+              <select value={nuevo.categoria} onChange={(e) => setNuevo({ ...nuevo, categoria: e.target.value })} className="pn-input">
+                {categoriasServicio.map((c) => (
+                  <option key={c.valor} value={c.valor}>{c.label}</option>
+                ))}
+              </select>
+            </Campo>
           </div>
           <MensajeError error={acc.error} />
           <div className="flex gap-2">

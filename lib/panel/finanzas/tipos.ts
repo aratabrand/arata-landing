@@ -131,4 +131,6 @@ export type DatosFinanzas = {
   clientes: ClienteRef[];
   /** Pasos del proceso de entrega de cada proyecto (D-112). */
   tareas: FinTarea[];
+  /** Países y ciudades para crear un cliente desde un proyecto (D-119). */
+  lugares: { paises: { codigo: string; nombre: string }[]; ciudades: { id: string; pais: string; nombre: string; departamento: string | null }[] };
 };

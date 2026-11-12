@@ -160,10 +160,10 @@ function EditorSitio({
         <fieldset disabled={!edita} className="min-w-0 space-y-4 disabled:opacity-80">
           <Tarjeta titulo="Cómo sale en Google" bajada="Lo que la gente lee antes de entrar">
             <div className="space-y-4">
-              <Campo label="Título" usado={borrador.seo.titulo.length} limite={LIM.seoTitulo} error={errs.seoTitulo}>
+              <Campo label="Título *" usado={borrador.seo.titulo.length} limite={LIM.seoTitulo} error={errs.seoTitulo}>
                 <input value={borrador.seo.titulo} onChange={(e) => set("seo", { ...borrador.seo, titulo: e.target.value })} className="pn-input" maxLength={90} />
               </Campo>
-              <Campo label="Descripción" usado={borrador.seo.descripcion.length} limite={LIM.seoDesc} error={errs.seoDesc}>
+              <Campo label="Descripción" opcional usado={borrador.seo.descripcion.length} limite={LIM.seoDesc} error={errs.seoDesc}>
                 <textarea value={borrador.seo.descripcion} onChange={(e) => set("seo", { ...borrador.seo, descripcion: e.target.value })} rows={3} className="pn-input h-auto py-2.5" maxLength={220} />
               </Campo>
             </div>
@@ -171,11 +171,11 @@ function EditorSitio({
 
           <Tarjeta titulo="Portada" bajada="Lo primero que se ve al abrir la página">
             <div className="space-y-4">
-              <Campo label="Título" usado={borrador.portada.titulo.length} limite={LIM.titulo} error={errs.titulo}>
+              <Campo label="Título *" usado={borrador.portada.titulo.length} limite={LIM.titulo} error={errs.titulo}>
                 <input value={borrador.portada.titulo} onChange={(e) => set("portada", { ...borrador.portada, titulo: e.target.value })} className="pn-input" maxLength={LIM.titulo} />
               </Campo>
               {remoto && <p className="-mt-2 text-xs text-fog-dim">La primera frase sale en blanco y lo que sigue, en lima.</p>}
-              <Campo label="Texto de apoyo" usado={borrador.portada.subtitulo.length} limite={LIM.subtitulo}>
+              <Campo label="Texto de apoyo" opcional usado={borrador.portada.subtitulo.length} limite={LIM.subtitulo}>
                 <textarea value={borrador.portada.subtitulo} onChange={(e) => set("portada", { ...borrador.portada, subtitulo: e.target.value })} rows={2} className="pn-input h-auto py-2.5" maxLength={LIM.subtitulo} />
               </Campo>
             </div>
@@ -238,10 +238,10 @@ function EditorSitio({
                     </button>}
                   </div>
                   <div className={cn("grid gap-3", remoto ? "sm:grid-cols-[1fr_1.4fr]" : "sm:grid-cols-[1fr_1.4fr_auto]")}>
-                    <Campo label="Texto" usado={b.texto.length} limite={LIM.boton} error={errs[`bt-${b.id}`]}>
+                    <Campo label="Texto *" usado={b.texto.length} limite={LIM.boton} error={errs[`bt-${b.id}`]}>
                       <input value={b.texto} onChange={(e) => setBoton(b.id, { texto: e.target.value })} className="pn-input" maxLength={LIM.boton} />
                     </Campo>
-                    <Campo label="Enlace" error={errs[`bl-${b.id}`]}>
+                    <Campo label="Enlace *" error={errs[`bl-${b.id}`]}>
                       <input value={b.enlace} onChange={(e) => setBoton(b.id, { enlace: e.target.value })} className="pn-input" inputMode="url" maxLength={300} spellCheck={false} />
                     </Campo>
                     {!remoto && (
@@ -424,12 +424,22 @@ function recortar(t: string, n: number) {
   return t.length > n ? `${t.slice(0, n - 1).trimEnd()}…` : t;
 }
 
-function Campo({ label, usado, limite, error, children }: { label: string; usado?: number; limite?: number; error?: string; children: React.ReactNode }) {
+function Campo({ label, usado, limite, error, opcional, children }: { label: string; usado?: number; limite?: number; error?: string; opcional?: boolean; children: React.ReactNode }) {
+  const req = /\*$/.test(label);
   const pasado = limite !== undefined && usado !== undefined && usado > limite;
   return (
     <label className="block min-w-0">
       <span className="mb-1.5 flex items-baseline justify-between gap-2 text-xs font-medium text-fog">
-        {label}
+        <span>
+          {label.replace(/\s*\*$/, "")}
+          {req && (
+            <>
+              <span aria-hidden className="ml-0.5 text-lime">*</span>
+              <span className="sr-only"> (obligatorio)</span>
+            </>
+          )}
+          {opcional && <span className="ml-1.5 font-normal text-fog-dim">· Opcional</span>}
+        </span>
         {limite !== undefined && (
           <span className={cn("tabular-nums", pasado ? "text-[#FF9BB0]" : "text-fog-dim")}>
             {usado}/{limite}

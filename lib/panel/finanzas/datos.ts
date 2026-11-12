@@ -4,6 +4,7 @@ import { panelActivo } from "../config";
 import { estadoSesion, negociosDe } from "../sesion";
 import { TARIFA_DIA_INICIAL, type ClienteRef, type DatosFinanzas, type FinConfig, type FinProyecto, type Gasto, type GastoFijo, type Persona, type RegistroTrabajo, type ReglasReparto, type Servicio } from "./tipos";
 import { finanzasDemo } from "./demo";
+import { cargarLugares } from "../clientes/datos";
 import type { FinTarea } from "./procesos";
 
 // Lectura de Finanzas y Equipo (solo servidor). Solo el negocio de tipo 'agencia'
@@ -61,7 +62,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
   const q = db();
   const n = ctx.negocioId;
 
-  const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes, tareas] = await Promise.all([
+  const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes, tareas, lugares] = await Promise.all([
     q.query(`select id, nombre, area, es_socio, usuario_id, activo from equipo_personas where negocio_id = $1 order by orden, creado`, [n]),
     q.query(`select tarifa_dia, reserva_meses, actualizado from fin_config where negocio_id = $1`, [n]),
     q.query(
@@ -87,6 +88,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
         where p.negocio_id = $1 order by t.orden, t.creado`,
       [n]
     ),
+    cargarLugares(),
   ]);
 
   const lista: Persona[] = personas.rows.map((r) => ({
@@ -109,6 +111,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     puedeMarcarPasos: true,
     miPersonaId: lista.find((p) => p.usuarioId === ctx.usuarioId)?.id ?? null,
     demo: false,
+    lugares,
     personas: lista,
     config: cfg,
     proyectos: proyectos.rows.map(

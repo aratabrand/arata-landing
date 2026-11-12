@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, Check, Clock, Plus, Trash2, Wallet } from "lucide-react";
+import { ArrowLeft, Check, Clock, History, Plus, Trash2, Wallet } from "lucide-react";
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
 import { avance, etapas, etiquetaEtapa, type Etapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
@@ -11,6 +12,9 @@ import { Hoja } from "../Clientes";
 import { PanelPage, Pill, Tarjeta } from "../ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, MensajeError, nombreDe, useAccion } from "../finanzas/comun";
 import { FormProyecto } from "../finanzas/ProyectosFin";
+import BorrarProyecto from "../finanzas/BorrarProyecto";
+import Historial from "../Historial";
+import type { EventoHistorial } from "@/lib/panel/historial";
 import { diasHasta } from "./ProyectosAgencia";
 import { cn } from "@/lib/utils";
 
@@ -20,8 +24,9 @@ import { cn } from "@/lib/utils";
 const comercial = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "En curso", t: "morado" }, cerrado: { l: "Cerrado", t: "lima" } } as const;
 const diasTxt = (d: number) => `${String(Math.round(d * 10) / 10).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
 
-export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: DatosFinanzas; p: FinProyecto; hoy: string }) {
+export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { datos: DatosFinanzas; p: FinProyecto; hoy: string; historial: EventoHistorial[] }) {
   const [editando, setEditando] = useState(false);
+  const router = useRouter();
   const acc = useAccion();
   const tareas = datos.tareas.filter((t) => t.proyectoId === p.id);
   const a = avance(tareas);
@@ -51,11 +56,14 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
             {vence !== null && vence < 0 && <Pill tono="alerta">Va tarde</Pill>}
           </div>
         </div>
-        {edita && (
-          <BotonSecundario type="button" onClick={() => setEditando(true)} className="h-11 shrink-0">
-            Editar proyecto
-          </BotonSecundario>
-        )}
+        <div className="flex shrink-0 flex-wrap gap-2">
+          {edita && (
+            <BotonSecundario type="button" onClick={() => setEditando(true)} className="h-11">
+              Editar proyecto
+            </BotonSecundario>
+          )}
+          {datos.esDueno && <BorrarProyecto proyectoId={p.id} nombre={p.nombre} onBorrado={() => router.push("/panel/proyectos")} />}
+        </div>
       </div>
       <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es de Sergio y Andrés." />
 
@@ -167,6 +175,10 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
           </Tarjeta>
         </div>
       </div>
+
+      <Tarjeta titulo="Historial" bajada="Quién hizo cada cambio y cuándo" accion={<History aria-hidden className="h-4 w-4 text-brand-soft" />}>
+        <Historial eventos={historial} vacio="Sin cambios registrados todavía." />
+      </Tarjeta>
 
       {editando && (
         <Hoja titulo={`Editar: ${p.nombre}`} onClose={() => setEditando(false)}>

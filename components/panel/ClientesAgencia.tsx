@@ -1,13 +1,17 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
-import { ExternalLink, Mail, MapPin, MessageCircle, Phone, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { ExternalLink, History, MapPin, MessageCircle, Phone, Plus, Search, Trash2 } from "lucide-react";
 import type { ClienteAgencia, DatosClientes } from "@/lib/panel/clientes/datos";
+import type { EventoHistorial } from "@/lib/panel/historial";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
-import { borrarCliente, guardarCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { borrarCliente, guardarCliente, verHistorialCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { mascaraCelular, mascaraNombre } from "@/lib/panel/mascaras";
+import { InputCelular, InputInstagram, InputUrl, SelectorLugar } from "./campos";
+import Historial from "./Historial";
 import { Hoja } from "./Clientes";
 import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
-import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, useAccion } from "./finanzas/comun";
+import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, LeyendaObligatorios, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
 // Clientes de Arata San con datos reales (D-110): quién es, de dónde llegó,
@@ -25,7 +29,8 @@ const estadoP = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "
 const enCurso = (c: ClienteAgencia) => c.proyectos.filter((p) => p.estado !== "cerrado");
 const comprado = (c: ClienteAgencia) => c.proyectos.filter((p) => p.estado === "cerrado").reduce((a, p) => a + p.valor, 0);
 const titulo = (c: ClienteAgencia) => c.empresa ?? c.nombre;
-const wa = (c: ClienteAgencia) => `https://wa.me/57${c.telefono.replace(/^57(?=\d{10}$)/, "")}?text=${encodeURIComponent(`Hola ${c.nombre.split(" ")[0]}, `)}`;
+// Colombia: se antepone 57; otros países ya traen su indicativo
+const wa = (c: ClienteAgencia) => `https://wa.me/${c.pais === "CO" ? "57" + c.telefono.replace(/^57(?=\d{10}$)/, "") : c.telefono}?text=${encodeURIComponent(`Hola ${c.nombre.split(" ")[0]}, `)}`;
 
 type Filtro = "todos" | "en-curso" | "origen";
 
@@ -41,7 +46,7 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
     return datos.clientes
       .filter((c) => filtro !== "en-curso" || enCurso(c).length > 0)
       .filter((c) => !origen || c.origen === origen)
-      .filter((c) => !t || [c.nombre, c.empresa, c.telefono, c.ciudad, c.correo].some((v) => v?.toLowerCase().includes(t)));
+      .filter((c) => !t || [c.nombre, c.empresa, c.telefono, c.ciudad, c.paisNombre].some((v) => v?.toLowerCase().includes(t)));
   }, [datos.clientes, q, filtro, origen]);
 
   const resumen = useMemo(() => {
@@ -163,22 +168,27 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
 
       {actual && (
         <Hoja titulo={titulo(actual)} onClose={() => setAbierto(null)}>
-          <Ficha c={actual} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} onBorrado={() => setAbierto(null)} />
+          <Ficha c={actual} datos={datos} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} onBorrado={() => setAbierto(null)} />
         </Hoja>
       )}
       {creando && (
         <Hoja titulo="Agregar cliente" onClose={() => setCreando(false)}>
-          <FormCliente onListo={() => setCreando(false)} />
+          <FormCliente datos={datos} onListo={() => setCreando(false)} />
         </Hoja>
       )}
     </PanelPage>
   );
 }
 
-function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; puedeEditar: boolean; puedeBorrar: boolean; onBorrado: () => void }) {
+function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; datos: DatosClientes; puedeEditar: boolean; puedeBorrar: boolean; onBorrado: () => void }) {
   const [editando, setEditando] = useState(false);
+  const [historial, setHistorial] = useState<EventoHistorial[] | null>(null);
   const acc = useAccion();
-  if (editando) return <FormCliente c={c} onListo={() => setEditando(false)} />;
+  // El historial del cliente se pide al abrir la ficha (y otra vez al terminar de editar)
+  useEffect(() => {
+    if (!editando) verHistorialCliente(c.id).then(setHistorial);
+  }, [c.id, editando]);
+  if (editando) return <FormCliente c={c} datos={datos} onListo={() => setEditando(false)} />;
   const curso = enCurso(c);
   const e = ESTADOS.find((x) => x.valor === c.estado)!;
 
@@ -210,9 +220,8 @@ function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; 
         <h3 className="mb-2 text-sm font-semibold text-white">Datos</h3>
         <ul className="space-y-2 text-sm text-fog">
           <li className="text-white">{c.nombre}{c.empresa && <span className="text-fog"> · {c.empresa}</span>}</li>
-          <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-brand-soft" />{c.telefono}</li>
-          {c.correo && <li className="flex items-center gap-2"><Mail aria-hidden className="h-4 w-4 text-brand-soft" />{c.correo}</li>}
-          {c.ciudad && <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-brand-soft" />{c.ciudad}</li>}
+          <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-brand-soft" />{mascaraCelular(c.telefono, c.pais)}</li>
+          <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-brand-soft" />{[c.ciudad, c.paisNombre].filter(Boolean).join(", ")}</li>
           {c.sitioWeb && (
             <li>
               <a href={c.sitioWeb} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-white">
@@ -261,6 +270,13 @@ function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; 
         </section>
       )}
 
+      <section>
+        <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+          <History aria-hidden className="h-4 w-4 text-brand-soft" /> Historial
+        </h3>
+        {historial === null ? <p className="text-sm text-fog-dim">Cargando…</p> : <Historial eventos={historial} vacio="Sin cambios registrados todavía." />}
+      </section>
+
       {puedeEditar && (
         <div className="flex flex-wrap gap-2 border-t border-white/8 pt-4">
           <BotonSecundario type="button" onClick={() => setEditando(true)}>Editar cliente</BotonSecundario>
@@ -268,7 +284,7 @@ function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; 
             <BotonSecundario
               type="button"
               className="text-[#FF9BB0]"
-              onClick={() => window.confirm(`¿Borrar a ${titulo(c)}? No se puede deshacer.`) && acc.correr(() => borrarCliente(c.id), onBorrado)}
+              onClick={() => window.confirm(`¿Borrar a ${titulo(c)} para siempre? No se puede deshacer y queda en el historial quién lo borró.`) && acc.correr(() => borrarCliente(c.id), onBorrado)}
             >
               <Trash2 aria-hidden className="h-4 w-4" /> Borrar
             </BotonSecundario>
@@ -280,8 +296,10 @@ function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; 
   );
 }
 
-function FormCliente({ c, onListo }: { c?: ClienteAgencia; onListo: () => void }) {
+function FormCliente({ c, datos, onListo }: { c?: ClienteAgencia; datos: DatosClientes; onListo: () => void }) {
   const acc = useAccion();
+  const [pais, setPais] = useState(c?.pais ?? "CO");
+  const [ciudadId, setCiudadId] = useState(c?.ciudadId ?? "");
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -293,8 +311,8 @@ function FormCliente({ c, onListo }: { c?: ClienteAgencia; onListo: () => void }
           nombre: v("nombre"),
           empresa: v("empresa"),
           telefono: v("telefono"),
-          correo: v("correo"),
-          ciudad: v("ciudad"),
+          pais,
+          ciudadId: pais === "CO" ? ciudadId : "",
           sitioWeb: v("sitioWeb"),
           instagram: v("instagram"),
           estado: v("estado"),
@@ -307,38 +325,40 @@ function FormCliente({ c, onListo }: { c?: ClienteAgencia; onListo: () => void }
   };
   return (
     <form onSubmit={enviar} noValidate className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
-        <Campo etiqueta="Negocio o empresa">
-          <input name="empresa" defaultValue={c?.empresa ?? ""} maxLength={90} className="pn-input" />
+      <LeyendaObligatorios />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Campo etiqueta="Nombre de la persona *">
+          <NombreInput name="nombre" inicial={c?.nombre ?? ""} autoComplete="name" />
         </Campo>
-        <Campo etiqueta="Contacto *">
-          <input name="nombre" defaultValue={c?.nombre} maxLength={80} className="pn-input" />
+        <Campo etiqueta="Negocio o empresa" obligatorio={false}>
+          <NombreInput name="empresa" inicial={c?.empresa ?? ""} autoComplete="organization" max={90} />
         </Campo>
-        <Campo etiqueta="Celular *">
-          <input name="telefono" defaultValue={c?.telefono} inputMode="tel" maxLength={20} placeholder="300 000 0000" className="pn-input" />
-        </Campo>
-        <Campo etiqueta="Correo">
-          <input name="correo" type="email" defaultValue={c?.correo ?? ""} maxLength={120} className="pn-input" />
-        </Campo>
-        <Campo etiqueta="Ciudad">
-          <input name="ciudad" defaultValue={c?.ciudad ?? ""} maxLength={60} className="pn-input" />
-        </Campo>
-        <Campo etiqueta="Estado">
+        <InputCelular key={pais} inicial={c?.telefono ?? ""} pais={pais} />
+        <Campo etiqueta="Estado *">
           <select name="estado" defaultValue={c?.estado ?? "nuevo"} className="pn-input">
             {ESTADOS.map((x) => (
               <option key={x.valor} value={x.valor}>{x.label}</option>
             ))}
           </select>
         </Campo>
-        <Campo etiqueta="Página web">
-          <input name="sitioWeb" defaultValue={c?.sitioWeb ?? ""} inputMode="url" placeholder="https://" maxLength={200} className="pn-input" />
-        </Campo>
-        <Campo etiqueta="Instagram">
-          <input name="instagram" defaultValue={c?.instagram ?? ""} placeholder="@negocio" maxLength={60} className="pn-input" />
-        </Campo>
       </div>
-      <div className="grid grid-cols-[1fr_1.6fr] gap-3">
-        <Campo etiqueta="De dónde llegó">
+      <SelectorLugar
+        paises={datos.paises}
+        ciudades={datos.ciudades}
+        pais={pais}
+        ciudadId={ciudadId}
+        puedeAgregar={datos.puedeEditar}
+        onCambio={(p, ci) => {
+          setPais(p);
+          setCiudadId(ci);
+        }}
+      />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <InputUrl inicial={c?.sitioWeb ?? ""} />
+        <InputInstagram inicial={c?.instagram ?? ""} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-[1fr_1.6fr]">
+        <Campo etiqueta="De dónde llegó" obligatorio={false}>
           <select name="origen" defaultValue={c?.origen ?? ""} className="pn-input">
             <option value="">Sin registrar</option>
             {ORIGENES.map((o) => (
@@ -346,11 +366,11 @@ function FormCliente({ c, onListo }: { c?: ClienteAgencia; onListo: () => void }
             ))}
           </select>
         </Campo>
-        <Campo etiqueta="Detalle">
+        <Campo etiqueta="Detalle" obligatorio={false}>
           <input name="origenDetalle" defaultValue={c?.origenDetalle ?? ""} maxLength={200} placeholder="Ej. lo refirió Andrés, campaña de noviembre…" className="pn-input" />
         </Campo>
       </div>
-      <Campo etiqueta="Notas">
+      <Campo etiqueta="Notas" obligatorio={false}>
         <textarea name="notas" defaultValue={c?.notas ?? ""} rows={3} maxLength={2000} className="pn-input h-auto py-2.5" />
       </Campo>
       <MensajeError error={acc.error} />
@@ -359,4 +379,10 @@ function FormCliente({ c, onListo }: { c?: ClienteAgencia; onListo: () => void }
       </BotonPrincipal>
     </form>
   );
+}
+
+/** Texto de nombre: sin espacios dobles ni al inicio. */
+function NombreInput({ name, inicial, autoComplete, max = 80 }: { name: string; inicial: string; autoComplete?: string; max?: number }) {
+  const [v, setV] = useState(inicial);
+  return <input name={name} value={v} maxLength={max} autoComplete={autoComplete} autoCapitalize="words" onChange={(e) => setV(mascaraNombre(e.target.value))} className="pn-input" />;
 }

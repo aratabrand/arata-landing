@@ -7,7 +7,7 @@ import { totalGastosFijos } from "@/lib/panel/finanzas/calculo";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
 import { borrarGasto, borrarGastoFijo, guardarGastoFijo } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { Tarjeta } from "../ui";
-import { BotonSecundario, CampoPesos, MensajeError, useAccion } from "./comun";
+import { BotonSecundario, Campo, CampoPesos, MensajeError, useAccion } from "./comun";
 import { FormGasto, Lista } from "./ProyectosFin";
 import { cn } from "@/lib/utils";
 
@@ -123,8 +123,12 @@ function GastosFijos({ datos }: { datos: DatosFinanzas }) {
       )}
       {datos.puedeEditar && (
         <form key={clave} onSubmit={enviar} noValidate className="mt-3 grid grid-cols-[1fr_auto] items-end gap-2">
-          <input name="concepto" placeholder="Concepto (ej. herramientas, contador)" aria-label="Concepto" maxLength={90} className="pn-input col-span-2" />
-          <CampoPesos name="valor" etiqueta="Valor mensual (COP)" />
+          <div className="col-span-2">
+            <Campo etiqueta="Concepto *">
+              <input name="concepto" placeholder="Ej. herramientas, contador" maxLength={90} autoComplete="off" className="pn-input" />
+            </Campo>
+          </div>
+          <CampoPesos name="valor" etiqueta="Valor mensual (COP)" requerido />
           <BotonSecundario type="submit" disabled={acc.pendiente} className="h-11">
             <Plus aria-hidden className="h-4 w-4" /> Agregar
           </BotonSecundario>

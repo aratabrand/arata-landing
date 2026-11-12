@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Calendar, Camera, Eye, ShoppingBag, TrendingUp, Users } from "lucide-react";
+import { Calendar, Camera, CircleCheck, Eye, ShoppingBag, TrendingUp, Users } from "lucide-react";
 import { nombreCliente, type DatosFinanzas } from "@/lib/panel/finanzas/tipos";
 import { etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
 import type { ClienteAgencia } from "@/lib/panel/clientes/datos";
@@ -26,6 +26,7 @@ const mesesCortos = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "se
 
 export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos: DatosFinanzas; clientes: ClienteAgencia[]; hoy: string; nombre: string }) {
   const [periodo, setPeriodo] = useState<PeriodoResumen>(30);
+  const [vistaProyectos, setVistaProyectos] = useState<"proceso" | "terminados">("proceso");
   const r = useMemo(() => resumenAgencia(datos, clientes, hoy, periodo), [datos, clientes, hoy, periodo]);
   const serie = r.meses.map((m) => ({ etiqueta: `${mesesCortos[Number(m.mes.slice(5)) - 1]} ${m.mes.slice(2, 4)}`, valor: m.ventas }));
   const textoPeriodo = periodo === 365 ? "el último año" : `los últimos ${periodo} días`;
@@ -108,7 +109,46 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-        <Tarjeta titulo="Proyectos en proceso" bajada="Los que se entregan primero arriba" accion={<Link href="/panel/proyectos" className="text-xs font-semibold text-brand-soft hover:text-white">Ver todos →</Link>}>
+        <Tarjeta
+          titulo={vistaProyectos === "proceso" ? "Proyectos en proceso" : "Proyectos terminados"}
+          bajada={vistaProyectos === "proceso" ? "Los que se entregan primero arriba" : `${r.terminadosPeriodo} en ${textoPeriodo} · ${r.aTiempo} a tiempo`}
+          accion={<Link href="/panel/proyectos" className="text-xs font-semibold text-brand-soft hover:text-white">Ver todos →</Link>}
+        >
+          <div className="mb-3">
+            <Segmentado
+              etiqueta="Proyectos"
+              opciones={[
+                { valor: "proceso" as const, label: `En proceso (${r.enProceso})` },
+                { valor: "terminados" as const, label: `Terminados (${r.terminados.length})` },
+              ]}
+              valor={vistaProyectos}
+              onChange={setVistaProyectos}
+            />
+          </div>
+          {vistaProyectos === "terminados" ? (
+            r.terminados.length === 0 ? (
+              <p className="py-6 text-center text-sm text-fog">Todavía no hay proyectos terminados.</p>
+            ) : (
+              <ul className="space-y-2">
+                {r.terminados.slice(0, 6).map(({ p, entregado, aTiempo }) => (
+                  <li key={p.id}>
+                    <Link href={`/panel/proyectos/${p.id}`} className="flex items-center gap-3 rounded-frame border border-white/6 bg-surface-2/50 p-3 hover:border-white/16">
+                      <CircleCheck aria-hidden className="h-4 w-4 shrink-0 text-lime" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-white">{p.nombre}</span>
+                        <span className="block truncate text-[0.7rem] text-fog-dim">
+                          {nombreCliente(datos.clientes.find((c) => c.id === p.clienteId))}
+                          {entregado && ` · entregado ${fechaCorta(entregado)}`}
+                        </span>
+                      </span>
+                      {aTiempo !== null && <Pill tono={aTiempo ? "lima" : "alerta"}>{aTiempo ? "A tiempo" : "Tarde"}</Pill>}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : (
+            <>
           {r.abiertos.length === 0 ? (
             <p className="py-6 text-center text-sm text-fog">No hay proyectos en proceso.</p>
           ) : (
@@ -131,6 +171,8 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
                 </li>
               ))}
             </ul>
+          )}
+            </>
           )}
         </Tarjeta>
 

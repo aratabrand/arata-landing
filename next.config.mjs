@@ -60,9 +60,9 @@ function redireccionesPanel() {
   if (PANEL_SOLO) {
     return [
       { source: "/", destination: "/panel", permanent: false },
-      // Todo lo que no sea panel, su API (acceso y textos publicados), los archivos de Next o robots/ícono → al sitio público
+      // Todo lo que no sea panel, su API (acceso, textos publicados y aviso diario), los archivos de Next o robots/ícono → al sitio público
       {
-        source: "/:ruta((?!panel(?:/|$)|api/auth/|api/sitio$|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
+        source: "/:ruta((?!panel(?:/|$)|api/auth/|api/sitio$|api/avisos/|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
         destination: `${SITIO}/:ruta`,
         permanent: false,
       },
@@ -91,7 +91,11 @@ const nextConfig = {
     return [{ source: "/v2", destination: "/", permanent: true }, ...redireccionesPanel()];
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // El service worker de avisos del panel siempre se revisa al abrir (D-119)
+      { source: "/panel/sw.js", headers: [{ key: "Cache-Control", value: "no-cache" }] },
+    ];
   },
 };
 

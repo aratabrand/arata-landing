@@ -80,11 +80,13 @@ Ejemplo: gastos fijos $ 1.000.000/mes; un proyecto promedio de $ 2.000.000 con 1
 
 | Persona | Rol (`miembros.rol`) | Puede |
 |---|---|---|
-| Sergio | `dueno` | Todo. **Solo él:** valor del día (general y por proyecto), personas del equipo, recalcular un cerrado, borrar clientes y Mi sitio |
+| Sergio | `dueno` | Todo. **Solo él:** valor del día (general y por proyecto), personas del equipo, recalcular un cerrado, **borrar proyectos y clientes** y Mi sitio |
 | Andrés | `finanzas` | Editar Finanzas: proyectos, valores, cierres, gastos, gastos fijos, días trabajados, reserva; clientes y servicios; pasos de los proyectos |
 | Santiago | `equipo` | **Ver todo** y marcar pasos |
 
 Doble barrera: la pantalla no muestra lo que no se puede editar, y **cada acción del servidor revisa otra vez** sesión con doble factor, negocio agencia y rol. Si Andrés intenta cambiar el valor del día directo al servidor: "Solo Sergio puede cambiar el valor del día".
+
+**Borrar (D-119): solo Sergio** borra proyectos y clientes. Borrar un proyecto muestra todo lo que se va (gastos, días, pasos) y pide escribir su nombre; se borra todo junto. Cada creación, cambio y borrado queda en el **historial** (quién, qué, cuándo, antes → después).
 
 Cambiar el rol de alguien (corre en el computador de Sergio, no cambia su contraseña):
 
@@ -160,6 +162,10 @@ Cálculo: 23 de 23 ✅ (`scripts/prueba-finanzas.ts`). Navegador con base local 
 | Valor del día propio $ 100.000 y cierre: Sergio $ 762.500; cambiar el general a $ 90.000 no altera lo cerrado | ✅ |
 | Andrés: crea proyectos, registra días y gastos, cambia la reserva; el valor del día bloqueado (general y del proyecto); Equipo en solo lectura; edita clientes pero no los borra; no cambia Mi sitio | ✅ |
 | Santiago: solo lectura, no crea proyectos | ✅ |
+
+## 8a-bis. Pruebas de historial, notificaciones y avisos (12 nov 2026, D-119)
+
+Unitarias: alertas 6/6, máscaras 11/11, finanzas 23/23, resumen 12/12. Navegador con base local, las 3 cuentas y un servidor de avisos de prueba: **36 de 36 ✅**, entre ellas: celular `300 123 4567`, Instagram `@…`, página `https://…`, otro país bloquea la ciudad, agregar ciudad que falta; historial del cliente y del proyecto (Valor $ 2.000.000 → $ 2.500.000); Andrés ve los cambios de Sergio como nuevos y el contador baja al verlos; un gasto de Sergio manda un aviso cifrado al dispositivo de Andrés y marcar un paso no; aviso diario: 401 sin clave, 1 aviso a 2 días y no repite; borrar proyecto muestra lo que se va, exige el nombre y no deja nada en la base; Andrés no puede borrar proyectos ni clientes.
 
 ## 8b. Clientes y servicios como listas (D-110)
 

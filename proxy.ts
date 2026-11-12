@@ -10,6 +10,8 @@ export function proxy(request: NextRequest) {
   if (!panelActivo) return NextResponse.next(); // modo ejemplo
   const ruta = request.nextUrl.pathname;
   if (ruta === RUTA_ENTRAR || ruta === RUTA_DOBLE_FACTOR) return NextResponse.next();
+  // Archivos públicos del panel como app (D-119): avisos, ícono y manifiesto. No traen datos.
+  if (/^\/panel\/(sw\.js|manifest\.webmanifest|icono-[\w-]+\.png)$/.test(ruta)) return NextResponse.next();
   if (!getSessionCookie(request)) {
     // Ya puso la contraseña y falta el código → directo al doble factor (sin repetir la contraseña)
     const pendiente = request.cookies.getAll().some((c) => c.name.endsWith("two_factor"));

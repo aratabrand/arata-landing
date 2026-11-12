@@ -170,6 +170,18 @@ create policy "miembros leen y escriben sus clientes" on clientes
 
 ---
 
+### Tablas nuevas (D-119, `010_historial_avisos_ciudades.sql`)
+
+| Tabla | Qué guarda |
+|---|---|
+| `panel_historial` | Quién (`usuario_id`, `quien`), qué (`accion`, `entidad`, `titulo`), cuándo (`creado`) y qué cambió (`cambios`: campo, antes, después). `proyecto_id`/`cliente_id` sin llave foránea: sobrevive al borrado. `importante` = también se avisa al celular |
+| `notificaciones_vistas` | Hasta cuándo vio cada persona sus notificaciones (contador de sin ver) |
+| `push_suscripciones` | Un dispositivo por fila (endpoint del navegador + llaves públicas). Se borra sola si el dispositivo ya no acepta avisos |
+| `avisos_enviados` | Un aviso de vencimiento por proyecto, tipo y día (no se repite) |
+| `paises` | Los 249 países (código ISO y nombre en español) |
+| `ciudades` | Ciudades de Colombia (74 principales + las que se agreguen desde el panel), con departamento |
+| `clientes.pais`, `clientes.ciudad_id` | Desde las listas. `clientes.correo` y `clientes.ciudad` (texto) quedan sin uso |
+
 ## 3. Definición de cada métrica
 
 Escrita para que el número del panel siempre se pueda explicar.

@@ -16,6 +16,7 @@ export function finanzasDemo(): DatosFinanzas {
     puedeMarcarPasos: false,
     miPersonaId: "d-sergio",
     demo: true,
+    lugares: { paises: [{ codigo: "CO", nombre: "Colombia" }], ciudades: [] },
     personas,
     config: { tarifaDia: 80_000, reservaMeses: 3, actualizado: null },
     proyectos: [

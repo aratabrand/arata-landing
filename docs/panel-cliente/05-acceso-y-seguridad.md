@@ -152,6 +152,29 @@ Sergio publica ─► config_sitio.publicado ─► Deploy Hook ─► Vercel re
 3. El sitio ya tiene `PANEL_URL`; no necesita nada más.
 4. Prueba: en el panel, Mi sitio → cambia un texto → Guardar → **Publicar en www.aratasan.com** → en 1–2 minutos aparece en la página (Vercel → Deployments muestra la construcción "Deploy Hook").
 
+## 3d. Avisos al celular y computador (D-119)
+
+```
+Cambio clave en el panel ──► historial ──► Web Push ──► celular / computador de los demás
+Vercel Cron 8 a. m. ──► /api/avisos/diario ──► proyectos a 2 días, hoy o tarde ──► Web Push
+```
+
+- Cada persona los activa **en cada dispositivo**: Notificaciones → "Activar avisos aquí". En **iPhone** primero: Safari → Compartir → **Agregar a inicio**, y abrir el panel desde ese ícono (Apple solo manda avisos a apps instaladas, iOS 16.4 o más nuevo).
+- Nunca le llega a uno el aviso de lo que hizo él mismo. Lo que no es clave (marcar un paso, guardar Mi sitio, editar un cliente) solo queda en Notificaciones.
+- `/api/avisos/diario` solo responde con `Authorization: Bearer CRON_SECRET` (Vercel lo manda solo). No repite el mismo aviso el mismo día (`avisos_enviados`).
+- Sin las claves, el panel funciona igual y la pestaña dice que faltan.
+
+**Pasos (Sergio, una sola vez, en su computador y en Vercel; ninguna clave pasa por el chat):**
+1. En la carpeta del proyecto: `npx web-push generate-vapid-keys` → muestra una **Public Key** y una **Private Key**.
+2. Vercel → proyecto **`arata-panel`** → Settings → Environment Variables (Production):
+   - `VAPID_PUBLIC_KEY` = la pública · `VAPID_PRIVATE_KEY` = la privada · `VAPID_SUBJECT` = `mailto:contacto@aratasan.com`
+   - `CRON_SECRET` = `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
+3. Redeploy de `arata-panel`. Vercel → Settings → **Cron Jobs** debe mostrar `/api/avisos/diario` a las 13:00 UTC (8 a. m. Bogotá).
+4. Para probar en local, las mismas variables en `.env.local` (otras claves está bien: las suscripciones son por clave).
+5. Cada uno: panel → Notificaciones → Activar avisos aquí → "Mandar aviso de prueba".
+
+> `vercel.json` es del repositorio: el proyecto del sitio también intenta el aviso diario, pero ahí la ruta responde 404 (no tiene la base). No hace nada.
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.

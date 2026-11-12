@@ -7,6 +7,7 @@ import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { errores, LIM } from "@/lib/panel/sitio/reglas";
 import type { ConfigSitio } from "@/content/panel/tipos";
 import type { Resultado } from "../finanzas/acciones";
+import { registrar } from "@/lib/panel/historial";
 
 // Guarda "Mi sitio" de Arata San (D-111). Revalida en el servidor con las mismas reglas
 // de la pantalla. Cada guardado deja una versión (config_sitio_versiones).
@@ -41,6 +42,7 @@ export async function guardarSitio(entrada: ConfigSitio): Promise<Resultado> {
     if (!u.rowCount) {
       await db().query(`insert into config_sitio (negocio_id, datos, actualizado_por) values ($1, $2, $3)`, [ctx.negocioId, datos, ctx.usuarioId]);
     }
+    await registrar(ctx, { accion: "editar", entidad: "sitio", titulo: "Guardó cambios en Mi sitio (sin publicar)" });
     revalidatePath("/panel/sitio");
     return { ok: true };
   } catch {
@@ -83,6 +85,7 @@ export async function publicarSitio(): Promise<Resultado> {
       ]);
       return { ok: false, error: "Vercel no respondió. No se publicó nada; intenta otra vez." };
     }
+    await registrar(ctx, { accion: "publicar", entidad: "sitio", titulo: "Publicó Mi sitio en aratasan.com", importante: true });
     revalidatePath("/panel/sitio");
     return { ok: true };
   } catch {

@@ -41,6 +41,7 @@ Este folder documenta **el panel** para ver cómo va el negocio y manejarlo desd
 | `/panel/sitio` | Títulos, descripciones, portada y botones, con vista previa; en Arata, **Publicar** los sube a aratasan.com (D-117) |
 | `/panel/finanzas` | **Solo Arata San.** Resumen, proyectos, gastos, reparto y proyección (datos reales en Neon) |
 | `/panel/equipo` | **Solo Arata San.** Cuánto gana cada uno, por proyecto y en total |
+| `/panel/notificaciones` | **Solo Arata San.** Alertas de entrega, todos los cambios (historial) y activar avisos al celular y computador (D-119) |
 | `/panel/entrar` | Paso 1 del acceso: correo y contraseña |
 | `/panel/doble-factor` | Paso 2: código de la app de autenticación (la primera vez, se activa con un QR) |
 

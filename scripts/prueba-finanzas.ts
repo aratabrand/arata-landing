@@ -64,7 +64,7 @@ const viejo = calcularProyecto({ ...p, repartoCongelado: { bolsaTrabajoPct: 30, 
 ok(viejo.numPartes === 2 && suma(viejo) === viejo.ganancia, "reglas viejas congeladas se leen sin romper");
 
 // Resumen y fondos
-const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, esDueno: true, puedeMarcarPasos: true, miPersonaId: "S", demo: false, personas, config, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, trabajo, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [], tareas: [] };
+const d: DatosFinanzas = { negocioId: "n", puedeEditar: true, esDueno: true, puedeMarcarPasos: true, miPersonaId: "S", demo: false, personas, config, proyectos: [p, { ...p, id: "px", estado: "en-curso", fechaCierre: null }], gastos, trabajo, gastosFijos: [{ id: "f", concepto: "Herramientas", valorMensual: 100_000, activo: true }], servicios: [], clientes: [], tareas: [], lugares: { paises: [], ciudades: [] } };
 const res = resumenFinanzas(d);
 ok(res.cerrados === 1 && res.ingresos === 2_000_000, "resumen solo cuenta cerrados");
 ok(res.fondos === 300_000, "fondos = 350.000 de Arata − 50.000 gasto de la empresa = " + res.fondos);

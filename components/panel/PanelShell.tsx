@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { ArrowUpRight, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users, UsersRound, Wallet } from "lucide-react";
+import { ArrowUpRight, Bell, Globe, LayoutDashboard, LogOut, MessageCircle, SquareKanban, Users, UsersRound, Wallet } from "lucide-react";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,11 @@ export const navPanel = [
   { href: "/panel/finanzas", label: "Finanzas", icon: Wallet, agencia: true },
   { href: "/panel/equipo", label: "Equipo", icon: UsersRound, agencia: true },
   { href: "/panel/sitio", label: "Mi sitio", icon: Globe, agencia: false },
+  // Solo Arata San (D-119). En celular va como campana arriba, no en las pestañas.
+  { href: "/panel/notificaciones", label: "Notificaciones", icon: Bell, agencia: true },
 ] as const;
+
+const NOTIF = "/panel/notificaciones";
 
 const activo = (path: string, href: string) => (href === "/panel" ? path === href : path.startsWith(href));
 
@@ -37,6 +41,7 @@ export default function PanelShell({
   conSesion = false,
   conFinanzas = false,
   sinFranja = ["/panel/finanzas", "/panel/equipo"],
+  sinLeer = 0,
   children,
 }: {
   negocio: Negocio;
@@ -44,10 +49,15 @@ export default function PanelShell({
   conFinanzas?: boolean;
   /** Rutas con datos reales o aviso propio: no llevan la franja de ejemplo. */
   sinFranja?: string[];
+  /** Cambios de otros sin ver + proyectos por vencer o tarde (D-119). */
+  sinLeer?: number;
   children: ReactNode;
 }) {
   const path = usePathname() ?? "/panel";
   const nav = navPanel.filter((n) => conFinanzas || !n.agencia);
+  const tabs = nav.filter((n) => n.href !== NOTIF);
+  const conNotif = nav.some((n) => n.href === NOTIF);
+  const contador = sinLeer > 99 ? "99+" : String(sinLeer);
   const conFranja = !sinFranja.some((r) => path.startsWith(r));
   // Resumen, Clientes, Proyectos y Mi sitio todavía muestran datos de ejemplo (aunque haya sesión real):
   // llevan la franja. Finanzas y Equipo tienen su propio aviso (ejemplo o solo lectura).
@@ -84,7 +94,13 @@ export default function PanelShell({
               >
                 <Icon aria-hidden className={cn("h-[18px] w-[18px]", on ? "text-lime" : "text-fog-dim group-hover:text-white")} />
                 {label}
-                {on && <span aria-hidden className="ml-auto h-1.5 w-1.5 rounded-full bg-lime" />}
+                {href === NOTIF && sinLeer > 0 ? (
+                  <span className="ml-auto min-w-[1.25rem] rounded-full bg-lime px-1.5 text-center text-[0.68rem] font-bold leading-5 text-ink" aria-label={`${sinLeer} sin ver`}>
+                    {contador}
+                  </span>
+                ) : (
+                  on && <span aria-hidden className="ml-auto h-1.5 w-1.5 rounded-full bg-lime" />
+                )}
               </Link>
             );
           })}
@@ -131,6 +147,21 @@ export default function PanelShell({
         </Link>
         <div className="flex min-w-0 items-center gap-2">
           <span className="truncate text-xs font-medium text-fog">{negocio.nombre}</span>
+          {conNotif && (
+            <Link
+              href={NOTIF}
+              aria-label={sinLeer > 0 ? `Notificaciones: ${sinLeer} sin ver` : "Notificaciones"}
+              aria-current={activo(path, NOTIF) ? "page" : undefined}
+              className={cn("relative flex h-10 w-10 shrink-0 items-center justify-center rounded-btn", activo(path, NOTIF) ? "text-lime" : "text-fog-dim hover:text-white")}
+            >
+              <Bell aria-hidden className="h-[18px] w-[18px]" />
+              {sinLeer > 0 && (
+                <span aria-hidden className="absolute right-1 top-1 min-w-[1rem] rounded-full bg-lime px-1 text-center text-[0.6rem] font-bold leading-4 text-ink">
+                  {contador}
+                </span>
+              )}
+            </Link>
+          )}
           {conSesion && (
             <button type="button" onClick={salir} aria-label="Salir del panel" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white">
               <LogOut aria-hidden className="h-4 w-4" />
@@ -152,8 +183,8 @@ export default function PanelShell({
         aria-label="Panel"
         className="fixed inset-x-0 bottom-0 z-30 border-t border-white/8 bg-[#06040F]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
       >
-        <ul className="grid" style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}>
-          {nav.map(({ href, label, icon: Icon }) => {
+        <ul className="grid" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
+          {tabs.map(({ href, label, icon: Icon }) => {
             const on = activo(path, href);
             return (
               <li key={href}>
