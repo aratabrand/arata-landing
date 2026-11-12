@@ -10,7 +10,7 @@ import { AGENDAR, hero, menu, seoInicio } from "@/content/inicio";
 //
 // - Sin PANEL_URL (local) → los textos de content/inicio.ts.
 // - El panel nunca publicó → los textos de content/inicio.ts.
-// - El panel no responde → la construcción FALLA a propósito y queda en línea la versión
+// - El panel no responde (después de esperarlo ~3 min) → la construcción FALLA a propósito y queda en línea la versión
 //   anterior (mejor eso que volver en silencio a textos viejos). Para construir igual sin
 //   el panel: SITIO_SIN_PANEL=1.
 
@@ -112,12 +112,17 @@ export function textosSitio(): Promise<TextosSitio> {
     if (!panel || process.env.SITIO_SIN_PANEL === "1" || process.env.PANEL_SOLO === "1") return textosBase;
     const url = `${panel}/api/sitio`;
     let ultimo: unknown;
-    for (let intento = 1; intento <= 3; intento++) {
+    // Al subir a main, Vercel construye el sitio y el panel a la vez: si el panel todavía
+    // no termina (responde 307/404/502), se espera hasta ~3 min antes de rendirse.
+    const esperas = [2, 5, 10, 15, 20, 30, 30, 30, 30, 30]; // segundos
+    for (let intento = 0; intento <= esperas.length; intento++) {
       try {
         return aplicarPublicado(await pedir(url));
       } catch (e) {
         ultimo = e;
-        await new Promise((r) => setTimeout(r, 1500 * intento));
+        if (intento === esperas.length) break;
+        console.warn(`[sitio-textos] el panel no respondió (${(e as Error)?.message}); reintento en ${esperas[intento]} s`);
+        await new Promise((r) => setTimeout(r, esperas[intento] * 1000));
       }
     }
     throw new Error(
