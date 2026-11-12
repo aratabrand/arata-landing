@@ -4,13 +4,13 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { contextoAgencia } from "@/lib/panel/finanzas/datos";
-import { validarReglas } from "@/lib/panel/finanzas/calculo";
-import { categoriasGasto, categoriasServicio, type CategoriaServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
+import { EMPRESA, actividades, categoriasGasto, categoriasServicio, type CategoriaServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
 import { etapas, plantillas } from "@/lib/panel/finanzas/procesos";
 
 // Acciones de Finanzas (D-109). Cada una, en el servidor:
 //   1. sesión completa con doble factor, 2. negocio de tipo 'agencia',
-//   3. rol 'dueno' (Andrés y Santiago solo ven), 4. valida los datos,
+//   3. rol: 'dueno' (Sergio) o 'finanzas' (Andrés) editan; el valor del día y el equipo
+//      son solo de Sergio; 'equipo' (Santiago) solo ve y marca pasos (D-118). 4. valida los datos,
 //   5. escribe filtrando SIEMPRE por negocio_id (nunca confía en el id que manda el navegador).
 
 export type Resultado = { ok: true; id?: string } | { ok: false; error: string };
@@ -18,11 +18,17 @@ export type Resultado = { ok: true; id?: string } | { ok: false; error: string }
 const NO = (error: string): Resultado => ({ ok: false, error });
 const SI: Resultado = { ok: true };
 
-async function dueno() {
+async function editor() {
   if (!panelActivo) throw new Error("El panel está en modo ejemplo: los cambios no se guardan.");
   const ctx = await contextoAgencia();
   if (!ctx) throw new Error("Tu sesión terminó. Vuelve a entrar.");
-  if (!ctx.puedeEditar) throw new Error("Solo Sergio puede cambiar las finanzas.");
+  if (!ctx.editaFinanzas) throw new Error("Solo Sergio y Andrés pueden cambiar las finanzas.");
+  return ctx;
+}
+
+async function soloDueno() {
+  const ctx = await editor();
+  if (!ctx.esDueno) throw new Error("Solo Sergio puede cambiar esto.");
   return ctx;
 }
 
@@ -70,33 +76,36 @@ const uuid = (v: unknown) => {
   return t;
 };
 
-async function reglasActuales(negocioId: string): Promise<ReglasReparto> {
-  const r = (await db().query(`select bolsa_trabajo_pct, reparto from fin_config where negocio_id = $1`, [negocioId])).rows[0];
+const valorDia = (v: unknown) => {
+  const n = pesos(v, "Valor del día", 1000);
+  if (n > 10_000_000) throw new Error("Valor del día: máximo 10.000.000.");
+  return n;
+};
+
+/** Reglas de hoy: valor del día + partes iguales (socios activos + empresa). Se congelan al cerrar. */
+async function reglasActuales(negocioId: string, tarifaProyecto: number | null): Promise<ReglasReparto> {
+  const r = (await db().query(`select tarifa_dia from fin_config where negocio_id = $1`, [negocioId])).rows[0];
   if (!r) throw new Error("Falta configurar el reparto.");
-  return { bolsaTrabajoPct: Number(r.bolsa_trabajo_pct), reparto: r.reparto };
+  const socios = await db().query(`select id from equipo_personas where negocio_id = $1 and es_socio and activo order by orden, creado`, [negocioId]);
+  return { tarifaDia: tarifaProyecto ?? Number(r.tarifa_dia), partes: [...socios.rows.map((x) => x.id as string), EMPRESA] };
 }
 
 // ── Reglas de reparto ───────────────────────────────────────────────
-export async function guardarReglas(entrada: { bolsaTrabajoPct: number; reparto: { beneficiario: string; pct: number }[]; reservaMeses: number }) {
+/** Valor del día (solo Sergio) y meses de reserva (Sergio y Andrés). */
+export async function guardarReglas(entrada: { tarifaDia: number | string; reservaMeses: number }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
-    const personas = (await db().query(`select id, nombre, area, es_socio, usuario_id, activo from equipo_personas where negocio_id = $1`, [ctx.negocioId])).rows.map(
-      (r) => ({ id: r.id as string, nombre: r.nombre, area: r.area, esSocio: r.es_socio, usuarioId: r.usuario_id, activo: r.activo })
-    );
-    const reglas: ReglasReparto = {
-      bolsaTrabajoPct: Math.round(Number(entrada.bolsaTrabajoPct) * 100) / 100,
-      reparto: (entrada.reparto ?? []).map((p) => ({ beneficiario: String(p.beneficiario), pct: Math.round(Number(p.pct) * 100) / 100 })),
-    };
-    const errores = validarReglas(reglas, personas);
-    if (errores.length) return NO(errores[0]);
+    const ctx = await editor();
     const reserva = Math.round(Number(entrada.reservaMeses));
     if (!(reserva >= 0 && reserva <= 24)) return NO("La reserva va de 0 a 24 meses.");
+    const actual = (await db().query(`select tarifa_dia from fin_config where negocio_id = $1`, [ctx.negocioId])).rows[0];
+    const tarifa = valorDia(entrada.tarifaDia);
+    if (actual && Number(actual.tarifa_dia) !== tarifa && !ctx.esDueno) return NO("Solo Sergio puede cambiar el valor del día.");
     await db().query(
-      `insert into fin_config (negocio_id, bolsa_trabajo_pct, reparto, reserva_meses, actualizado_por)
-       values ($1, $2, $3, $4, $5)
-       on conflict (negocio_id) do update set bolsa_trabajo_pct = excluded.bolsa_trabajo_pct, reparto = excluded.reparto,
-         reserva_meses = excluded.reserva_meses, actualizado_por = excluded.actualizado_por`,
-      [ctx.negocioId, reglas.bolsaTrabajoPct, JSON.stringify(reglas.reparto), reserva, ctx.usuarioId]
+      `insert into fin_config (negocio_id, bolsa_trabajo_pct, reparto, tarifa_dia, reserva_meses, actualizado_por)
+       values ($1, 0, '[]', $2, $3, $4)
+       on conflict (negocio_id) do update set tarifa_dia = excluded.tarifa_dia, reserva_meses = excluded.reserva_meses,
+         actualizado_por = excluded.actualizado_por`,
+      [ctx.negocioId, tarifa, reserva, ctx.usuarioId]
     );
     return SI;
   });
@@ -112,10 +121,12 @@ export async function guardarProyecto(entrada: {
   valor: string | number;
   fechaCierre?: string;
   fechaLimite?: string;
+  /** Valor del día solo de este proyecto ("" = el de Reparto). Solo Sergio. */
+  tarifaDia?: string | number | null;
   notas?: string;
 }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const nombre = texto(entrada.nombre, 2, 90, "Nombre del proyecto");
     // Cliente y servicio: solo de sus tablas y del mismo negocio (D-110)
     const cliente = entrada.clienteId ? uuid(entrada.clienteId) : null;
@@ -135,24 +146,35 @@ export async function guardarProyecto(entrada: {
     const valor = pesos(entrada.valor, "Valor del proyecto");
     const cierre = estado === "cerrado" ? fecha(entrada.fechaCierre, "Fecha de cierre") : null;
     const limite = entrada.fechaLimite ? fecha(entrada.fechaLimite, "Fecha de entrega") : null;
+    const tarifaPedida = entrada.tarifaDia === undefined || entrada.tarifaDia === null || entrada.tarifaDia === "" ? null : valorDia(entrada.tarifaDia);
 
     if (entrada.id) {
       const id = uuid(entrada.id);
-      const prev = (await db().query(`select estado, reparto_congelado from fin_proyectos where id = $1 and negocio_id = $2`, [id, ctx.negocioId])).rows[0];
+      const prev = (await db().query(`select estado, tarifa_dia, reparto_congelado from fin_proyectos where id = $1 and negocio_id = $2`, [id, ctx.negocioId])).rows[0];
       if (!prev) return NO("Ese proyecto no existe.");
-      // Al cerrar se congelan los % actuales; si se reabre, se sueltan
-      const congelado = estado === "cerrado" ? (prev.reparto_congelado ?? (await reglasActuales(ctx.negocioId))) : null;
+      // El valor del día del proyecto solo lo cambia Sergio; si Andrés guarda, se conserva el que había
+      const anterior = prev.tarifa_dia === null ? null : Number(prev.tarifa_dia);
+      if (tarifaPedida !== anterior && !ctx.esDueno && entrada.tarifaDia !== undefined) return NO("Solo Sergio puede cambiar el valor del día.");
+      const tarifa = ctx.esDueno && entrada.tarifaDia !== undefined ? tarifaPedida : anterior;
+      // Al cerrar se congelan las reglas (valor del día y partes); si se reabre, se sueltan
+      const congelado =
+        estado === "cerrado"
+          ? prev.reparto_congelado?.partes && tarifa === anterior
+            ? prev.reparto_congelado
+            : await reglasActuales(ctx.negocioId, tarifa)
+          : null;
       await db().query(
         `update fin_proyectos set nombre = $3, cliente_id = $4, servicio_id = $5, estado = $6, valor = $7, fecha_cierre = $8,
-           reparto_congelado = $9, notas = $10, fecha_limite = $11 where id = $1 and negocio_id = $2`,
-        [id, ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite]
+           reparto_congelado = $9, notas = $10, fecha_limite = $11, tarifa_dia = $12 where id = $1 and negocio_id = $2`,
+        [id, ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite, tarifa]
       );
     } else {
-      const congelado = estado === "cerrado" ? await reglasActuales(ctx.negocioId) : null;
+      if (tarifaPedida !== null && !ctx.esDueno) return NO("Solo Sergio puede poner un valor del día propio.");
+      const congelado = estado === "cerrado" ? await reglasActuales(ctx.negocioId, tarifaPedida) : null;
       const nuevo = await db().query(
-        `insert into fin_proyectos (negocio_id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas, fecha_limite)
-         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`,
-        [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite]
+        `insert into fin_proyectos (negocio_id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, reparto_congelado, notas, fecha_limite, tarifa_dia)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning id`,
+        [ctx.negocioId, nombre, cliente, servicio, estado, valor, cierre, congelado ? JSON.stringify(congelado) : null, notas, limite, tarifaPedida]
       );
       // El proceso de entrega arranca con los pasos del servicio (D-112)
       await cargarPasos(nuevo.rows[0].id, servicio);
@@ -162,14 +184,17 @@ export async function guardarProyecto(entrada: {
   });
 }
 
-/** Vuelve a calcular un proyecto cerrado con los % de hoy (decisión explícita de Sergio). */
+/** Vuelve a calcular un proyecto cerrado con las reglas de hoy (decisión explícita de Sergio). */
 export async function aplicarReglasActuales(proyectoId: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
-    const reglas = await reglasActuales(ctx.negocioId);
+    const ctx = await soloDueno();
+    const id = uuid(proyectoId);
+    const p = (await db().query(`select tarifa_dia from fin_proyectos where id = $1 and negocio_id = $2`, [id, ctx.negocioId])).rows[0];
+    if (!p) return NO("Ese proyecto no existe.");
+    const reglas = await reglasActuales(ctx.negocioId, p.tarifa_dia === null ? null : Number(p.tarifa_dia));
     const r = await db().query(
       `update fin_proyectos set reparto_congelado = $3 where id = $1 and negocio_id = $2 and estado = 'cerrado'`,
-      [uuid(proyectoId), ctx.negocioId, JSON.stringify(reglas)]
+      [id, ctx.negocioId, JSON.stringify(reglas)]
     );
     return r.rowCount ? SI : NO("Ese proyecto no está cerrado.");
   });
@@ -177,7 +202,7 @@ export async function aplicarReglasActuales(proyectoId: string) {
 
 export async function borrarProyecto(proyectoId: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const r = await db().query(`delete from fin_proyectos where id = $1 and negocio_id = $2`, [uuid(proyectoId), ctx.negocioId]);
     return r.rowCount ? SI : NO("Ese proyecto no existe.");
   });
@@ -195,7 +220,7 @@ async function cargarPasos(proyectoId: string, servicioId: string) {
 /** Carga los pasos de la plantilla del servicio en un proyecto que no tiene. */
 export async function cargarProceso(proyectoId: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const p = (await db().query(`select servicio_id from fin_proyectos where id = $1 and negocio_id = $2`, [uuid(proyectoId), ctx.negocioId])).rows[0];
     if (!p) return NO("Ese proyecto no existe.");
     if (!p.servicio_id) return NO("Primero elige el servicio del proyecto.");
@@ -224,7 +249,7 @@ export async function marcarPaso(tareaId: string, hecha: boolean) {
 
 export async function agregarPaso(entrada: { proyectoId: string; etapa: string; texto: string }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const proyectoId = uuid(entrada.proyectoId);
     if (!etapas.some((e) => e.valor === entrada.etapa)) return NO("Etapa no válida.");
     const ok = await db().query(`select 1 from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId]);
@@ -240,7 +265,7 @@ export async function agregarPaso(entrada: { proyectoId: string; etapa: string; 
 
 export async function borrarPaso(tareaId: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const r = await db().query(
       `delete from fin_tareas t using fin_proyectos p where t.id = $1 and t.proyecto_id = p.id and p.negocio_id = $2`,
       [uuid(tareaId), ctx.negocioId]
@@ -252,7 +277,7 @@ export async function borrarPaso(tareaId: string) {
 // ── Gastos ──────────────────────────────────────────────────────────
 export async function agregarGasto(entrada: { proyectoId: string | null; concepto: string; categoria: string; valor: string | number; fecha: string }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const proyectoId = entrada.proyectoId ? uuid(entrada.proyectoId) : null;
     if (proyectoId) {
       const existe = await db().query(`select 1 from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId]);
@@ -269,40 +294,43 @@ export async function agregarGasto(entrada: { proyectoId: string | null; concept
 
 export async function borrarGasto(gastoId: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const r = await db().query(`delete from fin_gastos where id = $1 and negocio_id = $2`, [uuid(gastoId), ctx.negocioId]);
     return r.rowCount ? SI : NO("Ese gasto no existe.");
   });
 }
 
-// ── Horas ───────────────────────────────────────────────────────────
-export async function agregarHoras(entrada: { proyectoId: string; personaId: string; horas: string | number; fecha: string; nota?: string }) {
+// ── Días trabajados (quién hizo qué) ────────────────────────────────
+/** Días que una persona trabajó en una actividad del proyecto. 1 día = 8 horas; se permiten medios días. */
+export async function agregarTrabajo(entrada: { proyectoId: string; personaId: string; actividad: string; dias: string | number; fecha: string; nota?: string }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const proyectoId = uuid(entrada.proyectoId);
     const personaId = uuid(entrada.personaId);
     const ok = await db().query(
-      `select pe.area from fin_proyectos p, equipo_personas pe
+      `select 1 from fin_proyectos p, equipo_personas pe
         where p.id = $1 and p.negocio_id = $3 and pe.id = $2 and pe.negocio_id = $3`,
       [proyectoId, personaId, ctx.negocioId]
     );
     if (!ok.rowCount) return NO("Proyecto o persona no válidos.");
-    const horas = Math.round(Number(String(entrada.horas).replace(",", ".")) * 100) / 100;
-    if (!(horas > 0 && horas <= 1000)) return NO("Las horas van de 0,25 a 1.000.");
+    const actividad = String(entrada.actividad ?? "");
+    if (!(actividades as readonly string[]).includes(actividad)) return NO("Elige la actividad.");
+    const dias = Number(String(entrada.dias).replace(",", "."));
+    if (!(dias > 0 && dias <= 365) || Math.round(dias * 2) !== dias * 2) return NO("Escribe los días en enteros o medios días (ej. 2 o 2,5).");
     await db().query(
-      `insert into fin_horas (proyecto_id, persona_id, area, horas, fecha, nota) values ($1, $2, $3, $4, $5, $6)`,
-      [proyectoId, personaId, ok.rows[0].area, horas, fecha(entrada.fecha, "Fecha"), opcional(entrada.nota, 200)]
+      `insert into fin_horas (proyecto_id, persona_id, area, dias, fecha, nota) values ($1, $2, $3, $4, $5, $6)`,
+      [proyectoId, personaId, actividad, dias, fecha(entrada.fecha, "Fecha"), opcional(entrada.nota, 200)]
     );
     return SI;
   });
 }
 
-export async function borrarHoras(horasId: string) {
+export async function borrarTrabajo(id: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const r = await db().query(
       `delete from fin_horas h using fin_proyectos p where h.id = $1 and h.proyecto_id = p.id and p.negocio_id = $2`,
-      [uuid(horasId), ctx.negocioId]
+      [uuid(id), ctx.negocioId]
     );
     return r.rowCount ? SI : NO("Ese registro no existe.");
   });
@@ -311,7 +339,7 @@ export async function borrarHoras(horasId: string) {
 // ── Servicios (lista para elegir en los proyectos) ──────────────────
 export async function guardarServicio(entrada: { id?: string; nombre: string; categoria: string; activo?: boolean }): Promise<Resultado> {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const nombre = texto(entrada.nombre, 2, 80, "Nombre del servicio").replace(/\s+/g, " ");
     if (!categoriasServicio.some((c) => c.valor === entrada.categoria)) return NO("Elige la categoría.");
     const repetido = await db().query(
@@ -338,7 +366,7 @@ export async function guardarServicio(entrada: { id?: string; nombre: string; ca
 // ── Equipo ──────────────────────────────────────────────────────────
 export async function guardarPersona(entrada: { id?: string; nombre: string; area: string; esSocio: boolean; activo: boolean }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await soloDueno();
     const nombre = texto(entrada.nombre, 2, 60, "Nombre");
     const area = texto(entrada.area, 2, 60, "Área");
     if (entrada.id) {
@@ -360,7 +388,7 @@ export async function guardarPersona(entrada: { id?: string; nombre: string; are
 // ── Gastos fijos ────────────────────────────────────────────────────
 export async function guardarGastoFijo(entrada: { id?: string; concepto: string; valorMensual: string | number; activo: boolean }) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const concepto = texto(entrada.concepto, 2, 90, "Concepto");
     const valor = pesos(entrada.valorMensual, "Valor mensual", 1);
     if (entrada.id) {
@@ -377,7 +405,7 @@ export async function guardarGastoFijo(entrada: { id?: string; concepto: string;
 
 export async function borrarGastoFijo(id: string) {
   return ejecutar(async () => {
-    const ctx = await dueno();
+    const ctx = await editor();
     const r = await db().query(`delete from fin_gastos_fijos where id = $1 and negocio_id = $2`, [uuid(id), ctx.negocioId]);
     return r.rowCount ? SI : NO("Ese gasto no existe.");
   });

@@ -2,14 +2,25 @@ import { db } from "../db";
 import { fechaBogota } from "../fecha";
 import { panelActivo } from "../config";
 import { estadoSesion, negociosDe } from "../sesion";
-import type { ClienteRef, DatosFinanzas, FinConfig, FinProyecto, Gasto, GastoFijo, Persona, RegistroHoras, ReglasReparto, Servicio } from "./tipos";
+import { TARIFA_DIA_INICIAL, type ClienteRef, type DatosFinanzas, type FinConfig, type FinProyecto, type Gasto, type GastoFijo, type Persona, type RegistroTrabajo, type ReglasReparto, type Servicio } from "./tipos";
 import { finanzasDemo } from "./demo";
 import type { FinTarea } from "./procesos";
 
 // Lectura de Finanzas y Equipo (solo servidor). Solo el negocio de tipo 'agencia'
-// donde la persona en sesión es miembro. Rol 'dueno' edita; los demás solo ven (D-109).
+// donde la persona en sesión es miembro. Roles (D-118):
+//   'dueno' (Sergio)      → todo, incluido el valor del día, el equipo y Mi sitio
+//   'finanzas' (Andrés)   → edita Finanzas, proyectos y clientes; no el valor del día ni el equipo
+//   'equipo' (Santiago)   → ve todo y marca pasos
 
-export type ContextoAgencia = { negocioId: string; usuarioId: string; rol: string; puedeEditar: boolean };
+export type ContextoAgencia = {
+  negocioId: string;
+  usuarioId: string;
+  rol: string;
+  /** Sergio: valor del día, personas del equipo y Mi sitio. */
+  esDueno: boolean;
+  /** Sergio y Andrés: proyectos, gastos, días trabajados y clientes. */
+  editaFinanzas: boolean;
+};
 
 /** Agencia a la que tiene acceso la persona en sesión (con doble factor). null = no tiene. */
 export async function contextoAgencia(): Promise<ContextoAgencia | null> {
@@ -17,7 +28,7 @@ export async function contextoAgencia(): Promise<ContextoAgencia | null> {
   if (s.estado !== "completa") return null;
   const agencia = (await negociosDe(s.usuarioId)).find((n) => n.tipo === "agencia");
   if (!agencia) return null;
-  return { negocioId: agencia.id, usuarioId: s.usuarioId, rol: agencia.rol, puedeEditar: agencia.rol === "dueno" };
+  return { negocioId: agencia.id, usuarioId: s.usuarioId, rol: agencia.rol, esDueno: agencia.rol === "dueno", editaFinanzas: agencia.rol === "dueno" || agencia.rol === "finanzas" };
 }
 
 // Fechas siempre en Bogotá, sin depender de la zona del servidor
@@ -52,16 +63,16 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
 
   const [personas, config, proyectos, gastos, horas, fijos, servicios, clientes, tareas] = await Promise.all([
     q.query(`select id, nombre, area, es_socio, usuario_id, activo from equipo_personas where negocio_id = $1 order by orden, creado`, [n]),
-    q.query(`select bolsa_trabajo_pct, reparto, reserva_meses, actualizado from fin_config where negocio_id = $1`, [n]),
+    q.query(`select tarifa_dia, reserva_meses, actualizado from fin_config where negocio_id = $1`, [n]),
     q.query(
-      `select id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, fecha_inicio, fecha_limite, reparto_congelado, notas
+      `select id, nombre, cliente_id, servicio_id, estado, valor, fecha_cierre, fecha_inicio, fecha_limite, tarifa_dia, reparto_congelado, notas
          from fin_proyectos where negocio_id = $1
         order by (estado = 'cerrado'), fecha_cierre desc nulls last, creado desc`,
       [n]
     ),
     q.query(`select id, proyecto_id, concepto, categoria, valor, fecha from fin_gastos where negocio_id = $1 order by fecha desc, creado desc`, [n]),
     q.query(
-      `select h.id, h.proyecto_id, h.persona_id, h.area, h.horas, h.fecha, h.nota
+      `select h.id, h.proyecto_id, h.persona_id, h.area, h.dias, h.fecha, h.nota
          from fin_horas h join fin_proyectos p on p.id = h.proyecto_id
         where p.negocio_id = $1 order by h.fecha desc, h.creado desc`,
       [n]
@@ -88,12 +99,13 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
   }));
   const c = config.rows[0];
   const cfg: FinConfig = c
-    ? { bolsaTrabajoPct: Number(c.bolsa_trabajo_pct), reparto: c.reparto, reservaMeses: c.reserva_meses, actualizado: c.actualizado?.toISOString?.() ?? null }
-    : { bolsaTrabajoPct: 0, reparto: [{ beneficiario: "empresa", pct: 100 }], reservaMeses: 3, actualizado: null };
+    ? { tarifaDia: Number(c.tarifa_dia), reservaMeses: c.reserva_meses, actualizado: c.actualizado?.toISOString?.() ?? null }
+    : { tarifaDia: TARIFA_DIA_INICIAL, reservaMeses: 3, actualizado: null };
 
   return {
     negocioId: n,
-    puedeEditar: ctx.puedeEditar,
+    puedeEditar: ctx.editaFinanzas,
+    esDueno: ctx.esDueno,
     puedeMarcarPasos: true,
     miPersonaId: lista.find((p) => p.usuarioId === ctx.usuarioId)?.id ?? null,
     demo: false,
@@ -110,6 +122,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
         fechaCierre: iso(r.fecha_cierre),
         fechaInicio: iso(r.fecha_inicio),
         fechaLimite: iso(r.fecha_limite),
+        tarifaDia: r.tarifa_dia === null ? null : Number(r.tarifa_dia),
         repartoCongelado: (r.reparto_congelado as ReglasReparto | null) ?? null,
         notas: r.notas,
       })
@@ -117,13 +130,13 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     gastos: gastos.rows.map(
       (r): Gasto => ({ id: r.id, proyectoId: r.proyecto_id, concepto: r.concepto, categoria: r.categoria, valor: Number(r.valor), fecha: iso(r.fecha)! })
     ),
-    horas: horas.rows.map(
-      (r): RegistroHoras => ({
+    trabajo: horas.rows.map(
+      (r): RegistroTrabajo => ({
         id: r.id,
         proyectoId: r.proyecto_id,
         personaId: r.persona_id,
-        area: r.area,
-        horas: Number(r.horas),
+        actividad: r.area,
+        dias: Number(r.dias),
         fecha: iso(r.fecha)!,
         nota: r.nota,
       })

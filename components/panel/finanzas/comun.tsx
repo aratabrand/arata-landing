@@ -51,7 +51,7 @@ export function AvisoAcceso({ demo, puedeEditar, texto }: { demo: boolean; puede
   return (
     <div className="flex items-center gap-2 rounded-frame border border-white/8 bg-surface-1 px-4 py-3 text-sm text-fog">
       <Lock aria-hidden className="h-4 w-4 text-brand-soft" />
-      {texto ?? "Puedes ver todo. Solo Sergio puede cambiar datos y porcentajes."}
+      {texto ?? "Puedes ver todo. Sergio y Andrés cambian los números; el valor del día, solo Sergio."}
     </div>
   );
 }

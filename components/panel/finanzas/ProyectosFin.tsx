@@ -1,16 +1,16 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { Clock, Lock, Plus, Receipt, Trash2 } from "lucide-react";
-import { EMPRESA, categoriasGasto, categoriasServicio, nombreCliente, type DatosFinanzas, type EstadoProyecto, type FinProyecto } from "@/lib/panel/finanzas/tipos";
-import { calcularProyecto } from "@/lib/panel/finanzas/calculo";
-import { fechaCorta, pesos, porcentaje } from "@/lib/panel/formato";
+import { CalendarDays, Lock, Plus, Receipt, Trash2 } from "lucide-react";
+import { EMPRESA, HORAS_POR_DIA, actividades, categoriasGasto, categoriasServicio, nombreCliente, type DatosFinanzas, type EstadoProyecto, type FinProyecto } from "@/lib/panel/finanzas/tipos";
+import { calcularProyecto, reglasActuales, textoDias } from "@/lib/panel/finanzas/calculo";
+import { fechaCorta, pesos } from "@/lib/panel/formato";
 import {
   agregarGasto,
-  agregarHoras,
+  agregarTrabajo,
   aplicarReglasActuales,
   borrarGasto,
-  borrarHoras,
+  borrarTrabajo,
   borrarProyecto,
   guardarProyecto,
   guardarServicio,
@@ -26,7 +26,6 @@ const estados: { valor: EstadoProyecto; label: string; tono: "neutro" | "morado"
   { valor: "en-curso", label: "En curso", tono: "morado" },
   { valor: "cerrado", label: "Cerrado", tono: "lima" },
 ];
-const horasTxt = (h: number) => `${String(Math.round(h * 100) / 100).replace(".", ",")} h`;
 
 export default function ProyectosFin({ datos, hoy }: { datos: DatosFinanzas; hoy: string }) {
   const [abierto, setAbierto] = useState<string | null>(null);
@@ -38,7 +37,7 @@ export default function ProyectosFin({ datos, hoy }: { datos: DatosFinanzas; hoy
     () =>
       datos.proyectos
         .filter((p) => filtro === "todos" || p.estado === filtro)
-        .map((p) => ({ p, r: calcularProyecto(p, datos.gastos, datos.horas, datos.config, datos.personas) })),
+        .map((p) => ({ p, r: calcularProyecto(p, datos.gastos, datos.trabajo, datos.config, datos.personas) })),
     [datos, filtro]
   );
   const actual = datos.proyectos.find((p) => p.id === abierto) ?? null;
@@ -159,6 +158,8 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
           valor: String(f.get("valor") ?? ""),
           fechaCierre: String(f.get("fechaCierre") ?? ""),
           fechaLimite: String(f.get("fechaLimite") ?? ""),
+          // El valor del día del proyecto solo lo manda Sergio (Andrés no lo puede cambiar)
+          ...(datos.esDueno ? { tarifaDia: String(f.get("tarifaDia") ?? "").replace(/\D/g, "") } : {}),
           notas: String(f.get("notas") ?? ""),
         }),
       onListo
@@ -172,6 +173,15 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
       <SelectorCliente datos={datos} valor={clienteId} onCambio={setClienteId} />
       <SelectorServicio datos={datos} valor={servicioId} onCambio={setServicioId} />
       <CampoPesos name="valor" etiqueta="Valor que paga el cliente (COP)" valorInicial={p?.valor} requerido />
+      {datos.esDueno ? (
+        <Campo etiqueta="Valor del día de este proyecto (opcional)" ayuda={`Vacío = el de Reparto (${pesos(datos.config.tarifaDia)}). Solo tú lo cambias.`}>
+          <input name="tarifaDia" inputMode="numeric" defaultValue={p?.tarifaDia ? new Intl.NumberFormat("es-CO").format(p.tarifaDia) : ""} placeholder={new Intl.NumberFormat("es-CO").format(datos.config.tarifaDia)} className="pn-input tabular-nums" />
+        </Campo>
+      ) : (
+        <p className="flex items-center gap-2 text-xs text-fog-dim">
+          <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Valor del día: {pesos(p?.tarifaDia ?? datos.config.tarifaDia)} (solo Sergio lo cambia).
+        </p>
+      )}
       <Campo etiqueta="Fecha de entrega prometida" ayuda="Para avisar si el proyecto va tarde.">
         <input name="fechaLimite" type="date" defaultValue={p?.fechaLimite ?? ""} className="pn-input" />
       </Campo>
@@ -192,7 +202,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
       {estado === "cerrado" && !p?.repartoCongelado && (
         <p className="flex items-start gap-2 rounded-frame border border-white/8 bg-surface-1 p-3 text-xs text-fog">
           <Lock aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-soft" />
-          Al cerrar, el proyecto guarda los porcentajes de hoy. Si después cambias el reparto, este proyecto no cambia.
+          Al cerrar, el proyecto guarda su valor del día y quiénes reciben parte igual. Si después cambia el reparto o el equipo, este proyecto no cambia.
         </p>
       )}
       <Campo etiqueta="Notas">
@@ -208,12 +218,15 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
 
 function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: DatosFinanzas; hoy: string; onBorrado: () => void }) {
   const [editando, setEditando] = useState(false);
-  const r = calcularProyecto(p, datos.gastos, datos.horas, datos.config, datos.personas);
+  const r = calcularProyecto(p, datos.gastos, datos.trabajo, datos.config, datos.personas);
   const gastos = datos.gastos.filter((g) => g.proyectoId === p.id);
-  const horas = datos.horas.filter((h) => h.proyectoId === p.id);
+  const trabajo = datos.trabajo.filter((h) => h.proyectoId === p.id);
   const acc = useAccion();
   const edita = datos.puedeEditar;
-  const congeladoDistinto = p.repartoCongelado && JSON.stringify(p.repartoCongelado) !== JSON.stringify({ bolsaTrabajoPct: datos.config.bolsaTrabajoPct, reparto: datos.config.reparto });
+  const hoyReglas = reglasActuales(datos.config, datos.personas);
+  const congeladoDistinto =
+    !!p.repartoCongelado &&
+    (r.reglas.partes.join() !== hoyReglas.partes.join() || (p.tarifaDia === null && r.tarifaDia !== hoyReglas.tarifaDia));
 
   if (editando) return <FormProyecto p={p} datos={datos} hoy={hoy} onListo={() => setEditando(false)} />;
 
@@ -247,23 +260,33 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
           <p className="text-sm text-fog">Sin ganancia todavía: agrega el valor del proyecto.</p>
         ) : (
           <>
-            <p className="mb-3 text-xs text-fog-dim">
-              {r.sinHoras
-                ? "Sin horas registradas: toda la ganancia se reparte con los porcentajes de socios."
-                : `Bolsa de trabajo ${porcentaje(r.reglas.bolsaTrabajoPct, 0)} = ${pesos(r.bolsa)} por ${horasTxt(r.horasTotales)} · Resto ${pesos(r.resto)} por porcentajes.`}
-            </p>
+            <dl className="mb-3 space-y-1 text-xs">
+              <div className="flex justify-between gap-3">
+                <dt className="text-fog-dim">Días trabajados {r.diasTotales > 0 ? `${textoDias(r.diasTotales)} × ${pesos(r.tarifaDia)}` : "(sin registrar)"}</dt>
+                <dd className="tabular-nums text-fog">{pesos(-r.pagoDias)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-fog-dim">Para repartir en {r.numPartes} partes iguales</dt>
+                <dd className="tabular-nums text-fog">{pesos(r.paraRepartir)} · {pesos(r.parteIgual)} c/u</dd>
+              </div>
+            </dl>
+            {r.recortado && (
+              <p className="mb-3 text-xs text-[#FFC76B]">
+                Los días ({pesos(r.pagoDiasCompleto)}) cuestan más que la ganancia: se pagan en proporción hasta {pesos(r.ganancia)} y no hay parte igual.
+              </p>
+            )}
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[0.7rem] text-fog-dim">
                   <th className="pb-2 text-left font-medium">Quién</th>
-                  <th className="pb-2 text-right font-medium">Trabajo</th>
-                  <th className="pb-2 text-right font-medium">Socio</th>
+                  <th className="pb-2 text-right font-medium">Parte igual</th>
+                  <th className="pb-2 text-right font-medium">Días</th>
                   <th className="pb-2 text-right font-medium">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/6">
                 {r.personas
-                  .filter((x) => x.total !== 0 || x.horas > 0)
+                  .filter((x) => x.total !== 0 || x.dias > 0)
                   .map((x) => {
                     const i = datos.personas.findIndex((pe) => pe.id === x.personaId);
                     return (
@@ -273,10 +296,10 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
                             <span className="h-2 w-2 rounded-full" style={{ background: colorPersona(Math.max(0, i)) }} />
                             {nombreDe(x.personaId, datos.personas)}
                           </span>
-                          {x.horas > 0 && <span className="pl-4 text-[0.7rem] text-fog-dim">{horasTxt(x.horas)}</span>}
+                          {x.dias > 0 && <span className="pl-4 text-[0.7rem] text-fog-dim">{textoDias(x.dias)}</span>}
                         </td>
-                        <td className="py-2 text-right tabular-nums text-fog">{pesos(x.trabajo)}</td>
-                        <td className="py-2 text-right tabular-nums text-fog">{pesos(x.socio)}</td>
+                        <td className="py-2 text-right tabular-nums text-fog">{pesos(x.parteIgual)}</td>
+                        <td className="py-2 text-right tabular-nums text-fog">{pesos(x.porDias)}</td>
                         <td className="py-2 text-right font-display font-bold text-white">{pesos(x.total)}</td>
                       </tr>
                     );
@@ -297,15 +320,15 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
         )}
         {p.repartoCongelado && (
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-fog-dim">
-            <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Calculado con los porcentajes del cierre.
-            {edita && congeladoDistinto && (
+            <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Calculado con el valor del día ({pesos(r.tarifaDia)}) y las {r.numPartes} partes del cierre.
+            {datos.esDueno && congeladoDistinto && (
               <button
                 type="button"
                 disabled={acc.pendiente}
-                onClick={() => window.confirm("¿Recalcular este proyecto con los porcentajes de hoy?") && acc.correr(() => aplicarReglasActuales(p.id))}
+                onClick={() => window.confirm("¿Recalcular este proyecto con el reparto de hoy?") && acc.correr(() => aplicarReglasActuales(p.id))}
                 className="font-semibold text-brand-soft hover:text-white"
               >
-                Usar los porcentajes de hoy
+                Usar el reparto de hoy
               </button>
             )}
           </div>
@@ -313,22 +336,23 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
         <MensajeError error={acc.error} />
       </section>
 
-      {/* Horas */}
+      {/* Días trabajados: quién hizo qué */}
       <section>
         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
-          <Clock aria-hidden className="h-4 w-4 text-brand-soft" /> Horas trabajadas
+          <CalendarDays aria-hidden className="h-4 w-4 text-brand-soft" /> Quién hizo qué
         </h3>
+        <p className="mb-2 text-xs text-fog-dim">Días de {HORAS_POR_DIA} horas a {pesos(r.tarifaDia)}. Se pagan antes de repartir por partes iguales.</p>
         <Lista
-          vacio="Sin horas registradas."
-          filas={horas.map((h) => ({
+          vacio="Sin días registrados: toda la ganancia se reparte por partes iguales."
+          filas={trabajo.map((h) => ({
             id: h.id,
-            izq: `${nombreDe(h.personaId, datos.personas)} · ${h.area}`,
-            sub: [fechaCorta(h.fecha), h.nota].filter(Boolean).join(" · "),
-            der: horasTxt(h.horas),
+            izq: `${nombreDe(h.personaId, datos.personas)} · ${h.actividad}`,
+            sub: [textoDias(h.dias), fechaCorta(h.fecha), h.nota].filter(Boolean).join(" · "),
+            der: pesos(Math.round(h.dias * r.tarifaDia)),
           }))}
-          onBorrar={edita ? (id) => borrarHoras(id) : undefined}
+          onBorrar={edita ? (id) => borrarTrabajo(id) : undefined}
         />
-        {edita && <FormHoras proyectoId={p.id} datos={datos} hoy={hoy} />}
+        {edita && <FormTrabajo proyectoId={p.id} datos={datos} hoy={hoy} tarifa={r.tarifaDia} />}
       </section>
 
       {/* Gastos */}
@@ -358,7 +382,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
             type="button"
             className="text-[#FF9BB0]"
             onClick={() =>
-              window.confirm(`¿Borrar "${p.nombre}" con sus gastos y horas? No se puede deshacer.`) && acc.correr(() => borrarProyecto(p.id), onBorrado)
+              window.confirm(`¿Borrar "${p.nombre}" con sus gastos y días trabajados? No se puede deshacer.`) && acc.correr(() => borrarProyecto(p.id), onBorrado)
             }
           >
             <Trash2 aria-hidden className="h-4 w-4" /> Borrar
@@ -409,41 +433,61 @@ export function Lista({
   );
 }
 
-function FormHoras({ proyectoId, datos, hoy }: { proyectoId: string; datos: DatosFinanzas; hoy: string }) {
+function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; datos: DatosFinanzas; hoy: string; tarifa: number }) {
   const acc = useAccion();
   const [clave, setClave] = useState(0);
+  const [dias, setDias] = useState("");
+  const n = Number(dias.replace(",", "."));
+  const valido = n > 0 && n <= 365 && Math.round(n * 2) === n * 2;
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     acc.correr(
       () =>
-        agregarHoras({
+        agregarTrabajo({
           proyectoId,
           personaId: String(f.get("persona") ?? ""),
-          horas: String(f.get("horas") ?? ""),
+          actividad: String(f.get("actividad") ?? ""),
+          dias,
           fecha: String(f.get("fecha") ?? ""),
           nota: String(f.get("nota") ?? ""),
         }),
-      () => setClave((k) => k + 1)
+      () => {
+        setClave((k) => k + 1);
+        setDias("");
+      }
     );
   };
   return (
     <form key={clave} onSubmit={enviar} noValidate className="mt-3 space-y-2">
-      <select name="persona" aria-label="Persona" className="pn-input" defaultValue={datos.miPersonaId ?? datos.personas[0]?.id}>
-        {datos.personas
-          .filter((pe) => pe.activo)
-          .map((pe) => (
-            <option key={pe.id} value={pe.id}>{pe.nombre} · {pe.area}</option>
-          ))}
-      </select>
       <div className="grid grid-cols-2 gap-2">
-        <input name="horas" inputMode="decimal" placeholder="Horas (ej. 2,5)" aria-label="Horas" className="pn-input" />
+        <select name="persona" aria-label="Quién lo hizo" className="pn-input" defaultValue={datos.miPersonaId ?? datos.personas[0]?.id}>
+          {datos.personas
+            .filter((pe) => pe.activo)
+            .map((pe) => (
+              <option key={pe.id} value={pe.id}>{pe.nombre}</option>
+            ))}
+        </select>
+        <select name="actividad" aria-label="Qué hizo" className="pn-input" defaultValue="">
+          <option value="" disabled>Qué hizo…</option>
+          {actividades.map((a) => (
+            <option key={a} value={a}>{a}</option>
+          ))}
+        </select>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <input value={dias} onChange={(e) => setDias(e.target.value)} inputMode="decimal" placeholder="Días (ej. 2 o 2,5)" aria-label="Días trabajados" className="pn-input" />
         <input name="fecha" type="date" defaultValue={hoy} aria-label="Fecha" className="pn-input" />
       </div>
+      {valido && (
+        <p className="text-xs text-fog">
+          {textoDias(n)} × {pesos(tarifa)} = <strong className="text-white">{pesos(Math.round(n * tarifa))}</strong>
+        </p>
+      )}
       <div className="grid grid-cols-[1fr_auto] gap-2">
-        <input name="nota" placeholder="Qué se hizo (opcional)" maxLength={200} aria-label="Nota" className="pn-input" />
+        <input name="nota" placeholder="Detalle (opcional)" maxLength={200} aria-label="Detalle" className="pn-input" />
         <BotonSecundario type="submit" disabled={acc.pendiente} className="h-11">
-          <Plus aria-hidden className="h-4 w-4" /> Horas
+          <Plus aria-hidden className="h-4 w-4" /> Días
         </BotonSecundario>
       </div>
       <MensajeError error={acc.error} />

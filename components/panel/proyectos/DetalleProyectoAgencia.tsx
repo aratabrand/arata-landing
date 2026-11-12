@@ -15,10 +15,10 @@ import { diasHasta } from "./ProyectosAgencia";
 import { cn } from "@/lib/utils";
 
 // Detalle de un proyecto de Arata (D-112): proceso por etapas con sus pasos,
-// avance, fechas, cliente, servicio y horas. Sergio marca pasos; el equipo ve.
+// avance, fechas, cliente, servicio y días trabajados. Sergio y Andrés editan; todos marcan pasos.
 
 const comercial = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "En curso", t: "morado" }, cerrado: { l: "Cerrado", t: "lima" } } as const;
-const horasTxt = (h: number) => `${String(Math.round(h * 10) / 10).replace(".", ",")} h`;
+const diasTxt = (d: number) => `${String(Math.round(d * 10) / 10).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
 
 export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: DatosFinanzas; p: FinProyecto; hoy: string }) {
   const [editando, setEditando] = useState(false);
@@ -32,7 +32,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
   const edita = datos.puedeEditar;
 
   const horasPor = new Map<string, number>();
-  datos.horas.filter((h) => h.proyectoId === p.id).forEach((h) => horasPor.set(h.personaId, (horasPor.get(h.personaId) ?? 0) + h.horas));
+  datos.trabajo.filter((h) => h.proyectoId === p.id).forEach((h) => horasPor.set(h.personaId, (horasPor.get(h.personaId) ?? 0) + h.dias));
 
   return (
     <PanelPage>
@@ -57,7 +57,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
           </BotonSecundario>
         )}
       </div>
-      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es solo de Sergio." />
+      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es de Sergio y Andrés." />
 
       {/* Proceso */}
       <Tarjeta titulo="Proceso" bajada={a.entregado ? "Todos los pasos están hechos." : a.siguiente ? `Sigue: ${a.siguiente}` : undefined}>
@@ -148,21 +148,21 @@ export default function DetalleProyectoAgencia({ datos, p, hoy }: { datos: Datos
             {p.notas && <p className="mt-4 whitespace-pre-line border-t border-white/8 pt-3 text-sm text-fog">{p.notas}</p>}
           </Tarjeta>
 
-          <Tarjeta titulo="Horas trabajadas">
+          <Tarjeta titulo="Días trabajados">
             {horasPor.size === 0 ? (
-              <p className="text-sm text-fog-dim">Sin horas registradas.</p>
+              <p className="text-sm text-fog-dim">Sin días registrados.</p>
             ) : (
               <ul className="space-y-2 text-sm">
                 {[...horasPor.entries()].map(([id, h]) => (
                   <li key={id} className="flex justify-between">
                     <span className="flex items-center gap-2 text-white"><Clock aria-hidden className="h-4 w-4 text-brand-soft" />{nombreDe(id, datos.personas)}</span>
-                    <span className="font-display font-bold text-white">{horasTxt(h)}</span>
+                    <span className="font-display font-bold text-white">{diasTxt(h)}</span>
                   </li>
                 ))}
               </ul>
             )}
             <Link href="/panel/finanzas" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-soft hover:text-white">
-              <Wallet aria-hidden className="h-4 w-4" /> Horas, gastos y reparto en Finanzas →
+              <Wallet aria-hidden className="h-4 w-4" /> Días, gastos y reparto en Finanzas →
             </Link>
           </Tarjeta>
         </div>

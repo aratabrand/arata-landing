@@ -46,7 +46,7 @@ export async function cargarSitioAgencia(): Promise<DatosSitio | null> {
   const publicado: ConfigSitio = r?.publicado ? { ...base, ...(r.publicado as ConfigSitio), anuncio: base.anuncio, actualizado: null } : base;
   const config: ConfigSitio = r ? { ...(r.datos as ConfigSitio), actualizado: r.actualizado?.toISOString?.() ?? null } : publicado;
   return {
-    puedeEditar: ctx.puedeEditar,
+    puedeEditar: ctx.esDueno,
     config,
     fuente: r ? "panel" : "sitio",
     publicado,

@@ -89,10 +89,11 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
         proyectosMes: 1,
         valorPromedio: todo.promedio.valor || 2_000_000,
         gastosPct: todo.promedio.gastosPct,
-        reglas: datos.config,
+        diasPorProyecto: todo.promedio.dias,
+        tarifaDia: datos.config.tarifaDia,
         personas: datos.personas,
         fijosMes: todo.fijosMes,
-        participacionHoras: participacionHistorica(datos.horas),
+        participacionDias: participacionHistorica(datos.trabajo),
       }),
     [datos, todo]
   );
@@ -100,8 +101,8 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
   const porCobrar = enCurso.reduce((a, p) => a + p.valor, 0);
 
   const filas = [
-    ...r.porPersona.map((x, i) => ({ id: x.persona.id, nombre: x.persona.nombre, total: x.total, trabajo: x.trabajo, socio: x.socio, horas: x.horas, color: colorPersona(i) })),
-    { id: EMPRESA, nombre: "Arata San (empresa)", total: r.empresaProyectos, trabajo: 0, socio: r.empresaProyectos, horas: 0, color: COLOR_EMPRESA },
+    ...r.porPersona.map((x, i) => ({ id: x.persona.id, nombre: x.persona.nombre, total: x.total, porDias: x.porDias, parteIgual: x.parteIgual, dias: x.dias, color: colorPersona(i) })),
+    { id: EMPRESA, nombre: "Arata San (empresa)", total: r.empresaProyectos, porDias: 0, parteIgual: r.empresaProyectos, dias: 0, color: COLOR_EMPRESA },
   ];
   const maxFila = Math.max(1, ...filas.map((f) => f.total));
 
@@ -135,7 +136,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1.5fr_1fr]">
-        <Tarjeta titulo="Cuánto le toca a cada uno" bajada="Bolsa por horas + porcentaje de socio, de los proyectos cerrados">
+        <Tarjeta titulo="Cuánto le toca a cada uno" bajada="Parte igual + días trabajados, de los proyectos cerrados">
           <ul className="space-y-4">
             {filas.map((f) => {
               const esYo = f.id === datos.miPersonaId;
@@ -150,12 +151,12 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
                     <span className="font-display font-bold text-white">{pesos(f.total)}</span>
                   </div>
                   <div className="flex h-2.5 overflow-hidden rounded-full bg-white/6" aria-hidden>
-                    <div className="h-full" style={{ width: `${(Math.max(0, f.socio) / maxFila) * 100}%`, background: f.color }} />
-                    <div className="h-full opacity-50" style={{ width: `${(Math.max(0, f.trabajo) / maxFila) * 100}%`, background: f.color }} />
+                    <div className="h-full" style={{ width: `${(Math.max(0, f.parteIgual) / maxFila) * 100}%`, background: f.color }} />
+                    <div className="h-full opacity-50" style={{ width: `${(Math.max(0, f.porDias) / maxFila) * 100}%`, background: f.color }} />
                   </div>
                   {f.id !== EMPRESA && (
                     <p className="mt-1 text-[0.72rem] text-fog-dim">
-                      Socio {pesos(f.socio)} · Trabajo {pesos(f.trabajo)} ({numero(f.horas)} h)
+                      Parte igual {pesos(f.parteIgual)} · Días {pesos(f.porDias)} ({numero(f.dias)} {f.dias === 1 ? "día" : "días"})
                     </p>
                   )}
                 </li>
@@ -216,7 +217,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
               {todo.fijosMes === 0 ? (
                 <p className="text-sm text-fog">Registra los gastos fijos mensuales en la pestaña Gastos para calcularlo.</p>
               ) : eq.equilibrio === null ? (
-                <p className="text-sm text-fog">Con los porcentajes actuales a la empresa no le queda nada por proyecto. Revisa el reparto.</p>
+                <p className="text-sm text-fog">Con los días que se trabajan por proyecto a la empresa no le queda nada. Revisa los días o el valor del día.</p>
               ) : (
                 <>
                   <p className="font-display text-3xl font-bold leading-none text-white">
@@ -250,8 +251,9 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
   const [valor, setValor] = useState(Math.round(todo.promedio.valor) || 2_000_000);
   const [gastosPct, setGastosPct] = useState(Math.round(todo.promedio.gastosPct) || 10);
   const [meta, setMeta] = useState(5_000_000);
-  const part = useMemo(() => participacionHistorica(datos.horas), [datos.horas]);
-  const base = { valorPromedio: valor, gastosPct, reglas: datos.config, personas: datos.personas, fijosMes: todo.fijosMes, participacionHoras: part };
+  const [dias, setDias] = useState(Math.round(todo.promedio.dias * 2) / 2 || 5);
+  const part = useMemo(() => participacionHistorica(datos.trabajo), [datos.trabajo]);
+  const base = { valorPromedio: valor, gastosPct, diasPorProyecto: dias, tarifaDia: datos.config.tarifaDia, personas: datos.personas, fijosMes: todo.fijosMes, participacionDias: part };
   const p = proyectar({ ...base, proyectosMes });
   const filas = [1, 2, 3, 4, 5, 6, 8, 10].map((n) => ({ n, ...proyectar({ ...base, proyectosMes: n }) }));
   const falta = Math.max(0, meta - todo.disponible);
@@ -261,7 +263,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
   return (
     <div className="space-y-4">
       <Tarjeta titulo="Supón un mes así" bajada="Cambia los valores y mira el resultado al instante. No se guarda nada.">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
           <label className="block">
             <span className="mb-1.5 flex justify-between text-xs font-medium text-fog">
               Proyectos al mes <strong className="font-display text-base text-white">{proyectosMes}</strong>
@@ -279,12 +281,18 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
             <input type="range" min={0} max={80} value={gastosPct} onChange={(e) => setGastosPct(Number(e.target.value))} className="w-full accent-[#7D53FF]" />
           </label>
           <label className="block">
+            <span className="mb-1.5 flex justify-between text-xs font-medium text-fog">
+              Días trabajados por proyecto <strong className="text-white">{String(dias).replace(".", ",")}</strong>
+            </span>
+            <input type="range" min={0} max={30} step={0.5} value={dias} onChange={(e) => setDias(Number(e.target.value))} className="w-full accent-[#7D53FF]" />
+          </label>
+          <label className="block">
             <span className="mb-1.5 block text-xs font-medium text-fog">Meta de inversión de Arata</span>
             <input value={fmt.format(meta)} inputMode="numeric" onChange={(e) => setMeta(Number(e.target.value.replace(/\D/g, "").slice(0, 11)) || 0)} className="pn-input tabular-nums" />
           </label>
         </div>
         <p className="mt-3 text-xs text-fog-dim">
-          Valores de arranque: promedio de los proyectos cerrados. La bolsa de trabajo se reparte según cómo se han repartido las horas hasta hoy.
+          Valores de arranque: promedio de los proyectos cerrados. Los días se pagan a {pesos(datos.config.tarifaDia)} y se reparten según quién ha trabajado hasta hoy; lo que queda va por partes iguales.
         </p>
       </Tarjeta>
 
@@ -312,7 +320,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
                 </span>
                 <span className="text-right">
                   <span className="block font-display font-bold text-white">{pesos(x.total)}</span>
-                  <span className="block text-[0.7rem] text-fog-dim">socio {pesosCorto(x.socio)} · trabajo {pesosCorto(x.trabajo)}</span>
+                  <span className="block text-[0.7rem] text-fog-dim">parte igual {pesosCorto(x.parteIgual)} · días {pesosCorto(x.porDias)}</span>
                 </span>
               </li>
             ))}

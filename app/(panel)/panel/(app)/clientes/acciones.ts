@@ -38,7 +38,7 @@ export async function guardarCliente(entrada: {
     if (!panelActivo) return NO("El panel está en modo ejemplo: los cambios no se guardan.");
     const ctx = await contextoAgencia();
     if (!ctx) return NO("Tu sesión terminó. Vuelve a entrar.");
-    if (!ctx.puedeEditar) return NO("Solo Sergio puede cambiar los clientes.");
+    if (!ctx.editaFinanzas) return NO("Solo Sergio y Andrés pueden cambiar los clientes.");
 
     const nombre = limpio(entrada.nombre, 80);
     if (!nombre || nombre.length < 2) return NO("Escribe el nombre del contacto.");
@@ -90,7 +90,7 @@ export async function borrarCliente(id: string): Promise<Resultado> {
   try {
     if (!panelActivo) return NO("El panel está en modo ejemplo.");
     const ctx = await contextoAgencia();
-    if (!ctx?.puedeEditar) return NO("Solo Sergio puede borrar clientes.");
+    if (!ctx?.esDueno) return NO("Solo Sergio puede borrar clientes.");
     const usados = await db().query(`select count(*)::int n from fin_proyectos where cliente_id = $1 and negocio_id = $2`, [id, ctx.negocioId]);
     if (usados.rows[0].n) return NO("Este cliente tiene proyectos: no se puede borrar. Márcalo como inactivo.");
     const r = await db().query(`delete from clientes where id = $1 and negocio_id = $2`, [id, ctx.negocioId]);

@@ -37,7 +37,7 @@ export type ClienteAgencia = {
   proyectos: ProyectoDeCliente[];
 };
 
-export type DatosClientes = { puedeEditar: boolean; clientes: ClienteAgencia[] };
+export type DatosClientes = { puedeEditar: boolean; puedeBorrar: boolean; clientes: ClienteAgencia[] };
 
 // Fechas siempre en Bogotá, sin depender de la zona del servidor
 const iso = fechaBogota;
@@ -68,7 +68,8 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     porCliente.set(r.cliente_id, l);
   });
   return {
-    puedeEditar: ctx.puedeEditar,
+    puedeEditar: ctx.editaFinanzas,
+    puedeBorrar: ctx.esDueno,
     clientes: cl.rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,

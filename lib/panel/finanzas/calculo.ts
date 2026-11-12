@@ -1,30 +1,34 @@
 import {
   EMPRESA,
   type DatosFinanzas,
+  type FinConfig,
   type FinProyecto,
   type Gasto,
   type GastoFijo,
   type Persona,
-  type RegistroHoras,
+  type RegistroTrabajo,
   type ReglasReparto,
 } from "./tipos";
 
-// Cálculos de finanzas (D-109). Funciones puras: sin base de datos ni pantalla.
+// Cálculos de finanzas (D-118). Funciones puras: sin base de datos ni pantalla.
 // docs/panel-cliente/06-finanzas.md §2 explica cada fórmula con un ejemplo.
 //
-//   ganancia        = valor − gastos del proyecto
-//   bolsa de trabajo = ganancia × bolsa%            → por horas de cada persona
-//   resto           = ganancia − bolsa              → por % de socios y empresa
-//   Si nadie registró horas, la bolsa se suma al resto (no se pierde plata).
-//   Si hay pérdida (ganancia < 0), no se reparte: la absorbe la empresa.
+//   ganancia     = valor − gastos del proyecto
+//   pago por días = días de cada persona × valor del día   (se paga PRIMERO)
+//   para repartir = ganancia − pago por días
+//   parte igual   = para repartir ÷ partes (socios activos + Arata)
+//
+// Nunca se reparte más de lo que dejó el proyecto:
+// - Si los días cuestan más que la ganancia, se pagan en proporción hasta la ganancia y no hay parte igual.
+// - Si hay pérdida (ganancia < 0), no se paga nada: la absorbe la empresa.
 // Los pesos se redondean al peso; la diferencia de redondeo va a la empresa,
 // así la suma de todas las partes es exactamente la ganancia.
 
 export type PartePersona = {
   personaId: string;
-  horas: number;
-  trabajo: number; // de la bolsa por horas
-  socio: number; // del % de socios
+  dias: number;
+  porDias: number; // días × valor del día
+  parteIgual: number; // su parte igual de lo que queda
   total: number;
 };
 
@@ -34,54 +38,70 @@ export type ResultadoProyecto = {
   gastos: number;
   ganancia: number;
   margenPct: number;
-  bolsa: number;
-  resto: number;
-  horasTotales: number;
-  sinHoras: boolean;
+  tarifaDia: number;
+  diasTotales: number;
+  /** Lo que se paga por días (después de recortar si no alcanza). */
+  pagoDias: number;
+  /** Lo que costarían los días completos (antes de recortar). */
+  pagoDiasCompleto: number;
+  paraRepartir: number;
+  parteIgual: number;
+  numPartes: number;
+  /** Los días costaban más que la ganancia y se pagaron en proporción. */
+  recortado: boolean;
   perdida: boolean;
   personas: PartePersona[];
   empresa: number;
   reglas: ReglasReparto;
 };
 
-export function sumaReparto(r: ReglasReparto) {
-  return r.reparto.reduce((a, p) => a + p.pct, 0);
+/** Quiénes reciben parte igual hoy: socios activos + la empresa. */
+export function partesActuales(personas: Persona[]): string[] {
+  return [...personas.filter((p) => p.esSocio && p.activo).map((p) => p.id), EMPRESA];
 }
 
-/** Problemas de unas reglas (lista vacía = válidas). */
-export function validarReglas(r: ReglasReparto, personas: Persona[]): string[] {
-  const e: string[] = [];
-  if (!(r.bolsaTrabajoPct >= 0 && r.bolsaTrabajoPct <= 100)) e.push("La bolsa de trabajo debe estar entre 0 % y 100 %.");
-  if (r.reparto.some((p) => !(p.pct >= 0 && p.pct <= 100))) e.push("Cada porcentaje debe estar entre 0 % y 100 %.");
-  const suma = Math.round(sumaReparto(r) * 100) / 100;
-  if (suma !== 100) e.push(`Los porcentajes de socios y empresa suman ${String(suma).replace(".", ",")} %: deben sumar 100 %.`);
-  if (!r.reparto.some((p) => p.beneficiario === EMPRESA)) e.push("Falta el porcentaje de Arata San (empresa).");
-  const ids = new Set(personas.map((p) => p.id));
-  if (r.reparto.some((p) => p.beneficiario !== EMPRESA && !ids.has(p.beneficiario))) e.push("Hay un porcentaje para una persona que ya no está en el equipo.");
-  return e;
+export function reglasActuales(config: FinConfig, personas: Persona[]): ReglasReparto {
+  return { tarifaDia: config.tarifaDia, partes: partesActuales(personas) };
+}
+
+/** Reglas congeladas, aceptando la forma vieja (bolsa y %) por si quedó alguna. */
+function normalizar(r: unknown, actuales: ReglasReparto): ReglasReparto | null {
+  if (!r || typeof r !== "object") return null;
+  const x = r as { tarifaDia?: unknown; partes?: unknown; reparto?: { beneficiario: string }[] };
+  const partes = Array.isArray(x.partes)
+    ? x.partes.map(String)
+    : Array.isArray(x.reparto)
+      ? x.reparto.map((p) => p.beneficiario)
+      : actuales.partes;
+  const tarifa = Number(x.tarifaDia);
+  return { tarifaDia: tarifa > 0 ? tarifa : actuales.tarifaDia, partes: partes.includes(EMPRESA) ? partes : [...partes, EMPRESA] };
 }
 
 export function calcularProyecto(
   p: FinProyecto,
   gastos: Gasto[],
-  horas: RegistroHoras[],
-  reglasActuales: ReglasReparto,
+  trabajo: RegistroTrabajo[],
+  config: FinConfig,
   personas: Persona[]
 ): ResultadoProyecto {
-  const reglas = p.repartoCongelado ?? reglasActuales;
+  const actuales = reglasActuales(config, personas);
+  const congeladas = normalizar(p.repartoCongelado, actuales);
+  const reglas = congeladas ?? actuales;
+  const tarifa = p.tarifaDia ?? reglas.tarifaDia;
+
   const gastosP = gastos.filter((g) => g.proyectoId === p.id).reduce((a, g) => a + g.valor, 0);
   const ganancia = p.valor - gastosP;
-  const horasP = horas.filter((h) => h.proyectoId === p.id);
-  const horasPor = new Map<string, number>();
-  horasP.forEach((h) => horasPor.set(h.personaId, (horasPor.get(h.personaId) ?? 0) + h.horas));
-  const horasTotales = [...horasPor.values()].reduce((a, b) => a + b, 0);
+  const diasPor = new Map<string, number>();
+  trabajo.filter((t) => t.proyectoId === p.id).forEach((t) => diasPor.set(t.personaId, (diasPor.get(t.personaId) ?? 0) + t.dias));
+  const diasTotales = [...diasPor.values()].reduce((a, b) => a + b, 0);
 
-  // Personas que aparecen: las del reparto, las que tienen horas y el resto del equipo
-  const idsPersonas = new Set<string>([
-    ...personas.map((x) => x.id),
-    ...reglas.reparto.filter((r) => r.beneficiario !== EMPRESA).map((r) => r.beneficiario),
-    ...horasPor.keys(),
-  ]);
+  // Personas que aparecen: el equipo, las que tienen parte y las que tienen días
+  const ids = new Set<string>([...personas.map((x) => x.id), ...reglas.partes.filter((x) => x !== EMPRESA), ...diasPor.keys()]);
+  const personasPartes = reglas.partes.filter((x) => x !== EMPRESA);
+  const numPartes = personasPartes.length + 1; // + empresa
+
+  const completo = new Map([...diasPor].map(([id, d]) => [id, Math.round(d * tarifa)]));
+  const pagoDiasCompleto = [...completo.values()].reduce((a, b) => a + b, 0);
 
   const base = {
     proyectoId: p.id,
@@ -89,37 +109,47 @@ export function calcularProyecto(
     gastos: gastosP,
     ganancia,
     margenPct: p.valor > 0 ? (ganancia / p.valor) * 100 : 0,
-    horasTotales,
-    reglas,
+    tarifaDia: tarifa,
+    diasTotales,
+    pagoDiasCompleto,
+    numPartes,
+    reglas: { ...reglas, tarifaDia: tarifa },
   };
 
   if (ganancia <= 0) {
     return {
       ...base,
-      bolsa: 0,
-      resto: 0,
-      sinHoras: horasTotales === 0,
+      pagoDias: 0,
+      paraRepartir: 0,
+      parteIgual: 0,
+      recortado: false,
       perdida: ganancia < 0,
-      personas: [...idsPersonas].map((id) => ({ personaId: id, horas: horasPor.get(id) ?? 0, trabajo: 0, socio: 0, total: 0 })),
+      personas: [...ids].map((id) => ({ personaId: id, dias: diasPor.get(id) ?? 0, porDias: 0, parteIgual: 0, total: 0 })),
       empresa: ganancia, // la pérdida la absorbe la empresa
     };
   }
 
-  const sinHoras = horasTotales === 0;
-  const bolsa = sinHoras ? 0 : Math.round(ganancia * (reglas.bolsaTrabajoPct / 100));
-  const resto = ganancia - bolsa;
-  const pctDe = (id: string) => reglas.reparto.find((r) => r.beneficiario === id)?.pct ?? 0;
+  // 1.º días (en proporción si no alcanza la ganancia)
+  const recortado = pagoDiasCompleto > ganancia;
+  const porDias = new Map(
+    [...completo].map(([id, v]) => [id, recortado ? Math.floor((v * ganancia) / pagoDiasCompleto) : v])
+  );
+  const pagoDias = [...porDias.values()].reduce((a, b) => a + b, 0);
 
-  const partes: PartePersona[] = [...idsPersonas].map((id) => {
-    const h = horasPor.get(id) ?? 0;
-    const trabajo = sinHoras ? 0 : Math.round((bolsa * h) / horasTotales);
-    const socio = Math.round((resto * pctDe(id)) / 100);
-    return { personaId: id, horas: h, trabajo, socio, total: trabajo + socio };
+  // 2.º partes iguales de lo que queda
+  const paraRepartir = ganancia - pagoDias;
+  // Si se recortaron los días, lo que sobra es redondeo: va a la empresa
+  const parteIgual = recortado ? 0 : Math.floor(paraRepartir / numPartes);
+
+  const partes: PartePersona[] = [...ids].map((id) => {
+    const d = porDias.get(id) ?? 0;
+    const igual = personasPartes.includes(id) ? parteIgual : 0;
+    return { personaId: id, dias: diasPor.get(id) ?? 0, porDias: d, parteIgual: igual, total: d + igual };
   });
-  // La empresa recibe su % y absorbe el redondeo: las partes suman exacto la ganancia
+  // La empresa recibe su parte igual y absorbe el redondeo: todo suma exacto la ganancia
   const empresa = ganancia - partes.reduce((a, x) => a + x.total, 0);
 
-  return { ...base, bolsa, resto, sinHoras, perdida: false, personas: partes, empresa };
+  return { ...base, pagoDias, paraRepartir, parteIgual, recortado, perdida: false, personas: partes, empresa };
 }
 
 export const totalGastosFijos = (fijos: GastoFijo[]) => fijos.filter((f) => f.activo).reduce((a, f) => a + f.valorMensual, 0);
@@ -129,7 +159,8 @@ const mes = (iso: string) => iso.slice(0, 7);
 /** Resumen de la empresa con los proyectos cerrados (opcionalmente desde una fecha). */
 export function resumenFinanzas(d: DatosFinanzas, desde?: string) {
   const cerrados = d.proyectos.filter((p) => p.estado === "cerrado" && p.fechaCierre && (!desde || p.fechaCierre >= desde));
-  const resultados = cerrados.map((p) => calcularProyecto(p, d.gastos, d.horas, d.config, d.personas));
+  const calc = (p: FinProyecto) => calcularProyecto(p, d.gastos, d.trabajo, d.config, d.personas);
+  const resultados = cerrados.map(calc);
   const ingresos = resultados.reduce((a, r) => a + r.ingreso, 0);
   const gastosProyectos = resultados.reduce((a, r) => a + r.gastos, 0);
   const ganancia = resultados.reduce((a, r) => a + r.ganancia, 0);
@@ -137,14 +168,14 @@ export function resumenFinanzas(d: DatosFinanzas, desde?: string) {
 
   const porPersona = d.personas.map((pe) => {
     const partes = resultados.map((r) => r.personas.find((x) => x.personaId === pe.id));
-    const sum = (k: "trabajo" | "socio" | "total" | "horas") => partes.reduce((a, x) => a + (x?.[k] ?? 0), 0);
-    return { persona: pe, horas: sum("horas"), trabajo: sum("trabajo"), socio: sum("socio"), total: sum("total") };
+    const sum = (k: "porDias" | "parteIgual" | "total" | "dias") => partes.reduce((a, x) => a + (x?.[k] ?? 0), 0);
+    return { persona: pe, dias: sum("dias"), porDias: sum("porDias"), parteIgual: sum("parteIgual"), total: sum("total") };
   });
 
   // Fondos: todo lo que le ha tocado a la empresa (siempre, no solo el periodo) − gastos de la empresa
-  const todosCerrados = d.proyectos.filter((p) => p.estado === "cerrado");
-  const empresaHistorica = todosCerrados
-    .map((p) => calcularProyecto(p, d.gastos, d.horas, d.config, d.personas).empresa)
+  const empresaHistorica = d.proyectos
+    .filter((p) => p.estado === "cerrado")
+    .map((p) => calc(p).empresa)
     .reduce((a, b) => a + b, 0);
   const gastosEmpresa = d.gastos.filter((g) => g.proyectoId === null).reduce((a, g) => a + g.valor, 0);
   const fondos = empresaHistorica - gastosEmpresa;
@@ -161,6 +192,8 @@ export function resumenFinanzas(d: DatosFinanzas, desde?: string) {
     x.proyectos += 1;
     meses.set(m, x);
   });
+
+  const diasCerrados = resultados.reduce((a, r) => a + r.diasTotales, 0);
 
   return {
     cerrados: resultados.length,
@@ -179,6 +212,7 @@ export function resumenFinanzas(d: DatosFinanzas, desde?: string) {
     promedio: {
       valor: resultados.length ? ingresos / resultados.length : 0,
       gastosPct: ingresos ? (gastosProyectos / ingresos) * 100 : 0,
+      dias: resultados.length ? diasCerrados / resultados.length : 0,
     },
     resultados,
   };
@@ -189,53 +223,68 @@ export function proyectar({
   proyectosMes,
   valorPromedio,
   gastosPct,
-  reglas,
+  diasPorProyecto,
+  tarifaDia,
   personas,
   fijosMes,
-  participacionHoras,
+  participacionDias,
 }: {
   proyectosMes: number;
   valorPromedio: number;
   gastosPct: number;
-  reglas: ReglasReparto;
+  /** Días trabajados en un proyecto promedio. */
+  diasPorProyecto: number;
+  tarifaDia: number;
   personas: Persona[];
   fijosMes: number;
-  /** Fracción de horas de cada persona (suma 1). Si falta, se reparte igual entre socios. */
-  participacionHoras?: Map<string, number>;
+  /** Fracción de días de cada persona (suma 1). Si falta, se reparte igual entre socios. */
+  participacionDias?: Map<string, number>;
 }) {
+  const socios = personas.filter((p) => p.esSocio && p.activo);
+  const numPartes = socios.length + 1;
+  // Un proyecto promedio
+  const uno = (() => {
+    const g = valorPromedio * (1 - gastosPct / 100);
+    const dias = Math.min(Math.max(0, g), diasPorProyecto * tarifaDia);
+    return { ganancia: g, dias, empresa: g > 0 ? (g - dias) / numPartes : g };
+  })();
+
   const ingresos = proyectosMes * valorPromedio;
   const gastos = Math.round(ingresos * (gastosPct / 100));
   const ganancia = ingresos - gastos;
-  const bolsa = Math.round(ganancia * (reglas.bolsaTrabajoPct / 100));
-  const resto = ganancia - bolsa;
-  const socios = personas.filter((p) => p.activo);
+  const pagoDias = ganancia > 0 ? Math.min(ganancia, Math.round(proyectosMes * diasPorProyecto * tarifaDia)) : 0;
+  const paraRepartir = Math.max(0, ganancia - pagoDias);
+  const parteIgual = Math.floor(paraRepartir / numPartes);
   const part =
-    participacionHoras && participacionHoras.size
-      ? participacionHoras
+    participacionDias && participacionDias.size
+      ? participacionDias
       : new Map(socios.map((p) => [p.id, socios.length ? 1 / socios.length : 0]));
-  const pctDe = (id: string) => reglas.reparto.find((r) => r.beneficiario === id)?.pct ?? 0;
-  const porPersona = socios.map((p) => {
-    const trabajo = Math.round(bolsa * (part.get(p.id) ?? 0));
-    const socio = Math.round((resto * pctDe(p.id)) / 100);
-    return { persona: p, trabajo, socio, total: trabajo + socio };
+  const activos = personas.filter((p) => p.activo);
+  const porPersona = activos.map((p) => {
+    const porDias = Math.round(pagoDias * (part.get(p.id) ?? 0));
+    const igual = p.esSocio ? parteIgual : 0;
+    return { persona: p, porDias, parteIgual: igual, total: porDias + igual };
   });
   const empresa = ganancia - porPersona.reduce((a, x) => a + x.total, 0);
 
   // Cuánto le deja a la empresa un proyecto promedio → cuántos cubren los gastos fijos
-  const empresaPorProyecto = proyectosMes > 0 ? empresa / proyectosMes : (() => {
-    const g1 = valorPromedio * (1 - gastosPct / 100);
-    return (g1 - g1 * (reglas.bolsaTrabajoPct / 100)) * (pctDe(EMPRESA) / 100);
-  })();
+  const empresaPorProyecto = uno.empresa;
   const equilibrio = fijosMes <= 0 ? 0 : empresaPorProyecto > 0 ? Math.ceil(fijosMes / empresaPorProyecto) : null;
 
-  return { ingresos, gastos, ganancia, bolsa, resto, porPersona, empresa, empresaNeta: empresa - fijosMes, empresaPorProyecto, equilibrio };
+  return { ingresos, gastos, ganancia, pagoDias, paraRepartir, parteIgual, porPersona, empresa, empresaNeta: empresa - fijosMes, empresaPorProyecto, equilibrio };
 }
 
-/** Fracción de horas de cada persona en todos los proyectos (para proyectar). */
-export function participacionHistorica(horas: RegistroHoras[]) {
-  const total = horas.reduce((a, h) => a + h.horas, 0);
+/** Fracción de días de cada persona en todos los proyectos (para proyectar). */
+export function participacionHistorica(trabajo: RegistroTrabajo[]) {
+  const total = trabajo.reduce((a, t) => a + t.dias, 0);
   const m = new Map<string, number>();
   if (!total) return m;
-  horas.forEach((h) => m.set(h.personaId, (m.get(h.personaId) ?? 0) + h.horas / total));
+  trabajo.forEach((t) => m.set(t.personaId, (m.get(t.personaId) ?? 0) + t.dias / total));
   return m;
+}
+
+/** "2,5 días (20 h)" */
+export function textoDias(d: number) {
+  const n = String(Math.round(d * 10) / 10).replace(".", ",");
+  return `${n} ${d === 1 ? "día" : "días"} (${String(Math.round(d * 8 * 10) / 10).replace(".", ",")} h)`;
 }

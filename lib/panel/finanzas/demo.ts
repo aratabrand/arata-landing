@@ -8,27 +8,22 @@ export function finanzasDemo(): DatosFinanzas {
     { id: "d-andres", nombre: "Andrés", area: "Comercial", esSocio: true, usuarioId: null, activo: true },
     { id: "d-santiago", nombre: "Santiago", area: "Tecnología", esSocio: true, usuarioId: null, activo: true },
   ];
-  const reparto = [
-    { beneficiario: "d-sergio", pct: 25 },
-    { beneficiario: "d-andres", pct: 25 },
-    { beneficiario: "d-santiago", pct: 25 },
-    { beneficiario: "empresa", pct: 25 },
-  ];
-  const reglas = { bolsaTrabajoPct: 30, reparto };
+  const reglas = { tarifaDia: 80_000, partes: ["d-sergio", "d-andres", "d-santiago", "empresa"] };
   return {
     negocioId: "demo",
     puedeEditar: false,
+    esDueno: false,
     puedeMarcarPasos: false,
     miPersonaId: "d-sergio",
     demo: true,
     personas,
-    config: { ...reglas, reservaMeses: 3, actualizado: null },
+    config: { tarifaDia: 80_000, reservaMeses: 3, actualizado: null },
     proyectos: [
-      { id: "dp-1", nombre: "Landing restaurante", clienteId: "dc-1", servicioId: "ds-1", estado: "cerrado", valor: 1_800_000, fechaCierre: "2026-09-18", fechaInicio: "2026-09-01", fechaLimite: "2026-09-18", repartoCongelado: reglas, notas: null },
-      { id: "dp-2", nombre: "Sitio de servicios", clienteId: "dc-2", servicioId: "ds-1", estado: "cerrado", valor: 2_600_000, fechaCierre: "2026-10-09", fechaInicio: "2026-09-01", fechaLimite: "2026-10-09", repartoCongelado: reglas, notas: null },
-      { id: "dp-3", nombre: "Landing con agenda", clienteId: "dc-3", servicioId: "ds-1", estado: "cerrado", valor: 2_000_000, fechaCierre: "2026-10-30", fechaInicio: "2026-09-01", fechaLimite: "2026-10-30", repartoCongelado: reglas, notas: null },
-      { id: "dp-4", nombre: "Rediseño de página", clienteId: "dc-4", servicioId: "ds-1", estado: "en-curso", valor: 2_200_000, fechaCierre: null, fechaInicio: "2026-09-01", fechaLimite: "2026-11-20", repartoCongelado: null, notas: null },
-      { id: "dp-5", nombre: "Landing de lanzamiento", clienteId: "dc-5", servicioId: "ds-1", estado: "propuesta", valor: 1_600_000, fechaCierre: null, fechaInicio: "2026-09-01", fechaLimite: "2026-11-20", repartoCongelado: null, notas: null },
+      { id: "dp-1", nombre: "Landing restaurante", clienteId: "dc-1", servicioId: "ds-1", estado: "cerrado", valor: 1_800_000, fechaCierre: "2026-09-18", fechaInicio: "2026-09-01", fechaLimite: "2026-09-18", tarifaDia: null, repartoCongelado: reglas, notas: null },
+      { id: "dp-2", nombre: "Sitio de servicios", clienteId: "dc-2", servicioId: "ds-1", estado: "cerrado", valor: 2_600_000, fechaCierre: "2026-10-09", fechaInicio: "2026-09-01", fechaLimite: "2026-10-09", tarifaDia: null, repartoCongelado: reglas, notas: null },
+      { id: "dp-3", nombre: "Landing con agenda", clienteId: "dc-3", servicioId: "ds-1", estado: "cerrado", valor: 2_000_000, fechaCierre: "2026-10-30", fechaInicio: "2026-09-01", fechaLimite: "2026-10-30", tarifaDia: null, repartoCongelado: reglas, notas: null },
+      { id: "dp-4", nombre: "Rediseño de página", clienteId: "dc-4", servicioId: "ds-1", estado: "en-curso", valor: 2_200_000, fechaCierre: null, fechaInicio: "2026-09-01", fechaLimite: "2026-11-20", tarifaDia: null, repartoCongelado: null, notas: null },
+      { id: "dp-5", nombre: "Landing de lanzamiento", clienteId: "dc-5", servicioId: "ds-1", estado: "propuesta", valor: 1_600_000, fechaCierre: null, fechaInicio: "2026-09-01", fechaLimite: "2026-11-20", tarifaDia: null, repartoCongelado: null, notas: null },
     ],
     gastos: [
       { id: "dg-1", proyectoId: "dp-1", concepto: "Fotos de banco", categoria: "herramientas", valor: 120_000, fecha: "2026-09-10" },
@@ -38,16 +33,15 @@ export function finanzasDemo(): DatosFinanzas {
       { id: "dg-5", proyectoId: null, concepto: "Publicidad en Instagram", categoria: "publicidad", valor: 250_000, fecha: "2026-10-15" },
       { id: "dg-6", proyectoId: null, concepto: "Suscripciones de herramientas", categoria: "herramientas", valor: 180_000, fecha: "2026-11-01" },
     ],
-    horas: [
-      { id: "dh-1", proyectoId: "dp-1", personaId: "d-sergio", area: "Estrategia y diseño", horas: 14, fecha: "2026-09-12", nota: null },
-      { id: "dh-2", proyectoId: "dp-1", personaId: "d-santiago", area: "Tecnología", horas: 10, fecha: "2026-09-15", nota: null },
-      { id: "dh-3", proyectoId: "dp-1", personaId: "d-andres", area: "Comercial", horas: 4, fecha: "2026-09-08", nota: null },
-      { id: "dh-4", proyectoId: "dp-2", personaId: "d-sergio", area: "Estrategia y diseño", horas: 18, fecha: "2026-10-04", nota: null },
-      { id: "dh-5", proyectoId: "dp-2", personaId: "d-santiago", area: "Tecnología", horas: 22, fecha: "2026-10-07", nota: null },
-      { id: "dh-6", proyectoId: "dp-2", personaId: "d-andres", area: "Comercial", horas: 6, fecha: "2026-09-29", nota: null },
-      { id: "dh-7", proyectoId: "dp-3", personaId: "d-sergio", area: "Estrategia y diseño", horas: 12, fecha: "2026-10-25", nota: null },
-      { id: "dh-8", proyectoId: "dp-3", personaId: "d-santiago", area: "Tecnología", horas: 16, fecha: "2026-10-28", nota: null },
-      { id: "dh-9", proyectoId: "dp-4", personaId: "d-sergio", area: "Estrategia y diseño", horas: 6, fecha: "2026-11-05", nota: null },
+    // Días trabajados (1 día = 8 h, a 80.000): quién hizo qué en cada proyecto
+    trabajo: [
+      { id: "dw-1", proyectoId: "dp-1", personaId: "d-sergio", actividad: "Diseño", dias: 2, fecha: "2026-09-12", nota: null },
+      { id: "dw-2", proyectoId: "dp-1", personaId: "d-santiago", actividad: "Desarrollo", dias: 1.5, fecha: "2026-09-15", nota: null },
+      { id: "dw-3", proyectoId: "dp-2", personaId: "d-sergio", actividad: "Diseño", dias: 2.5, fecha: "2026-10-04", nota: null },
+      { id: "dw-4", proyectoId: "dp-2", personaId: "d-santiago", actividad: "Desarrollo", dias: 3, fecha: "2026-10-07", nota: null },
+      { id: "dw-5", proyectoId: "dp-2", personaId: "d-andres", actividad: "Comercial", dias: 0.5, fecha: "2026-09-29", nota: null },
+      { id: "dw-6", proyectoId: "dp-3", personaId: "d-sergio", actividad: "Desarrollo", dias: 4, fecha: "2026-10-25", nota: null },
+      { id: "dw-7", proyectoId: "dp-4", personaId: "d-sergio", actividad: "Diseño", dias: 1, fecha: "2026-11-05", nota: null },
     ],
     servicios: [
       { id: "ds-1", nombre: "Página Lista en 5 Días", categoria: "pagina-web", activo: true },

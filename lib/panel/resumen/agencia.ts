@@ -19,7 +19,7 @@ export const cambioPct = (a: number, b: number) => (b ? ((a - b) / b) * 100 : nu
 export function resumenAgencia(d: DatosFinanzas, clientes: ClienteAgencia[], hoy: string, periodo: PeriodoResumen) {
   const desde = restar(hoy, periodo);
   const desdeAnt = restar(hoy, periodo * 2);
-  const calc = (p: (typeof d.proyectos)[number]) => calcularProyecto(p, d.gastos, d.horas, d.config, d.personas);
+  const calc = (p: (typeof d.proyectos)[number]) => calcularProyecto(p, d.gastos, d.trabajo, d.config, d.personas);
 
   const cerrados = d.proyectos.filter((p) => p.estado === "cerrado" && p.fechaCierre);
   const actual = cerrados.filter((p) => entre(p.fechaCierre, desde, hoy));

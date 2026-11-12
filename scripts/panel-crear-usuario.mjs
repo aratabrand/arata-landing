@@ -3,8 +3,8 @@
 //
 // Uso:  node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [rol] ["<persona del equipo>"]
 // Ej.:  node --env-file=.env.local scripts/panel-crear-usuario.mjs sergio@... "Sergio" arata-san dueno
-//       node --env-file=.env.local scripts/panel-crear-usuario.mjs andres@... "Andrés" arata-san equipo "Andrés"
-// rol: dueno (edita todo) · equipo (ve Finanzas y Equipo sin editar).
+//       node --env-file=.env.local scripts/panel-crear-usuario.mjs andres@... "Andrés" arata-san finanzas "Andrés"
+// rol: dueno (edita todo) · finanzas (edita Finanzas, menos el valor del día y el equipo) · equipo (ve todo y marca pasos).
 // persona: nombre en Equipo (solo agencia). Enlaza la cuenta para que el panel le marque "Tú".
 //
 // Genera una contraseña fuerte y la muestra UNA vez: guárdala en tu gestor de contraseñas.
@@ -19,8 +19,8 @@ import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins";
 
 const [correo, nombre, slug, rol = "dueno", persona] = process.argv.slice(2);
-if (!correo || !nombre || !slug || !["dueno", "equipo", "arata"].includes(rol)) {
-  console.error('Uso: node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [dueno|equipo|arata] ["<persona del equipo>"]');
+if (!correo || !nombre || !slug || !["dueno", "finanzas", "equipo", "arata"].includes(rol)) {
+  console.error('Uso: node --env-file=.env.local scripts/panel-crear-usuario.mjs <correo> "<nombre>" <slug-negocio> [dueno|finanzas|equipo|arata] ["<persona del equipo>"]');
   process.exit(1);
 }
 if (!process.env.DATABASE_URL || !process.env.BETTER_AUTH_SECRET) {

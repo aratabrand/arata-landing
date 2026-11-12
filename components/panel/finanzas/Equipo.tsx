@@ -12,8 +12,8 @@ import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, MensajeError, colo
 import { cn } from "@/lib/utils";
 
 // Módulo Equipo (solo Arata San, D-109): cuánto gana cada uno, por proyecto y en total.
-// Andrés y Santiago lo ven todo sin poder editar. Sergio administra las personas.
-const horasTxt = (h: number) => `${String(Math.round(h * 10) / 10).replace(".", ",")} h`;
+// Todos lo ven. Solo Sergio administra las personas (D-118).
+const diasTxt = (d: number) => `${String(Math.round(d * 10) / 10).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
 
 export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: string }) {
   const [editando, setEditando] = useState<Persona | "nueva" | null>(null);
@@ -24,11 +24,11 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
     () =>
       datos.proyectos
         .filter((p) => p.estado === "cerrado")
-        .map((p) => ({ p, r: calcularProyecto(p, datos.gastos, datos.horas, datos.config, datos.personas) })),
+        .map((p) => ({ p, r: calcularProyecto(p, datos.gastos, datos.trabajo, datos.config, datos.personas) })),
     [datos]
   );
   const abiertos = datos.proyectos.filter((p) => p.estado !== "cerrado");
-  const horasAbiertas = (id: string) => datos.horas.filter((h) => h.personaId === id && abiertos.some((p) => p.id === h.proyectoId)).reduce((a, h) => a + h.horas, 0);
+  const diasAbiertos = (id: string) => datos.trabajo.filter((h) => h.personaId === id && abiertos.some((p) => p.id === h.proyectoId)).reduce((a, h) => a + h.dias, 0);
 
   // "Tú" primero
   const personas = [...datos.personas].sort((a, b) => Number(b.id === datos.miPersonaId) - Number(a.id === datos.miPersonaId));
@@ -37,16 +37,16 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
     <PanelPage>
       <PanelHeader
         titulo="Equipo"
-        bajada="Lo que gana cada uno por proyecto: su parte como socio más lo que le toca por las horas trabajadas."
+        bajada="Lo que gana cada uno por proyecto: su parte igual más los días que trabajó."
         accion={
-          datos.puedeEditar ? (
+          datos.esDueno ? (
             <BotonPrincipal type="button" onClick={() => setEditando("nueva")} className="inline-flex items-center gap-2">
               <Plus aria-hidden className="h-4 w-4" /> Agregar persona
             </BotonPrincipal>
           ) : undefined
         }
       />
-      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} />
+      <AvisoAcceso demo={datos.demo} puedeEditar={datos.esDueno} texto="Puedes ver todo. Solo Sergio agrega o cambia personas del equipo." />
 
       <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
         {personas.map((pe) => {
@@ -74,7 +74,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                     </p>
                   </div>
                 </div>
-                {datos.puedeEditar && (
+                {datos.esDueno && (
                   <button type="button" aria-label={`Editar ${pe.nombre}`} onClick={() => setEditando(pe)} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
                     <Pencil aria-hidden className="h-4 w-4" />
                   </button>
@@ -93,8 +93,8 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                 </div>
               </dl>
               <p className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[0.72rem] text-fog-dim">
-                <span className="inline-flex items-center gap-1"><Wallet aria-hidden className="h-3 w-3" /> socio {pesos(t.socio)} · trabajo {pesos(t.trabajo)}</span>
-                <span className="inline-flex items-center gap-1"><Clock aria-hidden className="h-3 w-3" /> {horasTxt(t.horas)} en cerrados{horasAbiertas(pe.id) > 0 ? ` · ${horasTxt(horasAbiertas(pe.id))} en abiertos` : ""}</span>
+                <span className="inline-flex items-center gap-1"><Wallet aria-hidden className="h-3 w-3" /> parte igual {pesos(t.parteIgual)} · días {pesos(t.porDias)}</span>
+                <span className="inline-flex items-center gap-1"><Clock aria-hidden className="h-3 w-3" /> {diasTxt(t.dias)} en cerrados{diasAbiertos(pe.id) > 0 ? ` · ${diasTxt(diasAbiertos(pe.id))} en abiertos` : ""}</span>
               </p>
             </article>
           );
@@ -130,7 +130,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                       return (
                         <td key={pe.id} className={cn("py-2.5 pr-3 text-right tabular-nums", pe.id === datos.miPersonaId ? "font-semibold text-white" : "text-fog")}>
                           {pesos(x?.total ?? 0)}
-                          {x && x.horas > 0 && <span className="block text-[0.68rem] font-normal text-fog-dim">{horasTxt(x.horas)}</span>}
+                          {x && x.dias > 0 && <span className="block text-[0.68rem] font-normal text-fog-dim">{diasTxt(x.dias)}</span>}
                         </td>
                       );
                     })}
@@ -144,7 +144,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
       </Tarjeta>
 
       <p className="pb-2 text-center text-xs text-fog-dim">
-        Cómo se calcula: de la ganancia de cada proyecto, {datos.config.bolsaTrabajoPct} % se reparte por horas y el resto con los porcentajes de socio (pestaña Reparto en Finanzas).
+        Cómo se calcula: de la ganancia de cada proyecto (valor − gastos) primero se pagan los días trabajados a {pesos(datos.config.tarifaDia)} el día (8 horas) y lo que queda se reparte por partes iguales entre los socios activos y Arata (pestaña Reparto en Finanzas).
       </p>
 
       {editando && (
@@ -170,7 +170,7 @@ function FormPersona({ p, onListo }: { p?: Persona; onListo: () => void }) {
       <Campo etiqueta="Nombre *">
         <input name="nombre" defaultValue={p?.nombre} maxLength={60} className="pn-input" />
       </Campo>
-      <Campo etiqueta="Área *" ayuda="Se usa al registrar sus horas.">
+      <Campo etiqueta="Área *" ayuda="Su área principal en el equipo.">
         <input name="area" defaultValue={p?.area} maxLength={60} placeholder="Diseño, Comercial, Tecnología…" className="pn-input" />
       </Campo>
       <div className="flex flex-wrap gap-2">
@@ -184,7 +184,7 @@ function FormPersona({ p, onListo }: { p?: Persona; onListo: () => void }) {
         )}
       </div>
       <p className="text-xs text-fog-dim">
-        {p ? "Si deja el equipo, márcalo inactivo: sus proyectos pasados se conservan." : "Entra con 0 %: asígnale su porcentaje en Finanzas → Reparto."}
+        {p ? "Si deja el equipo, márcalo inactivo: sus proyectos pasados se conservan." : "Si es socio y está activo, recibe parte igual en los proyectos que se cierren desde hoy."}
       </p>
       <MensajeError error={acc.error} />
       <BotonPrincipal type="submit" pendiente={acc.pendiente} className="w-full">

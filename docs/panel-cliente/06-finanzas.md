@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.1 | 10 nov 2026 | Sergio |
+| En revisión | 0.2 | 12 nov 2026 | Sergio |
 
 > **Solo para la agencia (D-109).** Finanzas y Equipo existen únicamente para el negocio de tipo `agencia` (Arata San). Nunca aparecen en el panel de un cliente de página web, y la base de datos rechaza finanzas para cualquier otro negocio (trigger `exigir_agencia`).
 
@@ -22,39 +22,46 @@
 
 **Venta = proyecto cerrado.** Todo en **pesos colombianos (COP)**, sin decimales.
 
-## 2. Cómo se reparte la ganancia
+## 2. Cómo se reparte la ganancia (D-118)
+
+> Reemplaza la "bolsa por horas + % fijos" de D-109 (12 nov 2026). No había proyectos cerrados ni horas, así que no cambió nada ya pagado.
 
 Por proyecto, en este orden:
 
 | Paso | Fórmula |
 |---|---|
 | 1. Ganancia | valor que paga el cliente − gastos del proyecto |
-| 2. Bolsa de trabajo | ganancia × **% de bolsa** → se reparte según las **horas** de cada persona en ese proyecto |
-| 3. Resto | ganancia − bolsa → se reparte con los **% fijos** de cada socio y de **Arata San (empresa)** (suman 100 %) |
-| 4. Total de cada persona | su parte de la bolsa + su % del resto |
+| 2. Días trabajados (se pagan **primero**) | por cada actividad: quién la hizo × días × **valor del día** ($ 80.000; 1 día = 8 horas; se permiten medios días) |
+| 3. Para repartir | ganancia − días trabajados |
+| 4. Partes iguales | para repartir ÷ número de partes. Las partes son **los socios activos + Arata San (empresa)** (hoy 4) |
+| 5. Total de cada persona | su parte igual + sus días |
 
-**Ejemplo** (bolsa 30 %; Sergio, Andrés, Santiago y Arata con 25 % cada uno):
+**Ejemplo** (Sergio hizo el desarrollo en 5 días):
 
 | | Valor |
 |---|---|
 | Proyecto | $ 2.000.000 |
 | Gastos | − $ 200.000 |
 | **Ganancia** | **$ 1.800.000** |
-| Bolsa de trabajo (30 %) | $ 540.000 → Sergio 10 h, Santiago 20 h |
-| Resto (70 %) | $ 1.260.000 → $ 315.000 para cada uno |
+| Días de Sergio (5 × $ 80.000) | − $ 400.000 |
+| **Para repartir** | **$ 1.400.000 → $ 350.000 cada parte** |
 
-| Persona | Trabajo | Socio | **Total** |
+| Persona | Parte igual | Días | **Total** |
 |---|---|---|---|
-| Sergio | $ 180.000 | $ 315.000 | **$ 495.000** |
-| Andrés | $ 0 | $ 315.000 | **$ 315.000** |
-| Santiago | $ 360.000 | $ 315.000 | **$ 675.000** |
-| Arata San (empresa) | — | $ 315.000 | **$ 315.000** |
+| Sergio | $ 350.000 | $ 400.000 | **$ 750.000** |
+| Andrés | $ 350.000 | $ 0 | **$ 350.000** |
+| Santiago | $ 350.000 | $ 0 | **$ 350.000** |
+| Arata San (empresa) | $ 350.000 | — | **$ 350.000** |
 
 **Casos especiales:**
-- **Sin horas registradas:** no hay bolsa; toda la ganancia se reparte con los % de socios (no se pierde plata).
-- **Pérdida** (gastos mayores que el valor): no se reparte; la absorbe la empresa.
-- **Redondeo:** cada parte se redondea al peso; la diferencia va a la empresa, así la suma da exacto la ganancia.
-- **% congelados:** al **cerrar** un proyecto se guarda una copia de los % de ese momento. Si después cambias el reparto, los proyectos cerrados no cambian. Desde la ficha de un proyecto cerrado se puede recalcular con los % de hoy ("Usar los porcentajes de hoy"), a propósito y uno por uno.
+- **Sin días registrados:** toda la ganancia va por partes iguales.
+- **Los días cuestan más que la ganancia:** nunca se reparte más de lo que dejó el proyecto. Los días se pagan **en proporción** hasta la ganancia y no hay parte igual (ej. ganancia $ 1.800.000, días por $ 2.400.000 → cada uno recibe el 75 % de sus días).
+- **Pérdida** (gastos mayores que el valor): no se paga nada; la absorbe la empresa.
+- **Redondeo:** cada parte se redondea al peso hacia abajo; la diferencia va a la empresa, así la suma da exacto la ganancia.
+- **Valor del día por proyecto:** cada proyecto puede tener el suyo (en su ficha). Vacío = el de Reparto. **Solo Sergio** lo cambia.
+- **Se congela al cerrar:** el proyecto guarda su valor del día y quiénes reciben parte igual. Si después cambia el valor del día o entra/sale un socio, lo cerrado no cambia. Sergio puede recalcular uno por uno ("Usar el reparto de hoy").
+- **Gastos de la empresa** (sin proyecto: publicidad propia, herramientas) **no** se restan de ningún proyecto: salen de la parte de Arata (fondos). Revisado el 12 nov 2026: los gastos se restan bien.
+- No se registra **quién pagó** un gasto: si un socio paga algo de su bolsillo, hoy el panel no se lo devuelve (pendiente 8).
 
 ## 3. Fondos y punto de equilibrio
 
@@ -65,42 +72,49 @@ Por proyecto, en este orden:
 | **Disponible para invertir** | fondos − reserva (nunca menos de 0) |
 | **Punto de equilibrio** | gastos fijos del mes ÷ lo que le deja a Arata un proyecto promedio, redondeado hacia arriba |
 
-Ejemplo: gastos fijos $ 1.000.000/mes; un proyecto promedio de $ 2.000.000 con 10 % de gastos le deja a Arata $ 270.000 (con bolsa 40 %) → **4 proyectos al mes**.
+Ejemplo: gastos fijos $ 1.000.000/mes; un proyecto promedio de $ 2.000.000 con 10 % de gastos y 5 días trabajados le deja a Arata ($ 1.800.000 − $ 400.000) ÷ 4 = $ 350.000 → **3 proyectos al mes**.
 
-**Proyección:** se elige cuántos proyectos al mes, el valor promedio y el % de gastos (arrancan con el promedio real). Muestra cuánto ganaría cada uno, cuánto le queda a Arata después de gastos fijos, el punto de equilibrio y en cuántos meses se llega a una meta de inversión. No guarda nada. La bolsa de trabajo se proyecta según cómo se han repartido las horas hasta hoy (si no hay horas, por partes iguales).
+**Proyección:** se elige cuántos proyectos al mes, el valor promedio y el % de gastos (arrancan con el promedio real). Muestra cuánto ganaría cada uno, cuánto le queda a Arata después de gastos fijos, el punto de equilibrio y en cuántos meses se llega a una meta de inversión. No guarda nada. También se eligen los días trabajados por proyecto (arranca con el promedio real); se reparten según quién ha trabajado hasta hoy.
 
-## 4. Quién ve y quién edita
+## 4. Quién ve y quién edita (D-118)
 
 | Persona | Rol (`miembros.rol`) | Puede |
 |---|---|---|
-| Sergio | `dueno` | Ver y editar todo: proyectos, gastos, horas, personas y porcentajes |
-| Andrés, Santiago | `equipo` | **Ver todo**, sin editar. Su tarjeta en Equipo dice "Tú" |
+| Sergio | `dueno` | Todo. **Solo él:** valor del día (general y por proyecto), personas del equipo, recalcular un cerrado, borrar clientes y Mi sitio |
+| Andrés | `finanzas` | Editar Finanzas: proyectos, valores, cierres, gastos, gastos fijos, días trabajados, reserva; clientes y servicios; pasos de los proyectos |
+| Santiago | `equipo` | **Ver todo** y marcar pasos |
 
-Doble barrera: la pantalla no muestra los botones de editar a quien no es dueño, y **cada acción del servidor revisa otra vez** sesión con doble factor, negocio agencia y rol `dueno`. Probado: si Andrés llama la acción de guardar el reparto directo al servidor, la respuesta es "Solo Sergio puede cambiar las finanzas".
+Doble barrera: la pantalla no muestra lo que no se puede editar, y **cada acción del servidor revisa otra vez** sesión con doble factor, negocio agencia y rol. Si Andrés intenta cambiar el valor del día directo al servidor: "Solo Sergio puede cambiar el valor del día".
+
+Cambiar el rol de alguien (corre en el computador de Sergio, no cambia su contraseña):
+
+```bash
+node --env-file=.env.local scripts/panel-crear-usuario.mjs CORREO "Andrés" arata-san finanzas "Andrés"
+```
 
 ## 5. Pantallas
 
 | Ruta | Contenido |
 |---|---|
 | `/panel/finanzas` → **Resumen** | Ventas, gastos, ganancia y fondos (este mes / este año / todo) · cuánto le toca a cada uno · fondos de la empresa con reserva · ganancia por mes · punto de equilibrio |
-| → **Proyectos** | Lista con filtro (propuesta, en curso, cerrado) · ficha con reparto detallado, horas y gastos del proyecto · crear, editar, cerrar, borrar |
+| → **Proyectos** | Lista con filtro (propuesta, en curso, cerrado) · ficha con reparto detallado, quién hizo qué (días) y gastos del proyecto · crear, editar, cerrar, borrar |
 | → **Gastos** | Gastos fijos mensuales (con interruptor para dejar de contarlos) · gastos e inversiones de la empresa · gastos cargados a proyectos |
-| → **Reparto** | % de bolsa, % de cada socio y de Arata (deben sumar 100 %), meses de reserva · ejemplo en vivo |
+| → **Reparto** | Cómo se reparte, valor del día (Sergio), meses de reserva · ejemplo en vivo con valor, gastos, persona y días |
 | → **Proyección** | Simulador de mes, punto de equilibrio, meta de inversión y tabla "¿cuántos proyectos necesitamos?" |
-| `/panel/equipo` | Tarjeta por persona (total, este mes, este año, socio/trabajo, horas) · tabla por proyecto · agregar o editar personas (Sergio) |
+| `/panel/equipo` | Tarjeta por persona (total, este mes, este año, parte igual/días) · tabla por proyecto · agregar o editar personas (Sergio) |
 
 ## 6. Datos (`db/panel/003_finanzas.sql`)
 
 | Tabla | Qué guarda |
 |---|---|
 | `equipo_personas` | Nombre, área, si es socio, activo y la cuenta enlazada (`usuario_id`) |
-| `fin_config` (+ `fin_config_versiones`) | % de bolsa, % de reparto (JSON) y meses de reserva; cada cambio deja una versión con quién y cuándo |
-| `fin_proyectos` | Nombre, cliente, servicio, estado, valor, fecha de cierre y `reparto_congelado` |
+| `fin_config` (+ `fin_config_versiones`) | Valor del día (`tarifa_dia`) y meses de reserva; cada cambio deja una versión con quién y cuándo. `bolsa_trabajo_pct` y `reparto` quedan sin uso (D-118) |
+| `fin_proyectos` | Nombre, cliente, servicio, estado, valor, fecha de cierre, `tarifa_dia` propio y `reparto_congelado` ({valor del día, partes}) |
 | `fin_gastos` | Gastos de un proyecto (`proyecto_id`) o de la empresa (`proyecto_id` vacío) con categoría |
-| `fin_horas` | Horas por persona y proyecto, con área, fecha y nota |
+| `fin_horas` | Días trabajados (`dias`, medios días) por persona, proyecto y actividad (`area`), con fecha y nota (`009_reparto_igual_dias.sql`) |
 | `fin_gastos_fijos` | Gastos mensuales de la empresa (para equilibrio y reserva) |
 
-Código: cálculos puros en `lib/panel/finanzas/calculo.ts` (probados con `npx -y tsx scripts/prueba-finanzas.ts`, 17 casos), lectura en `lib/panel/finanzas/datos.ts`, acciones en `app/(panel)/panel/(app)/finanzas/acciones.ts`, pantallas en `components/panel/finanzas/`. Sin conexión a la base, muestra datos de ejemplo (`lib/panel/finanzas/demo.ts`) con aviso.
+Código: cálculos puros en `lib/panel/finanzas/calculo.ts` (probados con `npx -y tsx scripts/prueba-finanzas.ts`, 23 casos), lectura en `lib/panel/finanzas/datos.ts`, acciones en `app/(panel)/panel/(app)/finanzas/acciones.ts`, pantallas en `components/panel/finanzas/`. Sin conexión a la base, muestra datos de ejemplo (`lib/panel/finanzas/demo.ts`) con aviso.
 
 ## 7. Dar acceso a Andrés y Santiago
 
@@ -134,6 +148,18 @@ Base local (PGlite), `next build` + `next start`, Chromium. 22 de 22 ✅:
 | Andrés llamando la acción del servidor directo → rechazado | ✅ |
 | La base rechaza crear finanzas para un cliente de página web | ✅ |
 | Celular (iPhone 13): las 5 pestañas y Equipo sin scroll horizontal | ✅ |
+
+## 8a. Pruebas del reparto nuevo (12 nov 2026, D-118)
+
+Cálculo: 23 de 23 ✅ (`scripts/prueba-finanzas.ts`). Navegador con base local y las 3 cuentas: 28 de 28 ✅. Entre ellas:
+
+| Prueba | Resultado |
+|---|---|
+| Proyecto $ 2.000.000 − $ 200.000, Sergio 5 días de desarrollo → Sergio $ 750.000 · Andrés, Santiago y Arata $ 350.000 | ✅ |
+| Santiago 1,5 días = $ 120.000; 2,3 días se rechaza (solo enteros o medios) | ✅ |
+| Valor del día propio $ 100.000 y cierre: Sergio $ 762.500; cambiar el general a $ 90.000 no altera lo cerrado | ✅ |
+| Andrés: crea proyectos, registra días y gastos, cambia la reserva; el valor del día bloqueado (general y del proyecto); Equipo en solo lectura; edita clientes pero no los borra; no cambia Mi sitio | ✅ |
+| Santiago: solo lectura, no crea proyectos | ✅ |
 
 ## 8b. Clientes y servicios como listas (D-110)
 
@@ -190,10 +216,11 @@ Regla: un proyecto **cerrado sin pasos** cuenta como entregado (proyectos viejos
 
 | # | Qué | Quién |
 |---|---|---|
-| 1 | Poner los % reales de bolsa y de cada socio, y los gastos fijos | Sergio |
+| 1 | ~~Poner los % de bolsa y socios~~ (ya no aplica, D-118) · cargar los gastos fijos | Sergio |
 | 2 | Cargar los proyectos cerrados de este año para tener historia | Sergio |
 | 3 | ~~Publicar el panel~~ ✅ en `panel.aratasan.com` (11 nov 2026, D-115) | — |
 | 4 | ~~Crear las cuentas de Andrés y Santiago~~ ✅ (11 nov 2026, rol `equipo`, enlazadas en Equipo). Falta que cada uno active su doble factor al entrar | Andrés · Santiago |
 | 5 | Que el Resumen general del panel muestre las ventas reales (proyectos cerrados) | Siguiente paso |
 | 7 | Cargar los clientes reales de Arata en Clientes | Sergio |
-| 6 | Que cada uno registre sus propias horas (hoy solo Sergio) | Si se decide |
+| 6 | Que cada uno registre sus propios días (hoy Sergio y Andrés) | Si se decide |
+| 8 | Registrar quién pagó un gasto para devolvérselo | Si se decide |

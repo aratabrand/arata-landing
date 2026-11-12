@@ -16,7 +16,7 @@ Barrido del panel de Arata San, del 10 al 11 nov 2026 (D-102 a D-117). Sirve par
 | Resumen | Datos reales: ventas, ganancia, clientes nuevos, proyectos tarde, embudo. Visitas e Instagram: pendientes (§5) |
 | Clientes | Lista y ficha con origen, servicios y proyecto en curso; sin repetidos |
 | Proyectos | Grid + detalle por etapas; avance calculado de los pasos; el equipo marca pasos |
-| Finanzas / Equipo | Reparto con bolsa por horas, % congelados al cierre, fondos, equilibrio y proyección |
+| Finanzas / Equipo | Reparto por partes iguales + días trabajados a $ 80.000 (D-118), congelado al cierre, fondos, equilibrio y proyección |
 | Mi sitio | Textos reales de aratasan.com; Guardar (borrador) y **Publicar** al sitio sin perder velocidad (D-117) |
 | Publicación | `panel.aratasan.com` en un proyecto de Vercel aparte; el sitio no tiene ninguna clave |
 
@@ -64,7 +64,7 @@ Barrido del panel de Arata San, del 10 al 11 nov 2026 (D-102 a D-117). Sirve par
 | Catálogos separados desde el día 1 | No se mezclan dos productos con promesas distintas |
 | "Mi sitio" con publicar en 1–2 min | Es un argumento de la mensualidad: el cliente cambia su texto sin escribirnos y la página sigue rápida |
 | Resumen que no inventa números | "Pendiente" en vez de cifras de mentira: confianza |
-| Finanzas con reglas claras (bolsa por horas, % congelados) | Los tres socios ven lo mismo y nadie discute lo ya cerrado |
+| Finanzas con reglas claras (partes iguales + días trabajados, congelado al cierre) | Los tres socios ven lo mismo y nadie discute lo ya cerrado |
 | Plantilla de pasos de página web = la promesa de 5 días | El tablero mide si cumplimos lo que vendemos |
 
 ### Aprendizajes

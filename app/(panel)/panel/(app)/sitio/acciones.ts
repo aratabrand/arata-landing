@@ -15,7 +15,7 @@ export async function guardarSitio(entrada: ConfigSitio): Promise<Resultado> {
     if (!panelActivo) return { ok: false, error: "El panel está en modo ejemplo." };
     const ctx = await contextoAgencia();
     if (!ctx) return { ok: false, error: "Tu sesión terminó. Vuelve a entrar." };
-    if (!ctx.puedeEditar) return { ok: false, error: "Solo Sergio puede cambiar el sitio." };
+    if (!ctx.esDueno) return { ok: false, error: "Solo Sergio puede cambiar el sitio." };
 
     const t = (v: unknown, max: number) => String(v ?? "").slice(0, max);
     const limpio: ConfigSitio = {
@@ -56,7 +56,7 @@ export async function publicarSitio(): Promise<Resultado> {
     if (!panelActivo) return { ok: false, error: "El panel está en modo ejemplo." };
     const ctx = await contextoAgencia();
     if (!ctx) return { ok: false, error: "Tu sesión terminó. Vuelve a entrar." };
-    if (!ctx.puedeEditar) return { ok: false, error: "Solo Sergio puede publicar el sitio." };
+    if (!ctx.esDueno) return { ok: false, error: "Solo Sergio puede publicar el sitio." };
     const hook = process.env.SITIO_DEPLOY_HOOK ?? "";
     // En producción solo el Deploy Hook de Vercel; en local se puede probar con un servidor propio
     const local = process.env.NODE_ENV !== "production" && /^http:\/\/localhost:\d+\//.test(hook);

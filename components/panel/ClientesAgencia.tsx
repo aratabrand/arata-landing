@@ -163,7 +163,7 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
 
       {actual && (
         <Hoja titulo={titulo(actual)} onClose={() => setAbierto(null)}>
-          <Ficha c={actual} puedeEditar={datos.puedeEditar} onBorrado={() => setAbierto(null)} />
+          <Ficha c={actual} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} onBorrado={() => setAbierto(null)} />
         </Hoja>
       )}
       {creando && (
@@ -175,7 +175,7 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
   );
 }
 
-function Ficha({ c, puedeEditar, onBorrado }: { c: ClienteAgencia; puedeEditar: boolean; onBorrado: () => void }) {
+function Ficha({ c, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAgencia; puedeEditar: boolean; puedeBorrar: boolean; onBorrado: () => void }) {
   const [editando, setEditando] = useState(false);
   const acc = useAccion();
   if (editando) return <FormCliente c={c} onListo={() => setEditando(false)} />;
@@ -264,7 +264,7 @@ function Ficha({ c, puedeEditar, onBorrado }: { c: ClienteAgencia; puedeEditar: 
       {puedeEditar && (
         <div className="flex flex-wrap gap-2 border-t border-white/8 pt-4">
           <BotonSecundario type="button" onClick={() => setEditando(true)}>Editar cliente</BotonSecundario>
-          {c.proyectos.length === 0 && (
+          {puedeBorrar && c.proyectos.length === 0 && (
             <BotonSecundario
               type="button"
               className="text-[#FF9BB0]"

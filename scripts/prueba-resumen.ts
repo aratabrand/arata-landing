@@ -1,11 +1,11 @@
 // Prueba del Resumen de Arata (D-114). Correr:  npx -y tsx scripts/prueba-resumen.ts  — todo debe salir con ✓.
 import { resumenAgencia } from "../lib/panel/resumen/agencia";
 const ok=(c:boolean,m:string)=>{console.log((c?"✓ ":"✗ ")+m); if(!c) process.exitCode=1;};
-const reglas={bolsaTrabajoPct:30,reparto:[{beneficiario:"empresa",pct:100}]};
+const reglas={tarifaDia:80000};
 const P=(id:string,estado:any,valor:number,cierre:string|null,cliente:string,serv="s1",limite:string|null=null)=>({id,nombre:id,clienteId:cliente,servicioId:serv,estado,valor,fechaCierre:cierre,fechaInicio:null,fechaLimite:limite,repartoCongelado:null,notas:null});
 const d:any={negocioId:"n",puedeEditar:true,puedeMarcarPasos:true,miPersonaId:null,demo:false,personas:[],config:{...reglas,reservaMeses:3,actualizado:null},
  proyectos:[P("a","cerrado",2_000_000,"2026-11-01","c1"),P("b","cerrado",1_000_000,"2026-10-25","c2","s2"),P("c","cerrado",500_000,"2026-09-20","c1"),P("d","en-curso",3_000_000,null,"c3","s1","2026-11-05"),P("e","propuesta",900_000,null,"c4")],
- gastos:[{id:"g",proyectoId:"a",concepto:"x",categoria:"otros",valor:200_000,fecha:"2026-11-01"}],horas:[],gastosFijos:[],
+ gastos:[{id:"g",proyectoId:"a",concepto:"x",categoria:"otros",valor:200_000,fecha:"2026-11-01"}],trabajo:[],gastosFijos:[],
  servicios:[{id:"s1",nombre:"Página",categoria:"pagina-web",activo:true},{id:"s2",nombre:"Tienda",categoria:"catalogo",activo:true}],clientes:[],
  tareas:[{id:"t1",proyectoId:"d",etapa:"arranque",texto:"x",hecha:true,orden:0},{id:"t2",proyectoId:"d",etapa:"diseno",texto:"y",hecha:false,orden:1}]};
 const C=(id:string,creado:string,origen:string,proys:any[])=>({id,nombre:id,empresa:null,telefono:"1",correo:null,ciudad:null,sitioWeb:null,instagram:null,estado:"nuevo",origen,origenDetalle:null,notas:null,creado,proyectos:proys});
