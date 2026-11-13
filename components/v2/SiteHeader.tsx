@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
@@ -13,6 +14,8 @@ import { cn } from "@/lib/utils";
 
 // Header v2 (ref. 21st.dev captura 05):
 // barra completa, transparente arriba y con vidrio oscuro al bajar;
+// en escritorio el menú va en una píldora de vidrio con un selector de vidrio suave
+// que marca la página actual y sigue al mouse (D-121, mismo estilo del panel D-120);
 // "Servicios ▾" abre un mega menú con tarjetas de vista previa;
 // en celular, panel a pantalla completa (D-070).
 //
@@ -40,6 +43,37 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeTimer = useRef<number | null>(null);
   const megaRef = useRef<HTMLDivElement | null>(null);
+
+  // ── Selector de vidrio del menú de escritorio ──
+  const path = usePathname() ?? "/";
+  const pildora = useRef<HTMLDivElement | null>(null);
+  const opciones = useRef<(HTMLElement | null)[]>([]);
+  const [encima, setEncima] = useState<number | null>(null);
+  const [sel, setSel] = useState<{ x: number; w: number } | null>(null);
+  // La primera vez aparece en su sitio (sin deslizarse desde la izquierda); después se anima
+  const [animar, setAnimar] = useState(false);
+  useEffect(() => {
+    if (sel && !animar) {
+      const id = requestAnimationFrame(() => requestAnimationFrame(() => setAnimar(true)));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [sel, animar]);
+  const enServicios = menu.servicios.some((x) => x.href !== "/portafolio" && path.startsWith(x.href));
+  const actual = enServicios ? 0 : menu.links.findIndex((l) => l.href.startsWith("/") && !l.href.includes("#") && (path === l.href || path.startsWith(l.href + "/"))) + 1 || null;
+  const marcado = encima ?? (mega ? 0 : actual);
+  useLayoutEffect(() => {
+    const medir = () => {
+      const el = marcado === null ? null : opciones.current[marcado];
+      const base = pildora.current;
+      if (!el || !base) return setSel(null);
+      const a = el.getBoundingClientRect();
+      const c = base.getBoundingClientRect();
+      setSel({ x: a.left - c.left - base.clientLeft, w: a.width });
+    };
+    medir();
+    window.addEventListener("resize", medir);
+    return () => window.removeEventListener("resize", medir);
+  }, [marcado]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -129,9 +163,32 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
         </Link>
 
         {/* Escritorio */}
-        <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
+        <nav
+          aria-label="Principal"
+          ref={pildora}
+          onPointerLeave={() => setEncima(null)}
+          className="relative hidden items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.035] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] lg:flex"
+        >
+          {/* El vidrio de la píldora va en una capa aparte: si la píldora misma tuviera
+              backdrop-filter, el vidrio del mega menú (que está adentro) dejaría de desenfocar */}
+          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full backdrop-blur-xl" />
+          {/* Selector de vidrio suave: se mueve solo con transform (y su ancho), quieto con movimiento reducido */}
+          <span
+            aria-hidden
+            data-selector=""
+            className={cn(
+              "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_20px_-10px_rgba(125,83,255,0.55)] motion-reduce:transition-none",
+              animar ? "transition-[transform,width,opacity] duration-300 ease-out" : "transition-opacity duration-200",
+              sel ? "opacity-100" : "opacity-0"
+            )}
+            style={sel ? { transform: `translateX(${sel.x}px)`, width: sel.w } : undefined}
+          />
           <div ref={megaRef} className="relative" onPointerEnter={openMega} onPointerLeave={scheduleClose}>
             <button
+              ref={(el) => {
+                opciones.current[0] = el;
+              }}
+              onPointerEnter={() => setEncima(0)}
               type="button"
               aria-expanded={mega}
               aria-controls="mega-servicios"
@@ -139,9 +196,10 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
                 setMegaVisto(true);
                 setMega((v) => !v);
               }}
+              aria-current={enServicios ? "page" : undefined}
               className={cn(
-                "inline-flex h-9 items-center gap-1 rounded-btn px-3 text-sm font-medium transition-colors",
-                mega ? "bg-surface-2 text-white" : "text-fog hover:text-white"
+                "relative z-10 inline-flex h-9 items-center gap-1 rounded-full px-4 text-sm font-medium transition-colors",
+                mega || marcado === 0 ? "text-white" : "text-fog hover:text-white"
               )}
             >
               Servicios
@@ -184,11 +242,19 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             </div>
           </div>
 
-          {menu.links.map((l) => (
+          {menu.links.map((l, i) => (
             <Link
               key={l.label}
               href={l.href}
-              className="inline-flex h-9 items-center rounded-btn px-3 text-sm font-medium text-fog transition-colors hover:text-white"
+              ref={(el) => {
+                opciones.current[i + 1] = el;
+              }}
+              onPointerEnter={() => setEncima(i + 1)}
+              aria-current={actual === i + 1 ? "page" : undefined}
+              className={cn(
+                "relative z-10 inline-flex h-9 items-center rounded-full px-4 text-sm font-medium transition-colors",
+                marcado === i + 1 ? "text-white" : "text-fog hover:text-white"
+              )}
             >
               {l.label}
             </Link>
