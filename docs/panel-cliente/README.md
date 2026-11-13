@@ -9,7 +9,9 @@ Este folder documenta **el panel** para ver cómo va el negocio y manejarlo desd
 1. Usarlo en **Arata San** primero (en `/panel`, con acceso por contraseña + doble factor).
 2. **Repetirlo después en clientes de página web** sin empezar de cero: mismas piezas, mismos datos, otro negocio.
 
-> **A quién aplica (D-106):** primero **Arata San** (Sergio lo prueba con la agencia). Después, solo clientes de **página web**. Los clientes de **catálogo** (Arata Print, Caravana…) **no** usan este panel: tienen su propio sistema y su propia base de datos. No se mezclan ni en código ni en base de datos.
+> **A quién aplica (D-106, aclarado en D-122):** primero **Arata San** (Sergio lo prueba con la agencia). Después, el **modelo de panel** se monta solo a clientes de **página web** o de **aplicación a la medida**. A los clientes de **catálogo** (Arata Print, Caravana…) **no** se les monta este panel: tienen su propio sistema y su propia base de datos, y no se mezclan ni en código ni en base de datos.
+>
+> Esto no limita la lista de **Clientes de Arata** dentro del panel de la agencia: ahí se registra **cualquier cliente de cualquier servicio** (página, catálogo, sistema, mantenimiento) para sus proyectos y finanzas.
 >
 > **Base de datos del panel: Neon + Better Auth** (D-108), solo para este proyecto. El resto de la agencia sigue con Supabase.
 

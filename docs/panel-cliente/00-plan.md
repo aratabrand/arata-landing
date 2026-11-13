@@ -23,13 +23,16 @@ Que Arata San (primero) y después cada cliente de página web **vea en un solo 
 
 ## 2. Para quién
 
-> **A quién aplica (D-106):** primero **Arata San** (Sergio lo prueba con la agencia). Después, solo clientes de **página web**. Los clientes de **catálogo** (Arata Print, Caravana…) **no** usan este panel: tienen su propio sistema y su propia base de datos. No se mezclan ni en código ni en base de datos.
+> **A quién aplica (D-106, aclarado en D-122):** primero **Arata San** (Sergio lo prueba con la agencia). Después, el **modelo de panel** se monta solo a clientes de **página web** o de **aplicación a la medida**. A los clientes de **catálogo** (Arata Print, Caravana…) **no** se les monta este panel: tienen su propio sistema y su propia base de datos, y no se mezclan ni en código ni en base de datos.
+>
+> Esto no limita la lista de **Clientes de Arata** dentro del panel de la agencia: ahí se registra **cualquier cliente de cualquier servicio** (página, catálogo, sistema, mantenimiento) para sus proyectos y finanzas.
 
 | Orden | Quién | Para qué |
 |---|---|---|
 | 1 | **Arata San** (Sergio) | Probarlo con la agencia: datos reales propios, ajustar antes de mostrarlo a nadie |
 | 2 | Clientes de **página web** | Cuando la prueba con Arata salga bien |
-| — | Clientes de catálogo | **No aplica.** Tienen su sistema propio |
+| 2 | Clientes de **aplicación a la medida** | Igual que página web (D-122). Cuando llegue el primero se agrega su tipo de negocio en la base (hoy `negocios.tipo` admite `agencia` y `pagina-web`) |
+| — | Clientes de catálogo | **No se les monta este panel.** Tienen su sistema propio. Sí pueden estar en la lista de Clientes de Arata |
 
 
 Dueños de pymes colombianas (panaderías, restaurantes, tiendas, servicios). Lo abren **sobre todo en el celular**, entre una cosa y otra. No son técnicos: no saben qué es una "sesión" ni una "tasa de conversión".
