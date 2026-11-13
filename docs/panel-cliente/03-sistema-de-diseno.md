@@ -41,6 +41,8 @@ Reglas:
 
 ## 3. Marco
 
+> **Actualizado (D-120, 13 nov 2026):** en escritorio ya no hay barra lateral. Barra arriba: logo · menú en píldora de vidrio (`border-white/[0.09] bg-white/[0.035] backdrop-blur-xl`, selector `bg-white/[0.09]` con borde y brillo interior que se desliza con `transform`) · campana (ventana de notificaciones) · cuenta. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, las ventanas `position: fixed` de adentro quedarían atrapadas en ella. Celular: misma barra + 5 pestañas abajo. Opciones: Resumen, Clientes, Proyectos, Finanzas (solo agencia), Configuración (Ajustes del sitio, Equipo, Notificaciones).
+
 | | Celular | Escritorio (≥ 1024 px) |
 |---|---|---|
 | Navegación | Pestañas abajo (64 px + zona segura), barra superior de 56 px con vidrio | Barra lateral fija de 248 px |

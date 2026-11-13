@@ -47,7 +47,7 @@ export default function Notificaciones({
 
   return (
     <PanelPage>
-      <PanelHeader titulo="Notificaciones" bajada="Proyectos por vencer y todo lo que cambia en el panel: quién lo hizo y cuándo." />
+      <PanelHeader titulo="Notificaciones" bajada="Proyectos por vencer y todo lo que cambia en el panel: quién lo hizo y cuándo." volver={{ href: "/panel/configuracion", texto: "Configuración" }} />
 
       <AvisosDispositivo push={push} demo={demo} />
 

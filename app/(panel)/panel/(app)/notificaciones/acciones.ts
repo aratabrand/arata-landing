@@ -3,8 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
-import { contextoAgencia } from "@/lib/panel/finanzas/datos";
-import { marcarVisto } from "@/lib/panel/notificaciones";
+import { cargarFinanzas, contextoAgencia } from "@/lib/panel/finanzas/datos";
+import { marcarVisto, vistoHasta } from "@/lib/panel/notificaciones";
+import { historialDe, type EventoHistorial } from "@/lib/panel/historial";
+import { alertasVencimiento, type TipoAlerta } from "@/lib/panel/alertas";
+import { hoyColombia } from "@/lib/panel/fecha";
 import { avisarA, pushActivo } from "@/lib/panel/push";
 import type { Resultado } from "../finanzas/acciones";
 
@@ -73,5 +76,22 @@ export async function probarAviso(): Promise<Resultado> {
     return r.enviados ? { ok: true } : { ok: false, error: "No hay dispositivos activos para enviar el aviso." };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "No se pudo enviar." };
+  }
+}
+
+/** Lo último para la ventana de la campana (D-120): alertas de entrega + cambios recientes. Marca como vistas. */
+export async function verNotificacionesRecientes(): Promise<
+  | { ok: true; alertas: { id: string; nombre: string; tipo: TipoAlerta; texto: string }[]; eventos: EventoHistorial[]; visto: string | null; miUsuario: string }
+  | { ok: false; error: string }
+> {
+  try {
+    const ctx = await ctxAgencia();
+    const datos = await cargarFinanzas();
+    const alertas = datos ? alertasVencimiento(datos, hoyColombia()).map((a) => ({ id: a.proyecto.id, nombre: a.proyecto.nombre, tipo: a.tipo, texto: a.texto })) : [];
+    const [eventos, visto] = await Promise.all([historialDe(ctx.negocioId, { limite: 12 }), vistoHasta(ctx.negocioId, ctx.usuarioId)]);
+    await marcarVisto(ctx.negocioId, ctx.usuarioId);
+    return { ok: true, alertas, eventos, visto, miUsuario: ctx.usuarioId };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudieron leer las notificaciones." };
   }
 }

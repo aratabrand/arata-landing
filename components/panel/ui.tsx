@@ -1,5 +1,6 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Piezas base del panel (docs/panel-cliente/03-sistema-de-diseno.md §4).
@@ -11,10 +12,15 @@ export function PanelPage({ children }: { children: ReactNode }) {
 }
 
 /** Encabezado de módulo: el único <h1> de la vista. */
-export function PanelHeader({ titulo, bajada, accion }: { titulo: ReactNode; bajada?: ReactNode; accion?: ReactNode }) {
+export function PanelHeader({ titulo, bajada, accion, volver }: { titulo: ReactNode; bajada?: ReactNode; accion?: ReactNode; volver?: { href: string; texto: string } }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
+        {volver && (
+          <Link href={volver.href} className="mb-2 inline-flex h-9 items-center gap-1.5 text-sm text-fog hover:text-white">
+            <ArrowLeft aria-hidden className="h-4 w-4" /> {volver.texto}
+          </Link>
+        )}
         <h1 className="font-display text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.05] tracking-heading text-white">{titulo}</h1>
         {bajada && <p className="mt-2 max-w-xl text-sm text-fog sm:text-[0.95rem]">{bajada}</p>}
       </div>

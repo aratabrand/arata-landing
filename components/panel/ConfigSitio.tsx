@@ -106,7 +106,8 @@ function EditorSitio({
   return (
     <PanelPage>
       <PanelHeader
-        titulo="Mi sitio"
+        titulo="Ajustes del sitio"
+        volver={{ href: "/panel/configuracion", texto: "Configuración" }}
         bajada="Cambia los textos y botones de tu página. Mira cómo queda a la derecha antes de guardar."
         accion={
           <a href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center rounded-btn border border-white/10 bg-surface-2 px-5 text-sm font-semibold text-white hover:bg-surface-3">
@@ -260,7 +261,7 @@ function EditorSitio({
         </fieldset>
 
         {/* Vista previa */}
-        <div className="xl:sticky xl:top-8 xl:self-start">
+        <div className="xl:sticky xl:top-28 xl:self-start">
           <Tarjeta
             titulo="Vista previa"
             accion={

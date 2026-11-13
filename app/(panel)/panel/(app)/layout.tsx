@@ -15,10 +15,12 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
   let sinFranja = ["/panel/finanzas", "/panel/equipo"];
   let { negocio } = obtenerPanel();
   let sinLeer = 0;
+  let usuario: { nombre: string; correo?: string } | null = null;
   if (panelActivo) {
     const s = await estadoSesion();
     if (s.estado === "sin-sesion") redirect(RUTA_ENTRAR);
     if (s.estado === "falta-doble-factor") redirect(RUTA_DOBLE_FACTOR);
+    usuario = { nombre: s.nombre ?? "", correo: s.email ?? undefined };
     const ctx = await contextoAgencia();
     conFinanzas = ctx !== null;
     // El marco muestra el negocio real; los módulos que aún usan datos de ejemplo llevan su franja
@@ -33,7 +35,7 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
     }
   }
   return (
-    <PanelShell negocio={negocio} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer}>
+    <PanelShell negocio={negocio} usuario={usuario} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer}>
       {children}
     </PanelShell>
   );

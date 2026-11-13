@@ -3,7 +3,7 @@ import ConfigSitio from "@/components/panel/ConfigSitio";
 import { obtenerPanel } from "@/lib/panel/datos";
 import { cargarSitioAgencia } from "@/lib/panel/sitio/datos";
 
-export const metadata: Metadata = { title: "Mi sitio" };
+export const metadata: Metadata = { title: "Ajustes del sitio" };
 
 // Arata San con sesión: los textos reales de aratasan.com (o lo guardado en el panel), D-111.
 export default async function PanelSitioPage() {

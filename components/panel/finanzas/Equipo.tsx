@@ -37,6 +37,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
     <PanelPage>
       <PanelHeader
         titulo="Equipo"
+        volver={{ href: "/panel/configuracion", texto: "Configuración" }}
         bajada="Lo que gana cada uno por proyecto: su parte igual más los días que trabajó."
         accion={
           datos.esDueno ? (
