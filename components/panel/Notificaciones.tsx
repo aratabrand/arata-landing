@@ -110,6 +110,14 @@ function aBytes(base64: string) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
+/** ¿La suscripción del navegador se hizo con la clave pública de hoy? */
+function mismaClave(b: ArrayBuffer | null, clave: string) {
+  if (!b) return true; // algunos navegadores no la exponen: se asume que sí
+  const a = new Uint8Array(b);
+  const c = aBytes(clave);
+  return a.length === c.length && a.every((x, i) => x === c[i]);
+}
+
 /** Promesa con tiempo máximo: si no termina, falla con un mensaje para la persona. */
 function conTiempo<T>(p: Promise<T>, ms: number, mensaje: string): Promise<T> {
   return new Promise<T>((ok, mal) => {
@@ -158,10 +166,27 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
       }
       if (Notification.permission === "denied") return setEstado("bloqueado");
       const reg = await navigator.serviceWorker.register("/panel/sw.js", { scope: "/panel/" });
-      const s = await reg.pushManager.getSubscription();
+      let s = await reg.pushManager.getSubscription();
+      // Si la suscripción se hizo con otras claves (se cambiaron en Vercel), ya no sirve: se quita
+      if (s && push.clave && !mismaClave(s.options.applicationServerKey, push.clave)) {
+        await s.unsubscribe();
+        s = null;
+      }
+      // El navegador ya tiene avisos: se vuelven a guardar en el panel (por si el primer
+      // intento no llegó, o la base se limpió). Si falla, se dice por qué.
+      if (s && push.activo && Notification.permission === "granted") {
+        const j = s.toJSON();
+        const r = await guardarSuscripcion({ endpoint: s.endpoint, p256dh: j.keys?.p256dh ?? "", auth: j.keys?.auth ?? "", dispositivo: nombreDispositivo() });
+        if (!r.ok) {
+          await s.unsubscribe();
+          s = null;
+          acc.setError(r.error);
+        }
+      }
       setSuscripcion(s);
       setEstado(s ? "encendido" : "apagado");
     })().catch(() => setEstado("no-soportado"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Cada paso tiene un tiempo máximo y un mensaje claro: antes, si el navegador se quedaba
