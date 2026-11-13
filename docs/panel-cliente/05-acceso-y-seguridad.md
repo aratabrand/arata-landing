@@ -173,6 +173,16 @@ Vercel Cron 8 a. m. ──► /api/avisos/diario ──► proyectos a 2 días, 
 4. Para probar en local, las mismas variables en `.env.local` (otras claves está bien: las suscripciones son por clave).
 5. Cada uno: panel → Notificaciones → Activar avisos aquí → "Mandar aviso de prueba".
 
+**Si al activar sale un error** (el panel muestra la causa y el código del navegador al final):
+
+| Código | Qué pasa | Qué hacer |
+|---|---|---|
+| `NotAllowedError` | El celular o el navegador bloquean las notificaciones | Android: Ajustes → Aplicaciones → Chrome → Notificaciones permitidas, y en Chrome → Configuración de sitios → Notificaciones → `panel.aratasan.com` en Permitir. PC: ícono junto a la dirección → Notificaciones → Permitir |
+| `AbortError · push service error` | Chrome no logra registrarse en el servicio de avisos de Google (pasó en el Android de Sergio el 13 nov 2026) | En orden: probar con datos móviles; DNS privado en Automático/Desactivado y sin bloqueadores ni VPN; fecha y hora automáticas; cuenta de Google iniciada; Chrome y Servicios de Google Play sin restricción de batería e inicio automático (Xiaomi/Redmi/POCO); borrar caché de Servicios de Google Play y reiniciar; actualizar Chrome y Play Services. Respaldo: Firefox (usa su propio servicio) |
+| Se queda en "Activando…" | Permiso sin responder | Buscar el ícono de campana en la barra de direcciones y elegir Permitir (desde D-119 el panel corta a los 20 s y lo dice) |
+
+Activado y probado el 13 nov 2026: Sergio en Windows · Chrome y Android · Chrome.
+
 > `vercel.json` es del repositorio: el proyecto del sitio también intenta el aviso diario, pero ahí la ruta responde 404 (no tiene la base). No hace nada.
 
 ## 4. Si se pierde el celular
