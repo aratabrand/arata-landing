@@ -110,6 +110,31 @@ function aBytes(base64: string) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
+/** Promesa con tiempo máximo: si no termina, falla con un mensaje para la persona. */
+function conTiempo<T>(p: Promise<T>, ms: number, mensaje: string): Promise<T> {
+  return new Promise<T>((ok, mal) => {
+    const t = window.setTimeout(() => mal(new Error(mensaje)), ms);
+    p.then(
+      (v) => (window.clearTimeout(t), ok(v)),
+      (e) => (window.clearTimeout(t), mal(e))
+    );
+  });
+}
+
+/** Registro del service worker ya activo (lo registra si hace falta). */
+async function listo(): Promise<ServiceWorkerRegistration> {
+  const reg = (await navigator.serviceWorker.getRegistration("/panel/")) ?? (await navigator.serviceWorker.register("/panel/sw.js", { scope: "/panel/" }));
+  if (reg.active) return reg;
+  const sw = reg.installing ?? reg.waiting;
+  if (!sw) return navigator.serviceWorker.ready;
+  await new Promise<void>((ok) => {
+    const ver = () => sw.state === "activated" && (sw.removeEventListener("statechange", ver), ok());
+    sw.addEventListener("statechange", ver);
+    ver();
+  });
+  return reg;
+}
+
 function nombreDispositivo() {
   const ua = navigator.userAgent;
   const so = /iPhone|iPad/.test(ua) ? "iPhone" : /Android/.test(ua) ? "Android" : /Mac/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows" : "Computador";
@@ -139,22 +164,44 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
     })().catch(() => setEstado("no-soportado"));
   }, []);
 
+  // Cada paso tiene un tiempo máximo y un mensaje claro: antes, si el navegador se quedaba
+  // esperando (permiso sin responder, servicio de avisos sin conexión), el botón decía
+  // "Activando…" para siempre.
   const activar = () =>
     acc.correr(async () => {
-      const permiso = await Notification.requestPermission();
-      if (permiso !== "granted") {
-        setEstado(permiso === "denied" ? "bloqueado" : "apagado");
-        return { ok: false, error: "No diste permiso para los avisos." };
+      try {
+        const permiso = await conTiempo(
+          Notification.requestPermission(),
+          20_000,
+          "El navegador está esperando tu permiso. Busca el ícono de campana en la barra de direcciones y elige Permitir."
+        );
+        if (permiso !== "granted") {
+          setEstado(permiso === "denied" ? "bloqueado" : "apagado");
+          return { ok: false, error: "No diste permiso para los avisos." };
+        }
+        const reg = await conTiempo(listo(), 15_000, "El servicio de avisos del panel no arrancó. Recarga la página e intenta otra vez.");
+        const s =
+          (await reg.pushManager.getSubscription()) ??
+          (await conTiempo(
+            reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: aBytes(push.clave) }),
+            20_000,
+            "El navegador no pudo conectarse a su servicio de avisos. Si usas Brave, activa en Configuración → Privacidad «Usar los servicios de Google para mensajes push» y recarga."
+          ));
+        const j = s.toJSON();
+        const r = await guardarSuscripcion({ endpoint: s.endpoint, p256dh: j.keys?.p256dh ?? "", auth: j.keys?.auth ?? "", dispositivo: nombreDispositivo() });
+        if (r.ok) {
+          setSuscripcion(s);
+          setEstado("encendido");
+        } else await s.unsubscribe();
+        return r;
+      } catch (e) {
+        // Los errores del navegador (DOMException) se explican; los de tiempo agotado son propios y se muestran tal cual
+        if (e instanceof DOMException) {
+          console.error("[avisos]", e.name, e.message);
+          return { ok: false, error: "El navegador no dejó activar los avisos. Revisa que las notificaciones estén permitidas para este sitio y recarga la página." };
+        }
+        return { ok: false, error: e instanceof Error ? e.message : "No se pudieron activar los avisos." };
       }
-      const reg = await navigator.serviceWorker.ready;
-      const s = (await reg.pushManager.getSubscription()) ?? (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: aBytes(push.clave) }));
-      const j = s.toJSON();
-      const r = await guardarSuscripcion({ endpoint: s.endpoint, p256dh: j.keys?.p256dh ?? "", auth: j.keys?.auth ?? "", dispositivo: nombreDispositivo() });
-      if (r.ok) {
-        setSuscripcion(s);
-        setEstado("encendido");
-      } else await s.unsubscribe();
-      return r;
     });
 
   const apagar = () =>
