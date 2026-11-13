@@ -110,6 +110,26 @@ function aBytes(base64: string) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
+/** Mensaje claro según el error del navegador (con el código, para poder revisarlo). */
+function explicarError(e: DOMException) {
+  const android = /Android/.test(navigator.userAgent);
+  const codigo = ` (código: ${e.name}${e.message ? ` · ${e.message.slice(0, 80)}` : ""})`;
+  if (e.name === "NotAllowedError")
+    return (
+      (android
+        ? "El celular no deja que el navegador muestre notificaciones. Revisa en Ajustes → Aplicaciones → Chrome → Notificaciones que estén permitidas, y en Chrome → ⋮ → Configuración → Configuración de sitios → Notificaciones que panel.aratasan.com esté en Permitir."
+        : "Las notificaciones están bloqueadas para este sitio. Toca el ícono junto a la dirección → Notificaciones → Permitir, y recarga.") + codigo
+    );
+  if (e.name === "AbortError" || /push service/i.test(e.message))
+    return (
+      (android
+        ? "El celular no pudo conectarse al servicio de avisos de Google. Revisa que Google Play Services esté actualizado, que Chrome no tenga restringido el uso de batería ni de datos en segundo plano (Ajustes → Aplicaciones → Chrome) y vuelve a intentar con internet estable."
+        : "El navegador no pudo conectarse a su servicio de avisos. Revisa tu conexión y vuelve a intentar.") + codigo
+    );
+  if (e.name === "InvalidStateError") return "El servicio de avisos del panel todavía no estaba listo. Recarga la página e intenta otra vez." + codigo;
+  return "El navegador no dejó activar los avisos. Revisa que las notificaciones estén permitidas para este sitio y recarga la página." + codigo;
+}
+
 /** ¿La suscripción del navegador se hizo con la clave pública de hoy? */
 function mismaClave(b: ArrayBuffer | null, clave: string) {
   if (!b) return true; // algunos navegadores no la exponen: se asume que sí
@@ -223,7 +243,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
         // Los errores del navegador (DOMException) se explican; los de tiempo agotado son propios y se muestran tal cual
         if (e instanceof DOMException) {
           console.error("[avisos]", e.name, e.message);
-          return { ok: false, error: "El navegador no dejó activar los avisos. Revisa que las notificaciones estén permitidas para este sitio y recarga la página." };
+          return { ok: false, error: explicarError(e) };
         }
         return { ok: false, error: e instanceof Error ? e.message : "No se pudieron activar los avisos." };
       }
