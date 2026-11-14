@@ -59,7 +59,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
           ) : undefined
         }
       />
-      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo y marcar los pasos de los proyectos. Crear, editar o quitar pasos es de Sergio y Andrés." />
+      <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} texto="Puedes ver todo, marcar los pasos, ponerte como responsable y registrar tus días. Crear, editar o quitar pasos es de Sergio y Andrés." />
 
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
         {[

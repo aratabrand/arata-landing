@@ -358,7 +358,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
           filas={trabajo.map((h) => ({
             id: h.id,
             izq: `${nombreDe(h.personaId, datos.personas)} · ${h.actividad}`,
-            sub: [textoDias(h.dias), fechaCorta(h.fecha), h.nota].filter(Boolean).join(" · "),
+            sub: [textoDias(h.dias), fechaCorta(h.fecha), h.tareaId ? `Paso: ${datos.tareas.find((x) => x.id === h.tareaId)?.texto ?? "—"}` : null, h.nota].filter(Boolean).join(" · "),
             der: pesos(Math.round(h.dias * r.tarifaDia)),
           }))}
           onBorrar={edita ? (id) => borrarTrabajo(id) : undefined}

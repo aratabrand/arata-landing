@@ -73,7 +73,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     ),
     q.query(`select id, proyecto_id, concepto, categoria, valor, fecha from fin_gastos where negocio_id = $1 order by fecha desc, creado desc`, [n]),
     q.query(
-      `select h.id, h.proyecto_id, h.persona_id, h.area, h.dias, h.fecha, h.nota
+      `select h.id, h.proyecto_id, h.persona_id, h.area, h.dias, h.fecha, h.nota, h.tarea_id
          from fin_horas h join fin_proyectos p on p.id = h.proyecto_id
         where p.negocio_id = $1 order by h.fecha desc, h.creado desc`,
       [n]
@@ -82,7 +82,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
     q.query(`select id, nombre, categoria, activo from servicios where negocio_id = $1 order by orden, nombre`, [n]),
     q.query(`select id, nombre, empresa from clientes where negocio_id = $1 order by lower(coalesce(empresa, nombre)), lower(nombre)`, [n]),
     q.query(
-      `select t.id, t.proyecto_id, t.etapa, t.texto, t.hecha, t.orden, t.hecha_en,
+      `select t.id, t.proyecto_id, t.etapa, t.texto, t.hecha, t.orden, t.hecha_en, t.responsable_id,
               (select e.id from equipo_personas e where e.usuario_id = t.hecha_por and e.negocio_id = p.negocio_id) hecha_por
          from fin_tareas t join fin_proyectos p on p.id = t.proyecto_id
         where p.negocio_id = $1 order by t.orden, t.creado`,
@@ -140,6 +140,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
         personaId: r.persona_id,
         actividad: r.area,
         dias: Number(r.dias),
+        tareaId: r.tarea_id ?? null,
         fecha: iso(r.fecha)!,
         nota: r.nota,
       })
@@ -156,6 +157,7 @@ export async function cargarFinanzas(): Promise<DatosFinanzas | null> {
         hecha: r.hecha,
         orden: r.orden,
         hechaPor: r.hecha_por,
+        responsableId: r.responsable_id ?? null,
         hechaEn: r.hecha_en ? iso(r.hecha_en) : null,
       })
     ),

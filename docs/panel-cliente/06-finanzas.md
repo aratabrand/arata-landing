@@ -63,6 +63,8 @@ Por proyecto, en este orden:
 - **Gastos de la empresa** (sin proyecto: publicidad propia, herramientas) **no** se restan de ningún proyecto: salen de la parte de Arata (fondos). Revisado el 12 nov 2026: los gastos se restan bien.
 - No se registra **quién pagó** un gasto: si un socio paga algo de su bolsillo, hoy el panel no se lo devuelve (pendiente 8).
 
+**Días desde los pasos del proyecto (D-123):** además de Finanzas → Proyectos → "Quién hizo qué", los días se registran en el detalle del proyecto, en cada paso: al marcarlo como hecho se elige quién lo hizo y cuántos días (opcional), y con el ícono de calendario se suman más. Son los mismos registros (`fin_horas`, con `tarea_id`), así que cuentan igual en el reparto. Sergio y Andrés registran para cualquiera; Santiago, solo los suyos.
+
 ## 3. Fondos y punto de equilibrio
 
 | Concepto | Cálculo |

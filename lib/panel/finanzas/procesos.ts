@@ -22,7 +22,18 @@ export type FinTarea = {
   orden: number;
   /** Persona del equipo que lo marcó (si se sabe). */
   hechaPor?: string | null;
+  /** Persona del equipo que lo hizo (D-123). */
+  responsableId?: string | null;
   hechaEn?: string | null;
+};
+
+/** Actividad con la que se registran los días de un paso, según su etapa (se puede cambiar). */
+export const actividadDeEtapa: Record<Etapa, string> = {
+  arranque: "Gestión del proyecto",
+  diseno: "Diseño",
+  construccion: "Desarrollo",
+  revision: "Desarrollo",
+  entrega: "Gestión del proyecto",
 };
 
 export const plantillas: Record<CategoriaServicio, { etapa: Etapa; texto: string }[]> = {

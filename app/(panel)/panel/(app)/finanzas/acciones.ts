@@ -5,7 +5,7 @@ import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { EMPRESA, actividades, categoriasGasto, categoriasServicio, type CategoriaServicio, type ReglasReparto } from "@/lib/panel/finanzas/tipos";
-import { etapas, plantillas } from "@/lib/panel/finanzas/procesos";
+import { actividadDeEtapa, etapas, plantillas, type Etapa } from "@/lib/panel/finanzas/procesos";
 import { diferencias, fechaTxt, pesosTxt, registrar } from "@/lib/panel/historial";
 
 // Acciones de Finanzas (D-109). Cada una, en el servidor:
@@ -368,6 +368,127 @@ export async function marcarPaso(tareaId: string, hecha: boolean) {
   });
 }
 
+// ── Responsable y días de cada paso (D-123) ─────────────────────────
+// Sergio y Andrés asignan y registran para cualquiera; el resto del equipo, solo para sí mismo.
+async function miembro() {
+  if (!panelActivo) throw new Error("El panel está en modo ejemplo: los cambios no se guardan.");
+  const ctx = await contextoAgencia();
+  if (!ctx) throw new Error("Tu sesión terminó. Vuelve a entrar.");
+  return ctx;
+}
+
+async function personaValida(ctx: Awaited<ReturnType<typeof miembro>>, personaId: string) {
+  const r = (
+    await db().query(`select id, nombre, usuario_id, activo from equipo_personas where id = $1 and negocio_id = $2`, [uuid(personaId), ctx.negocioId])
+  ).rows[0];
+  if (!r) throw new Error("Esa persona no está en el equipo.");
+  if (!ctx.editaFinanzas && r.usuario_id !== ctx.usuarioId) throw new Error("Solo puedes ponerte a ti como responsable y registrar tus propios días.");
+  return { id: r.id as string, nombre: r.nombre as string };
+}
+
+async function pasoDe(ctx: Awaited<ReturnType<typeof miembro>>, tareaId: string) {
+  const r = (
+    await db().query(
+      `select t.id, t.texto, t.etapa, t.hecha, t.responsable_id, p.id proyecto_id, p.nombre proyecto
+         from fin_tareas t join fin_proyectos p on p.id = t.proyecto_id where t.id = $1 and p.negocio_id = $2`,
+      [uuid(tareaId), ctx.negocioId]
+    )
+  ).rows[0];
+  if (!r) throw new Error("Ese paso no existe.");
+  return r as { id: string; texto: string; etapa: Etapa; hecha: boolean; responsable_id: string | null; proyecto_id: string; proyecto: string };
+}
+
+function diasValidos(v: unknown) {
+  const d = Number(String(v ?? "").replace(",", "."));
+  if (!(d > 0 && d <= 365) || Math.round(d * 2) !== d * 2) throw new Error("Escribe los días en enteros o medios días (ej. 2 o 2,5).");
+  return d;
+}
+const diasTxt = (d: number) => `${String(d).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
+
+/**
+ * Marca un paso como hecho diciendo quién lo hizo y, si se quiere, cuántos días le tomó.
+ * Los días quedan en fin_horas con el paso (cuentan en el reparto).
+ */
+export async function completarPaso(entrada: { tareaId: string; responsableId: string; dias?: string | number | null; actividad?: string; fecha?: string }) {
+  return ejecutar(async () => {
+    const ctx = await miembro();
+    const t = await pasoDe(ctx, entrada.tareaId);
+    const persona = await personaValida(ctx, entrada.responsableId);
+    const conDias = entrada.dias !== undefined && entrada.dias !== null && String(entrada.dias).trim() !== "";
+    const dias = conDias ? diasValidos(entrada.dias) : 0;
+    const actividad = String(entrada.actividad || actividadDeEtapa[t.etapa]);
+    if (!(actividades as readonly string[]).includes(actividad)) return NO("Elige la actividad.");
+    const dia = entrada.fecha ? fecha(entrada.fecha, "Fecha") : null;
+    await db().query(
+      `update fin_tareas set hecha = true, hecha_en = coalesce(case when hecha then hecha_en end, now()),
+              hecha_por = coalesce(case when hecha then hecha_por end, $2), responsable_id = $3 where id = $1`,
+      [t.id, ctx.usuarioId, persona.id]
+    );
+    if (conDias) {
+      await db().query(
+        `insert into fin_horas (proyecto_id, persona_id, area, dias, fecha, tarea_id) values ($1, $2, $3, $4, coalesce($5::date, current_date), $6)`,
+        [t.proyecto_id, persona.id, actividad, dias, dia, t.id]
+      );
+    }
+    await registrar(ctx, {
+      accion: "marcar",
+      entidad: "paso",
+      entidadId: t.id,
+      proyectoId: t.proyecto_id,
+      titulo: `Marcó "${t.texto}" en ${t.proyecto}: lo hizo ${persona.nombre}${conDias ? ` en ${diasTxt(dias)}` : ""}`,
+      cambios: conDias ? [{ campo: "Días trabajados", antes: "", despues: `${diasTxt(dias)} de ${actividad} (${persona.nombre})` }] : [],
+      // Los días cambian el reparto: aviso al celular
+      importante: conDias,
+    });
+    return SI;
+  });
+}
+
+/** Suma días trabajados a un paso (y lo deja con responsable si no tenía). */
+export async function agregarDiasPaso(entrada: { tareaId: string; personaId: string; dias: string | number; actividad?: string; fecha?: string; nota?: string }) {
+  return ejecutar(async () => {
+    const ctx = await miembro();
+    const t = await pasoDe(ctx, entrada.tareaId);
+    const persona = await personaValida(ctx, entrada.personaId);
+    const dias = diasValidos(entrada.dias);
+    const actividad = String(entrada.actividad || actividadDeEtapa[t.etapa]);
+    if (!(actividades as readonly string[]).includes(actividad)) return NO("Elige la actividad.");
+    await db().query(
+      `insert into fin_horas (proyecto_id, persona_id, area, dias, fecha, nota, tarea_id) values ($1, $2, $3, $4, $5, $6, $7)`,
+      [t.proyecto_id, persona.id, actividad, dias, fecha(entrada.fecha, "Fecha"), opcional(entrada.nota, 200), t.id]
+    );
+    if (!t.responsable_id) await db().query(`update fin_tareas set responsable_id = $2 where id = $1`, [t.id, persona.id]);
+    await registrar(ctx, {
+      accion: "crear",
+      entidad: "dias",
+      entidadId: t.id,
+      proyectoId: t.proyecto_id,
+      titulo: `Registró ${diasTxt(dias)} de ${actividad} de ${persona.nombre} en "${t.texto}" (${t.proyecto})`,
+      importante: true,
+    });
+    return SI;
+  });
+}
+
+/** Cambia (o quita) el responsable de un paso. */
+export async function cambiarResponsable(tareaId: string, personaId: string | null) {
+  return ejecutar(async () => {
+    const ctx = await miembro();
+    const t = await pasoDe(ctx, tareaId);
+    // Quitar al responsable: Sergio y Andrés, o la misma persona si era ella
+    if (!personaId) {
+      if (t.responsable_id && !ctx.editaFinanzas) await personaValida(ctx, t.responsable_id);
+      await db().query(`update fin_tareas set responsable_id = null where id = $1`, [t.id]);
+      await registrar(ctx, { accion: "editar", entidad: "paso", entidadId: t.id, proyectoId: t.proyecto_id, titulo: `Quitó el responsable de "${t.texto}" (${t.proyecto})` });
+      return SI;
+    }
+    const persona = await personaValida(ctx, personaId);
+    await db().query(`update fin_tareas set responsable_id = $2 where id = $1`, [t.id, persona.id]);
+    await registrar(ctx, { accion: "editar", entidad: "paso", entidadId: t.id, proyectoId: t.proyecto_id, titulo: `Puso a ${persona.nombre} como responsable de "${t.texto}" (${t.proyecto})` });
+    return SI;
+  });
+}
+
 export async function agregarPaso(entrada: { proyectoId: string; etapa: string; texto: string }) {
   return ejecutar(async () => {
     const ctx = await editor();
@@ -462,7 +583,15 @@ export async function agregarTrabajo(entrada: { proyectoId: string; personaId: s
 
 export async function borrarTrabajo(id: string) {
   return ejecutar(async () => {
-    const ctx = await editor();
+    // Sergio y Andrés quitan cualquier registro; los demás, solo los suyos (D-123)
+    const ctx = await miembro();
+    if (!ctx.editaFinanzas) {
+      const dueno = await db().query(
+        `select 1 from fin_horas h join equipo_personas e on e.id = h.persona_id where h.id = $1 and e.usuario_id = $2`,
+        [uuid(id), ctx.usuarioId]
+      );
+      if (!dueno.rowCount) return NO("Solo puedes quitar tus propios días.");
+    }
     const r = await db().query(
       `delete from fin_horas h using fin_proyectos p where h.id = $1 and h.proyecto_id = p.id and p.negocio_id = $2
        returning h.dias, h.area, p.id proyecto_id, p.nombre proyecto,

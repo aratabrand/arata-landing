@@ -88,6 +88,8 @@ export type RegistroTrabajo = {
   dias: number;
   fecha: string;
   nota: string | null;
+  /** Paso del proyecto del que salen estos días (D-123). */
+  tareaId?: string | null;
 };
 
 export type GastoFijo = { id: string; concepto: string; valorMensual: number; activo: boolean };
