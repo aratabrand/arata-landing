@@ -7,11 +7,12 @@ import { ArrowLeft, Check, Clock, History, Plus, Trash2, Wallet } from "lucide-r
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
 import { avance, etapas, etiquetaEtapa, type Etapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
-import { agregarPaso, borrarPaso, cargarProceso, marcarPaso } from "@/app/(panel)/panel/(app)/finanzas/acciones";
+import { agregarPaso, borrarPaso, borrarTrabajo, cargarProceso, marcarPaso } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { Hoja } from "../Clientes";
 import { PanelPage, Pill, Tarjeta } from "../ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, MensajeError, nombreDe, useAccion } from "../finanzas/comun";
-import { FormProyecto } from "../finanzas/ProyectosFin";
+import { FormProyecto, FormTrabajo, Lista } from "../finanzas/ProyectosFin";
+import { textoDias } from "@/lib/panel/finanzas/calculo";
 import BorrarProyecto from "../finanzas/BorrarProyecto";
 import Historial from "../Historial";
 import type { EventoHistorial } from "@/lib/panel/historial";
@@ -156,11 +157,10 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
             {p.notas && <p className="mt-4 whitespace-pre-line border-t border-white/8 pt-3 text-sm text-fog">{p.notas}</p>}
           </Tarjeta>
 
-          <Tarjeta titulo="Días trabajados">
-            {horasPor.size === 0 ? (
-              <p className="text-sm text-fog-dim">Sin días registrados.</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
+          {/* Quién trabajó (D-124): por persona y área, no por paso. Al cerrar se completa en el formulario. */}
+          <Tarjeta titulo="Quién trabajó" bajada="Días por persona y área (1 día = 8 h)">
+            {horasPor.size > 0 && (
+              <ul className="mb-3 space-y-2 text-sm">
                 {[...horasPor.entries()].map(([id, h]) => (
                   <li key={id} className="flex justify-between">
                     <span className="flex items-center gap-2 text-white"><Clock aria-hidden className="h-4 w-4 text-brand-soft" />{nombreDe(id, datos.personas)}</span>
@@ -169,8 +169,16 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
                 ))}
               </ul>
             )}
+            <Lista
+              vacio="Nadie registrado todavía. También se completa al cerrar el proyecto."
+              filas={datos.trabajo
+                .filter((h) => h.proyectoId === p.id)
+                .map((h) => ({ id: h.id, izq: `${nombreDe(h.personaId, datos.personas)} · ${h.actividad}`, sub: `${textoDias(h.dias)} · ${fechaCorta(h.fecha)}`, der: "" }))}
+              onBorrar={edita ? (id) => borrarTrabajo(id) : undefined}
+            />
+            {edita && <FormTrabajo proyectoId={p.id} datos={datos} hoy={hoy} tarifa={p.tarifaDia ?? datos.config.tarifaDia} />}
             <Link href="/panel/finanzas" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-soft hover:text-white">
-              <Wallet aria-hidden className="h-4 w-4" /> Días, gastos y reparto en Finanzas →
+              <Wallet aria-hidden className="h-4 w-4" /> Gastos y reparto en Finanzas →
             </Link>
           </Tarjeta>
         </div>

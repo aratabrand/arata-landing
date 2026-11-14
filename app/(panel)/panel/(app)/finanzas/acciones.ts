@@ -122,6 +122,57 @@ export async function guardarReglas(entrada: { tarifaDia: number | string; reser
   });
 }
 
+// ── "¿Quién trabajó?" del formulario del proyecto (D-124) ──────────
+type FilaTrabajo = { personaId: string; persona: string; actividad: string; dias: number };
+
+async function validarTrabajo(negocioId: string, t?: { agregar?: { personaId: string; actividad: string; dias: string | number }[]; quitar?: string[] }) {
+  const agregar: FilaTrabajo[] = [];
+  const lista = (t?.agregar ?? []).slice(0, 30);
+  if (lista.length) {
+    const personas = (await db().query(`select id, nombre from equipo_personas where negocio_id = $1`, [negocioId])).rows;
+    for (const f of lista) {
+      const persona = personas.find((x) => x.id === String(f.personaId));
+      if (!persona) throw new Error("Elige a la persona de la lista.");
+      if (!(actividades as readonly string[]).includes(String(f.actividad))) throw new Error("Elige el área de cada persona.");
+      const dias = Number(String(f.dias).replace(",", "."));
+      if (!(dias > 0 && dias <= 365) || Math.round(dias * 2) !== dias * 2) throw new Error(`Días de ${persona.nombre}: enteros o medios días (ej. 2 o 2,5).`);
+      agregar.push({ personaId: persona.id, persona: persona.nombre, actividad: String(f.actividad), dias });
+    }
+  }
+  const quitar = (t?.quitar ?? []).slice(0, 60).map(uuid);
+  return { agregar, quitar };
+}
+
+const hoyDeBogota = () => new Date(Date.now() - 5 * 3600_000).toISOString().slice(0, 10);
+const diasTxt = (d: number) => `${String(d).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
+
+async function aplicarTrabajo(ctx: { negocioId: string; usuarioId: string; rol: string; esDueno: boolean; editaFinanzas: boolean }, proyectoId: string, nombre: string, f: { agregar: FilaTrabajo[]; quitar: string[] }, dia: string) {
+  if (!f.agregar.length && !f.quitar.length) return;
+  const quitados = f.quitar.length
+    ? (
+        await db().query(
+          `delete from fin_horas h where h.id = any($1::uuid[]) and h.proyecto_id = $2
+           returning h.dias, h.area, (select nombre from equipo_personas e where e.id = h.persona_id) persona`,
+          [f.quitar, proyectoId]
+        )
+      ).rows
+    : [];
+  for (const x of f.agregar) {
+    await db().query(`insert into fin_horas (proyecto_id, persona_id, area, dias, fecha) values ($1, $2, $3, $4, $5)`, [proyectoId, x.personaId, x.actividad, x.dias, dia]);
+  }
+  await registrar(ctx, {
+    accion: "editar",
+    entidad: "dias",
+    proyectoId,
+    titulo: `Actualizó quién trabajó en ${nombre}`,
+    cambios: [
+      ...f.agregar.map((x) => ({ campo: x.persona, antes: "", despues: `${diasTxt(x.dias)} de ${x.actividad}` })),
+      ...quitados.map((x) => ({ campo: String(x.persona), antes: `${diasTxt(Number(x.dias))} de ${x.area}`, despues: "" })),
+    ],
+    importante: true,
+  });
+}
+
 // ── Proyectos ───────────────────────────────────────────────────────
 export async function guardarProyecto(entrada: {
   id?: string;
@@ -135,6 +186,8 @@ export async function guardarProyecto(entrada: {
   /** Valor del día solo de este proyecto ("" = el de Reparto). Solo Sergio. */
   tarifaDia?: string | number | null;
   notas?: string;
+  /** "¿Quién trabajó?" del formulario (D-124): días por persona y área que se agregan o quitan al guardar. */
+  trabajo?: { agregar?: { personaId: string; actividad: string; dias: string | number }[]; quitar?: string[] };
 }) {
   return ejecutar(async () => {
     const ctx = await editor();
@@ -158,6 +211,7 @@ export async function guardarProyecto(entrada: {
     const cierre = estado === "cerrado" ? fecha(entrada.fechaCierre, "Fecha de cierre") : null;
     const limite = entrada.fechaLimite ? fecha(entrada.fechaLimite, "Fecha de entrega") : null;
     const tarifaPedida = entrada.tarifaDia === undefined || entrada.tarifaDia === null || entrada.tarifaDia === "" ? null : valorDia(entrada.tarifaDia);
+    const filas = await validarTrabajo(ctx.negocioId, entrada.trabajo);
 
     if (entrada.id) {
       const id = uuid(entrada.id);
@@ -206,6 +260,7 @@ export async function guardarProyecto(entrada: {
           importante: cerro || cambios.some((c) => ["Valor", "Fecha de entrega", "Valor del día", "Estado"].includes(c.campo)),
         });
       }
+      await aplicarTrabajo(ctx, id, nombre, filas, cierre ?? hoyDeBogota());
     } else {
       if (tarifaPedida !== null && !ctx.esDueno) return NO("Solo Sergio puede poner un valor del día propio.");
       const congelado = estado === "cerrado" ? await reglasActuales(ctx.negocioId, tarifaPedida) : null;
@@ -216,6 +271,7 @@ export async function guardarProyecto(entrada: {
       );
       // El proceso de entrega arranca con los pasos del servicio (D-112)
       await cargarPasos(nuevo.rows[0].id, servicio);
+      await aplicarTrabajo(ctx, nuevo.rows[0].id, nombre, { ...filas, quitar: [] }, cierre ?? hoyDeBogota());
       await registrar(ctx, {
         accion: "crear",
         entidad: "proyecto",

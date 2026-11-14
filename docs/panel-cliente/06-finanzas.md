@@ -63,6 +63,8 @@ Por proyecto, en este orden:
 - **Gastos de la empresa** (sin proyecto: publicidad propia, herramientas) **no** se restan de ningún proyecto: salen de la parte de Arata (fondos). Revisado el 12 nov 2026: los gastos se restan bien.
 - No se registra **quién pagó** un gasto: si un socio paga algo de su bolsillo, hoy el panel no se lo devuelve (pendiente 8).
 
+**¿Quién trabajó? al cerrar (D-125):** al cambiar un proyecto a **Cerrado**, el formulario muestra "¿Quién trabajó?" para agregar Persona + Área + días, con el reparto en vivo; todo se guarda junto con el cierre. También se puede llenar antes en la ficha del proyecto. Los días no se registran por paso (se probó y se revirtió: D-123 → D-124).
+
 ## 3. Fondos y punto de equilibrio
 
 | Concepto | Cálculo |

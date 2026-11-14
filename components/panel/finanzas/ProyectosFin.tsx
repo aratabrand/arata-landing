@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 import { CalendarDays, Lock, Plus, Receipt, Trash2 } from "lucide-react";
-import { EMPRESA, HORAS_POR_DIA, actividades, categoriasGasto, categoriasServicio, nombreCliente, type DatosFinanzas, type EstadoProyecto, type FinProyecto } from "@/lib/panel/finanzas/tipos";
+import { EMPRESA, HORAS_POR_DIA, actividades, categoriasGasto, categoriasServicio, nombreCliente, type DatosFinanzas, type EstadoProyecto, type FinProyecto, type RegistroTrabajo } from "@/lib/panel/finanzas/tipos";
 import { calcularProyecto, reglasActuales, textoDias } from "@/lib/panel/finanzas/calculo";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
 import {
@@ -146,6 +146,10 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
   const [estado, setEstado] = useState<EstadoProyecto>(p?.estado ?? "en-curso");
   const [clienteId, setClienteId] = useState(p?.clienteId ?? "");
   const [servicioId, setServicioId] = useState(p?.servicioId ?? "");
+  // "¿Quién trabajó?" (D-124): filas nuevas y registros que se quitan; se guardan junto con el proyecto
+  const [valor, setValor] = useState(p?.valor ?? 0);
+  const [nuevas, setNuevas] = useState<{ clave: number; personaId: string; actividad: string; dias: string }[]>([]);
+  const [quitar, setQuitar] = useState<string[]>([]);
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -163,6 +167,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
           // El valor del día del proyecto solo lo manda Sergio (Andrés no lo puede cambiar)
           ...(datos.esDueno ? { tarifaDia: String(f.get("tarifaDia") ?? "").replace(/\D/g, "") } : {}),
           notas: String(f.get("notas") ?? ""),
+          trabajo: { agregar: nuevas.map(({ personaId, actividad, dias }) => ({ personaId, actividad, dias })), quitar },
         }),
       onListo
     );
@@ -175,7 +180,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
       </Campo>
       <SelectorCliente datos={datos} valor={clienteId} onCambio={setClienteId} />
       <SelectorServicio datos={datos} valor={servicioId} onCambio={setServicioId} />
-      <CampoPesos name="valor" etiqueta="Valor que paga el cliente (COP)" valorInicial={p?.valor} requerido />
+      <CampoPesos name="valor" etiqueta="Valor que paga el cliente (COP)" valorInicial={p?.valor} requerido onCambio={setValor} />
       {datos.esDueno ? (
         <Campo etiqueta="Valor del día de este proyecto" obligatorio={false} ayuda={`Vacío = el de Reparto (${pesos(datos.config.tarifaDia)}). Solo tú lo cambias.`}>
           <input
@@ -210,6 +215,9 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
           </Campo>
         )}
       </div>
+      {estado === "cerrado" && (
+        <QuienTrabajo p={p} datos={datos} valor={valor} nuevas={nuevas} setNuevas={setNuevas} quitar={quitar} setQuitar={setQuitar} />
+      )}
       {estado === "cerrado" && !p?.repartoCongelado && (
         <p className="flex items-start gap-2 rounded-frame border border-white/8 bg-surface-1 p-3 text-xs text-fog">
           <Lock aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-soft" />
@@ -221,9 +229,151 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
       </Campo>
       <MensajeError error={error} />
       <BotonPrincipal type="submit" pendiente={pendiente} className="w-full">
-        {p ? "Guardar cambios" : "Crear proyecto"}
+        {estado === "cerrado" && p?.estado !== "cerrado" ? "Cerrar proyecto" : p ? "Guardar cambios" : "Crear proyecto"}
       </BotonPrincipal>
     </form>
+  );
+}
+
+// ── "¿Quién trabajó?" al cerrar (D-124) ─────────────────────────────
+// Persona + área + días (1 día = 8 h). Se guardan junto con el proyecto y el reparto se ve en vivo.
+type FilaNueva = { clave: number; personaId: string; actividad: string; dias: string };
+
+function QuienTrabajo({
+  p,
+  datos,
+  valor,
+  nuevas,
+  setNuevas,
+  quitar,
+  setQuitar,
+}: {
+  p?: FinProyecto;
+  datos: DatosFinanzas;
+  valor: number;
+  nuevas: FilaNueva[];
+  setNuevas: (f: (l: FilaNueva[]) => FilaNueva[]) => void;
+  quitar: string[];
+  setQuitar: (f: (l: string[]) => string[]) => void;
+}) {
+  const activos = datos.personas.filter((x) => x.activo);
+  const [persona, setPersona] = useState(activos[0]?.id ?? "");
+  const [actividad, setActividad] = useState<string>("");
+  const [dias, setDias] = useState("");
+  const existentes = p ? datos.trabajo.filter((h) => h.proyectoId === p.id && !quitar.includes(h.id)) : [];
+  const nombre = (id: string) => datos.personas.find((x) => x.id === id)?.nombre ?? "—";
+  const listo = persona && actividad && diasValidos(dias);
+
+  // Reparto en vivo con lo que hay en pantalla (el servidor vuelve a calcular al guardar)
+  const proyecto: FinProyecto = {
+    id: p?.id ?? "nuevo",
+    nombre: "",
+    clienteId: null,
+    servicioId: null,
+    estado: "cerrado",
+    valor,
+    fechaCierre: null,
+    fechaInicio: null,
+    fechaLimite: null,
+    tarifaDia: p?.tarifaDia ?? null,
+    repartoCongelado: p?.repartoCongelado ?? null,
+    notas: null,
+  };
+  const registros: RegistroTrabajo[] = [
+    ...existentes,
+    ...nuevas.map((n) => ({ id: `n${n.clave}`, proyectoId: proyecto.id, personaId: n.personaId, actividad: n.actividad, dias: Number(n.dias.replace(",", ".")), fecha: "", nota: null })),
+  ];
+  const r = calcularProyecto(proyecto, datos.gastos, registros, datos.config, datos.personas);
+
+  const agregar = () => {
+    if (!listo) return;
+    setNuevas((l) => [...l, { clave: Date.now(), personaId: persona, actividad, dias }]);
+    setDias("");
+    setActividad("");
+  };
+
+  return (
+    <section className="space-y-3 rounded-frame border border-brand/40 bg-brand/[0.06] p-3 sm:p-4">
+      <div>
+        <h3 className="text-sm font-semibold text-white">¿Quién trabajó?</h3>
+        <p className="text-xs text-fog-dim">Persona, área y días (1 día = 8 h, a {pesos(r.tarifaDia)}). Se pagan antes de repartir por partes iguales.</p>
+      </div>
+
+      {existentes.length + nuevas.length > 0 ? (
+        <ul className="divide-y divide-white/6 rounded-frame border border-white/8 bg-surface-1">
+          {existentes.map((h) => (
+            <li key={h.id} className="flex items-center gap-2 px-3 py-2 text-sm">
+              <span className="min-w-0 flex-1 text-white">{nombre(h.personaId)} <span className="text-fog">· {h.actividad} · {textoDias(h.dias)}</span></span>
+              <span className="text-xs tabular-nums text-fog">{pesos(Math.round(h.dias * r.tarifaDia))}</span>
+              <button type="button" aria-label={`Quitar ${nombre(h.personaId)} · ${h.actividad}`} onClick={() => setQuitar((l) => [...l, h.id])} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+                <Trash2 aria-hidden className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+          {nuevas.map((n) => (
+            <li key={n.clave} className="flex items-center gap-2 px-3 py-2 text-sm">
+              <span className="min-w-0 flex-1 text-white">
+                {nombre(n.personaId)} <span className="text-fog">· {n.actividad} · {textoDias(Number(n.dias.replace(",", ".")))}</span>
+                <span className="ml-1.5 text-[0.68rem] text-lime">nuevo</span>
+              </span>
+              <span className="text-xs tabular-nums text-fog">{pesos(Math.round(Number(n.dias.replace(",", ".")) * r.tarifaDia))}</span>
+              <button type="button" aria-label={`Quitar ${nombre(n.personaId)} · ${n.actividad}`} onClick={() => setNuevas((l) => l.filter((x) => x.clave !== n.clave))} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+                <Trash2 aria-hidden className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-xs text-fog">Nadie todavía: si nadie trabajó días aparte, toda la ganancia se reparte por partes iguales.</p>
+      )}
+
+      <div className="grid grid-cols-2 items-end gap-2">
+        <Campo etiqueta="Persona *">
+          <select value={persona} onChange={(e) => setPersona(e.target.value)} className="pn-input">
+            {activos.map((x) => (
+              <option key={x.id} value={x.id}>{x.nombre}</option>
+            ))}
+          </select>
+        </Campo>
+        <Campo etiqueta="Área *">
+          <select value={actividad} onChange={(e) => setActividad(e.target.value)} className="pn-input">
+            <option value="" disabled>Elige…</option>
+            {actividades.map((a) => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+        </Campo>
+        <Campo etiqueta="Días *">
+          <input value={dias} onChange={(e) => setDias(mascaraDias(e.target.value))} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), agregar())} inputMode="decimal" autoComplete="off" placeholder="2,5" className="pn-input tabular-nums" />
+        </Campo>
+        <BotonSecundario type="button" disabled={!listo} onClick={agregar} className="h-11">
+          <Plus aria-hidden className="h-4 w-4" /> Agregar
+        </BotonSecundario>
+      </div>
+
+      {valor > 0 && (
+        <div className="rounded-frame border border-white/8 bg-surface-1 p-3 text-xs">
+          <p className="mb-1.5 font-semibold text-white">Así queda el reparto</p>
+          {r.perdida ? (
+            <p className="text-[#FF9BB0]">El proyecto da pérdida: no se reparte y la absorbe Arata.</p>
+          ) : (
+            <ul className="flex flex-wrap gap-x-4 gap-y-1 text-fog">
+              {r.personas
+                .filter((x) => x.total > 0)
+                .map((x) => (
+                  <li key={x.personaId}>
+                    {nombreDe(x.personaId, datos.personas)} <strong className="tabular-nums text-white">{pesos(x.total)}</strong>
+                  </li>
+                ))}
+              <li>
+                Arata <strong className="tabular-nums text-lime">{pesos(r.empresa)}</strong>
+              </li>
+            </ul>
+          )}
+          {r.recortado && <p className="mt-1 text-[#FFC76B]">Los días cuestan más que la ganancia: se pagan en proporción.</p>}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -350,7 +500,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
       {/* Días trabajados: quién hizo qué */}
       <section>
         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
-          <CalendarDays aria-hidden className="h-4 w-4 text-brand-soft" /> Quién hizo qué
+          <CalendarDays aria-hidden className="h-4 w-4 text-brand-soft" /> Quién trabajó
         </h3>
         <p className="mb-2 text-xs text-fog-dim">Días de {HORAS_POR_DIA} horas a {pesos(r.tarifaDia)}. Se pagan antes de repartir por partes iguales.</p>
         <Lista
@@ -437,7 +587,7 @@ export function Lista({
   );
 }
 
-function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; datos: DatosFinanzas; hoy: string; tarifa: number }) {
+export function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; datos: DatosFinanzas; hoy: string; tarifa: number }) {
   const acc = useAccion();
   const [clave, setClave] = useState(0);
   const [dias, setDias] = useState("");
@@ -474,7 +624,7 @@ function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; d
               ))}
           </select>
         </Campo>
-        <Campo etiqueta="Qué hizo *">
+        <Campo etiqueta="Área *">
           <select name="actividad" className="pn-input" defaultValue="">
             <option value="" disabled>Elige…</option>
             {actividades.map((a) => (
