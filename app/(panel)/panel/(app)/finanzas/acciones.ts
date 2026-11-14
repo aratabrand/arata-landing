@@ -491,6 +491,20 @@ export async function borrarGasto(gastoId: string) {
 
 // ── Días trabajados (quién hizo qué) ────────────────────────────────
 /** Días que una persona trabajó en una actividad del proyecto. 1 día = 8 horas; se permiten medios días. */
+/** Varias personas a la vez (D-127): Persona + Área + días por fila, una sola fecha. Sergio y Andrés. */
+export async function agregarTrabajoVarios(entrada: { proyectoId: string; fecha: string; filas: { personaId: string; actividad: string; dias: string | number }[] }) {
+  return ejecutar(async () => {
+    const ctx = await editor();
+    const proyectoId = uuid(entrada.proyectoId);
+    const p = (await db().query(`select nombre from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId])).rows[0];
+    if (!p) return NO("Ese proyecto no existe.");
+    if (!entrada.filas?.length) return NO("Agrega al menos una persona.");
+    const filas = await validarTrabajo(ctx.negocioId, { agregar: entrada.filas });
+    await aplicarTrabajo(ctx, proyectoId, p.nombre, { agregar: filas.agregar, quitar: [] }, fecha(entrada.fecha, "Fecha"));
+    return SI;
+  });
+}
+
 export async function agregarTrabajo(entrada: { proyectoId: string; personaId: string; actividad: string; dias: string | number; fecha: string; nota?: string }) {
   return ejecutar(async () => {
     const ctx = await editor();

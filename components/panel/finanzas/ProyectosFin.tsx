@@ -7,7 +7,7 @@ import { calcularProyecto, reglasActuales, textoDias } from "@/lib/panel/finanza
 import { fechaCorta, pesos } from "@/lib/panel/formato";
 import {
   agregarGasto,
-  agregarTrabajo,
+  agregarTrabajoVarios,
   aplicarReglasActuales,
   borrarGasto,
   borrarTrabajo,
@@ -587,71 +587,90 @@ export function Lista({
   );
 }
 
+// Quién trabajó (D-127): varias personas a la vez. Cada fila es Persona + Área + días;
+// "+ Añadir persona" suma otra fila y "Guardar" registra todas juntas con una fecha.
+type FilaForm = { clave: number; personaId: string; actividad: string; dias: string };
+
 export function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: string; datos: DatosFinanzas; hoy: string; tarifa: number }) {
   const acc = useAccion();
-  const [clave, setClave] = useState(0);
-  const [dias, setDias] = useState("");
-  const n = Number(dias.replace(",", "."));
-  const valido = diasValidos(dias);
+  const activos = datos.personas.filter((pe) => pe.activo);
+  const inicial = () => [{ clave: Date.now(), personaId: datos.miPersonaId ?? activos[0]?.id ?? "", actividad: "", dias: "" }];
+  const [filas, setFilas] = useState<FilaForm[]>(inicial);
+  const [fecha, setFecha] = useState(hoy);
+  const cambiar = (clave: number, c: Partial<FilaForm>) => setFilas((l) => l.map((f) => (f.clave === clave ? { ...f, ...c } : f)));
+  const completa = (f: FilaForm) => f.personaId && f.actividad && diasValidos(f.dias);
+  const listas = filas.length > 0 && filas.every(completa);
+  const total = filas.filter(completa).reduce((a, f) => a + Number(f.dias.replace(",", ".")), 0);
+  // La próxima fila arranca con alguien que todavía no esté en la lista
+  const siguiente = () => activos.find((pe) => !filas.some((f) => f.personaId === pe.id))?.id ?? activos[0]?.id ?? "";
+
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
+    if (!listas) return;
     acc.correr(
-      () =>
-        agregarTrabajo({
-          proyectoId,
-          personaId: String(f.get("persona") ?? ""),
-          actividad: String(f.get("actividad") ?? ""),
-          dias,
-          fecha: String(f.get("fecha") ?? ""),
-          nota: String(f.get("nota") ?? ""),
-        }),
-      () => {
-        setClave((k) => k + 1);
-        setDias("");
-      }
+      () => agregarTrabajoVarios({ proyectoId, fecha, filas: filas.map(({ personaId, actividad, dias }) => ({ personaId, actividad, dias })) }),
+      () => setFilas(inicial())
     );
   };
+
   return (
-    <form key={clave} onSubmit={enviar} noValidate className="mt-3 space-y-2">
-      <div className="grid grid-cols-2 gap-2">
-        <Campo etiqueta="Quién lo hizo *">
-          <select name="persona" className="pn-input" defaultValue={datos.miPersonaId ?? datos.personas[0]?.id}>
-            {datos.personas
-              .filter((pe) => pe.activo)
-              .map((pe) => (
-                <option key={pe.id} value={pe.id}>{pe.nombre}</option>
-              ))}
-          </select>
-        </Campo>
-        <Campo etiqueta="Área *">
-          <select name="actividad" className="pn-input" defaultValue="">
-            <option value="" disabled>Elige…</option>
-            {actividades.map((a) => (
-              <option key={a} value={a}>{a}</option>
-            ))}
-          </select>
-        </Campo>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        <Campo etiqueta="Días trabajados *" ayuda="1 día = 8 h. Ej. 2 o 2,5">
-          <input value={dias} onChange={(e) => setDias(mascaraDias(e.target.value))} inputMode="decimal" autoComplete="off" placeholder="2,5" className="pn-input tabular-nums" />
-        </Campo>
+    <form onSubmit={enviar} noValidate className="mt-3 space-y-3">
+      <ul className="space-y-2">
+        {filas.map((f, i) => (
+          <li key={f.clave} className="rounded-frame border border-white/8 bg-surface-1 p-2.5">
+            <div className="grid grid-cols-2 items-end gap-2">
+              <Campo etiqueta={filas.length > 1 ? `Persona ${i + 1} *` : "Persona *"}>
+                <select value={f.personaId} onChange={(e) => cambiar(f.clave, { personaId: e.target.value })} className="pn-input">
+                  {activos.map((pe) => (
+                    <option key={pe.id} value={pe.id}>{pe.nombre}</option>
+                  ))}
+                </select>
+              </Campo>
+              <Campo etiqueta="Área *">
+                <select value={f.actividad} onChange={(e) => cambiar(f.clave, { actividad: e.target.value })} className="pn-input">
+                  <option value="" disabled>Elige…</option>
+                  {actividades.map((a) => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+              </Campo>
+              <Campo etiqueta="Días *" ayuda="1 día = 8 h. Ej. 2 o 2,5">
+                <input value={f.dias} onChange={(e) => cambiar(f.clave, { dias: mascaraDias(e.target.value) })} inputMode="decimal" autoComplete="off" placeholder="2,5" className="pn-input tabular-nums" />
+              </Campo>
+              <div className="flex h-11 items-center justify-between gap-2 self-start pt-[1.4rem]">
+                <span className="text-xs tabular-nums text-fog">{diasValidos(f.dias) ? `= ${pesos(Math.round(Number(f.dias.replace(",", ".")) * tarifa))}` : ""}</span>
+                {filas.length > 1 && (
+                  <button type="button" aria-label={`Quitar fila ${i + 1}`} onClick={() => setFilas((l) => l.filter((x) => x.clave !== f.clave))} className="flex h-10 w-10 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+                    <Trash2 aria-hidden className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        onClick={() => setFilas((l) => [...l, { clave: Date.now(), personaId: siguiente(), actividad: "", dias: "" }])}
+        className="inline-flex h-10 items-center gap-1.5 rounded-btn border border-dashed border-white/15 px-3 text-sm font-semibold text-fog hover:border-white/30 hover:text-white"
+      >
+        <Plus aria-hidden className="h-4 w-4" /> Añadir persona
+      </button>
+
+      <div className="grid grid-cols-[1fr_auto] items-end gap-2">
         <Campo etiqueta="Fecha *">
-          <input name="fecha" type="date" defaultValue={hoy} max={hoy} className="pn-input" />
+          <input type="date" value={fecha} max={hoy} onChange={(e) => setFecha(e.target.value)} className="pn-input" />
         </Campo>
+        <BotonPrincipal type="submit" pendiente={acc.pendiente} disabled={!listas} className="h-11">
+          {filas.length > 1 ? `Guardar ${filas.length} personas` : "Guardar"}
+        </BotonPrincipal>
       </div>
-      {valido && (
+      {total > 0 && (
         <p className="text-xs text-fog">
-          {textoDias(n)} × {pesos(tarifa)} = <strong className="text-white">{pesos(Math.round(n * tarifa))}</strong>
+          {textoDias(total)} × {pesos(tarifa)} = <strong className="text-white">{pesos(Math.round(total * tarifa))}</strong> en total
         </p>
       )}
-      <div className="grid grid-cols-[1fr_auto] gap-2">
-        <input name="nota" placeholder="Detalle (opcional)" maxLength={200} aria-label="Detalle (opcional)" className="pn-input" />
-        <BotonSecundario type="submit" disabled={acc.pendiente} className="h-11">
-          <Plus aria-hidden className="h-4 w-4" /> Días
-        </BotonSecundario>
-      </div>
       <MensajeError error={acc.error} />
     </form>
   );
