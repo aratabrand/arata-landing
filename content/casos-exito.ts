@@ -1,5 +1,5 @@
 // Casos de éxito del Inicio: video del proyecto dentro de un celular + descripción + testimonio.
-// Pedido de Sergio (D-102). Copy de la sección ◻ por aprobar (03-copy.md, "Casos de éxito").
+// Pedido de Sergio (D-128). Copy de la sección ◻ por aprobar (03-copy.md, "Casos de éxito").
 //
 // Reglas:
 // - Solo videos y testimonios reales. Si falta el testimonio, no se muestra ese bloque (no se inventa).

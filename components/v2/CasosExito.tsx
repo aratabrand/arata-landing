@@ -5,9 +5,9 @@ import Reveal from "@/components/Reveal";
 import { casosExito, casosVisibles, datosDelCaso } from "@/content/casos-exito";
 import { proyectos } from "@/content/proyectos";
 
-// Sección "Casos de éxito" del Inicio (D-102). Componente de servidor: arma los datos
+// Sección "Casos de éxito" del Inicio (D-128). Componente de servidor: arma los datos
 // y el celular con el reel es la única parte con JavaScript. Sin casos publicables, no se muestra.
-// En /catalogos-y-sistemas va con `servicio="catalogo"` (solo casos de catálogo) y la franja de precio en `pie` (D-103).
+// En /catalogos-y-sistemas va con `servicio="catalogo"` (solo casos de catálogo) y la franja de precio en `pie` (D-129).
 export default function CasosExito({
   id = "casos",
   servicio,

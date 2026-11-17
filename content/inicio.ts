@@ -8,6 +8,13 @@ export const AGENDAR = "/agendar";
 export const INICIO = "/";
 export const PRECIOS = `${INICIO}#precios`;
 
+/** Título y descripción del Inicio para Google (los lee la página y el panel "Mi sitio"). */
+export const seoInicio = {
+  titulo: "Arata San · Tu página lista en 5 días, hecha para vender desde el celular",
+  descripcion:
+    "Diseñamos páginas, catálogos y sistemas para negocios que quieren clientes por internet. Listos en 5 días hábiles, desde 400 USD, con garantía de velocidad de 90 o más en Google.",
+};
+
 export const hero = {
   badge: "Tomamos 3 proyectos nuevos al mes",
   titulo: "Tu página lista en 5 días.",

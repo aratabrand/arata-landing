@@ -40,7 +40,7 @@ export default function CatalogosYSistemas() {
       />
       <ServiceHero {...c.hero} tipo="catalogo" />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre="" items={c.problema.items} />
-      {/* D-103: "Tu catálogo, listo para vender" se reemplaza por los casos de éxito en video. La franja de precio se queda. */}
+      {/* D-129: "Tu catálogo, listo para vender" se reemplaza por los casos de éxito en video. La franja de precio se queda. */}
       <CasosExito
         id="casos-catalogo"
         servicio="catalogo"

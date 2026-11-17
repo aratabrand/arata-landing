@@ -20,6 +20,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
 | [`decisiones.md`](decisiones.md) | Bitácora de cada decisión: qué, cuándo, quién y por qué | Todas |
+| [`panel-cliente/`](panel-cliente/README.md) | **Blueprint del panel del cliente** (`/panel`): plan, módulos, modelo de datos, diseño y cómo montarlo para cada cliente | Aparte |
 
 Los archivos sin enlace todavía no existen: se crean al llegar a su fase.
 

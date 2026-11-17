@@ -6,7 +6,7 @@ import { ArrowRight, ChevronDown, ChevronUp, Pause, Play, Volume2, VolumeX } fro
 import { medir } from "@/lib/medir";
 import type { Testimonio } from "@/content/casos-exito";
 
-// Casos de éxito (D-102): el video de cada proyecto dentro de un celular, con su descripción y testimonio al lado.
+// Casos de éxito (D-128): el video de cada proyecto dentro de un celular, con su descripción y testimonio al lado.
 // - Con 2+ casos: flechas arriba/abajo; el cambio es vertical, tipo reel (el siguiente sube desde abajo).
 //   Video, textos y datos cambian juntos.
 // - Rendimiento: el video no se pide hasta que la sección está cerca (600 px); solo el activo se reproduce,

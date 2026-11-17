@@ -1,0 +1,234 @@
+# 06 — Finanzas y Equipo (solo Arata San)
+
+| Estado | Versión | Última actualización | Aprueba |
+|---|---|---|---|
+| En revisión | 0.2 | 12 nov 2026 | Sergio |
+
+> **Solo para la agencia (D-109).** Finanzas y Equipo existen únicamente para el negocio de tipo `agencia` (Arata San). Nunca aparecen en el panel de un cliente de página web, y la base de datos rechaza finanzas para cualquier otro negocio (trigger `exigir_agencia`).
+
+---
+
+## 1. Qué resuelve
+
+| Pregunta | Dónde se ve |
+|---|---|
+| ¿Cuánto vendimos y cuánto ganamos? | Finanzas → Resumen |
+| ¿Cuánto se gastó en cada proyecto? | Finanzas → Proyectos → ficha del proyecto |
+| ¿Cuánto le toca a cada uno por proyecto? | Ficha del proyecto · Equipo |
+| ¿Cuánto ha ganado cada uno en total, este mes y este año? | Equipo |
+| ¿Con cuánta plata cuenta Arata para invertir? | Finanzas → Resumen → Fondos de la empresa |
+| ¿Cuántos proyectos al mes necesitamos para cubrir gastos? | Resumen → Punto de equilibrio · Proyección |
+| ¿Qué pasa si cerramos 3, 5 u 8 proyectos al mes? | Finanzas → Proyección |
+
+**Venta = proyecto cerrado.** Todo en **pesos colombianos (COP)**, sin decimales.
+
+## 2. Cómo se reparte la ganancia (D-118)
+
+> Reemplaza la "bolsa por horas + % fijos" de D-109 (12 nov 2026). No había proyectos cerrados ni horas, así que no cambió nada ya pagado.
+
+Por proyecto, en este orden:
+
+| Paso | Fórmula |
+|---|---|
+| 1. Ganancia | valor que paga el cliente − gastos del proyecto |
+| 2. Días trabajados (se pagan **primero**) | por cada actividad: quién la hizo × días × **valor del día** ($ 80.000; 1 día = 8 horas; se permiten medios días) |
+| 3. Para repartir | ganancia − días trabajados |
+| 4. Partes iguales | para repartir ÷ número de partes. Las partes son **los socios activos + Arata San (empresa)** (hoy 4) |
+| 5. Total de cada persona | su parte igual + sus días |
+
+**Ejemplo** (Sergio hizo el desarrollo en 5 días):
+
+| | Valor |
+|---|---|
+| Proyecto | $ 2.000.000 |
+| Gastos | − $ 200.000 |
+| **Ganancia** | **$ 1.800.000** |
+| Días de Sergio (5 × $ 80.000) | − $ 400.000 |
+| **Para repartir** | **$ 1.400.000 → $ 350.000 cada parte** |
+
+| Persona | Parte igual | Días | **Total** |
+|---|---|---|---|
+| Sergio | $ 350.000 | $ 400.000 | **$ 750.000** |
+| Andrés | $ 350.000 | $ 0 | **$ 350.000** |
+| Santiago | $ 350.000 | $ 0 | **$ 350.000** |
+| Arata San (empresa) | $ 350.000 | — | **$ 350.000** |
+
+**Casos especiales:**
+- **Sin días registrados:** toda la ganancia va por partes iguales.
+- **Los días cuestan más que la ganancia:** nunca se reparte más de lo que dejó el proyecto. Los días se pagan **en proporción** hasta la ganancia y no hay parte igual (ej. ganancia $ 1.800.000, días por $ 2.400.000 → cada uno recibe el 75 % de sus días).
+- **Pérdida** (gastos mayores que el valor): no se paga nada; la absorbe la empresa.
+- **Redondeo:** cada parte se redondea al peso hacia abajo; la diferencia va a la empresa, así la suma da exacto la ganancia.
+- **Valor del día por proyecto:** cada proyecto puede tener el suyo (en su ficha). Vacío = el de Reparto. **Solo Sergio** lo cambia.
+- **Se congela al cerrar:** el proyecto guarda su valor del día y quiénes reciben parte igual. Si después cambia el valor del día o entra/sale un socio, lo cerrado no cambia. Sergio puede recalcular uno por uno ("Usar el reparto de hoy").
+- **Gastos de la empresa** (sin proyecto: publicidad propia, herramientas) **no** se restan de ningún proyecto: salen de la parte de Arata (fondos). Revisado el 12 nov 2026: los gastos se restan bien.
+- No se registra **quién pagó** un gasto: si un socio paga algo de su bolsillo, hoy el panel no se lo devuelve (pendiente 8).
+
+**¿Quién trabajó? al cerrar (D-125):** al cambiar un proyecto a **Cerrado**, el formulario muestra "¿Quién trabajó?" para agregar Persona + Área + días, con el reparto en vivo; todo se guarda junto con el cierre. También se puede llenar antes en la ficha del proyecto. Los días no se registran por paso (se probó y se revirtió: D-123 → D-124).
+
+## 3. Fondos y punto de equilibrio
+
+| Concepto | Cálculo |
+|---|---|
+| **Fondos de Arata** | todo lo que le ha tocado a la empresa (proyectos cerrados) − gastos e inversiones de la empresa |
+| **Reserva** | gastos fijos mensuales × meses de reserva (3 de arranque; se cambia en Reparto) |
+| **Disponible para invertir** | fondos − reserva (nunca menos de 0) |
+| **Punto de equilibrio** | gastos fijos del mes ÷ lo que le deja a Arata un proyecto promedio, redondeado hacia arriba |
+
+Ejemplo: gastos fijos $ 1.000.000/mes; un proyecto promedio de $ 2.000.000 con 10 % de gastos y 5 días trabajados le deja a Arata ($ 1.800.000 − $ 400.000) ÷ 4 = $ 350.000 → **3 proyectos al mes**.
+
+**Proyección:** se elige cuántos proyectos al mes, el valor promedio y el % de gastos (arrancan con el promedio real). Muestra cuánto ganaría cada uno, cuánto le queda a Arata después de gastos fijos, el punto de equilibrio y en cuántos meses se llega a una meta de inversión. No guarda nada. También se eligen los días trabajados por proyecto (arranca con el promedio real); se reparten según quién ha trabajado hasta hoy.
+
+## 4. Quién ve y quién edita (D-118)
+
+| Persona | Rol (`miembros.rol`) | Puede |
+|---|---|---|
+| Sergio | `dueno` | Todo. **Solo él:** valor del día (general y por proyecto), personas del equipo, recalcular un cerrado, **borrar proyectos y clientes** y Mi sitio |
+| Andrés | `finanzas` | Editar Finanzas: proyectos, valores, cierres, gastos, gastos fijos, días trabajados, reserva; clientes y servicios; pasos de los proyectos |
+| Santiago | `equipo` | **Ver todo** y marcar pasos |
+
+Doble barrera: la pantalla no muestra lo que no se puede editar, y **cada acción del servidor revisa otra vez** sesión con doble factor, negocio agencia y rol. Si Andrés intenta cambiar el valor del día directo al servidor: "Solo Sergio puede cambiar el valor del día".
+
+**Borrar (D-119): solo Sergio** borra proyectos y clientes. Borrar un proyecto muestra todo lo que se va (gastos, días, pasos) y pide escribir su nombre; se borra todo junto. Cada creación, cambio y borrado queda en el **historial** (quién, qué, cuándo, antes → después).
+
+Cambiar el rol de alguien (corre en el computador de Sergio, no cambia su contraseña):
+
+```bash
+node --env-file=.env.local scripts/panel-crear-usuario.mjs CORREO "Andrés" arata-san finanzas "Andrés"
+```
+
+## 5. Pantallas
+
+| Ruta | Contenido |
+|---|---|
+| `/panel/finanzas` → **Resumen** | Ventas, gastos, ganancia y fondos (este mes / este año / todo) · cuánto le toca a cada uno · fondos de la empresa con reserva · ganancia por mes · punto de equilibrio |
+| → **Proyectos** | Lista con filtro (propuesta, en curso, cerrado) · ficha con reparto detallado, quién hizo qué (días) y gastos del proyecto · crear, editar, cerrar, borrar |
+| → **Gastos** | Gastos fijos mensuales (con interruptor para dejar de contarlos) · gastos e inversiones de la empresa · gastos cargados a proyectos |
+| → **Reparto** | Cómo se reparte, valor del día (Sergio), meses de reserva · ejemplo en vivo con valor, gastos, persona y días |
+| → **Proyección** | Simulador de mes, punto de equilibrio, meta de inversión y tabla "¿cuántos proyectos necesitamos?" |
+| `/panel/equipo` | Tarjeta por persona (total, este mes, este año, parte igual/días) · tabla por proyecto · agregar o editar personas (Sergio) |
+
+## 6. Datos (`db/panel/003_finanzas.sql`)
+
+| Tabla | Qué guarda |
+|---|---|
+| `equipo_personas` | Nombre, área, si es socio, activo y la cuenta enlazada (`usuario_id`) |
+| `fin_config` (+ `fin_config_versiones`) | Valor del día (`tarifa_dia`) y meses de reserva; cada cambio deja una versión con quién y cuándo. `bolsa_trabajo_pct` y `reparto` quedan sin uso (D-118) |
+| `fin_proyectos` | Nombre, cliente, servicio, estado, valor, fecha de cierre, `tarifa_dia` propio y `reparto_congelado` ({valor del día, partes}) |
+| `fin_gastos` | Gastos de un proyecto (`proyecto_id`) o de la empresa (`proyecto_id` vacío) con categoría |
+| `fin_horas` | Días trabajados (`dias`, medios días) por persona, proyecto y actividad (`area`), con fecha y nota (`009_reparto_igual_dias.sql`) |
+| `fin_gastos_fijos` | Gastos mensuales de la empresa (para equilibrio y reserva) |
+
+Código: cálculos puros en `lib/panel/finanzas/calculo.ts` (probados con `npx -y tsx scripts/prueba-finanzas.ts`, 23 casos), lectura en `lib/panel/finanzas/datos.ts`, acciones en `app/(panel)/panel/(app)/finanzas/acciones.ts`, pantallas en `components/panel/finanzas/`. Sin conexión a la base, muestra datos de ejemplo (`lib/panel/finanzas/demo.ts`) con aviso.
+
+## 7. Dar acceso a Andrés y Santiago
+
+Cada uno con su propio correo. Sergio corre en su computador:
+
+```bash
+node --env-file=.env.local scripts/panel-crear-usuario.mjs CORREO-DE-ANDRES "Andrés" arata-san equipo "Andrés"
+```
+
+```bash
+node --env-file=.env.local scripts/panel-crear-usuario.mjs CORREO-DE-SANTIAGO "Santiago" arata-san equipo "Santiago"
+```
+
+El último dato enlaza la cuenta con su persona en Equipo. Cada comando muestra una contraseña **una sola vez**: se le pasa a cada uno por un medio privado (no por un grupo), y al entrar el panel le obliga a activar su propio doble factor.
+
+> Para que ellos entren, el panel tiene que estar publicado (hoy solo corre en el computador de Sergio). Ver pendiente 3.
+
+## 8. Pruebas (10 nov 2026)
+
+Base local (PGlite), `next build` + `next start`, Chromium. 22 de 22 ✅:
+
+| Prueba | Resultado |
+|---|---|
+| Sergio ve Finanzas y Equipo; datos reales sin aviso de ejemplo | ✅ |
+| Crear proyecto, registrar horas (10 h y 20 h) y un gasto de $ 200.000 | ✅ |
+| Reparto: Sergio $ 495.000 · Andrés $ 315.000 · Santiago $ 675.000 · Arata $ 315.000 | ✅ |
+| Cerrar el proyecto congela los %; cambiar la bolsa a 40 % no lo altera | ✅ |
+| No deja guardar un reparto que suma 105 % | ✅ |
+| Fondos = $ 315.000 − $ 50.000 = $ 265.000 · equilibrio 4 proyectos/mes | ✅ |
+| Andrés ve todo, con aviso de solo lectura, sin botones de editar; "Tú" en su tarjeta | ✅ |
+| Andrés llamando la acción del servidor directo → rechazado | ✅ |
+| La base rechaza crear finanzas para un cliente de página web | ✅ |
+| Celular (iPhone 13): las 5 pestañas y Equipo sin scroll horizontal | ✅ |
+
+## 8a. Pruebas del reparto nuevo (12 nov 2026, D-118)
+
+Cálculo: 23 de 23 ✅ (`scripts/prueba-finanzas.ts`). Navegador con base local y las 3 cuentas: 28 de 28 ✅. Entre ellas:
+
+| Prueba | Resultado |
+|---|---|
+| Proyecto $ 2.000.000 − $ 200.000, Sergio 5 días de desarrollo → Sergio $ 750.000 · Andrés, Santiago y Arata $ 350.000 | ✅ |
+| Santiago 1,5 días = $ 120.000; 2,3 días se rechaza (solo enteros o medios) | ✅ |
+| Valor del día propio $ 100.000 y cierre: Sergio $ 762.500; cambiar el general a $ 90.000 no altera lo cerrado | ✅ |
+| Andrés: crea proyectos, registra días y gastos, cambia la reserva; el valor del día bloqueado (general y del proyecto); Equipo en solo lectura; edita clientes pero no los borra; no cambia Mi sitio | ✅ |
+| Santiago: solo lectura, no crea proyectos | ✅ |
+
+## 8a-bis. Pruebas de historial, notificaciones y avisos (12 nov 2026, D-119)
+
+Unitarias: alertas 6/6, máscaras 11/11, finanzas 23/23, resumen 12/12. Navegador con base local, las 3 cuentas y un servidor de avisos de prueba: **36 de 36 ✅**, entre ellas: celular `300 123 4567`, Instagram `@…`, página `https://…`, otro país bloquea la ciudad, agregar ciudad que falta; historial del cliente y del proyecto (Valor $ 2.000.000 → $ 2.500.000); Andrés ve los cambios de Sergio como nuevos y el contador baja al verlos; un gasto de Sergio manda un aviso cifrado al dispositivo de Andrés y marcar un paso no; aviso diario: 401 sin clave, 1 aviso a 2 días y no repite; borrar proyecto muestra lo que se va, exige el nombre y no deja nada en la base; Andrés no puede borrar proyectos ni clientes.
+
+## 8b. Clientes y servicios como listas (D-110)
+
+En un proyecto, **cliente y servicio se eligen de una lista**: no se escriben a mano, para que no haya dos formas de escribir lo mismo.
+
+| Lista | Tabla | Cómo se agrega | Regla contra repetidos |
+|---|---|---|---|
+| Clientes | `clientes` (con empresa, contacto, celular, de dónde llegó y detalle) | En Clientes → "Agregar cliente", o en el proyecto con "＋ Agregar cliente nuevo…" | Mismo celular, o misma empresa + contacto sin importar mayúsculas, tildes ni espacios |
+| Servicios | `servicios` (nombre + categoría) | Finanzas → Proyectos → "Servicios", o en el proyecto con "＋ Agregar servicio nuevo…" | Mismo nombre sin importar mayúsculas ni espacios (también lo exige la base con un índice único) |
+
+Servicios iniciales (los paquetes del sitio): Página Lista en 5 Días · Tienda por WhatsApp en 5 Días · Tu Negocio en Orden · Mantenimiento mensual. Un servicio se puede **renombrar** o **desactivar** (deja de salir en proyectos nuevos; los viejos lo conservan). Un cliente con proyectos **no se puede borrar** (la base lo impide): se marca inactivo.
+
+**Módulo Clientes (datos reales, solo Arata):** lista con búsqueda, filtro "En curso" y por origen; cada cliente muestra estado, "Proyecto en curso", último servicio y cuánto ha comprado (proyectos cerrados). La ficha trae datos de contacto, de dónde llegó (origen + detalle), todos sus servicios y proyectos con estado y valor, notas y botón de WhatsApp. Sergio edita; Andrés y Santiago solo ven.
+
+## 8c. Proyectos en grid con su proceso (D-112)
+
+`/panel/proyectos` (Arata con sesión) muestra **una tarjeta por proyecto**: servicio, nombre, cliente, estado comercial, **etapa actual** con el siguiente paso, las 5 etapas, la fecha de entrega (aviso si va tarde) y **abajo la barra de avance** (pasos hechos / total). Filtros: En proceso · Entregados · Todos; resumen con cuántos van tarde. Cada tarjeta abre `/panel/proyectos/[id]`.
+
+| Detalle del proyecto | |
+|---|---|
+| Proceso | 5 etapas (Arranque → Diseño → Construcción → Revisión → Entrega) con ✓, "Aquí vas" y % |
+| Pasos por etapa | Casillas para marcar (Sergio), agregar o quitar pasos |
+| Datos | Cliente, servicio, valor, inicio, **entrega prometida** (días que faltan o que pasaron), cierre |
+| Horas | Horas por persona, con enlace a Finanzas |
+
+**Regla:** la etapa y el avance **se calculan de los pasos** (etapa = la del primer paso sin terminar). No hay que actualizar dos cosas.
+
+**Plantillas por tipo de servicio** (`lib/panel/finanzas/procesos.ts`): al crear un proyecto se cargan solas. La de página web sigue los 5 días que promete el sitio: propuesta → textos/logo/fotos → estructura de 5 secciones (día 1) → diseño en celular y computador (días 2 y 3) → construir (días 2 y 3) → 2 rondas de ajustes (día 4) → publicar, medir 90+ en Google y capacitar (día 5). Catálogo, sistema, mantenimiento y "otro" tienen la suya. Un proyecto sin pasos tiene el botón "Cargar el proceso". Sergio marca pasos; Andrés y Santiago los ven sin marcar.
+
+Migración `db/panel/005_proceso.sql`: `fin_proyectos.fecha_inicio`, `fecha_limite` y tabla `fin_tareas`.
+
+## 8d. Resumen con datos reales y equipo que marca pasos (D-113, D-114)
+
+**Resumen (`/panel`) de Arata**, con selector 30 días · 90 días · 1 año y comparación con el periodo anterior:
+
+| Pieza | Dato |
+|---|---|
+| Ventas | Suma de proyectos **cerrados** en el periodo (por fecha de cierre) |
+| Ganancia | Ventas − gastos de esos proyectos · margen |
+| Clientes nuevos | Clientes creados en el periodo |
+| Proyectos en proceso | Con pasos sin terminar (o en curso sin pasos) · cuántos van tarde |
+| Cómo van las ventas | Ventas por mes, últimos 12 meses · en curso por cobrar · propuestas abiertas · ticket promedio |
+| Clientes que compran | Clientes con al menos un proyecto cerrado ÷ total · embudo Clientes → Con propuesta o proyecto → Compraron |
+| De dónde llegan | Clientes por origen y cuántos compraron |
+| Lo que más se vende | Servicios por ventas del periodo |
+| Últimas ventas | 5 proyectos cerrados más recientes |
+| Visitas e Instagram | **Pendiente** (Google Analytics y Meta por n8n). No se muestran números inventados |
+
+Regla: un proyecto **cerrado sin pasos** cuenta como entregado (proyectos viejos de antes del panel). Cálculos en `lib/panel/resumen/agencia.ts`, prueba `npx -y tsx scripts/prueba-resumen.ts` (12 casos).
+
+**Equipo marca pasos (D-113):** Andrés y Santiago pueden **marcar y desmarcar** pasos de los proyectos; agregar, quitar o editar sigue siendo de Sergio, igual que todo el dinero. Cada paso guarda quién lo marcó y cuándo ("Lo marcó Andrés · 10 nov"). Migración `006_quien_marca.sql`.
+
+## 9. Pendiente
+
+| # | Qué | Quién |
+|---|---|---|
+| 1 | ~~Poner los % de bolsa y socios~~ (ya no aplica, D-118) · cargar los gastos fijos | Sergio |
+| 2 | Cargar los proyectos cerrados de este año para tener historia | Sergio |
+| 3 | ~~Publicar el panel~~ ✅ en `panel.aratasan.com` (11 nov 2026, D-115) | — |
+| 4 | ~~Crear las cuentas de Andrés y Santiago~~ ✅ (11 nov 2026, rol `equipo`, enlazadas en Equipo). Falta que cada uno active su doble factor al entrar | Andrés · Santiago |
+| 5 | Que el Resumen general del panel muestre las ventas reales (proyectos cerrados) | Siguiente paso |
+| 7 | Cargar los clientes reales de Arata en Clientes | Sergio |
+| 6 | Que cada uno registre sus propios días (hoy Sergio y Andrés) | Si se decide |
+| 8 | Registrar quién pagó un gasto para devolvérselo | Si se decide |

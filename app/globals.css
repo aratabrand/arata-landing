@@ -612,6 +612,7 @@
   }
 }
 
+/* Los estilos del panel viven en app/(panel)/panel/panel.css (D-114): no pesan en el sitio. */
 /* ── Casos de éxito: celular con reel vertical (D-102) ───────────────────────
    Marco de iPhone hecho en CSS (sin imagen: nítido en cualquier pantalla, 0 KB).
    Solo transform/opacity animados. --w = ancho del celular. */

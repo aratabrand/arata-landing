@@ -850,7 +850,7 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 
 ---
 
-## Inicio · Casos de éxito (D-102) ◻ por aprobar
+## Inicio · Casos de éxito (D-128) ◻ por aprobar
 
 Va después del portafolio destacado. Video del proyecto dentro de un celular, con descripción y testimonio al lado. Código: `content/casos-exito.ts`.
 
@@ -870,7 +870,7 @@ Va después del portafolio destacado. Video del proyecto dentro de un celular, c
 | Datos flotantes (salen de los datos reales del caso) | *5 días* de principio a fin · *99* en velocidad (celular) |
 | Por cada caso | Título, descripción breve y testimonio (texto, nombre, cargo y estrellas que dé el cliente) |
 
-- ✅ Video real de Caravana publicado (D-103), en el Inicio y en `/catalogos-y-sistemas` (reemplaza "Tu catálogo, listo para vender").
+- ✅ Video real de Caravana publicado (D-129), en el Inicio y en `/catalogos-y-sistemas` (reemplaza "Tu catálogo, listo para vender").
 - ◻ **Falta:** el testimonio de Caravana (frase, nombre, cargo y estrellas). Mientras no llegue, ese bloque no se muestra.
 
 ---
