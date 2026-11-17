@@ -4,11 +4,11 @@ import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import {
   CasesSection,
   CustomSystemSection,
-  IncludesSection,
   PriceBar,
   ServiceHero,
 } from "@/components/v2/ServiceSections";
 import { Assurances } from "@/components/v2/Pricing";
+import CasosExito from "@/components/v2/CasosExito";
 import { catalogos as c } from "@/content/servicios";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
@@ -40,10 +40,10 @@ export default function CatalogosYSistemas() {
       />
       <ServiceHero {...c.hero} tipo="catalogo" />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre="" items={c.problema.items} />
-      <IncludesSection
-        id="tienda"
-        titulo={c.tienda.titulo}
-        items={c.tienda.items}
+      {/* D-129: "Tu catálogo, listo para vender" se reemplaza por los casos de éxito en video. La franja de precio se queda. */}
+      <CasosExito
+        id="casos-catalogo"
+        servicio="catalogo"
         pie={
           <>
             <PriceBar

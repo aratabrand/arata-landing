@@ -613,3 +613,223 @@
 }
 
 /* Los estilos del panel viven en app/(panel)/panel/panel.css (D-114): no pesan en el sitio. */
+/* ── Casos de éxito: celular con reel vertical (D-102) ───────────────────────
+   Marco de iPhone hecho en CSS (sin imagen: nítido en cualquier pantalla, 0 KB).
+   Solo transform/opacity animados. --w = ancho del celular. */
+.cx { --w: min(66vw, 280px); --ease: cubic-bezier(0.65, 0, 0.35, 1); }
+@media (min-width: 640px) { .cx { --w: 290px; } }
+@media (min-width: 1024px) { .cx { --w: 310px; } }
+
+.cx-phone {
+  position: relative;
+  z-index: 1;
+  width: var(--w);
+  padding: calc(var(--w) * 0.034);
+  border-radius: calc(var(--w) * 0.17);
+  background: #0a0711;
+  /* canto morado (tono de marca) + borde exterior + sombra con luz morada */
+  box-shadow:
+    0 0 0 2px #5a43b0,
+    0 0 0 3.5px #241a4a,
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 40px 90px -30px rgba(125, 83, 255, 0.45);
+}
+/* botones laterales: volumen (izq., 3 con box-shadow) y encendido (der.) */
+.cx-phone::before,
+.cx-phone::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: #4a3797;
+}
+.cx-phone::before {
+  left: -5.5px;
+  top: 18%;
+  height: 4%;
+  box-shadow: 0 calc(var(--w) * 0.12) 0 0 #4a3797, 0 calc(var(--w) * 0.12) 0 0 #4a3797;
+}
+.cx-phone::after { right: -5.5px; top: 27%; height: 11%; }
+
+.cx-screen {
+  position: relative;
+  aspect-ratio: 9 / 19.5;
+  overflow: hidden;
+  border-radius: calc(var(--w) * 0.135);
+  background: #03010b; /* igual al fondo de los videos de marca: con object-contain no se notan bordes */
+  isolation: isolate; /* recorta bien el video en Safari */
+}
+.cx-isla {
+  position: absolute;
+  z-index: 4;
+  top: 2.4%;
+  left: 50%;
+  width: 31%;
+  height: 4.1%;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: #000;
+}
+
+/* Reel: el activo en su sitio; los anteriores arriba y los siguientes abajo */
+.cx-slide {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.75s var(--ease);
+  will-change: transform;
+}
+.cx-slide.is-on { transform: translateY(0); }
+.cx-slide.is-arriba { transform: translateY(-100%); }
+.cx-slide.is-abajo { transform: translateY(100%); }
+
+.cx-tap { position: absolute; inset: 0; z-index: 2; cursor: pointer; }
+.cx-tap:focus-visible { outline: 2px solid #b6ff00; outline-offset: -4px; border-radius: inherit; }
+.cx-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background: rgba(3, 1, 11, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  transition: opacity 0.3s, transform 0.3s var(--ease);
+}
+.cx-play.is-on,
+.cx-tap:focus-visible .cx-play { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+@media (hover: hover) { .cx-tap:hover .cx-play { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+
+.cx-progreso {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 1.6%;
+  width: 36%;
+  height: 4px;
+  overflow: hidden;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+}
+.cx-progreso span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.cx-sonido {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 5.5%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(3, 1, 11, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transform: translateX(-50%);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.cx-sonido:hover { border-color: rgba(182, 255, 0, 0.6); }
+.cx-sonido[aria-pressed="true"] { background: rgba(125, 83, 255, 0.55); }
+.cx-ondas { display: inline-flex; align-items: center; gap: 2px; height: 12px; }
+.cx-ondas i { width: 2px; height: 100%; border-radius: 2px; background: currentColor; transform: scaleY(0.3); }
+.cx-ondas.is-on i { animation: cx-onda 0.9s ease-in-out infinite; }
+.cx-ondas.is-on i:nth-child(2) { animation-delay: -0.3s; }
+.cx-ondas.is-on i:nth-child(3) { animation-delay: -0.6s; }
+.cx-ondas.is-on i:nth-child(4) { animation-delay: -0.15s; }
+
+.cx-flecha {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #110c20;
+  color: #fff;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease);
+}
+.cx-flecha:hover { background: #b6ff00; border-color: #b6ff00; color: #03010b; }
+.cx-flecha:active { transform: scale(0.92); }
+
+/* Anillos y luz detrás del celular (dato visual, no tapa nada) */
+.cx-anillos {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--w) * 1.9);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background:
+    radial-gradient(closest-side, rgba(125, 83, 255, 0.22), transparent 70%),
+    radial-gradient(closest-side, transparent 64%, rgba(255, 255, 255, 0.06) 64.4%, transparent 65%),
+    radial-gradient(closest-side, transparent 86%, rgba(255, 255, 255, 0.045) 86.3%, transparent 86.8%);
+  pointer-events: none;
+}
+
+/* Datos del caso: en fila debajo del celular (nunca tapan el video ni sus subtítulos); cambian con el caso */
+.cx-datos { position: relative; z-index: 2; display: grid; margin-top: 22px; pointer-events: none; }
+.cx-grupo {
+  grid-area: 1 / 1;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(14px) scale(0.94);
+  transition: opacity 0.5s, transform 0.6s var(--ease);
+}
+.cx-grupo.is-on { opacity: 1; transform: none; transition-delay: 0.35s; }
+.cx-dato-in {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 9.5rem;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(17, 12, 32, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  animation: cx-flota 6s ease-in-out infinite alternate;
+}
+
+
+/* Texto del caso: sale hacia donde se va el video y entra escalonado */
+.cx-txt { transition: opacity 0.45s, visibility 0s 0.75s; }
+.cx-txt:not(.is-on) { opacity: 0; visibility: hidden; pointer-events: none; }
+.cx-txt.is-on { transition: opacity 0.45s, visibility 0s; }
+.cx-txt .cx-i {
+  transition: transform 0.7s var(--ease), opacity 0.6s;
+  transition-delay: calc(var(--d, 0) * 70ms + 0.15s);
+}
+.cx-txt.is-arriba .cx-i { transform: translateY(-22px); opacity: 0; transition-delay: 0s; }
+.cx-txt.is-abajo .cx-i { transform: translateY(22px); opacity: 0; transition-delay: 0s; }
+
+@keyframes cx-flota { to { transform: translateY(-8px); } }
+@keyframes cx-onda { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cx-slide, .cx-txt, .cx-txt .cx-i, .cx-grupo { transition: opacity 0.2s !important; }
+  .cx-slide.is-arriba, .cx-slide.is-abajo { transform: none; opacity: 0; }
+  .cx-dato-in, .cx-ondas.is-on i { animation: none; }
+}

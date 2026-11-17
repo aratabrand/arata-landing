@@ -129,6 +129,8 @@ export const catalogos = {
     ],
   },
   tienda: {
+    // D-129: el título y la lista ya no se muestran (los reemplazan los casos en video).
+    // Se conservan por si vuelven; la franja de precio (precio, nota, pago, botón) sí se usa.
     titulo: "Tu catálogo, listo para vender",
     items: [
       { icono: "carrito", titulo: "Catálogo con carrito", texto: "Tus clientes ven tus productos ordenados por categoría y arman su pedido." },

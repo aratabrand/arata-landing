@@ -850,6 +850,31 @@ Textos que no estaban en el copy aprobado y fueron necesarios al construir. Vive
 
 ---
 
+## Inicio · Casos de éxito (D-128) ◻ por aprobar
+
+Va después del portafolio destacado. Video del proyecto dentro de un celular, con descripción y testimonio al lado. Código: `content/casos-exito.ts`.
+
+**Título** (elige una):
+
+| Versión | Título | Texto |
+|---|---|---|
+| **A** (puesta por defecto) | Mira cómo les funciona a nuestros clientes. | Videos reales de los catálogos y páginas que hicimos, y lo que dicen sus dueños. |
+| B | Así venden hoy nuestros clientes. | Mira sus catálogos funcionando y lo que dicen de trabajar con nosotros. |
+| C | Lo que hicimos, contado por ellos. | Videos reales de sus catálogos y páginas, y su opinión sin filtro. |
+
+| Dónde | Texto ◻ |
+|---|---|
+| Etiqueta arriba del título | Casos de éxito |
+| Botón de sonido dentro del video | Toca para escucharlo · Toca para silenciar |
+| Enlace bajo el testimonio | Ver el caso completo |
+| Datos flotantes (salen de los datos reales del caso) | *5 días* de principio a fin · *99* en velocidad (celular) |
+| Por cada caso | Título, descripción breve y testimonio (texto, nombre, cargo y estrellas que dé el cliente) |
+
+- ✅ Video real de Caravana publicado (D-129), en el Inicio y en `/catalogos-y-sistemas` (reemplaza "Tu catálogo, listo para vender").
+- ◻ **Falta:** el testimonio de Caravana (frase, nombre, cargo y estrellas). Mientras no llegue, ese bloque no se muestra.
+
+---
+
 ## Estado del resto del sitio
 
 > Copy **aprobado** (D-056). Lo que sigue en ◻ son datos que llegan después y se insertan sin cambiar la estructura.
