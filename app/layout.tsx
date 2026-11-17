@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/lib/site";
-import { GtmInit, GtmScript, GtmNoScript } from "@/components/GoogleTagManager";
+import { GtmInit, GtmScript } from "@/components/GoogleTagManager";
+import CookieBanner from "@/components/CookieBanner";
 import { V2_PUBLICADO } from "@/lib/lanzamiento";
 import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
@@ -127,13 +128,14 @@ export default function RootLayout({
           del <body>, no su contenido. */}
       <body className="font-body antialiased" suppressHydrationWarning>
         {conMedicion && <GtmInit />}
-        {conMedicion && <GtmNoScript />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
         {conMedicion && <GtmScript />}
+        {/* D-130: aviso de cookies; sin "Aceptar", Google Analytics no carga */}
+        {conMedicion && <CookieBanner />}
       </body>
     </html>
   );

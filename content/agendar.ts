@@ -60,12 +60,19 @@ export const agendar = {
   botones: { siguiente: "Siguiente", elegirHora: "Elegir hora", atras: "Atrás" },
   errores: {
     opcion: "Elige una opción para seguir.",
-    whatsapp: "Escribe tu WhatsApp con el indicativo, por ejemplo +57 300 000 0000.",
+    whatsapp: "Revisa tu WhatsApp: con indicativo, por ejemplo +57 300 000 0000.",
     correo: "Revisa tu correo, parece que le falta algo.",
     autorizacion: "Necesitamos tu autorización para poder contactarte.",
     // aprobados en D-100
-    nombre: "Escribe tu nombre.",
-    url: "Escribe la dirección de tu página.",
+    nombre: "Escribe tu nombre (mínimo 2 letras).",
+    url: "Escribe la dirección de tu página, por ejemplo tunegocio.com.",
+  },
+  // ◻ D-131: mensajes cuando se frena un envío (anti-bot, sin servidor)
+  freno: {
+    rapido: "Fue muy rápido. Revisa tus datos y vuelve a tocar «Elegir hora».",
+    trampa: "No pudimos validar el envío.",
+    intentos: "Ya enviaste varias solicitudes en la última hora.",
+    whatsapp: "Escríbenos por WhatsApp",
   },
   auditoriaNota: "Te la entregamos en 48 horas y la revisamos juntos en la reunión.",
   calendario: {

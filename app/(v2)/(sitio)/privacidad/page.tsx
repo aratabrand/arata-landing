@@ -42,7 +42,7 @@ export default function Privacidad() {
 
         <div className="mt-12 space-y-10">
           {c.secciones.map((s, i) => (
-            <section key={s.titulo} aria-labelledby={`pol-${i}`}>
+            <section key={s.titulo} id={"id" in s ? s.id : undefined} aria-labelledby={`pol-${i}`} className="scroll-mt-24">
               <h2 id={`pol-${i}`} className="font-display text-xl font-bold tracking-heading text-white">
                 {s.titulo}
               </h2>

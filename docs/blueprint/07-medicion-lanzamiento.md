@@ -82,6 +82,8 @@ Si después quieres quitarle el acceso a esa cuenta en GA4, el vínculo sigue fu
 
 Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que ve y edita todo. Recomendado: dejar la vieja como segunda administradora de respaldo.
 
+**Consentimiento (D-130):** desde el 17 nov 2026, GA4 **solo carga si la persona acepta** en el aviso de cookies (Ley 1581). Quien rechaza o no responde no se mide. Por eso, desde esa fecha, **las visitas en GA4 bajan** frente a antes (normalmente se mide entre el 40 % y el 70 % de las visitas): no es que lleguen menos personas. Para comparar meses, usar Search Console (no depende de cookies) y las reuniones de Cal.com.
+
 **Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
 ---

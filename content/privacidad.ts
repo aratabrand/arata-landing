@@ -15,7 +15,7 @@ export const responsable = {
   telefono: "+57 313 401 1189 (WhatsApp)",
   correo: "contacto@aratasan.com",
   vigencia: "noviembre de 2026",
-  actualizacion: "9 de noviembre de 2026",
+  actualizacion: "17 de noviembre de 2026",
 };
 
 // D-099: ajustes de la revisión (autorización expresa, envío fuera de Colombia, dirección
@@ -62,11 +62,13 @@ export const privacidad = {
       ],
     },
     {
+      id: "cookies",
       titulo: "5. Cookies y medición del sitio",
       parrafos: [
-        "Usamos Google Analytics, a través de Google Tag Manager, para contar visitas y ver cómo se usa el sitio. Google Analytics guarda cookies en tu navegador (por ejemplo, _ga) con un número al azar, no con tu nombre. Se activa cuando tocas, haces scroll o pasados unos segundos.",
-        "El sitio también guarda en tu navegador, solo mientras tienes la pestaña abierta, una marca para no repetir la animación de entrada. No tiene datos tuyos.",
-        "Puedes borrar o bloquear las cookies desde la configuración de tu navegador, o instalar el complemento de Google para no ser medido por Analytics (tools.google.com/dlpage/gaoptout). El sitio sigue funcionando igual.",
+        "Usamos Google Analytics, a través de Google Tag Manager, para contar visitas y ver cómo se usa el sitio. Solo se activa si lo aceptas en el aviso de cookies que aparece la primera vez que entras. Si lo rechazas o no respondes, no se carga.",
+        "Google Analytics guarda cookies en tu navegador (por ejemplo, _ga) con un número al azar, no con tu nombre ni tu correo. Los datos los procesa Google en Estados Unidos y las cookies duran hasta 2 años, salvo que las borres.",
+        "Hay cookies y datos del navegador necesarios, que no piden permiso porque sin ellos la página no funciona como pediste: tu elección de cookies (se guarda 12 meses; después te volvemos a preguntar), una marca mientras tienes la pestaña abierta para no repetir la animación de entrada y, si agendas, las que usa el calendario de Cal.com para reservar tu cita. No se usan para publicidad.",
+        "Puedes cambiar tu elección cuando quieras en «Preferencias de cookies», al final de cada página. Si retiras el permiso, dejamos de medir y borramos las cookies de Google Analytics de este sitio. También puedes borrarlas o bloquearlas desde tu navegador. El sitio funciona igual.",
       ],
     },
     {

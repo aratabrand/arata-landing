@@ -8,6 +8,20 @@ import { agendar as c, calLinks, type TipoAgenda } from "@/content/agendar";
 import { site } from "@/lib/site";
 import { medir } from "@/lib/medir";
 import { cn } from "@/lib/utils";
+import {
+  LIMITES,
+  TIEMPO_MINIMO_MS,
+  correoValido,
+  demasiadosIntentos,
+  mascaraCorreo,
+  mascaraNombre,
+  mascaraUrl,
+  mascaraWhatsapp,
+  nombreValido,
+  normalizarUrl,
+  registrarIntento,
+  whatsappValido,
+} from "@/lib/formulario";
 
 // Flujo de /agendar (02-arquitectura.md §2): 3 preguntas + datos + calendario.
 // - Tocar una opción la elige y pasa al siguiente paso (cómodo con el pulgar).
@@ -19,6 +33,7 @@ import { cn } from "@/lib/utils";
 type Paso = "tipo" | "cuando" | "inversion" | "datos" | "calendario";
 
 type Datos = { nombre: string; whatsapp: string; correo: string; url: string; autoriza: boolean };
+type Freno = "rapido" | "trampa" | "intentos";
 
 const TIPOS: TipoAgenda[] = ["pagina", "catalogo", "sistema", "auditoria"];
 
@@ -32,13 +47,16 @@ type CalFn = ((...args: unknown[]) => void) & { loaded?: boolean; ns?: Record<st
 // Medición: a GA4 directo (gtag) y a GTM (dataLayer). Ver lib/medir.ts.
 const track = (event: string, data: Record<string, string | number | null> = {}) => medir(event, data);
 
-const soloDigitos = (s: string) => s.replace(/\D/g, "");
-const whatsappValido = (s: string) => {
-  const d = soloDigitos(s);
-  return d.length >= 10 && d.length <= 15;
-};
-const correoValido = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
-const urlValida = (s: string) => /^(https?:\/\/)?[^\s.]+\.[^\s]{2,}/i.test(s.trim());
+// Máscaras, límites y anti-bot: lib/formulario.ts (D-131).
+/** Si se borró un separador (espacio) del WhatsApp, borra también el dígito anterior; si no, la máscara lo volvería a poner. */
+function cambioWhatsapp(previo: string, nuevo: string) {
+  const dig = (x: string) => x.replace(/\D/g, "");
+  if (nuevo.length < previo.length && dig(nuevo) === dig(previo)) {
+    const d = dig(nuevo).slice(0, -1);
+    return mascaraWhatsapp(previo.trim().startsWith("+") ? `+${d}` : d);
+  }
+  return mascaraWhatsapp(nuevo);
+}
 
 export default function BookingFlow() {
   const router = useRouter();
@@ -52,6 +70,10 @@ export default function BookingFlow() {
   const [paso, setPaso] = useState<Paso>("tipo");
   const [errores, setErrores] = useState<Partial<Record<keyof Datos | "opcion", string>>>({});
   const tituloRef = useRef<HTMLHeadingElement>(null);
+  // Anti-bot (D-131): hora en que abrió el flujo, campo trampa y freno visible
+  const inicio = useRef(Date.now());
+  const trampa = useRef<HTMLInputElement>(null);
+  const [freno, setFreno] = useState<Freno | null>(null);
   const primerRender = useRef(true);
 
   const auditoria = tipo === "auditoria";
@@ -88,18 +110,35 @@ export default function BookingFlow() {
 
   const continuarTipo = () => {
     if (!tipo) return setErrores({ opcion: c.errores.opcion });
-    if (auditoria && !urlValida(datos.url)) return setErrores({ url: c.errores.url });
+    if (auditoria && !normalizarUrl(datos.url)) return setErrores({ url: c.errores.url });
     siguiente();
   };
 
   const validarDatos = () => {
     const e: typeof errores = {};
-    if (!datos.nombre.trim()) e.nombre = c.errores.nombre;
+    if (!nombreValido(datos.nombre)) e.nombre = c.errores.nombre;
     if (!whatsappValido(datos.whatsapp)) e.whatsapp = c.errores.whatsapp;
     if (!correoValido(datos.correo)) e.correo = c.errores.correo;
     if (!datos.autoriza) e.autoriza = c.errores.autorizacion;
     setErrores(e);
     if (Object.keys(e).length === 0) {
+      // Anti-bot: campo trampa lleno, envío en menos de 4 s o 5+ intentos en la última hora
+      const motivo: Freno | null = trampa.current?.value
+        ? "trampa"
+        : Date.now() - inicio.current < TIEMPO_MINIMO_MS
+          ? "rapido"
+          : demasiadosIntentos()
+            ? "intentos"
+            : null;
+      if (motivo) {
+        track("agendar_frenado", { motivo });
+        setFreno(motivo);
+        // Una persona real que fue muy rápido puede volver a intentarlo enseguida
+        if (motivo === "rapido") inicio.current = Date.now() - TIEMPO_MINIMO_MS;
+        return;
+      }
+      setFreno(null);
+      registrarIntento();
       track("agendar_datos_completos", { tipo });
       ir("calendario");
     } else {
@@ -112,7 +151,7 @@ export default function BookingFlow() {
   const tipoLabel = c.pasos.tipo.opciones.find((o) => o.valor === tipo)?.label ?? "";
   const resumen = [
     `Necesito: ${tipoLabel}`,
-    auditoria && datos.url ? `Mi página: ${datos.url.trim()}` : null,
+    auditoria && datos.url ? `Mi página: ${normalizarUrl(datos.url) ?? "-"}` : null,
     `Cuándo empezar: ${cuando ?? "-"}`,
     !auditoria ? `Inversión: ${inversion ?? "-"}` : null,
     `WhatsApp: ${datos.whatsapp.trim()}`,
@@ -174,9 +213,12 @@ export default function BookingFlow() {
                     type: "text",
                     inputMode: "url",
                     autoComplete: "url",
+                    autoCapitalize: "none",
+                    spellCheck: false,
+                    maxLength: LIMITES.url,
                     placeholder: c.pasos.url.placeholder,
                     value: datos.url,
-                    onChange: (e) => setDatos({ ...datos, url: e.target.value }),
+                    onChange: (e) => setDatos({ ...datos, url: mascaraUrl(e.target.value) }),
                   }}
                 />
                 <p className="mt-3 text-sm text-fog">{c.auditoriaNota}</p>
@@ -231,8 +273,12 @@ export default function BookingFlow() {
                 input={{
                   type: "text",
                   autoComplete: "name",
+                  autoCapitalize: "words",
+                  enterKeyHint: "next",
+                  maxLength: LIMITES.nombre,
                   value: datos.nombre,
-                  onChange: (e) => setDatos({ ...datos, nombre: e.target.value }),
+                  onChange: (e) => setDatos({ ...datos, nombre: mascaraNombre(e.target.value) }),
+                  onBlur: () => setDatos((d) => ({ ...d, nombre: d.nombre.trim() })),
                 }}
               />
               <Campo
@@ -243,9 +289,11 @@ export default function BookingFlow() {
                   type: "tel",
                   inputMode: "tel",
                   autoComplete: "tel",
+                  enterKeyHint: "next",
+                  maxLength: LIMITES.whatsapp,
                   placeholder: c.pasos.datos.whatsappPlaceholder,
                   value: datos.whatsapp,
-                  onChange: (e) => setDatos({ ...datos, whatsapp: e.target.value }),
+                  onChange: (e) => setDatos({ ...datos, whatsapp: cambioWhatsapp(datos.whatsapp, e.target.value) }),
                 }}
               />
               <Campo
@@ -256,9 +304,13 @@ export default function BookingFlow() {
                   type: "email",
                   inputMode: "email",
                   autoComplete: "email",
+                  autoCapitalize: "none",
+                  spellCheck: false,
+                  enterKeyHint: "done",
+                  maxLength: LIMITES.correo,
                   placeholder: c.pasos.datos.correoPlaceholder,
                   value: datos.correo,
-                  onChange: (e) => setDatos({ ...datos, correo: e.target.value }),
+                  onChange: (e) => setDatos({ ...datos, correo: mascaraCorreo(e.target.value) }),
                 }}
               />
               <div>
@@ -288,6 +340,26 @@ export default function BookingFlow() {
                 </label>
                 {errores.autoriza && <Error id="error-autoriza">{errores.autoriza}</Error>}
               </div>
+              {/* Campo trampa (D-131): invisible para personas y lectores de pantalla; los bots lo llenan */}
+              <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                <label htmlFor="campo-sitio-web">No llenes este campo</label>
+                <input ref={trampa} id="campo-sitio-web" name="sitio_web_confirmacion" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
+              </div>
+              {freno && (
+                <div role="alert" className="rounded-frame border border-[#FF6B8A]/40 bg-[#FF6B8A]/[0.06] p-4 text-sm text-white">
+                  {c.freno[freno]}{" "}
+                  {freno !== "rapido" && (
+                    <a
+                      href={`https://wa.me/${site.phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-lime underline underline-offset-4"
+                    >
+                      {c.freno.whatsapp}
+                    </a>
+                  )}
+                </div>
+              )}
               <button
                 type="submit"
                 className="v2-shine group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-btn bg-lime px-6 text-[0.95rem] font-semibold text-ink transition-colors hover:bg-[#C6FF33]"
