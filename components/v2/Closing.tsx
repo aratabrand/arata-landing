@@ -4,6 +4,8 @@ import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import { Container, Glow } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
+import { AbrirPreferenciasCookies } from "@/components/CookieBanner";
+import { cookies } from "@/content/cookies";
 import { AGENDAR, ctaFinal, faq, footer } from "@/content/inicio";
 import { proyectos } from "@/content/proyectos";
 
@@ -121,7 +123,13 @@ export function SiteFooter() {
         </div>
         <div className="mt-14 flex flex-col gap-2 border-t border-white/6 pt-6 text-xs text-fog-dim sm:flex-row sm:justify-between">
           <p>{footer.cierre}</p>
-          <p>© {anio} Arata San</p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            {/* D-130: volver a elegir las cookies desde cualquier página */}
+            <AbrirPreferenciasCookies className="inline-flex min-h-10 items-center underline decoration-white/20 underline-offset-4 transition-colors hover:text-white sm:min-h-0">
+              {cookies.footer}
+            </AbrirPreferenciasCookies>
+            <p>© {anio} Arata San</p>
+          </div>
         </div>
       </Container>
     </footer>

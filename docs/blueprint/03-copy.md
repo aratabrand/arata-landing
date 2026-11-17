@@ -875,6 +875,35 @@ Va después del portafolio destacado. Video del proyecto dentro de un celular, c
 
 ---
 
+## Aviso de cookies (D-130) ◻ por aprobar
+
+Texto en `content/cookies.ts`.
+
+| Dónde | Texto ◻ |
+|---|---|
+| Título del aviso | ¿Nos dejas medir tu visita? |
+| Texto del aviso | Usamos cookies de Google Analytics para saber cuántas personas visitan la página. Solo se activan si aceptas, y puedes cambiar de opinión cuando quieras. |
+| Botones | Aceptar · Rechazar · Elegir mis preferencias · Política de datos |
+| Preferencias · título e intro | Preferencias de cookies · Elige qué cookies dejas activas en este navegador. Tu elección se guarda 12 meses y la puedes cambiar desde el final de cualquier página. |
+| Necesarias (siempre activas) | Hacen que la página funcione: guardan tu elección de cookies y si ya viste la animación de entrada. Si agendas, el calendario de Cal.com usa las que necesita para reservar tu cita. No se usan para publicidad. |
+| Medición (Google Analytics) | Nos dicen cuántas personas visitan la página, de dónde llegan y qué páginas ven, sin tu nombre ni tu correo. Los datos los guarda Google, en Estados Unidos. |
+| Botones de preferencias | Guardar mis preferencias · Aceptar todas |
+| Pie | Si no aceptas la medición, la página funciona igual. |
+| Footer | Preferencias de cookies |
+
+## `/agendar` · mensajes de seguridad (D-131) ◻ por aprobar
+
+| Cuándo | Texto ◻ |
+|---|---|
+| Nombre inválido | Escribe tu nombre (mínimo 2 letras). |
+| URL inválida | Escribe la dirección de tu página, por ejemplo tunegocio.com. |
+| WhatsApp inválido | Revisa tu WhatsApp: con indicativo, por ejemplo +57 300 000 0000. |
+| Envío en menos de 4 s | Fue muy rápido. Revisa tus datos y vuelve a tocar «Elegir hora». |
+| Campo trampa lleno | No pudimos validar el envío. **Escríbenos por WhatsApp** |
+| 5 o más envíos en 1 hora | Ya enviaste varias solicitudes en la última hora. **Escríbenos por WhatsApp** |
+
+---
+
 ## Estado del resto del sitio
 
 > Copy **aprobado** (D-056). Lo que sigue en ◻ son datos que llegan después y se insertan sin cambiar la estructura.

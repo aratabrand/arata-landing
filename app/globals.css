@@ -833,3 +833,14 @@
   .cx-slide.is-arriba, .cx-slide.is-abajo { transform: none; opacity: 0; }
   .cx-dato-in, .cx-ondas.is-on i { animation: none; }
 }
+
+/* ── Aviso de cookies (D-130) ─────────────────────────────────────────────
+   Entra después de la animación de entrada (el retraso va en línea). Solo transform/opacity. */
+.as-cookies { animation: as-cookies-entra 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes as-cookies-entra { from { opacity: 0; transform: translateY(24px); } }
+.as-cookies-dialogo[open] { animation: as-cookies-dialogo 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+.as-cookies-dialogo::backdrop { background: rgba(3, 1, 11, 0.7); backdrop-filter: blur(4px); }
+@keyframes as-cookies-dialogo { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+@media (prefers-reduced-motion: reduce) {
+  .as-cookies, .as-cookies-dialogo[open] { animation-duration: 0.01s; }
+}
