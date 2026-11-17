@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Hero from "@/components/v2/Hero";
 import { ProblemSection, ProofStrip, ServicesSection, StepsSection } from "@/components/v2/HomeSections";
 import PortfolioShowcase from "@/components/v2/PortfolioShowcase";
+import CasosExito from "@/components/v2/CasosExito";
 import PricingSection from "@/components/v2/Pricing";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import JsonLd from "@/components/JsonLd";
@@ -27,6 +28,7 @@ export default function InicioV2() {
       <ProblemSection />
       <ServicesSection />
       <PortfolioShowcase />
+      <CasosExito />
       <StepsSection />
       <PricingSection />
       <FaqSection />
