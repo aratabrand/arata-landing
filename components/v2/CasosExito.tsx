@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import CasosReel, { type CasoReel } from "./CasosReel";
 import { Container, Eyebrow, Glow } from "./primitives";
 import Reveal from "@/components/Reveal";
@@ -6,8 +7,17 @@ import { proyectos } from "@/content/proyectos";
 
 // Sección "Casos de éxito" del Inicio (D-102). Componente de servidor: arma los datos
 // y el celular con el reel es la única parte con JavaScript. Sin casos publicables, no se muestra.
-export default function CasosExito() {
-  const items: CasoReel[] = casosVisibles().flatMap((c) => {
+// En /catalogos-y-sistemas va con `servicio="catalogo"` (solo casos de catálogo) y la franja de precio en `pie` (D-103).
+export default function CasosExito({
+  id = "casos",
+  servicio,
+  pie,
+}: {
+  id?: string;
+  servicio?: "pagina" | "catalogo";
+  pie?: ReactNode;
+} = {}) {
+  const items: CasoReel[] = casosVisibles(servicio).flatMap((c) => {
     const p = proyectos.find((x) => x.slug === c.slug);
     if (!p) return [];
     return [
@@ -30,12 +40,12 @@ export default function CasosExito() {
   if (items.length === 0) return null;
 
   return (
-    <section id="casos" aria-labelledby="casos-titulo" className="relative scroll-mt-20 overflow-hidden py-20 sm:py-28">
+    <section id={id} aria-labelledby={`${id}-titulo`} className="relative scroll-mt-20 overflow-hidden py-20 sm:py-28">
       <Glow className="left-[-10%] top-[30%] h-[520px] w-[520px] opacity-60" />
       <Container className="relative">
         <Reveal className="max-w-2xl">
           <Eyebrow>{casosExito.eyebrow}</Eyebrow>
-          <h2 id="casos-titulo" className="mt-3 font-display text-v2-h2 font-bold tracking-heading text-white">
+          <h2 id={`${id}-titulo`} className="mt-3 font-display text-v2-h2 font-bold tracking-heading text-white">
             {casosExito.titulo}
           </h2>
           <p className="mt-3 max-w-xl text-v2-lead text-fog">{casosExito.texto}</p>
@@ -55,6 +65,7 @@ export default function CasosExito() {
             }}
           />
         </Reveal>
+        {pie && <div className="mt-16 sm:mt-20">{pie}</div>}
       </Container>
     </section>
   );

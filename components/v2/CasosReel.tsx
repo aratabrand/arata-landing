@@ -24,7 +24,7 @@ export type CasoReel = {
   testimonio?: Testimonio;
   logo?: string;
   muestra?: boolean;
-  video: { mp4: string; poster: string; audio: boolean };
+  video: { mp4: string; poster: string; audio: boolean; ajuste?: "cover" | "contain" };
   datos: { valor: string; texto: string }[];
 };
 
@@ -57,6 +57,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
   const [near, setNear] = useState(false);
   const [inView, setInView] = useState(false);
   const root = useRef<HTMLDivElement | null>(null);
+  const phone = useRef<HTMLDivElement | null>(null);
   const vids = useRef<(HTMLVideoElement | null)[]>([]);
   const bar = useRef<HTMLSpanElement | null>(null);
   const varios = items.length > 1;
@@ -83,7 +84,8 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
     );
     const vista = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.35 });
     cerca.observe(el);
-    vista.observe(el);
+    // En pantalla = el celular visible (no toda la sección, que en móvil es más alta que la pantalla)
+    vista.observe(phone.current ?? el);
     return () => {
       cerca.disconnect();
       vista.disconnect();
@@ -162,7 +164,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
           {/* Atmósfera: anillos y luz morada detrás del celular */}
           <div aria-hidden className="cx-anillos" />
 
-          <div className="cx-phone">
+          <div ref={phone} className="cx-phone">
             <div className="cx-screen">
               {items.map((c, k) => (
                 <div
@@ -174,7 +176,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
                     ref={(el) => {
                       vids.current[k] = el;
                     }}
-                    className="h-full w-full object-cover"
+                    className={`h-full w-full ${c.video.ajuste === "contain" ? "object-contain" : "object-cover"}`}
                     src={near ? c.video.mp4 : undefined}
                     poster={near ? c.video.poster : undefined}
                     muted
@@ -222,21 +224,19 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
             </div>
           </div>
 
-          {/* Datos reales del proyecto, flotando (cambian con el caso) */}
-          {items.map((c, k) =>
-            c.datos.map((d, j) => (
-              <div
-                key={`${c.slug}-${j}`}
-                aria-hidden
-                className={`cx-dato ${j === 0 ? "cx-dato-a" : "cx-dato-b"} ${k === i ? "is-on" : ""}`}
-              >
-                <div className="cx-dato-in" style={{ animationDelay: `${j * -3}s` } as CSSProperties}>
-                  <span className="font-display text-lg font-bold leading-none text-lime">{d.valor}</span>
-                  <span className="text-[0.7rem] leading-tight text-fog">{d.texto}</span>
-                </div>
+          {/* Datos reales del proyecto, debajo del celular (cambian con el caso) */}
+          <div className="cx-datos" aria-hidden>
+            {items.map((c, k) => (
+              <div key={c.slug} className={`cx-grupo ${k === i ? "is-on" : ""}`}>
+                {c.datos.map((d, j) => (
+                  <div key={j} className="cx-dato-in" style={{ animationDelay: `${j * -3}s` } as CSSProperties}>
+                      <span className="font-display text-lg font-bold leading-none text-lime">{d.valor}</span>
+                      <span className="text-[0.7rem] leading-tight text-fog">{d.texto}</span>
+                  </div>
+                ))}
               </div>
-            ))
-          )}
+            ))}
+          </div>
 
           {activo.muestra && (
             <span className="absolute -top-4 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-ink">

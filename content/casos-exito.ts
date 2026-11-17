@@ -23,6 +23,11 @@ export type CasoExito = {
     poster: string; // WebP, primer cuadro
     /** El video tiene voz o música: muestra el botón de sonido. */
     audio: boolean;
+    /**
+     * "contain" = el video se ve completo (sin recortar los lados) y lo que sobra arriba y abajo
+     * se funde con el fondo #03010B. Úsalo cuando el video no es 9:19,5 y tiene textos cerca de los bordes.
+     */
+    ajuste?: "cover" | "contain";
   };
   titulo: string;
   descripcion: string;
@@ -47,26 +52,13 @@ export const casosExito = {
   enVivo: "Desde la tienda",
   items: [
     {
+      // Video real del cliente (Sergio, 17 nov 2026): explicación animada del catálogo, con voz.
+      // 1080×1920 → 720×1280, 9,8 MB → 2,3 MB. ◻ Testimonio pendiente: sin él, no se muestra ese bloque.
       slug: "caravana",
-      muestra: true,
-      video: { mp4: "/casos/caravana.mp4", poster: "/casos/caravana.webp", audio: true },
+      video: { mp4: "/casos/caravana.mp4", poster: "/casos/caravana.webp", audio: true, ajuste: "contain" },
       titulo: "De la galería de fotos a una tienda con panel.",
       descripcion: "Un catálogo con los productos organizados y un panel para manejar la tienda desde el celular.",
-      testimonio: {
-        texto: "Texto de ejemplo: aquí va lo que dice el cliente sobre su catálogo, con sus palabras.",
-        nombre: "Nombre del cliente",
-        cargo: "Dueño de Caravana",
-        estrellas: 5,
-      },
       logo: "/logos/caravana.svg",
-    },
-    {
-      slug: "arata-print",
-      muestra: true,
-      video: { mp4: "/casos/arata-print.mp4", poster: "/casos/arata-print.webp", audio: false },
-      titulo: "Del chat de WhatsApp a un negocio con datos.",
-      descripcion: "Un catálogo que el dueño maneja desde el celular, con los pedidos en orden y datos de lo que compran sus clientes.",
-      logo: "/logos/arata-print.svg",
     },
   ] as CasoExito[],
 };
@@ -85,7 +77,11 @@ export function datosDelCaso(slug: string): { valor: string; texto: string }[] {
  * Casos que se publican. En producción (Vercel production) se quitan los de muestra;
  * en el preview y en local se ven para revisar la sección.
  */
-export function casosVisibles(): CasoExito[] {
+export function casosVisibles(servicio?: Proyecto["servicio"]): CasoExito[] {
   const produccion = process.env.VERCEL_ENV === "production";
-  return casosExito.items.filter((c) => !(produccion && c.muestra));
+  return casosExito.items.filter((c) => {
+    if (produccion && c.muestra) return false;
+    if (!servicio) return true;
+    return proyectos.find((p) => p.slug === c.slug)?.servicio === servicio;
+  });
 }

@@ -655,7 +655,7 @@
   aspect-ratio: 9 / 19.5;
   overflow: hidden;
   border-radius: calc(var(--w) * 0.135);
-  background: #110c20;
+  background: #03010b; /* igual al fondo de los videos de marca: con object-contain no se notan bordes */
   isolation: isolate; /* recorta bien el video en Safari */
 }
 .cx-isla {
@@ -785,19 +785,18 @@
   pointer-events: none;
 }
 
-/* Datos flotantes: cambian con el caso; flotan suave */
-.cx-dato {
-  position: absolute;
-  z-index: 2;
+/* Datos del caso: en fila debajo del celular (nunca tapan el video ni sus subtítulos); cambian con el caso */
+.cx-datos { position: relative; z-index: 2; display: grid; margin-top: 22px; pointer-events: none; }
+.cx-grupo {
+  grid-area: 1 / 1;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
   opacity: 0;
-  transform: translateY(14px) scale(0.92);
+  transform: translateY(14px) scale(0.94);
   transition: opacity 0.5s, transform 0.6s var(--ease);
-  pointer-events: none;
 }
-.cx-dato.is-on { opacity: 1; transform: none; transition-delay: 0.35s; }
-.cx-dato-a { left: -14px; top: 22%; }
-.cx-dato-b { right: -14px; bottom: 20%; }
-@media (min-width: 1024px) { .cx-dato-a { left: -64px; } .cx-dato-b { right: -56px; } }
+.cx-grupo.is-on { opacity: 1; transform: none; transition-delay: 0.35s; }
 .cx-dato-in {
   display: flex;
   flex-direction: column;
@@ -812,10 +811,7 @@
   box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
   animation: cx-flota 6s ease-in-out infinite alternate;
 }
-@media (max-width: 639.98px) {
-  .cx-dato-in { padding: 8px 11px; max-width: 7.5rem; }
-  .cx-dato-in > span:first-child { font-size: 1rem; }
-}
+
 
 /* Texto del caso: sale hacia donde se va el video y entra escalonado */
 .cx-txt { transition: opacity 0.45s, visibility 0s 0.75s; }
@@ -832,7 +828,7 @@
 @keyframes cx-onda { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .cx-slide, .cx-txt, .cx-txt .cx-i, .cx-dato { transition: opacity 0.2s !important; }
+  .cx-slide, .cx-txt, .cx-txt .cx-i, .cx-grupo { transition: opacity 0.2s !important; }
   .cx-slide.is-arriba, .cx-slide.is-abajo { transform: none; opacity: 0; }
   .cx-dato-in, .cx-ondas.is-on i { animation: none; }
 }
