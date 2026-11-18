@@ -8,12 +8,19 @@
 // - La elección se guarda 12 meses en este navegador (localStorage, no es una cookie);
 //   después se vuelve a preguntar. Se puede cambiar cuando quiera desde el footer.
 // - Si retira el permiso, se avisa a Google (consent mode) y se borran las cookies _ga.
+// - Dos permisos separados (D-132): "medicion" (Google Analytics: cuántas visitas) y "navegacion"
+//   (Microsoft Clarity: mapas de clics y grabaciones, más invasivo). "Aceptar" da los dos; se pueden
+//   elegir uno por uno en Preferencias. Clarity solo existe si hay `site.clarityId`.
+
+import { site } from "@/lib/site";
 
 export const CLAVE = "as-cookies";
+/** Microsoft Clarity está encendido (hay ID de proyecto). Si no, no hay segundo permiso ni se menciona. */
+export const CLARITY_ACTIVO = site.clarityId !== "";
 export const VERSION = 1;
 const VIGENCIA_MS = 365 * 24 * 60 * 60 * 1000;
 
-export type Consentimiento = { v: number; medicion: boolean; fecha: string };
+export type Consentimiento = { v: number; medicion: boolean; navegacion?: boolean; fecha: string };
 
 export const EVENTO_CAMBIO = "as:consentimiento";
 export const EVENTO_ABRIR = "as:abrir-cookies";
@@ -31,10 +38,27 @@ export function leerConsentimiento(): Consentimiento | null {
   }
 }
 
-type Ventana = Window & { gtag?: (...a: unknown[]) => void };
+/**
+ * ¿Hay que mostrar el aviso? Sí si nunca eligió, o si eligió antes de que existiera Clarity
+ * (permiso nuevo = autorización nueva: Ley 1581, finalidad distinta).
+ */
+export function necesitaPreguntar(c: Consentimiento | null) {
+  return !c || (CLARITY_ACTIVO && c.navegacion === undefined);
+}
 
-export function guardarConsentimiento(medicion: boolean) {
-  const c: Consentimiento = { v: VERSION, medicion, fecha: new Date().toISOString() };
+type Ventana = Window & {
+  gtag?: (...a: unknown[]) => void;
+  clarity?: (...a: unknown[]) => void;
+  __clarityCargado?: boolean;
+};
+
+export function guardarConsentimiento(medicion: boolean, navegacion = false) {
+  const c: Consentimiento = {
+    v: VERSION,
+    medicion,
+    ...(CLARITY_ACTIVO ? { navegacion } : {}),
+    fecha: new Date().toISOString(),
+  };
   try {
     window.localStorage.setItem(CLAVE, JSON.stringify(c));
   } catch {
@@ -44,15 +68,35 @@ export function guardarConsentimiento(medicion: boolean) {
   w.gtag?.("consent", "update", { analytics_storage: medicion ? "granted" : "denied" });
   if (!medicion) borrarCookiesDeMedicion();
   window.dispatchEvent(new CustomEvent(EVENTO_CAMBIO, { detail: c }));
+  // Retirar el permiso de Clarity: avisarle, borrar sus cookies y recargar para que su script
+  // deje de correr (no hay una forma limpia de "pararlo" sin recargar).
+  if (CLARITY_ACTIVO && !navegacion && w.__clarityCargado) {
+    try {
+      w.clarity?.("consentv2", { ad_Storage: "denied", analytics_Storage: "denied" });
+      w.clarity?.("consent", false);
+    } catch {}
+    borrarCookies(NOMBRES_CLARITY);
+    window.location.reload();
+  }
   return c;
 }
 
-/** Borra _ga y _ga_* en el dominio actual y en el dominio padre (.aratasan.com). */
+const esGoogle = (n: string) => n === "_ga" || n.startsWith("_ga_") || n === "_gid" || n === "_gat";
+/** Cookies de Clarity. _clck y _clsk son de este sitio; CLID, MUID y ANONID las pone Microsoft en su dominio
+ *  (no se pueden borrar desde aquí; la persona las borra desde su navegador). */
+const NOMBRES_CLARITY = ["_clck", "_clsk", "CLID", "ANONID", "MUID", "SM"];
+
 function borrarCookiesDeMedicion() {
+  borrarCookies((n) => esGoogle(n));
+}
+
+/** Borra cookies del dominio actual y del dominio padre (.aratasan.com). */
+function borrarCookies(filtro: string[] | ((n: string) => boolean)) {
+  const coincide = Array.isArray(filtro) ? (n: string) => filtro.includes(n) : filtro;
   const nombres = document.cookie
     .split(";")
     .map((p) => p.split("=")[0].trim())
-    .filter((n) => n === "_ga" || n.startsWith("_ga_") || n === "_gid" || n === "_gat");
+    .filter(coincide);
   const host = window.location.hostname;
   const partes = host.split(".");
   const dominios = ["", host, partes.length > 2 ? `.${partes.slice(-2).join(".")}` : `.${host}`];

@@ -891,6 +891,18 @@ Texto en `content/cookies.ts`.
 | Pie | Si no aceptas la medición, la página funciona igual. |
 | Footer | Preferencias de cookies |
 
+### Con Microsoft Clarity encendido (D-132) ◻ por aprobar
+
+Solo aparece cuando hay ID de Clarity (`lib/clarity.mjs`). Textos en `content/cookies.ts`, `content/privacidad.ts` y `content/agendar.ts`.
+
+| Dónde | Texto ◻ |
+|---|---|
+| Aviso (reemplaza el texto corto) | Usamos cookies de Google Analytics para contar las visitas y de Microsoft Clarity para ver por dónde se mueve la gente en la página. Solo se activan si aceptas, y puedes cambiar de opinión cuando quieras. |
+| Preferencias · nuevo permiso | **Cómo navegas (Microsoft Clarity).** Nos muestra dónde hace clic y hasta dónde baja la gente, y guarda una grabación de la visita (se ve el mouse y el desplazamiento, sin sonido). Lo que escribes en los formularios se oculta y no se graba. Los datos los guarda Microsoft, en Estados Unidos. |
+| Pie de preferencias | Si no aceptas, la página funciona igual. |
+| Casilla de /agendar | Autorizo a Arata San a usar mis datos para atender mi solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (**Cal.com, Google y Microsoft**), que pueden estar fuera de Colombia, según la Política de tratamiento de datos. |
+| Política §4 y §5 | Nombra a Microsoft (Clarity), explica qué graba, qué se oculta, qué cookies guarda (`_clck`, `_clsk`, CLID, MUID) y cómo retirarlo. Ver `content/privacidad.ts`. |
+
 ## `/agendar` · mensajes de seguridad (D-131) ◻ por aprobar
 
 | Cuándo | Texto ◻ |

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { site } from "@/lib/site";
 import { GtmInit, GtmScript } from "@/components/GoogleTagManager";
 import CookieBanner from "@/components/CookieBanner";
+import ClarityLoader from "@/components/ClarityLoader";
 import { V2_PUBLICADO } from "@/lib/lanzamiento";
 import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
@@ -136,6 +137,8 @@ export default function RootLayout({
         {conMedicion && <GtmScript />}
         {/* D-130: aviso de cookies; sin "Aceptar", Google Analytics no carga */}
         {conMedicion && <CookieBanner />}
+        {/* D-132: Microsoft Clarity, solo con el permiso "Cómo navegas" y solo si hay NEXT_PUBLIC_CLARITY_ID */}
+        {conMedicion && <ClarityLoader />}
       </body>
     </html>
   );

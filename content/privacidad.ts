@@ -4,6 +4,9 @@
 // Sergio, no la exige el art. 13) ni se guarda en el código. Negocio digital sin oficina:
 // domicilio Bogotá + correo y teléfono como canales. Recomendado: revisión de un abogado.
 
+import { CLARITY_ACTIVO } from "@/lib/consentimiento";
+import { CLARITY_DESDE } from "@/lib/clarity.mjs";
+
 export const responsable = {
   nombre: "Sergio David Cuevas",
   tipo: "Persona natural",
@@ -15,7 +18,8 @@ export const responsable = {
   telefono: "+57 313 401 1189 (WhatsApp)",
   correo: "contacto@aratasan.com",
   vigencia: "noviembre de 2026",
-  actualizacion: "17 de noviembre de 2026",
+  // D-132: si Clarity está encendido, la fecha es la de su encendido (lib/clarity.mjs).
+  actualizacion: CLARITY_ACTIVO && CLARITY_DESDE ? CLARITY_DESDE : "17 de noviembre de 2026",
 };
 
 // D-099: ajustes de la revisión (autorización expresa, envío fuera de Colombia, dirección
@@ -57,7 +61,7 @@ export const privacidad = {
     {
       titulo: "4. Quién más los ve y envío fuera de Colombia",
       parrafos: [
-        "Para agendar usamos Cal.com, y para medir el sitio usamos Google (Tag Manager y Analytics). Estos proveedores guardan los datos por nosotros, solo para prestarnos ese servicio, y pueden tener sus servidores fuera de Colombia, por ejemplo en Estados Unidos.",
+        `Para agendar usamos Cal.com, y para medir el sitio usamos Google (Tag Manager y Analytics)${CLARITY_ACTIVO ? " y Microsoft (Clarity)" : ""}. Estos proveedores guardan los datos por nosotros, solo para prestarnos ese servicio, y pueden tener sus servidores fuera de Colombia, por ejemplo en Estados Unidos.`,
         "Al marcar la casilla de autorización aceptas de forma expresa que tus datos se envíen a esos proveedores fuera de Colombia, solo para esas finalidades (Ley 1581 de 2012, art. 26). Les pedimos el mismo cuidado que exige la ley colombiana.",
       ],
     },
@@ -65,10 +69,19 @@ export const privacidad = {
       id: "cookies",
       titulo: "5. Cookies y medición del sitio",
       parrafos: [
-        "Usamos Google Analytics, a través de Google Tag Manager, para contar visitas y ver cómo se usa el sitio. Solo se activa si lo aceptas en el aviso de cookies que aparece la primera vez que entras. Si lo rechazas o no respondes, no se carga.",
+        CLARITY_ACTIVO
+          ? "Usamos dos herramientas para entender cómo se usa el sitio: Google Analytics, a través de Google Tag Manager, que cuenta las visitas, y Microsoft Clarity, que nos muestra por dónde se mueve la gente en cada página. Cada una se activa solo si la aceptas, por separado, en el aviso de cookies que aparece la primera vez que entras. Si las rechazas o no respondes, no se cargan."
+          : "Usamos Google Analytics, a través de Google Tag Manager, para contar visitas y ver cómo se usa el sitio. Solo se activa si lo aceptas en el aviso de cookies que aparece la primera vez que entras. Si lo rechazas o no respondes, no se carga.",
         "Google Analytics guarda cookies en tu navegador (por ejemplo, _ga) con un número al azar, no con tu nombre ni tu correo. Los datos los procesa Google en Estados Unidos y las cookies duran hasta 2 años, salvo que las borres.",
+        ...(CLARITY_ACTIVO
+          ? [
+              "Microsoft Clarity nos muestra mapas de calor (dónde hace clic y hasta dónde baja la gente) y grabaciones de la visita: se ve cómo se mueve el mouse, los clics y el desplazamiento por la página, sin sonido ni imagen tuya. Lo que escribes en los formularios (nombre, WhatsApp, correo y la dirección de tu página) se oculta y no se graba. Clarity guarda cookies de este sitio (_clck y _clsk) y otras de Microsoft (por ejemplo, CLID y MUID), con un código al azar, no con tu nombre ni tu correo. Algunas duran un día y otras hasta un año. Microsoft procesa los datos en Estados Unidos y los conserva por un tiempo limitado.",
+            ]
+          : []),
         "Hay cookies y datos del navegador necesarios, que no piden permiso porque sin ellos la página no funciona como pediste: tu elección de cookies (se guarda 12 meses; después te volvemos a preguntar), una marca mientras tienes la pestaña abierta para no repetir la animación de entrada y, si agendas, las que usa el calendario de Cal.com para reservar tu cita. No se usan para publicidad.",
-        "Puedes cambiar tu elección cuando quieras en «Preferencias de cookies», al final de cada página. Si retiras el permiso, dejamos de medir y borramos las cookies de Google Analytics de este sitio. También puedes borrarlas o bloquearlas desde tu navegador. El sitio funciona igual.",
+        CLARITY_ACTIVO
+          ? "Puedes cambiar tu elección cuando quieras en «Preferencias de cookies», al final de cada página. Si retiras el permiso, dejamos de medir y borramos las cookies de Google Analytics y de Clarity de este sitio (al retirar el de Clarity, la página se recarga sola). Las que Microsoft guarda en su propio dominio, como CLID y MUID, las puedes borrar desde la configuración de tu navegador. El sitio funciona igual."
+          : "Puedes cambiar tu elección cuando quieras en «Preferencias de cookies», al final de cada página. Si retiras el permiso, dejamos de medir y borramos las cookies de Google Analytics de este sitio. También puedes borrarlas o bloquearlas desde tu navegador. El sitio funciona igual.",
       ],
     },
     {

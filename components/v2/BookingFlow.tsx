@@ -204,7 +204,7 @@ export default function BookingFlow() {
               }}
             />
             {auditoria && (
-              <div className="mt-6">
+              <div className="mt-6" data-clarity-mask="True">
                 <Campo
                   id="campo-url"
                   label={c.pasos.url.pregunta}
@@ -258,7 +258,9 @@ export default function BookingFlow() {
 
         {paso === "datos" && (
           <Pregunta titulo={c.pasos.datos.pregunta} tituloRef={tituloRef}>
+            {/* D-132: data-clarity-mask = Microsoft Clarity no graba lo que se escribe aquí */}
             <form
+              data-clarity-mask="True"
               noValidate
               onSubmit={(e) => {
                 e.preventDefault();
