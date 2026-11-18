@@ -5,13 +5,17 @@ import Link from "next/link";
 import { Cookie, X } from "lucide-react";
 import { cookies as t } from "@/content/cookies";
 import {
+  CLARITY_ACTIVO,
   EVENTO_ABRIR,
   guardarConsentimiento,
   leerConsentimiento,
+  necesitaPreguntar,
 } from "@/lib/consentimiento";
 import { cn } from "@/lib/utils";
 
 // Aviso de cookies (D-130). Aparece si la persona no ha elegido (o su elección venció a los 12 meses).
+// Con Microsoft Clarity encendido (D-132) hay un segundo permiso, aparte del de Google Analytics, y quien
+// eligió antes de que existiera Clarity vuelve a ver el aviso.
 // - Aceptar, Rechazar y Preferencias con el mismo peso visual que importa: rechazar es un solo toque.
 // - Preferencias: <dialog> nativo (atrapa el foco, cierra con Escape, devuelve el foco).
 // - No tapa la página: tarjeta fija abajo; no bloquea el scroll ni el uso del sitio.
@@ -20,29 +24,34 @@ import { cn } from "@/lib/utils";
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
   const [medicion, setMedicion] = useState(false);
+  const [navegacion, setNavegacion] = useState(false);
   const [retraso, setRetraso] = useState(1.9);
   const dialogo = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
     const c = leerConsentimiento();
     setMedicion(c?.medicion ?? false);
+    setNavegacion(c?.navegacion ?? false);
     // Si ya vio la animación de entrada en esta visita, el aviso sale enseguida
     try {
       if (window.sessionStorage.getItem("as-cargado")) setRetraso(0.4);
     } catch {}
-    if (!c) setVisible(true);
+    if (necesitaPreguntar(c)) setVisible(true);
 
     const abrir = () => {
-      setMedicion(leerConsentimiento()?.medicion ?? false);
+      const c = leerConsentimiento();
+      setMedicion(c?.medicion ?? false);
+      setNavegacion(c?.navegacion ?? false);
       dialogo.current?.showModal();
     };
     window.addEventListener(EVENTO_ABRIR, abrir);
     return () => window.removeEventListener(EVENTO_ABRIR, abrir);
   }, []);
 
-  const decidir = useCallback((acepta: boolean) => {
-    guardarConsentimiento(acepta);
-    setMedicion(acepta);
+  const decidir = useCallback((medicionElegida: boolean, navegacionElegida: boolean) => {
+    guardarConsentimiento(medicionElegida, navegacionElegida);
+    setMedicion(medicionElegida);
+    setNavegacion(navegacionElegida);
     setVisible(false);
     dialogo.current?.close();
   }, []);
@@ -64,14 +73,14 @@ export default function CookieBanner() {
                 <h2 id="cookies-titulo" className="font-display text-base font-bold text-white">
                   {t.titulo}
                 </h2>
-                <p className="mt-1.5 text-[0.82rem] leading-relaxed text-fog">{t.texto}</p>
+                <p className="mt-1.5 text-[0.82rem] leading-relaxed text-fog">{CLARITY_ACTIVO ? t.textoConClarity : t.texto}</p>
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => decidir(true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+              <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
                 {t.aceptar}
               </button>
-              <button type="button" onClick={() => decidir(false)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
+              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
                 {t.rechazar}
               </button>
               <div className="col-span-2 flex items-center justify-center gap-4 text-sm">
@@ -125,45 +134,22 @@ export default function CookieBanner() {
               </div>
               <p className="mt-2 text-sm leading-relaxed text-fog">{t.necesarias.texto}</p>
             </li>
-            <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
-              <div className="flex items-center justify-between gap-4">
-                <h3 id="cookies-medicion" className="font-semibold">
-                  {t.medicion.titulo}
-                </h3>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={medicion}
-                  aria-labelledby="cookies-medicion"
-                  onClick={() => setMedicion((m) => !m)}
-                  className={cn(
-                    "relative h-7 w-12 shrink-0 rounded-full border transition-colors",
-                    medicion ? "border-lime bg-lime" : "border-white/20 bg-surface-3"
-                  )}
-                >
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "absolute left-0.5 top-0.5 h-5 w-5 rounded-full transition-transform duration-200",
-                      medicion ? "translate-x-5 bg-ink" : "translate-x-0 bg-white"
-                    )}
-                  />
-                </button>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-fog">{t.medicion.texto}</p>
-            </li>
+            <Opcion id="cookies-medicion" titulo={t.medicion.titulo} texto={t.medicion.texto} activo={medicion} onCambiar={() => setMedicion((m) => !m)} />
+            {CLARITY_ACTIVO && (
+              <Opcion id="cookies-navegacion" titulo={t.navegacion.titulo} texto={t.navegacion.texto} activo={navegacion} onCambiar={() => setNavegacion((n) => !n)} />
+            )}
           </ul>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button type="button" onClick={() => decidir(medicion)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
+            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
               {t.guardar}
             </button>
-            <button type="button" onClick={() => decidir(true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+            <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
               {t.aceptarTodas}
             </button>
           </div>
           <p className="mt-4 text-xs leading-relaxed text-fog-dim">
-            {t.pie}{" "}
+            {CLARITY_ACTIVO ? t.pieConClarity : t.pie}{" "}
             <Link href="/privacidad#cookies" className="underline underline-offset-4 hover:text-white">
               {t.enlace}
             </Link>
@@ -181,5 +167,32 @@ export function AbrirPreferenciasCookies({ className, children }: { className?: 
     <button type="button" className={className} onClick={() => window.dispatchEvent(new Event(EVENTO_ABRIR))}>
       {children}
     </button>
+  );
+}
+
+/** Un permiso con su interruptor (apagado por defecto; la ley exige que no vengan marcados). */
+function Opcion({ id, titulo, texto, activo, onCambiar }: { id: string; titulo: string; texto: string; activo: boolean; onCambiar: () => void }) {
+  return (
+    <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
+      <div className="flex items-center justify-between gap-4">
+        <h3 id={id} className="font-semibold">
+          {titulo}
+        </h3>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={activo}
+          aria-labelledby={id}
+          onClick={onCambiar}
+          className={cn("relative h-7 w-12 shrink-0 rounded-full border transition-colors", activo ? "border-lime bg-lime" : "border-white/20 bg-surface-3")}
+        >
+          <span
+            aria-hidden
+            className={cn("absolute left-0.5 top-0.5 h-5 w-5 rounded-full transition-transform duration-200", activo ? "translate-x-5 bg-ink" : "translate-x-0 bg-white")}
+          />
+        </button>
+      </div>
+      <p className="mt-2 text-sm leading-relaxed text-fog">{texto}</p>
+    </li>
   );
 }

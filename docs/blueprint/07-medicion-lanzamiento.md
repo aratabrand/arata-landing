@@ -84,6 +84,17 @@ Quitar la cuenta vieja **solo después** de entrar con la nueva y comprobar que 
 
 **Consentimiento (D-130):** desde el 17 nov 2026, GA4 **solo carga si la persona acepta** en el aviso de cookies (Ley 1581). Quien rechaza o no responde no se mide. Por eso, desde esa fecha, **las visitas en GA4 bajan** frente a antes (normalmente se mide entre el 40 % y el 70 % de las visitas): no es que lleguen menos personas. Para comparar meses, usar Search Console (no depende de cookies) y las reuniones de Cal.com.
 
+**Microsoft Clarity (D-132): cómo encenderlo.** El código ya está en el sitio y apagado; falta el proyecto.
+
+1. Entra a **clarity.microsoft.com** con la cuenta de Google que ya administra Analytics y Search Console, y crea un proyecto: nombre "Arata San", sitio `https://www.aratasan.com`.
+2. En **Settings → Overview** copia el **Project ID** (unas 10 letras y números).
+3. En **Settings → Team** invita a Andrés y a Santiago. En la configuración de **Masking** deja el modo **Balanced** o **Strict**, y bloquea las IP del equipo (opción de bloqueo de IP) para no grabar nuestras propias visitas.
+4. Pásale el ID a Claude: pone el ID y la fecha de hoy en `lib/clarity.mjs`. Con ese cambio salen juntos el permiso nuevo en el aviso de cookies, la política y la casilla de `/agendar`.
+5. **Verificar (5 min):** abre el sitio, acepta en el aviso, entra a `/agendar` y escribe datos de prueba. En Clarity (las grabaciones tardan unos minutos en aparecer) confirma que **nombre, WhatsApp y correo salen ocultos**. Con la consola del navegador abierta, confirma que no hay errores de seguridad (CSP) al aceptar.
+6. **Confirmar con Microsoft:** cuánto duran sus cookies y cuánto tiempo guarda las grabaciones (en la configuración del proyecto y en learn.microsoft.com/clarity/cookie-list). Si no coincide con lo que dice la política (§5), se ajusta el texto.
+
+**Qué mirar en Clarity:** *Heatmaps → Scroll* del Inicio (hasta dónde baja la gente y dónde se pierde), *Heatmaps → Click* de `/agendar` y de las páginas de servicio (qué botones tocan y cuáles no), *Recordings* filtrando por `/agendar` (dónde se detiene la gente) y los avisos de **clics sin respuesta** y **clics repetidos** (algo no funciona como la gente espera). Con pocas visitas (hoy ~26 por semana) solo sirve para ver casos concretos, no para sacar porcentajes.
+
 **Rendimiento (D-098):** el contenedor de GA4 pesa unos 178 KB. Cargado al abrir la página, el Inicio publicado bajó a 77–82 en celular. Ahora se carga **al primer toque, scroll, movimiento del mouse o tecla**, de inmediato si hay un evento de conversión, o a los 7 s. Así la velocidad vuelve a 90+ y no se pierde ningún evento. Costo: quien se va en menos de 7 s sin tocar nada no queda registrado.
 
 ---

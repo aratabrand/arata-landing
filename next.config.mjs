@@ -5,6 +5,8 @@
 // (hidratación, next/font, estilos inline de framer-motion).
 // En desarrollo, Next necesita 'unsafe-eval' (Hot Reload) y ws: (HMR socket);
 // en producción se usa la versión estricta.
+import { CLARITY_ID } from "./lib/clarity.mjs";
+
 const isDev = process.env.NODE_ENV === "development";
 
 // Google Tag Manager carga desde googletagmanager.com; los tags que se
@@ -15,14 +17,19 @@ const isDev = process.env.NODE_ENV === "development";
 // pinta el calendario en un iframe de app.cal.com / cal.com. Solo se pide al
 // llegar al último paso del formulario.
 const cal = "https://app.cal.com https://cal.com";
+// Microsoft Clarity (D-132): el script sale de www.clarity.ms y scripts.clarity.ms, manda los datos a
+// *.clarity.ms y usa c.bing.com para su cookie. Solo se permite si el sitio tiene un ID de Clarity.
+const clarity = CLARITY_ID
+  ? { script: " https://www.clarity.ms https://scripts.clarity.ms", conexion: " https://*.clarity.ms https://c.bing.com", img: " https://*.clarity.ms https://c.bing.com" }
+  : { script: "", conexion: "", img: "" };
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://app.cal.com${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://app.cal.com${clarity.script}${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com https://www.google.com",
+  `img-src 'self' data: blob: https://www.googletagmanager.com https://*.google-analytics.com https://*.googletagmanager.com https://www.google.com${clarity.img}`,
   "font-src 'self' data:",
   // GA4 manda cada evento a *.google-analytics.com y una copia a www.google.com/g/collect (D-096).
-  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com ${cal}${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com${clarity.conexion} ${cal}${isDev ? " ws:" : ""}`,
   `frame-src https://www.googletagmanager.com ${cal}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
