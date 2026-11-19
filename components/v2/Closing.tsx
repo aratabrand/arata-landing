@@ -2,14 +2,14 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
-import { Container, Glow } from "./primitives";
+import { Container, DosTonos } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import { AbrirPreferenciasCookies } from "@/components/CookieBanner";
 import { cookies } from "@/content/cookies";
 import { AGENDAR, ctaFinal, faq, footer } from "@/content/inicio";
 import { proyectos } from "@/content/proyectos";
 
-// Cierre del Inicio: FAQ en dos columnas (captura 02), CTA en tarjeta grande con collage (captura 04) y footer.
+// Cierre del Inicio: FAQ en dos columnas (captura 02), CTA en tarjeta blanca con dos trabajos (D-138) y footer.
 
 type Pregunta = { p: string; r: string };
 
@@ -24,7 +24,7 @@ export function FaqSection({
       <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <h2 id="faq" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {titulo}
+            <DosTonos texto={titulo} />
           </h2>
           {subtitulo && <p className="mt-4 max-w-sm text-fog">{subtitulo}</p>}
         </div>
@@ -46,39 +46,43 @@ export function FaqSection({
 
 type Cta = { titulo: string; texto: string; boton: string; nota?: string; href?: string };
 
-/** CTA final: tarjeta grande con collage de los trabajos tintado de morado (captura 04). */
+/**
+ * CTA final (D-138): tarjeta BLANCA grande con texto ink (20:1), alineada a la izquierda, y dos
+ * trabajos reales enmarcados a la derecha (solo en pantallas grandes). Botón negro con círculo lima.
+ */
 export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.ReactNode } = {}) {
+  const muestra = proyectos.slice(0, 2);
   return (
     <section aria-labelledby="cta-final" className="pb-24 pt-8 sm:pb-32">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[28px] border border-white/8 bg-surface-1 px-6 py-20 text-center sm:py-28">
-          {/* Collage de trabajos al fondo */}
-          <div aria-hidden className="absolute inset-0 -z-10 grid grid-cols-2 gap-3 p-3 opacity-45 sm:grid-cols-4">
-            {proyectos.map((p, i) => (
+        <div className="relative isolate grid overflow-hidden rounded-[32px] bg-paper text-ink lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="px-7 py-14 sm:px-12 sm:py-16 lg:py-20">
+            {antes}
+            <h2 id="cta-final" className="max-w-xl font-display text-v2-h2 font-bold tracking-heading text-ink">
+              <DosTonos texto={cta.titulo} tono="text-ink/45" />
+            </h2>
+            <p className="mt-5 max-w-lg text-v2-lead text-ink/70">{cta.texto}</p>
+            <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <Button href={cta.href ?? AGENDAR} variant="ink" size="lg" arrow>
+                {cta.boton}
+              </Button>
+              {cta.nota && <p className="text-sm text-ink/60">{cta.nota}</p>}
+            </div>
+          </div>
+          {/* Dos trabajos reales, enmarcados y algo girados (decorativo) */}
+          <div aria-hidden className="relative hidden lg:block">
+            {muestra.map((p, i) => (
               <div
                 key={p.slug}
-                className="v2-frame h-full"
-                style={{ transform: `translateY(${i % 2 === 0 ? "-8%" : "10%"}) rotate(${i % 2 === 0 ? -3 : 3}deg)` }}
+                className="absolute w-[78%] overflow-hidden rounded-[18px] border border-ink/10 bg-ink shadow-[0_30px_60px_-30px_rgba(3,1,11,0.45)]"
+                style={i === 0 ? { right: "-6%", top: "12%", transform: "rotate(-4deg)" } : { right: "18%", bottom: "-10%", transform: "rotate(3deg)" }}
               >
-                <ProjectPreview proyecto={p} captura={i % 2} sizes="(min-width: 640px) 300px, 50vw" />
+                <div className="aspect-[16/10]">
+                  <ProjectPreview proyecto={p} captura={0} sizes="420px" />
+                </div>
               </div>
             ))}
           </div>
-          {/* Tinte morado plano sobre el collage + luz */}
-          <div aria-hidden className="absolute inset-0 -z-10 bg-[#140A3A]/75" />
-          <Glow className="left-1/2 top-1/2 -z-10 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2" />
-
-          {antes}
-          <h2 id="cta-final" className="mx-auto max-w-3xl font-display text-v2-h2 font-bold tracking-heading text-white">
-            {cta.titulo}
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-v2-lead text-fog">{cta.texto}</p>
-          <div className="mt-9 flex justify-center">
-            <Button href={cta.href ?? AGENDAR} size="lg" arrow>
-              {cta.boton}
-            </Button>
-          </div>
-          {cta.nota && <p className="mt-4 text-sm text-fog-dim">{cta.nota}</p>}
         </div>
       </Container>
     </section>

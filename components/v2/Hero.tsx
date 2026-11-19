@@ -1,7 +1,7 @@
 import CountUp from "@/components/CountUp";
 import { TiltedGridHero } from "@/components/ui/tilted-grid-hero";
 import { Button } from "./Button";
-import { Badge, Container, Glow } from "./primitives";
+import { Badge, Container } from "./primitives";
 import { hero } from "@/content/inicio";
 import { esExterno, textosBase, type TextosSitio } from "@/lib/sitio-textos";
 import { capturasIntercaladas } from "@/content/proyectos";
@@ -13,7 +13,6 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
   const imagenes = capturasIntercaladas();
   return (
     <section className="relative overflow-hidden pt-28 sm:pt-32">
-      <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
       <div
         aria-hidden
         className="v2-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
@@ -44,7 +43,6 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
 
       {/* Banda curva con capturas reales del portafolio */}
       <div className="relative mt-8 sm:mt-10">
-        <Glow className="left-1/2 top-1/2 h-[26rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 opacity-70" />
         {/* Celular y escritorio con proporción fija → la curva se pinta correcta desde el servidor (D-064).
             Las capturas se pintan como fondo de cada franja: el <h1> sigue siendo el LCP. */}
         <TiltedGridHero

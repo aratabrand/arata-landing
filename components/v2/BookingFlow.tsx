@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Check, MessageCircle } from "lucide-react";
+import { ArrowLeft, Check, MessageCircle } from "lucide-react";
 import { agendar as c, calLinks, type TipoAgenda } from "@/content/agendar";
 import { site } from "@/lib/site";
 import { medir } from "@/lib/medir";
 import { cn } from "@/lib/utils";
+import { circuloBoton, clasesBoton, FlechaBoton } from "./Button";
 import {
   LIMITES,
   TIEMPO_MINIMO_MS,
@@ -364,10 +365,10 @@ export default function BookingFlow() {
               )}
               <button
                 type="submit"
-                className="v2-shine group mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-btn bg-lime px-6 text-[0.95rem] font-semibold text-ink transition-colors hover:bg-[#C6FF33]"
+                className={cn("group mt-2 w-full gap-3", clasesBoton({ size: "lg", arrow: true }))}
               >
                 {c.botones.elegirHora}
-                <ArrowRight aria-hidden className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <FlechaBoton className={cn(circuloBoton.primary, "h-9 w-9")} />
               </button>
             </form>
           </Pregunta>
@@ -516,10 +517,10 @@ function Siguiente({ onClick, children }: { onClick: () => void; children: React
     <button
       type="button"
       onClick={onClick}
-      className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-btn border border-white/10 bg-surface-2 px-6 text-[0.95rem] font-semibold text-white transition-colors hover:border-white/16 hover:bg-surface-3 sm:w-auto"
+      className={cn("group mt-6 w-full gap-3 sm:w-auto", clasesBoton({ variant: "secondary", size: "lg", arrow: true }))}
     >
       {children}
-      <ArrowRight aria-hidden className="h-4 w-4" />
+      <FlechaBoton className={cn(circuloBoton.secondary, "h-9 w-9")} />
     </button>
   );
 }
@@ -611,7 +612,7 @@ function Calendario({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track("agendar_whatsapp", {})}
-          className="v2-shine mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-btn bg-lime px-6 text-[0.95rem] font-semibold text-ink sm:w-auto"
+          className={cn("mt-5 w-full sm:w-auto", clasesBoton({ size: "lg" }))}
         >
           <MessageCircle aria-hidden className="h-4 w-4" />
           {c.calendario.botonWhatsapp}
@@ -631,7 +632,7 @@ function Calendario({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => track("agendar_whatsapp", { motivo: "calendario_lento" })}
-              className="inline-flex h-11 items-center gap-2 rounded-btn border border-white/10 bg-surface-2 px-5 text-sm font-semibold text-white hover:bg-surface-3"
+              className={clasesBoton({ variant: "secondary" })}
             >
               <MessageCircle aria-hidden className="h-4 w-4" />
               {c.calendario.botonWhatsapp}

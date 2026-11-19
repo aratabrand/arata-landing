@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { BarChart3, FileText, Hourglass, Images, MessageSquareWarning, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
-import { Container, SectionHeader } from "./primitives";
+import { Container, DosTonos, SectionHeader } from "./primitives";
 import ScrollPaint from "./ScrollPaint";
 import ServicesBento from "./ServicesBento";
 import { pasos, problema, prueba, servicios } from "@/content/inicio";
@@ -83,7 +83,7 @@ export function ProblemSection({
       <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <Reveal>
           <h2 id={id} className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {titulo}
+            <DosTonos texto={titulo} />
           </h2>
           {cierre && <p className="mt-4 max-w-md text-v2-lead text-fog">{cierre}</p>}
         </Reveal>
@@ -163,14 +163,14 @@ export function StepsSection({
           <span aria-hidden className="absolute left-[1.125rem] top-[1.125rem] hidden h-px bg-white/10 lg:block" style={{ width: largo }} />
           <span
             aria-hidden
-            className="absolute left-[1.125rem] top-[1.125rem] hidden h-[2px] origin-left bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:block"
+            className="absolute left-[1.125rem] top-[1.125rem] hidden h-[2px] origin-left bg-lime lg:block"
             style={{ width: largo, transform: "scaleX(var(--p))" }}
           />
           {/* Línea vertical (celular) */}
           <span aria-hidden className="absolute bottom-6 left-[1.125rem] top-4 w-px bg-white/10 lg:hidden" />
           <span
             aria-hidden
-            className="absolute bottom-6 left-[1.125rem] top-4 w-[2px] origin-top bg-lime shadow-[0_0_12px_rgba(182,255,0,0.6)] lg:hidden"
+            className="absolute bottom-6 left-[1.125rem] top-4 w-[2px] origin-top bg-lime lg:hidden"
             style={{ transform: "scaleY(var(--p))" }}
           />
 
@@ -181,7 +181,7 @@ export function StepsSection({
                 {/* versión encendida: círculo lima con número ink */}
                 <span
                   aria-hidden
-                  className="absolute inset-[-1px] flex items-center justify-center rounded-full bg-lime text-ink shadow-[0_0_18px_rgba(182,255,0,0.55)]"
+                  className="absolute inset-[-1px] flex items-center justify-center rounded-full bg-lime text-ink"
                   style={{ opacity: encendido(i) }}
                 >
                   {p.marca ?? i + 1}
