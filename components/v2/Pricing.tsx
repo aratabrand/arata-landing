@@ -8,7 +8,7 @@ import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
-// la tarjeta recomendada lleva el filo morado (.v2-destacada, D-139), badge y el único botón principal (morado, D-140).
+// la tarjeta recomendada lleva el filo morado (.v2-destacada, D-141), badge y el único botón principal (morado, D-142).
 // La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {

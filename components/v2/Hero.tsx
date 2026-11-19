@@ -10,7 +10,7 @@ import { capturasIntercaladas } from "@/content/proyectos";
 // Hero v2 (copy D-038). Debajo del texto, una banda curva con las capturas
 // reales de los proyectos pasando (TiltedGridHero, D-064).
 // Rendimiento: el <h1> NO se anima (es el LCP); las capturas bajan con prioridad baja.
-// Cuadrito de ícono de cada cifra (estilo del panel, D-139), en el orden de hero.pruebas
+// Cuadrito de ícono de cada cifra (estilo del panel, D-141), en el orden de hero.pruebas
 const ICONOS_PRUEBAS = [CalendarDays, Gauge, Store];
 
 export default function Hero({ textos = textosBase.portada }: { textos?: TextosSitio["portada"] }) {

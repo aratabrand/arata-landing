@@ -77,7 +77,7 @@
    ────────────────────────────────────────────────────────────────────── */
 @layer components {
   /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
-  /* D-139: misma tarjeta por capas del panel (D-136): un velo blanco muy suave arriba,
+  /* D-141: misma tarjeta por capas del panel (D-136): un velo blanco muy suave arriba,
      borde fino y un filo de luz arriba. Se separa del fondo sin luces de color. */
   .v2-card {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #0f0c19;
@@ -94,7 +94,7 @@
     box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.35);
   }
 
-  /* Botón principal = .pn-primario del panel (D-140): morado de marca, texto blanco (4,6:1) */
+  /* Botón principal = .pn-primario del panel (D-142): morado de marca, texto blanco (4,6:1) */
   .v2-primario {
     background: linear-gradient(180deg, #7d53ff, #6d45f0);
     color: #fff;
@@ -256,7 +256,7 @@
 /* Tarjetas glass de garantía, pago y mantenimiento (D-068).
    Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
 .v2-glass {
-  /* D-139: estilo del panel (D-136): sin vidrio ni luz de color en la esquina; filo morado arriba */
+  /* D-141: estilo del panel (D-136): sin vidrio ni luz de color en la esquina; filo morado arriba */
   position: relative;
   isolation: isolate;
   overflow: hidden;

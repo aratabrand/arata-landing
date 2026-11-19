@@ -63,7 +63,7 @@ La referencia usa **luces radiales grandes y borrosas** detrás de las secciones
 - Máximo 1–2 luces por pantalla.
 - La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") **sigue vigente para los slides de carruseles**; en el sitio v2 se permiten solo estas luces.
 
-### Estilo del panel aplicado al sitio ✅ (D-139)
+### Estilo del panel aplicado al sitio ✅ (D-141)
 
 El 19 nov se probaron dos direcciones y se descartaron: color plano con bloques morados (D-137) y tarjetas blancas (D-138). Se volvió a esta versión (con las luces) y se le aplicó el estilo del panel (D-136, `docs/panel-cliente/03-sistema-de-diseno.md`):
 
@@ -73,8 +73,8 @@ El 19 nov se probaron dos direcciones y se descartaron: color plano con bloques 
 | Tarjeta destacada (`.v2-destacada`) | Igual, con **filo morado**: velo morado 12 % → 2 % y borde morado al 45 %. Paquete recomendado y precio de cada servicio (reemplaza el brillo `glow-purple`) |
 | Garantías (`.v2-glass`) | Como la cifra destacada del panel: sin vidrio ni luz en la esquina, borde morado al 28 % |
 | Cuadrito de ícono (`.v2-icono`) | Igual a `.pn-icono`: 10 px de radio, fondo blanco al 4 %, ícono `brand-soft`. En las cifras del hero (calendario, velocímetro, tienda), el Problema, "Es para ti si", "Todo lo que trae" y el adicional |
-| Botones | Los del panel (D-140): morado con texto blanco y oscuro con borde fino (la píldora de D-137 se quitó) |
-| Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-140). Los checks de "Es para ti si" pasan a morado |
+| Botones | Los del panel (D-142): morado con texto blanco y oscuro con borde fino (la píldora de D-137 se quitó) |
+| Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-142). Los checks de "Es para ti si" pasan a morado |
 
 ---
 
@@ -106,7 +106,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Componente | Descripción | Prioridad |
 |---|---|---|
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
-| Botón | **El del panel** (D-140, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
+| Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
 | Tarjeta base | Superficie + borde fino de 1 px + radio 24 px; luz que sigue el cursor en hover | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
@@ -115,7 +115,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
 | Tarjetas del problema | Apiladas, caja de ícono + título + texto, resaltado que las recorre (D-066) | P1 |
-| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada con filo morado (`.v2-destacada`, D-139), badge "Recomendado" y el único botón principal (morado, D-140); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
+| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada con filo morado (`.v2-destacada`, D-141), badge "Recomendado" y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
 | Tarjetas glass de garantía | Garantía, pago 50/50 y mantenimiento, `backdrop-filter` + ícono SVG animado (`Assurances`, D-068) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
