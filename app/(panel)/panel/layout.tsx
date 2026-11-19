@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "./panel.css";
+// D-135: CSS del panel generado aparte (npm run panel:css) desde styles/panel.src.css.
+import "@/styles/panel.generated.css";
 
 // Panel (docs/panel-cliente/). Privado: nunca se indexa, no va en el sitemap
 // y robots.txt lo bloquea. Mismo sistema v2: solo fondo ink.

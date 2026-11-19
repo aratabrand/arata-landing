@@ -1,8 +1,8 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // El panel tiene su propio Tailwind (tailwind.panel.config.ts, D-115): sus clases no
-  // entran al CSS del sitio público, que va en línea en cada página.
+  // El panel tiene su propio Tailwind (tailwind.panel.config.ts, D-115), que se compila APARTE de Next
+  // con `npm run panel:css` (D-135): sus clases no entran al CSS del sitio público, que va en línea en cada página.
   content: [
     "./app/**/*.{ts,tsx}",
     "!./app/(panel)/**",
