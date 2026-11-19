@@ -41,9 +41,18 @@ export const agendar = {
       pregunta: "¿Cuándo te gustaría empezar?",
       opciones: ["En las próximas semanas", "En uno o dos meses", "Más adelante, sin afán", "Todavía lo estoy pensando"],
     },
+    // D-143: las opciones dependen de lo que eligió en "¿Qué necesitas?". Ninguna baja del precio base
+    // del servicio, salvo "Menos de 800 USD" en catálogo, que muestra la nota de pagar por partes.
+    // La auditoría no tiene este paso.
     inversion: {
       pregunta: "¿Cuánto tienes pensado invertir?",
-      opciones: ["Menos de 400 USD", "400 a 800 USD", "800 a 2.000 USD", "Más de 2.000 USD"],
+      opciones: {
+        pagina: ["400 a 800 USD", "800 a 2.000 USD", "Más de 2.000 USD"],
+        catalogo: ["Menos de 800 USD", "800 a 1.500 USD", "1.500 a 3.000 USD", "Más de 3.000 USD"],
+        sistema: ["1.000 a 3.000 USD", "3.000 a 6.000 USD", "Más de 6.000 USD"],
+      } as Record<Exclude<TipoAgenda, "auditoria">, string[]>,
+      // Opción que no avanza sola y muestra la nota (solo donde existe)
+      menos: { catalogo: "Menos de 800 USD" } as Partial<Record<TipoAgenda, string>>,
       notaMenos: "Puedes pagar por partes: 50 % para arrancar y 50 % al entregar.",
     },
     datos: {

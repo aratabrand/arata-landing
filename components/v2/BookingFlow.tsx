@@ -82,6 +82,9 @@ export default function BookingFlow() {
     () => (auditoria ? ["tipo", "cuando", "datos", "calendario"] : ["tipo", "cuando", "inversion", "datos", "calendario"]),
     [auditoria]
   );
+  // Rangos de inversión según el servicio elegido (D-143)
+  const opcionesInversion = tipo && tipo !== "auditoria" ? c.pasos.inversion.opciones[tipo] : [];
+  const menosInversion = tipo ? c.pasos.inversion.menos[tipo] : undefined;
   const idx = orden.indexOf(paso);
   const total = orden.length;
 
@@ -200,6 +203,8 @@ export default function BookingFlow() {
               onElegir={(v) => {
                 const t = v as TipoAgenda;
                 setTipo(t);
+                // Si cambia de servicio, el rango elegido antes puede no existir en el nuevo (D-143)
+                if (t !== "auditoria" && inversion && !c.pasos.inversion.opciones[t].includes(inversion)) setInversion(null);
                 setErrores({});
                 if (t !== "auditoria") window.setTimeout(() => ir("cuando"), 180);
               }}
@@ -243,14 +248,14 @@ export default function BookingFlow() {
         {paso === "inversion" && (
           <Pregunta titulo={c.pasos.inversion.pregunta} tituloRef={tituloRef}>
             <Opciones
-              opciones={c.pasos.inversion.opciones.map((o) => ({ valor: o, label: o }))}
+              opciones={opcionesInversion.map((o) => ({ valor: o, label: o }))}
               valor={inversion}
-              // "Menos de 400 USD" no avanza solo: primero ve la facilidad de pago (D-041)
-              onElegir={(v) => elegir(setInversion, v, v !== c.pasos.inversion.opciones[0])}
+              // "Menos de 800 USD" (catálogo) no avanza solo: primero ve la facilidad de pago (D-041, D-143)
+              onElegir={(v) => elegir(setInversion, v, v !== menosInversion)}
             />
-            {inversion === c.pasos.inversion.opciones[0] && (
+            {menosInversion && inversion === menosInversion && (
               <div className="v2-step mt-5">
-                <p className="rounded-frame border border-lime/30 bg-lime/[0.06] p-4 text-white">{c.pasos.inversion.notaMenos}</p>
+                <p className="rounded-frame border border-brand/40 bg-brand/10 p-4 text-white">{c.pasos.inversion.notaMenos}</p>
                 <Siguiente onClick={siguiente}>{c.botones.siguiente}</Siguiente>
               </div>
             )}
