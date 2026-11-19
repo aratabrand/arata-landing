@@ -99,7 +99,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     cargarLugares(),
     db().query(
       `select id, nombre, correo, whatsapp, necesita, tipo, pagina_web, cuando, inversion, reunion_inicio, reunion_fin,
-              enlace_llamada, enlace_reserva, estado, cliente_id, creado, cerrado_en
+              enlace_llamada, enlace_reserva, estado, por_aceptar, cliente_id, creado, cerrado_en
          from interesados where negocio_id = $1 order by reunion_inicio desc limit 300`,
       [ctx.negocioId]
     ),
@@ -131,6 +131,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
         enlaceLlamada: r.enlace_llamada,
         enlaceReserva: r.enlace_reserva,
         estado: r.estado,
+        porAceptar: Boolean(r.por_aceptar),
         clienteId: r.cliente_id,
         creado: r.creado.toISOString(),
         cerradoEn: r.cerrado_en ? r.cerrado_en.toISOString() : null,

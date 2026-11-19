@@ -194,7 +194,7 @@ Persona agenda en aratasan.com/agendar ──► Cal.com ──► webhook firma
 ```
 
 - Cal.com firma el cuerpo con HMAC-SHA256 y el secreto que se le pone al webhook (cabecera `x-cal-signature-256`). El panel rechaza lo que no venga firmado (401); sin `CAL_WEBHOOK_SECRET` responde 503. La ruta no usa sesión, por eso `next.config.mjs` la deja pasar (`api/cal/`).
-- Eventos que atiende: reserva creada/solicitada, reprogramada y cancelada. Un aviso repetido no duplica (`cal_uid` único). El PING de prueba responde 200 y no hace nada.
+- Eventos que atiende: reserva creada, solicitada (confirmación manual: queda **Por aceptar en Cal.com** hasta aceptarla o rechazarla allá, D-134), rechazada, reprogramada y cancelada. Un aviso repetido no duplica (`cal_uid` único). El PING de prueba responde 200 y no hace nada.
 - Los enlaces de llamada solo se guardan si son `https` de Cal.com, Google Meet, Zoom, Teams o Whereby; si no, el botón abre la página de la reserva en Cal.com.
 - El nombre, correo y WhatsApp salen de la reserva; lo demás (necesita, cuándo empezar, inversión, página) de las notas que arma `BookingFlow`. Una reserva hecha directo en Cal.com, sin notas, también queda en la lista.
 
@@ -203,7 +203,7 @@ Persona agenda en aratasan.com/agendar ──► Cal.com ──► webhook firma
 2. Vercel → proyecto **`arata-panel`** → Settings → Environment Variables (Production, **Sensitive**): `CAL_WEBHOOK_SECRET` = ese valor. Luego **Redeploy**.
 3. Cal.com → Settings → Developer → **Webhooks** → New:
    - Subscriber URL: `https://panel.aratasan.com/api/cal/webhook`
-   - Triggers: **Booking Created**, **Booking Cancelled**, **Booking Rescheduled** (y **Booking Requested** si alguna reunión pide aprobación)
+   - Triggers (en español en Cal.com): **Reserva creada**, **Reserva cancelada**, **Reserva reprogramada**, **Reserva solicitada** y **Reserva rechazada** (estas dos para la confirmación manual, D-134). Las demás se quitan; si quedan, el panel las ignora
    - Secret: el mismo valor del paso 1 · Payload template: el de por defecto
    - Botón **Ping test**: debe salir respuesta 200.
 4. Prueba real: agendar desde aratasan.com/agendar con tu propio correo. Debe llegar el aviso al celular y aparecer en Clientes → Interesados. Después cancelar la reserva: debe llegar el aviso de cancelación.

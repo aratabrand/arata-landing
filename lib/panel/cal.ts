@@ -113,7 +113,8 @@ export function leerNotas(notas: unknown, evento?: string | null): Notas {
 export type Aviso =
   | { accion: "ignorar"; motivo: string }
   | {
-      accion: "creada" | "reprogramada" | "cancelada";
+      /** solicitada = espera que la acepten en Cal.com (confirmación manual) · creada = ya quedó fija */
+      accion: "creada" | "solicitada" | "reprogramada" | "cancelada" | "rechazada";
       uid: string;
       /** Solo en reprogramaciones: el uid de la reserva anterior. */
       uidAnterior: string | null;
@@ -147,16 +148,19 @@ const obj = (v: unknown): Obj => (v && typeof v === "object" && !Array.isArray(v
 export function leerAviso(cuerpo: unknown): Aviso {
   const raiz = obj(cuerpo);
   const trigger = String(raiz.triggerEvent ?? "");
-  const acciones: Record<string, "creada" | "reprogramada" | "cancelada"> = {
-    BOOKING_CREATED: "creada",
-    BOOKING_REQUESTED: "creada",
+  const acciones: Record<string, Exclude<Aviso, { accion: "ignorar" }>["accion"]> = {
+    BOOKING_CREATED: "creada", // también llega cuando se acepta una solicitud
+    BOOKING_REQUESTED: "solicitada",
+    BOOKING_REJECTED: "rechazada",
     BOOKING_RESCHEDULED: "reprogramada",
     BOOKING_CANCELLED: "cancelada",
   };
-  const accion = acciones[trigger];
-  if (!accion) return { accion: "ignorar", motivo: trigger || "sin evento" };
-
   const p = obj(raiz.payload);
+  let accion = acciones[trigger];
+  if (!accion) return { accion: "ignorar", motivo: trigger || "sin evento" };
+  // Por si Cal.com manda "creada" con la reserva todavía en espera
+  if (accion === "creada" && String(p.status ?? "").toUpperCase() === "PENDING") accion = "solicitada";
+
   const uid = String(p.uid ?? "");
   if (!UID.test(uid)) return { accion: "ignorar", motivo: "reserva sin uid válido" };
   const inicio = iso(p.startTime);

@@ -74,7 +74,10 @@ ok(raro.accion === "creada" && raro.enlaceLlamada === null, "enlace de un sitio 
 const rep = leerAviso(base({ triggerEvent: "BOOKING_RESCHEDULED" }, { uid: "NUEVOuid123456", rescheduleUid: "bFJeNb2uX8ANpT3JL5EfXw", startTime: "2026-11-20T15:00:00Z" }));
 ok(rep.accion === "reprogramada" && rep.uid === "NUEVOuid123456" && rep.uidAnterior === "bFJeNb2uX8ANpT3JL5EfXw", "reprogramada: trae el uid nuevo y el anterior");
 ok(leerAviso(base({ triggerEvent: "BOOKING_CANCELLED" })).accion === "cancelada", "cancelada");
-ok(leerAviso(base({ triggerEvent: "BOOKING_REQUESTED" })).accion === "creada", "solicitud pendiente de aprobar: se trata como creada");
+ok(leerAviso(base({ triggerEvent: "BOOKING_REQUESTED" })).accion === "solicitada", "solicitud que hay que aceptar en Cal.com → solicitada");
+ok(leerAviso(base({ triggerEvent: "BOOKING_REJECTED" })).accion === "rechazada", "rechazada en Cal.com → rechazada");
+ok(leerAviso(base({ triggerEvent: "BOOKING_CREATED" }, { status: "PENDING" })).accion === "solicitada", "creada pero todavía en espera (status PENDING) → solicitada");
+ok(leerAviso(base({ triggerEvent: "BOOKING_CREATED" }, { status: "ACCEPTED" })).accion === "creada", "creada y aceptada → creada");
 ok(leerAviso({ triggerEvent: "PING", payload: {} }).accion === "ignorar" && leerAviso(base({ triggerEvent: "MEETING_ENDED" })).accion === "ignorar", "PING y otros eventos: se ignoran sin fallar");
 ok(leerAviso(base({}, { uid: "x" })).accion === "ignorar" && leerAviso(base({}, { startTime: "no es fecha" })).accion === "ignorar", "uid o fecha inválidos: se ignora");
 ok(leerAviso(null).accion === "ignorar" && leerAviso("texto").accion === "ignorar" && leerAviso([]).accion === "ignorar", "cuerpo que no es un objeto: se ignora");

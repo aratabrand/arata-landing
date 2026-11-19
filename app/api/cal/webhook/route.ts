@@ -4,8 +4,8 @@ import { panelActivo } from "@/lib/panel/config";
 import { cuandoTexto, firmaValida, leerAviso, type Aviso } from "@/lib/panel/cal";
 import { registrarSistema } from "@/lib/panel/historial";
 
-// Avisos de Cal.com (D-133). Cal.com llama aquí cada vez que alguien agenda, cancela o cambia la hora
-// de una reunión. Se configura en Cal.com → Settings → Developer → Webhooks (guía:
+// Avisos de Cal.com (D-133, D-134). Cal.com llama aquí cada vez que alguien agenda (o pide una reunión
+// que hay que aceptar), cancela o cambia la hora, y cuando se acepta o rechaza una solicitud. Se configura en Cal.com → Settings → Developer → Webhooks (guía:
 // docs/panel-cliente/05-acceso-y-seguridad.md §3e).
 //
 // Seguridad: es la única puerta pública del panel para escribir datos. Sin CAL_WEBHOOK_SECRET responde
@@ -52,27 +52,70 @@ export async function POST(req: NextRequest) {
 
 type Reserva = Exclude<Aviso, { accion: "ignorar" }>;
 
-async function insertar(negocioId: string, a: Reserva) {
+async function insertar(negocioId: string, a: Reserva, porAceptar = false) {
   return db().query(
     `insert into interesados (negocio_id, cal_uid, cal_booking_id, nombre, correo, whatsapp, necesita, tipo, pagina_web, cuando, inversion,
-                              autorizacion, evento, reunion_inicio, reunion_fin, zona_horaria, enlace_llamada, enlace_reserva)
-     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+                              autorizacion, evento, reunion_inicio, reunion_fin, zona_horaria, enlace_llamada, enlace_reserva, por_aceptar)
+     values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
      on conflict (cal_uid) do nothing returning id`,
-    [negocioId, a.uid, a.bookingId, a.nombre, a.correo, a.whatsapp, a.necesita, a.tipo, a.paginaWeb, a.cuando, a.inversion, a.autorizacion, a.evento, a.inicio, a.fin, a.zona, a.enlaceLlamada, a.enlaceReserva]
+    [negocioId, a.uid, a.bookingId, a.nombre, a.correo, a.whatsapp, a.necesita, a.tipo, a.paginaWeb, a.cuando, a.inversion, a.autorizacion, a.evento, a.inicio, a.fin, a.zona, a.enlaceLlamada, a.enlaceReserva, porAceptar]
   );
 }
 
 async function procesar(negocioId: string, a: Reserva) {
+  // Confirmación manual en Cal.com (D-134): llega la solicitud y queda "por aceptar"
+  if (a.accion === "solicitada") {
+    const r = await insertar(negocioId, a, true);
+    if (r.rowCount) await avisarNueva(negocioId, r.rows[0].id, a, true);
+    return;
+  }
+
   if (a.accion === "creada") {
     const r = await insertar(negocioId, a);
     // Si ya estaba (Cal.com reintentó), no se avisa otra vez
-    if (r.rowCount) await avisarNueva(negocioId, r.rows[0].id, a);
+    if (r.rowCount) return avisarNueva(negocioId, r.rows[0].id, a, false);
+    // Ya estaba como solicitud: se aceptó en Cal.com. Ahora sí trae el enlace de la llamada.
+    const acep = await db().query(
+      `update interesados set por_aceptar = false, enlace_llamada = coalesce($3, enlace_llamada), reunion_inicio = $4, reunion_fin = coalesce($5, reunion_fin), actualizado = now()
+        where negocio_id = $1 and cal_uid = $2 and por_aceptar and estado = 'agendada' returning id, nombre`,
+      [negocioId, a.uid, a.enlaceLlamada, a.inicio, a.fin]
+    );
+    if (acep.rowCount) {
+      const x = acep.rows[0];
+      // Lo aceptó alguien del equipo en Cal.com: queda en el historial, sin aviso al celular
+      await registrarSistema(negocioId, "Cal.com", {
+        accion: "editar",
+        entidad: "interesado",
+        entidadId: x.id,
+        titulo: `Se aceptó la reunión de ${x.nombre}`,
+        cambios: [{ campo: "Reunión", antes: "Por aceptar", despues: cuandoTexto(a.inicio) }],
+      });
+    }
+    return;
+  }
+
+  if (a.accion === "rechazada") {
+    const r = await db().query(
+      `update interesados set estado = 'rechazada', por_aceptar = false, cerrado_en = now(), actualizado = now()
+        where negocio_id = $1 and cal_uid = $2 and estado = 'agendada' returning id, nombre`,
+      [negocioId, a.uid]
+    );
+    if (r.rowCount) {
+      const x = r.rows[0];
+      await registrarSistema(negocioId, "Cal.com", {
+        accion: "editar",
+        entidad: "interesado",
+        entidadId: x.id,
+        titulo: `Se rechazó la reunión de ${x.nombre}`,
+        cambios: [{ campo: "Reunión", antes: cuandoTexto(a.inicio), despues: "Rechazada en Cal.com" }],
+      });
+    }
     return;
   }
 
   if (a.accion === "cancelada") {
     const r = await db().query(
-      `update interesados set estado = 'cancelada', actualizado = now()
+      `update interesados set estado = 'cancelada', por_aceptar = false, actualizado = now()
         where negocio_id = $1 and cal_uid = $2 and estado = 'agendada' returning id, nombre, reunion_inicio`,
       [negocioId, a.uid]
     );
@@ -118,15 +161,15 @@ async function procesar(negocioId: string, a: Reserva) {
   }
   // No teníamos la reserva original (se perdió su aviso): se guarda como nueva
   const r = await insertar(negocioId, a);
-  if (r.rowCount) await avisarNueva(negocioId, r.rows[0].id, a);
+  if (r.rowCount) await avisarNueva(negocioId, r.rows[0].id, a, false);
 }
 
-async function avisarNueva(negocioId: string, id: string, a: Reserva) {
+async function avisarNueva(negocioId: string, id: string, a: Reserva, porAceptar: boolean) {
   await registrarSistema(negocioId, "Cal.com", {
     accion: "crear",
     entidad: "interesado",
     entidadId: id,
-    titulo: `Nuevo interesado: ${a.nombre} agendó una reunión`,
+    titulo: porAceptar ? `${a.nombre} pidió una reunión: acéptala o recházala en Cal.com` : `Nuevo interesado: ${a.nombre} agendó una reunión`,
     cambios: [
       { campo: "Necesita", antes: "", despues: a.necesita ?? "—" },
       { campo: "Reunión", antes: "", despues: cuandoTexto(a.inicio) },

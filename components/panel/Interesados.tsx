@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CalendarClock, Check, ExternalLink, Mail, MessageCircle, RotateCcw, Trash2, Video, X } from "lucide-react";
 import { borrarInteresado, descartarInteresado, reabrirInteresado } from "@/app/(panel)/panel/(app)/clientes/acciones";
-import { cuandoTexto, etiquetaTipo, momentoDe, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
+import { CAL_POR_ACEPTAR, cuandoTexto, etiquetaTipo, momentoDe, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
 import { Pill } from "./ui";
 import { BotonSecundario, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
@@ -59,10 +59,12 @@ export default function Interesados({
     };
   }, [router]);
 
-  const { porConfirmar, proximas, cerradas } = useMemo(() => {
-    const pend = interesados.filter((i) => i.estado === "agendada");
+  const { porAceptar, porConfirmar, proximas, cerradas } = useMemo(() => {
     const dif = (a: Interesado, b: Interesado) => Date.parse(a.inicio) - Date.parse(b.inicio);
+    const pend = interesados.filter((i) => i.estado === "agendada" && !i.porAceptar);
     return {
+      // Pidieron la reunión y falta aceptarla en Cal.com (confirmación manual, D-134)
+      porAceptar: interesados.filter((i) => i.estado === "agendada" && i.porAceptar).sort(dif),
       // Reunión que ya pasó y nadie la cerró: lo que hay que resolver primero (la más reciente arriba)
       porConfirmar: pend.filter((i) => momentoDe(i, ahoraMs) === "pasada").sort((a, b) => dif(b, a)),
       // Las que vienen, la más cercana primero
@@ -88,6 +90,14 @@ export default function Interesados({
 
   return (
     <div className="space-y-6">
+      {porAceptar.length > 0 && (
+        <Grupo titulo="Por aceptar en Cal.com" detalle="Pidieron reunión. Si es real, acéptala en Cal.com; si es spam, recházala allá y aquí se cierra sola." cantidad={porAceptar.length} alerta>
+          {porAceptar.map((i) => (
+            <Fila key={i.id} i={i} ahoraMs={ahoraMs} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
+          ))}
+        </Grupo>
+      )}
+
       {porConfirmar.length > 0 && (
         <Grupo titulo="Por confirmar" detalle="La reunión ya pasó: ¿cómo salió?" cantidad={porConfirmar.length} alerta>
           {porConfirmar.map((i) => (
@@ -144,6 +154,8 @@ const pastilla = (i: Interesado, m: Momento, ahoraMs: number): { texto: string; 
   if (i.estado === "confirmada") return { texto: "Ya es cliente", tono: "lima" };
   if (i.estado === "cancelada") return { texto: "Canceló", tono: "alerta" };
   if (i.estado === "descartada") return { texto: "No avanzó", tono: "neutro" };
+  if (i.estado === "rechazada") return { texto: "Rechazada en Cal.com", tono: "neutro" };
+  if (i.porAceptar) return { texto: "Por aceptar en Cal.com", tono: "alerta" };
   if (m === "pasada") return { texto: "Por confirmar", tono: "alerta" };
   if (m === "ahora") return { texto: "Es ahora", tono: "lima" };
   if (m === "pronto") return { texto: `Hoy · ${relativo(i.inicio, ahoraMs)}`, tono: "morado" };
@@ -170,7 +182,8 @@ function Fila({
   const acc = useAccion();
   const m = momentoDe(i, ahoraMs);
   const p = pastilla(i, m, ahoraMs);
-  const pendiente = i.estado === "agendada";
+  const esperando = i.estado === "agendada" && i.porAceptar; // falta aceptarla en Cal.com
+  const pendiente = i.estado === "agendada" && !i.porAceptar;
   const llamada = i.enlaceLlamada ?? i.enlaceReserva;
   const ahoraEs = pendiente && m === "ahora";
   const cliente = i.clienteId ? nombreCliente(i.clienteId) : null;
@@ -255,6 +268,17 @@ function Fila({
 
       {/* Acciones */}
       <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+        {esperando && (
+          <a
+            href={CAL_POR_ACEPTAR}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="v2-shine inline-flex h-11 items-center justify-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] sm:w-auto"
+          >
+            <Check aria-hidden className="h-4 w-4" /> Aceptar o rechazar en Cal.com
+            <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
+          </a>
+        )}
         {pendiente && llamada && (
           <a
             href={llamada}

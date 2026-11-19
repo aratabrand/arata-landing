@@ -202,6 +202,7 @@ export async function confirmarInteresado(entrada: { interesadoId: string; clien
     const i = await interesadoDe(ctx.negocioId, entrada.interesadoId);
     if (i.estado === "confirmada") return NO("Este interesado ya está confirmado.");
     if (i.estado === "cancelada") return NO("Canceló su reunión en Cal.com. Si agenda otra vez, aparece como un interesado nuevo.");
+    if (i.estado === "rechazada") return NO("Esta reunión se rechazó en Cal.com.");
 
     // ¿Ya es cliente? Mismo celular, escrito como lo guarda guardarCliente
     const pais = String(entrada.cliente.pais || "CO").toUpperCase();

@@ -1,7 +1,7 @@
 // Interesados que agendan reunión por Cal.com (D-133). Tipos y funciones puras que usa la pantalla
 // (sin node:crypto ni base de datos: este archivo también viaja al navegador).
 
-export type EstadoInteresado = "agendada" | "confirmada" | "cancelada" | "descartada";
+export type EstadoInteresado = "agendada" | "confirmada" | "cancelada" | "descartada" | "rechazada";
 export type TipoInteres = "pagina" | "catalogo" | "sistema" | "auditoria";
 
 export type Interesado = {
@@ -21,6 +21,8 @@ export type Interesado = {
   enlaceLlamada: string | null;
   enlaceReserva: string | null;
   estado: EstadoInteresado;
+  /** Pidió la reunión y todavía no se acepta en Cal.com (confirmación manual, D-134). */
+  porAceptar: boolean;
   clienteId: string | null;
   creado: string;
   cerradoEn: string | null;
@@ -104,6 +106,9 @@ export function datosDeCliente(i: Interesado) {
     notas,
   };
 }
+
+/** Donde se aceptan o rechazan las solicitudes en Cal.com. */
+export const CAL_POR_ACEPTAR = "https://app.cal.com/bookings/unconfirmed";
 
 export const etiquetaTipo: Record<TipoInteres, string> = {
   pagina: "Página",
