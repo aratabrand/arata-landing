@@ -2,8 +2,13 @@
    CSS SOLO del panel (D-114). Se carga en las rutas /panel; el sitio público no lo descarga.
    Tiene su propio Tailwind (tailwind.panel.config.ts) con las clases que usa el panel,
    para que esas clases no se sumen al CSS que va dentro de cada página del sitio.
+
+   ⚠ ESTE ARCHIVO ES LA FUENTE. NO se importa desde Next (D-135). Se compila aparte, con la
+   herramienta de Tailwind, a styles/panel.generated.css (npm run panel:css), y ese es el que
+   importa app/(panel)/panel/layout.tsx. Antes llevaba `@config` y Next lo procesaba junto con el
+   CSS del sitio: en Vercel, según qué archivo se procesara primero, el sitio quedaba compilado con
+   la configuración del panel (sin text-v2-hero, gap-6, etc.) y se veía roto. Aquí no se usa @config.
    ────────────────────────────────────────────────────────────────────── */
-@config "../../../tailwind.panel.config.ts";
 /* Componentes del panel ANTES de las utilidades, para que clases como pl-9 o h-9 les ganen */
 /* Campo de formulario: 44 px de alto, superficie 1, foco morado */
 .pn-input {

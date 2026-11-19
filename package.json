@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/dev.mjs",
+    "panel:css": "tailwindcss -c tailwind.panel.config.ts -i styles/panel.src.css -o styles/panel.generated.css --minify",
+    "prebuild": "npm run panel:css",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
