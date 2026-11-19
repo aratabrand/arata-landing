@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { CalendarDays } from "lucide-react";
 import Logo from "@/components/Logo";
 import Ring from "@/components/Ring";
 import { Button } from "@/components/v2/Button";
@@ -138,6 +139,28 @@ export default function SistemaV2() {
               </Button>
             </div>
             <p className="mt-4 text-sm text-fog">Regla: un solo botón morado por vista (el CTA principal). El lima queda para los datos.</p>
+          </Bloque>
+
+          <Bloque id="b-panel" titulo="Piezas del panel en el sitio (D-141, D-142)">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="v2-card p-6">
+                <span className="v2-icono h-9 w-9">
+                  <CalendarDays aria-hidden className="h-4 w-4" />
+                </span>
+                <p className="mt-4 font-display text-2xl font-bold text-white">5 días</p>
+                <p className="mt-1 text-sm text-fog">.v2-card + .v2-icono: tarjeta por capas y cuadrito de ícono.</p>
+              </div>
+              <div className="v2-destacada rounded-card p-6">
+                <p className="text-xs font-semibold text-brand-soft">Destacada</p>
+                <p className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">Paquete recomendado</p>
+                <p className="mt-2 text-sm text-fog">.v2-destacada: filo morado arriba. Solo una o dos por página.</p>
+              </div>
+              <div className="v2-card p-6">
+                <p className="font-display text-3xl font-bold text-lime">90+</p>
+                <p className="mt-2 text-sm text-fog">Lima solo para datos: cifras, anillos, pasos. Nunca en botones.</p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-fog">Son copias de .v2-card del panel, .pn-icono y .pn-primario del panel: si cambias una, cambia la otra (04-sistema-de-diseno.md §13).</p>
           </Bloque>
 
           <Bloque id="b-badges" titulo="Badges">

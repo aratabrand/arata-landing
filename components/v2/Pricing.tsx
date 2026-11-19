@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
 // la tarjeta recomendada lleva el filo morado (.v2-destacada, D-141), badge y el único botón principal (morado, D-142).
-// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
+// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas con filo morado (D-068, D-141).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
   const rec = paquete.recomendado;
@@ -48,7 +48,7 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
   );
 }
 
-/* Íconos SVG animados de las tarjetas glass (se dibujan con .is-visible de <Reveal>) */
+/* Íconos SVG animados de las tarjetas de garantía (se dibujan con .is-visible de <Reveal>) */
 
 function GaugeIcon() {
   // Velocímetro de 180°: arco que llena el 90 % y aguja que sube hasta 90 (−90° → 72°).
@@ -165,7 +165,7 @@ const ICONOS_GLASS = {
   mantenimiento: { Icon: MaintenanceIcon, glow: "rgba(185,164,255,0.3)" },
 } as const;
 
-/** Tarjetas glass de garantía, pago y mantenimiento (D-068). */
+/** Tarjetas de garantía, pago y mantenimiento (D-068; estilo del panel desde D-141). */
 export function Assurances({ className }: { className?: string }) {
   return (
     <div className={cn("grid gap-4 md:grid-cols-3", className)}>

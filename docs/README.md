@@ -14,7 +14,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Paquetes y precios, avatar, ecuación de valor, nombres, garantías, gancho, embudo y guion de llamada | 1 |
 | [`blueprint/02-arquitectura.md`](blueprint/02-arquitectura.md) | Menú, flujo de agendamiento y estructura sección por sección de cada página | 2 |
 | [`blueprint/03-copy.md`](blueprint/03-copy.md) | Copy de cada página con versiones para elegir (todas las páginas) | 2 |
-| [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2 y especificación de cada componente (hoy: dirección) | 3 |
+| [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2, componentes y estilo vigente (el del panel aplicado al sitio, D-141/D-142); §13: qué se probó y se descartó y qué piezas se comparten con el panel | 3 |
 | [`blueprint/05-construccion.md`](blueprint/05-construccion.md) | Rutas, carpetas, flujo de agenda, eventos de GTM, configuración de Cal.com y pendientes de lanzamiento | 4 |
 | [`blueprint/06-seo-geo-velocidad.md`](blueprint/06-seo-geo-velocidad.md) | SEO por página, datos estructurados, GEO (`llms.txt`), velocidad medida, legal y **lista de lanzamiento** | 5 |
 | [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
