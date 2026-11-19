@@ -245,7 +245,8 @@ export function BarrasVerticales({ puntos, formato, alto = 150 }: { puntos: Punt
     <div ref={ref}>
       <div className="flex items-end gap-1.5 sm:gap-2" style={{ height: alto }}>
         {puntos.map((p, i) => {
-          const ultimo = i === puntos.length - 1;
+          // Barras apagadas; la elegida (la que tocas o, si no, la última) va en morado con un punto lima
+          const activa = i === (hover ?? puntos.length - 1);
           return (
             <div
               key={i}
@@ -254,14 +255,15 @@ export function BarrasVerticales({ puntos, formato, alto = 150 }: { puntos: Punt
               onPointerLeave={() => setHover(null)}
             >
               <div
-                className={cn("pn-columna w-full origin-bottom rounded-full", visto && "is-visible")}
+                className={cn("pn-columna relative w-full origin-bottom rounded-full", visto && "is-visible")}
                 style={{
                   height: `${Math.max(4, (p.valor / max) * 100)}%`,
-                  background: ultimo ? LIMA : hover === i ? "#9B7BFF" : MORADO,
-                  opacity: ultimo || hover === i ? 1 : 0.75,
+                  background: activa ? `linear-gradient(180deg, #9B7BFF, ${MORADO})` : "rgba(255,255,255,0.09)",
                   transitionDelay: `${i * 45}ms`,
                 }}
-              />
+              >
+                {activa && <span aria-hidden className="absolute left-1/2 top-1 h-1.5 w-1.5 -translate-x-1/2 rounded-full" style={{ background: LIMA, boxShadow: "0 0 0 3px rgba(182,255,0,0.18)" }} />}
+              </div>
               {hover === i && (
                 <span className="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface-3 px-2 py-1 text-[0.7rem] font-semibold text-white">
                   {formato(p.valor)}

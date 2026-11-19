@@ -139,7 +139,7 @@ function EditorSitio({
                   type="button"
                   disabled={!remoto.puedePublicar || pub.pendiente || hayErrores}
                   onClick={() => pub.correr(() => publicarSitio(), () => setPublicando(true))}
-                  className="v2-shine inline-flex h-11 items-center justify-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-30"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-30"
                 >
                   <Send aria-hidden className="h-4 w-4" />
                   {pub.pendiente ? "Publicando…" : `Publicar en ${dominioDe(negocio.sitio)}`}
@@ -193,7 +193,7 @@ function EditorSitio({
                 aria-checked={borrador.anuncio.activo}
                 aria-label="Mostrar franja de anuncio"
                 onClick={() => set("anuncio", { ...borrador.anuncio, activo: !borrador.anuncio.activo })}
-                className={cn("relative h-7 w-12 rounded-full border transition-colors", borrador.anuncio.activo ? "border-lime bg-lime" : "border-white/15 bg-surface-2")}
+                className={cn("relative h-7 w-12 rounded-full border transition-colors", borrador.anuncio.activo ? "border-brand bg-brand" : "border-white/15 bg-surface-2")}
               >
                 <span className={cn("absolute left-0 top-0.5 h-5 w-5 rounded-full transition-transform", borrador.anuncio.activo ? "translate-x-[22px] bg-ink" : "translate-x-0.5 bg-fog")} />
               </button>
@@ -370,7 +370,7 @@ function EditorSitio({
               type="button"
               disabled={!sucio || hayErrores || !edita || acc.pendiente}
               onClick={guardar}
-              className="v2-shine h-11 flex-1 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-30 sm:flex-none"
+              className="h-11 flex-1 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-30 sm:flex-none"
             >
               {acc.pendiente ? "Guardando…" : "Guardar cambios"}
             </button>
@@ -435,7 +435,7 @@ function Campo({ label, usado, limite, error, opcional, children }: { label: str
           {label.replace(/\s*\*$/, "")}
           {req && (
             <>
-              <span aria-hidden className="ml-0.5 text-lime">*</span>
+              <span aria-hidden className="ml-0.5 text-brand-soft">*</span>
               <span className="sr-only"> (obligatorio)</span>
             </>
           )}

@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import QRCode from "qrcode";
-import { ShieldCheck } from "lucide-react";
 import { RUTA_ENTRAR } from "@/lib/panel/config";
 import { authCliente } from "@/lib/panel/auth-cliente";
 
@@ -99,7 +98,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
       <button
         type="submit"
         disabled={enviando || codigo.length < 6}
-        className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-50"
+        className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-50"
       >
         {enviando ? "Verificando…" : paso.paso === "qr" ? "Activar" : "Entrar"}
       </button>
@@ -108,14 +107,10 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
 
   return (
     <div className="space-y-5">
-      <div className="flex h-11 w-11 items-center justify-center rounded-btn border border-white/10 bg-surface-2">
-        <ShieldCheck aria-hidden className="h-5 w-5 text-lime" />
-      </div>
-
       {paso.paso === "clave" && (
         <form onSubmit={confirmarClave} noValidate className="space-y-4">
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-heading text-white">Activa el doble factor</h1>
+            <h1 className="font-display text-[1.7rem] font-bold leading-tight tracking-heading text-white">Activa el doble factor</h1>
             <p className="mt-1.5 text-sm text-fog">Es obligatorio para entrar al panel. Confirma tu contraseña para empezar.</p>
           </div>
           <label className="block">
@@ -127,7 +122,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
               {error}
             </p>
           )}
-          <button type="submit" disabled={enviando} className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-60">
+          <button type="submit" disabled={enviando} className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-60">
             {enviando ? "Preparando…" : "Continuar"}
           </button>
         </form>
@@ -136,7 +131,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
       {paso.paso === "qr" && (
         <>
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-heading text-white">Escanea el código</h1>
+            <h1 className="font-display text-[1.7rem] font-bold leading-tight tracking-heading text-white">Escanea el código</h1>
             <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-fog">
               <li>Abre tu app de autenticación (Google Authenticator, 1Password, Authy…).</li>
               <li>Escanea este código o escribe la clave.</li>
@@ -158,7 +153,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
       {paso.paso === "respaldo" && (
         <div className="space-y-4">
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-heading text-white">Guarda tus códigos de respaldo</h1>
+            <h1 className="font-display text-[1.7rem] font-bold leading-tight tracking-heading text-white">Guarda tus códigos de respaldo</h1>
             <p className="mt-1.5 text-sm text-fog">
               Si pierdes el celular, cada uno sirve <strong className="text-white">una sola vez</strong> para entrar. Guárdalos en tu gestor de contraseñas. No los volveremos a mostrar.
             </p>
@@ -177,7 +172,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
           >
             Copiar códigos
           </button>
-          <button type="button" onClick={() => window.location.assign("/panel")} className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33]">
+          <button type="button" onClick={() => window.location.assign("/panel")} className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">
             Ya los guardé, entrar al panel
           </button>
         </div>
@@ -186,7 +181,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
       {paso.paso === "codigo" && (
         <>
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-heading text-white">Código de verificación</h1>
+            <h1 className="font-display text-[1.7rem] font-bold leading-tight tracking-heading text-white">Código de verificación</h1>
             <p className="mt-1.5 text-sm text-fog">
               {usarRespaldo ? "Escribe uno de los códigos de respaldo que guardaste." : "Abre tu app de autenticación y escribe el código de 6 números de Arata San."}
             </p>

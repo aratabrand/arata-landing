@@ -29,17 +29,20 @@ export function PanelHeader({ titulo, bajada, accion, volver }: { titulo: ReactN
   );
 }
 
-/** Tarjeta del panel: superficie 1 + borde fino + radio 24 px. */
+/** Tarjeta del panel: superficie en capas + borde fino + radio 20 px (D-136). */
 export function Tarjeta({
   titulo,
   bajada,
   accion,
+  icono,
   children,
   className,
 }: {
   titulo?: ReactNode;
   bajada?: ReactNode;
   accion?: ReactNode;
+  /** Cuadrito con ícono antes del título (D-136). */
+  icono?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
@@ -47,9 +50,12 @@ export function Tarjeta({
     <section className={cn("v2-card min-w-0 p-4 sm:p-6", className)}>
       {(titulo || accion) && (
         <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            {titulo && <h2 className="font-display text-base font-bold tracking-heading text-white sm:text-lg">{titulo}</h2>}
-            {bajada && <p className="mt-0.5 text-xs text-fog-dim">{bajada}</p>}
+          <div className="flex min-w-0 items-center gap-3">
+            {icono && <span className="pn-icono">{icono}</span>}
+            <div className="min-w-0">
+              {titulo && <h2 className="font-display text-base font-bold tracking-heading text-white sm:text-lg">{titulo}</h2>}
+              {bajada && <p className="mt-0.5 text-xs text-fog-dim">{bajada}</p>}
+            </div>
           </div>
           {accion}
         </div>

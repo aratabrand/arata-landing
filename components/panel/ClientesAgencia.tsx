@@ -271,7 +271,7 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
         ))}
       </dl>
 
-      <a href={wa(c)} target="_blank" rel="noopener noreferrer" className="v2-shine flex h-11 w-full items-center justify-center gap-2 rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33]">
+      <a href={wa(c)} target="_blank" rel="noopener noreferrer" className="flex h-11 w-full items-center justify-center gap-2 rounded-btn pn-primario text-sm font-semibold">
         <MessageCircle aria-hidden className="h-4 w-4" /> Escribirle por WhatsApp
       </a>
 

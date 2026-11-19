@@ -145,7 +145,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
             </div>
 
             <Link href="/panel/notificaciones" className="flex items-center justify-center gap-2 border-t border-white/[0.06] px-4 py-3 text-xs font-semibold text-fog hover:text-white">
-              <BellRing aria-hidden className="h-3.5 w-3.5 text-lime" /> Avisos en este dispositivo e historial completo
+              <BellRing aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Avisos en este dispositivo e historial completo
             </Link>
           </div>
         </>

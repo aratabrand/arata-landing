@@ -129,7 +129,7 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
         <p className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-brand-soft">{servicio?.nombre ?? "Sin servicio"}</p>
         <Pill tono={comercial[p.estado].t}>{comercial[p.estado].l}</Pill>
       </div>
-      <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-lime">{p.nombre}</h2>
+      <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-brand-soft">{p.nombre}</h2>
       <p className="mt-0.5 truncate text-sm text-fog">{nombreCliente(cliente)}</p>
 
       {/* Etapa actual */}

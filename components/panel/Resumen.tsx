@@ -144,16 +144,18 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
       <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {kpis.map((k, i) => (
           <article key={k.label} className={cn("v2-card flex flex-col p-4 sm:p-5", i === 0 && "v2-glass")}>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <span className="pn-icono">
+                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
+              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.label}</p>
-              <k.icon aria-hidden className={cn("h-4 w-4", i === 0 ? "text-lime" : "text-brand-soft")} />
             </div>
-            <p className="mt-3 font-display text-[clamp(1.5rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.valor}</p>
+            <p className="mt-4 font-display text-[clamp(1.5rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.valor}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <Delta valor={k.delta} />
               <span className="text-xs text-fog-dim">{k.nota}</span>
             </div>
-            <Sparkline valores={k.spark} className="mt-4" color={i === 0 ? "#B6FF00" : "#7D53FF"} />
+            <Sparkline valores={k.spark} className="mt-4" color="#7D53FF" />
           </article>
         ))}
       </div>
