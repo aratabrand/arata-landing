@@ -94,6 +94,17 @@
     box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.35);
   }
 
+  /* Botón principal = .pn-primario del panel (D-140): morado de marca, texto blanco (4,6:1) */
+  .v2-primario {
+    background: linear-gradient(180deg, #7d53ff, #6d45f0);
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(125, 83, 255, 0.8);
+    transition: filter 0.2s, transform 0.15s;
+  }
+  .v2-primario:hover { filter: brightness(1.1); }
+  .v2-primario:active { transform: translateY(1px); }
+  .v2-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+
   /* Cuadrito con ícono (igual que .pn-icono del panel) */
   .v2-icono {
     display: grid;

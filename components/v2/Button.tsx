@@ -3,54 +3,38 @@ import type { ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Botón v2 (D-137, 04-sistema-de-diseno.md §5). Píldora de color plano, sin degradados ni brillos.
-// - primary:   lima con texto ink. Con flecha: círculo ink con la flecha lima al final.
-// - secondary: blanco con texto ink. Con flecha: círculo morado con la flecha blanca.
-// - ink:       negro con texto blanco y círculo lima con flecha ink. Para usar SOBRE BLANCO
-//              (tarjeta recomendada, precio, cierre; D-138).
+// Botón v2 = el del panel (D-140, igual a .pn-primario de D-136). 04-sistema-de-diseno.md §5.
+// - primary:   morado de marca con texto blanco (4,6:1), filo de luz arriba (.v2-primario). Uno por vista.
+// - secondary: superficie oscura con borde fino.
 // - ghost:     texto con flecha ("Ver todo →").
-// Al pasar el mouse la flecha sale por la derecha y entra otra por la izquierda (solo transform).
+// Radio 10 px (rounded-btn). El lima ya no va en botones: queda para los datos.
 // Alto mínimo 44 px (área táctil).
 
-type Variant = "primary" | "secondary" | "ink" | "ghost";
+type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-colors duration-200";
+  "inline-flex items-center justify-center gap-2 rounded-btn font-semibold whitespace-nowrap transition-colors duration-200";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-lime text-ink hover:bg-[#C6FF33]",
-  secondary: "bg-white text-ink hover:bg-[#EDE7FF]",
-  ink: "bg-ink text-white hover:bg-[#1C1830]",
-  ghost: "text-white hover:text-lime",
+  primary: "v2-primario",
+  secondary: "border border-white/10 bg-surface-2 text-white hover:border-white/16 hover:bg-surface-3",
+  ghost: "text-white hover:text-brand-soft",
 };
 
-// Círculo de la flecha por variante
-const circulo: Record<Exclude<Variant, "ghost">, string> = {
-  primary: "bg-ink text-lime",
-  secondary: "bg-brand text-white",
-  ink: "bg-lime text-ink",
+const sizes: Record<Size, string> = {
+  md: "h-11 px-5 text-sm",
+  lg: "h-12 px-6 text-[0.95rem]",
 };
 
-const sizes: Record<Size, { solo: string; flecha: string; circulo: string }> = {
-  md: { solo: "h-11 px-5 text-sm", flecha: "h-11 pl-5 pr-1.5 text-sm", circulo: "h-8 w-8" },
-  lg: { solo: "h-12 px-6 text-[0.95rem]", flecha: "h-12 pl-6 pr-1.5 text-[0.95rem]", circulo: "h-9 w-9" },
-};
-
-/** Flecha dentro del círculo: una sale y otra entra al pasar el mouse. */
+/** Flecha del botón: se corre un poco al pasar el mouse (solo transform). */
 export function FlechaBoton({ className }: { className?: string }) {
-  return (
-    <span aria-hidden className={cn("relative grid shrink-0 place-items-center overflow-hidden rounded-full", className)}>
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-[180%] motion-reduce:transition-none" />
-      <ArrowRight className="absolute h-4 w-4 -translate-x-[180%] transition-transform duration-300 ease-out group-hover:translate-x-0 motion-reduce:hidden" />
-    </span>
-  );
+  return <ArrowRight aria-hidden className={cn("h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5", className)} />;
 }
 
 /** Clases del botón, para enlaces o <button> que no usan este componente (formulario, cookies). */
-export function clasesBoton({ variant = "primary", size = "md", arrow = false }: { variant?: Variant; size?: Size; arrow?: boolean } = {}) {
-  if (variant === "ghost") return cn(base, variants.ghost, "h-11 px-1 text-sm");
-  return cn(base, variants[variant], arrow ? sizes[size].flecha : sizes[size].solo);
+export function clasesBoton({ variant = "primary", size = "md" }: { variant?: Variant; size?: Size; arrow?: boolean } = {}) {
+  return cn(base, variants[variant], variant === "ghost" ? "h-11 px-1 text-sm" : sizes[size]);
 }
 
 export function Button({
@@ -72,16 +56,11 @@ export function Button({
   className?: string;
   onClick?: () => void;
 }) {
-  const cls = cn(clasesBoton({ variant, size, arrow }), arrow && variant !== "ghost" && "gap-3", className);
+  const cls = cn(clasesBoton({ variant, size }), className);
   const content = (
     <>
       {children}
-      {arrow &&
-        (variant === "ghost" ? (
-          <ArrowRight aria-hidden className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-        ) : (
-          <FlechaBoton className={cn(circulo[variant], sizes[size].circulo)} />
-        ))}
+      {arrow && <FlechaBoton />}
     </>
   );
 
@@ -98,5 +77,3 @@ export function Button({
     </Link>
   );
 }
-
-export const circuloBoton = circulo;

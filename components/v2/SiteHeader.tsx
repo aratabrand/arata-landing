@@ -262,7 +262,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button href={cta.enlace} external={ctaExterno} size="md" arrow className="hidden h-10 sm:inline-flex">
+          <Button href={cta.enlace} external={ctaExterno} size="md" className="hidden h-10 sm:inline-flex">
             {cta.texto}
           </Button>
           <button

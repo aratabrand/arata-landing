@@ -23,8 +23,8 @@ const colores = [
   { token: "surface-1", hex: "#0A0714", uso: "Tarjetas", clase: "bg-surface-1 border border-white/10" },
   { token: "surface-2", hex: "#110C20", uso: "Hover, botón secundario", clase: "bg-surface-2" },
   { token: "surface-3", hex: "#18112D", uso: "Menús y modales", clase: "bg-surface-3" },
-  { token: "lime", hex: "#B6FF00", uso: "CTA principal, cifras clave", clase: "bg-lime" },
-  { token: "brand", hex: "#7D53FF", uso: "Brillos, bordes destacados, gráficos", clase: "bg-brand" },
+  { token: "lime", hex: "#B6FF00", uso: "Datos: cifras clave, anillos, pasos", clase: "bg-lime" },
+  { token: "brand", hex: "#7D53FF", uso: "Botón principal, elegir, bordes destacados, gráficos", clase: "bg-brand" },
   { token: "brand-soft", hex: "#B9A4FF", uso: "Texto morado sobre oscuro", clase: "bg-brand-soft" },
   { token: "brand-ink", hex: "#3B1D99", uso: "Tintes de luces (no es texto)", clase: "bg-brand-ink" },
 ];
@@ -127,7 +127,7 @@ export default function SistemaV2() {
           <Bloque id="b-botones" titulo="Botones · píldora · alto mín. 44 px">
             <div className="flex flex-wrap items-center gap-3">
               <Button href="#" size="lg" arrow>
-                Primario (lima)
+                Primario (morado)
               </Button>
               <Button href="#">Primario md</Button>
               <Button href="#" variant="secondary" size="lg" arrow>
@@ -137,7 +137,7 @@ export default function SistemaV2() {
                 Terciario
               </Button>
             </div>
-            <p className="mt-4 text-sm text-fog">Regla: un solo botón lima por vista (el CTA principal).</p>
+            <p className="mt-4 text-sm text-fog">Regla: un solo botón morado por vista (el CTA principal). El lima queda para los datos.</p>
           </Bloque>
 
           <Bloque id="b-badges" titulo="Badges">

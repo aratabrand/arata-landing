@@ -8,7 +8,7 @@ import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
-// la tarjeta recomendada lleva borde morado + brillo + badge y el ÚNICO botón lima.
+// la tarjeta recomendada lleva el filo morado (.v2-destacada, D-139), badge y el único botón principal (morado, D-140).
 // La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
@@ -31,7 +31,7 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       </p>
       {paquete.nota && <p className="mt-2 text-sm text-fog-dim">{paquete.nota}</p>}
 
-      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} arrow className="mt-6 w-full">
+      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} className="mt-6 w-full">
         {paquete.boton}
       </Button>
 
