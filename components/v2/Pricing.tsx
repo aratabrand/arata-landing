@@ -7,43 +7,64 @@ import { Container, SectionHeader } from "./primitives";
 import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
 
-// Precios (ref. 21st.dev captura 03, D-044):
-// la tarjeta recomendada va en morado plano (D-137, sin brillo) + badge y el ÚNICO botón lima.
-// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
+// Precios (ref. 21st.dev captura 03, D-044; rediseño D-138):
+// tarjetas oscuras finas y la recomendada en BLANCO con texto ink (20:1), etiqueta "Recomendado"
+// dentro de la tarjeta y botón negro con círculo lima. El precio separa "Desde" del número.
+// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas (D-068).
+
+/** "Desde 400 USD" → "Desde" pequeño + "400 USD" grande. Otros textos, tal cual. */
+export function Precio({ texto, claro = false, className }: { texto: string; claro?: boolean; className?: string }) {
+  const m = texto.match(/^(Desde)\s+(.+)$/i);
+  return (
+    <p className={cn("font-display tracking-display", claro ? "text-ink" : "text-white", className)}>
+      {m && <span className={cn("mb-2 block font-sans text-sm font-medium tracking-normal", claro ? "text-ink/60" : "text-fog-dim")}>{m[1]}</span>}
+      <span className="block text-[2.6rem] font-bold leading-none">{m ? m[2] : texto}</span>
+    </p>
+  );
+}
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
   const rec = paquete.recomendado;
   return (
     <article
       className={cn(
-        "relative flex h-full flex-col rounded-card border p-6 sm:p-7",
-        rec ? "border-brand bg-brand" : "border-white/8 bg-surface-1"
+        "relative flex h-full flex-col rounded-[28px] border p-7 sm:p-8",
+        rec ? "border-white bg-paper text-ink" : "border-white/8 bg-surface-1"
       )}
     >
-      {rec && (
-        <span className="absolute -top-3 left-6 rounded-full border border-white/15 bg-ink px-3 py-1 text-xs font-semibold text-white">
-          Recomendado
-        </span>
-      )}
-      <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
-      <p className="mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display text-white">
-        {paquete.precio}
-      </p>
-      {paquete.nota && <p className={cn("mt-2 text-sm", rec ? "text-white" : "text-fog-dim")}>{paquete.nota}</p>}
+      <div className="flex min-h-7 items-center justify-between gap-3">
+        <h3 className={cn("text-sm font-semibold", rec ? "text-ink" : "text-fog")}>{paquete.nombre}</h3>
+        {rec && (
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime" />
+            Recomendado
+          </span>
+        )}
+      </div>
+      <Precio texto={paquete.precio} claro={rec} className="mt-8" />
+      {paquete.nota && <p className={cn("mt-3 text-sm", rec ? "text-ink/70" : "text-fog-dim")}>{paquete.nota}</p>}
 
-      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} arrow className="mt-6 w-full">
+      <Button href={AGENDAR} variant={rec ? "ink" : "secondary"} arrow className="mt-8 w-full">
         {paquete.boton}
       </Button>
 
-      <ul className={cn("mt-6 space-y-3 border-t pt-6", rec ? "border-white/20" : "border-white/8")}>
+      <ul className={cn("mt-8 space-y-3.5 border-t pt-7", rec ? "border-ink/10" : "border-white/8")}>
         {paquete.incluye.map((item) => (
-          <li key={item} className={cn("flex gap-3 text-sm", rec ? "text-white" : "text-fog")}>
-            <Check aria-hidden className={cn("mt-0.5 h-4 w-4 shrink-0", rec ? "text-white" : "text-brand-soft")} />
+          <li key={item} className={cn("flex gap-3 text-sm", rec ? "text-ink/80" : "text-fog")}>
+            <span
+              aria-hidden
+              className={cn(
+                "mt-px grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full",
+                rec ? "bg-brand/10 text-brand" : "bg-white/[0.06] text-white"
+              )}
+            >
+              <Check className="h-3 w-3" strokeWidth={3} />
+            </span>
             <span>{item}</span>
           </li>
         ))}
       </ul>
-      {paquete.adicional && <p className={cn("mt-6 text-xs leading-relaxed", rec ? "text-white" : "text-fog-dim")}>{paquete.adicional}</p>}
+      {paquete.adicional && <p className={cn("mt-6 text-xs leading-relaxed", rec ? "text-ink/70" : "text-fog-dim")}>{paquete.adicional}</p>}
     </article>
   );
 }

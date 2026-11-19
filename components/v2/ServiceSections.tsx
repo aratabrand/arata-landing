@@ -210,14 +210,14 @@ export function PriceBar({
   tipo: string;
 }) {
   return (
-    <div className="mt-6 flex flex-col gap-5 rounded-card border border-brand bg-brand p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
+    <div className="mt-6 flex flex-col gap-6 rounded-[28px] bg-paper p-7 text-ink sm:flex-row sm:items-center sm:justify-between sm:p-8">
       <div>
-        <p className="font-display text-[2rem] font-extrabold leading-none tracking-display text-white">
-          {precio} <span className="font-sans text-base font-normal tracking-normal text-white">· {nota}</span>
+        <p className="font-display text-[2rem] font-bold leading-none tracking-display text-ink">
+          {precio} <span className="font-sans text-base font-normal tracking-normal text-ink/60">· {nota}</span>
         </p>
-        <p className="mt-2 text-sm text-white">{pago}</p>
+        <p className="mt-2.5 text-sm text-ink/70">{pago}</p>
       </div>
-      <Button href={agendarCon(tipo)} size="lg" arrow className="shrink-0">
+      <Button href={agendarCon(tipo)} variant="ink" size="lg" arrow className="shrink-0">
         {boton}
       </Button>
     </div>
@@ -442,16 +442,17 @@ export function PriceSection({
       <GridBackground orb="50% 30%" />
       <Container>
         <Reveal>
-          <div className="relative mx-auto max-w-3xl rounded-card border border-brand bg-brand p-8 text-center sm:p-12">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-ink px-3 py-1 text-xs font-semibold text-white">
+          <div className="relative mx-auto max-w-3xl rounded-[32px] bg-paper p-8 text-center text-ink sm:p-14">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime" />
               {paquete}
             </span>
-            <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">
+            <h2 id="precio" className="mt-6 font-display text-[clamp(2.4rem,8vw,4rem)] font-bold leading-none tracking-display text-ink">
               {precio}
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-white">{pago}</p>
+            <p className="mx-auto mt-4 max-w-md text-ink/70">{pago}</p>
             <div className="mt-8 flex justify-center">
-              <Button href={agendarCon(tipo)} size="lg" arrow>
+              <Button href={agendarCon(tipo)} variant="ink" size="lg" arrow>
                 {boton}
               </Button>
             </div>

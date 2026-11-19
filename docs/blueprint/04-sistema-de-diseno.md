@@ -55,12 +55,29 @@ Las superficies tienen un leve tinte morado para que el oscuro se sienta de marc
 | `purple-deep` (`brand-ink`) | `#3B1D99` | Detalles de gráficos | Texto y fondos (no se lee sobre oscuro) |
 | `brand-soft` | `#B9A4FF` | Texto morado sobre oscuro: etiquetas, íconos de lista (≈9.7:1) | Fondos |
 
-### Color plano ✅ (D-137, reemplaza las luces de fondo de D-044)
+### Color plano y blancos ✅ (D-137 + D-138, reemplaza las luces de fondo de D-044)
 
-Sergio pidió menos degradados, con una referencia de estudio de marca (fondo oscuro, un solo color de acento usado en bloques sólidos). Se aplicó **solo el color**: la estructura de los componentes no cambió, salvo los botones.
+Sergio pidió menos degradados (D-137) y, al ver la primera versión con bloques morados y texto blanco, la descartó: "se ve fatal", pidió algo **más limpio, premium y de alto valor**, jugando con los blancos (D-138). Lo que quedó:
 
-| En la referencia | En Arata |
+| Pieza | Cómo va |
 |---|---|
+| Fondo y tarjetas | `ink` + `surface-1` + borde blanco al 6–8 %. **Sin vidrio**, sin luces de color, sin sombras de color |
+| **Lo destacado** (paquete recomendado, precio de cada servicio, banda final) | **Tarjeta blanca** (`paper`) con texto `ink` (20:1), radio 28–32 px. Textos secundarios en `ink` al 60–70 % (≥ 5,7:1). Íconos en morado sobre un círculo morado al 10 % |
+| Botón sobre blanco | Variante **`ink`**: píldora negra, texto blanco, círculo lima con flecha `ink` |
+| Títulos de sección | **Dos tonos**: hasta la primera coma o punto en blanco, el resto en `fog-dim` (`DosTonos`, automático; no cambia el texto). Sobre blanco, `ink` + `ink` al 45 % |
+| Etiquetas (eyebrow) | Punto lima + texto `fog` en mayúsculas |
+| Precio | "Desde" pequeño arriba y el número grande en Funnel Display 700 |
+| Lima | Botón principal, una línea o cifra clave y puntos de estado. Nunca de fondo grande |
+| Morado | Círculo del botón blanco, íconos sobre blanco, gráficos. **No va de fondo detrás de texto** (blanco sobre morado da 4,6:1 y se ve mal en bloques grandes; descartado en D-138) |
+
+Reglas:
+
+- **Nada de degradados de color.** Solo máscaras sin color que desvanecen bordes (rejilla, banda de capturas, franja de logos).
+- Máximo **una o dos tarjetas blancas por página**: son lo que queremos que elijan. Si todo es blanco, nada destaca.
+- Morado y lima no son fondos de sección; el blanco tampoco: va en tarjetas, la página sigue oscura.
+- La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") vale también para el sitio. El panel tiene su propio sistema (`docs/panel-cliente/03-sistema-de-diseno.md`, D-136).
+
+---|---|
 | Fondo negro, tarjetas oscuras sólidas con borde fino | `ink` + `surface-1` + borde blanco al 6–8 %. **Sin vidrio** (`backdrop-filter`), sin luz de color en las esquinas |
 | El acento llena **bloques enteros** (plan destacado, testimonio) | **Morado plano** `#7D53FF` en el paquete recomendado, la tarjeta de precio de cada servicio y la banda final (collage tapado al 95 %) |
 | Palabras del título en el color de acento | Lima en una palabra o línea del título (ya pasaba en el hero) |
@@ -105,7 +122,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Componente | Descripción | Prioridad |
 |---|---|---|
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
-| Botón | **Píldora** de color plano (D-137). Primario **lima** con texto `ink`; con flecha lleva al final un círculo `ink` con la flecha lima · secundario **blanco** con texto `ink`; con flecha, círculo morado con flecha blanca · terciario texto con flecha ("Ver todo →"). Al pasar el mouse la flecha sale por la derecha y entra otra (solo `transform`). Sin brillo | P1 |
+| Botón | **Píldora** de color plano (D-137). Primario **lima** con texto `ink`; con flecha lleva al final un círculo `ink` con la flecha lima · secundario **blanco** con texto `ink`; con flecha, círculo morado con flecha blanca · **`ink`** (sobre tarjetas blancas, D-138): negro con texto blanco y círculo lima · terciario texto con flecha ("Ver todo →"). Al pasar el mouse la flecha sale por la derecha y entra otra (solo `transform`). Sin brillo | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
 | Tarjeta base | Superficie + borde fino de 1 px + radio 24 px; en hover, tinte blanco plano al 3 % (antes, luz morada que seguía el cursor) | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
@@ -114,7 +131,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
 | Tarjetas del problema | Apiladas, caja de ícono + título + texto, resaltado que las recorre (D-066) | P1 |
-| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** va en **morado plano** con texto blanco, badge "Recomendado" en `ink` y el único botón lima; las demás, oscuras con botón blanco (captura 03, D-137) | P1 |
+| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** va en **blanco** con texto `ink`, etiqueta "Recomendado" negra con punto lima dentro de la tarjeta y botón `ink`; las demás, oscuras con botón blanco. "Desde" pequeño sobre el número (captura 03, D-138) | P1 |
 | Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: superficie sólida + borde fino + ícono SVG animado (`Assurances`, D-068; sin vidrio ni luz desde D-137, la clase se sigue llamando `.v2-glass`) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
@@ -124,7 +141,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Preguntas frecuentes | **Dos columnas**: título a la izquierda, acordeón a la derecha; en celular, una columna (captura 02) | P1 |
 | Formulario de 3 pasos | Las 3 preguntas antes del calendario (D-017) | P1 |
 | Calendario Cal.com | Integrado en `/agendar` | P1 |
-| Banda de CTA | **Tarjeta grande** redondeada en **morado plano**, con el collage de los trabajos apenas visible debajo (morado al 95 %); título y texto blancos, botón lima y nota corta debajo (captura 04, D-137) | P1 |
+| Banda de CTA | **Tarjeta blanca grande** (radio 32 px) con texto `ink` alineado a la izquierda, título en dos tonos, botón `ink` con la nota al lado y, en escritorio, dos trabajos reales enmarcados y girados a la derecha (D-138) | P1 |
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
 | Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula lima que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |

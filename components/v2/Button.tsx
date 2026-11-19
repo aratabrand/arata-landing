@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 // Botón v2 (D-137, 04-sistema-de-diseno.md §5). Píldora de color plano, sin degradados ni brillos.
 // - primary:   lima con texto ink. Con flecha: círculo ink con la flecha lima al final.
 // - secondary: blanco con texto ink. Con flecha: círculo morado con la flecha blanca.
+// - ink:       negro con texto blanco y círculo lima con flecha ink. Para usar SOBRE BLANCO
+//              (tarjeta recomendada, precio, cierre; D-138).
 // - ghost:     texto con flecha ("Ver todo →").
 // Al pasar el mouse la flecha sale por la derecha y entra otra por la izquierda (solo transform).
 // Alto mínimo 44 px (área táctil).
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ink" | "ghost";
 type Size = "md" | "lg";
 
 const base =
@@ -19,6 +21,7 @@ const base =
 const variants: Record<Variant, string> = {
   primary: "bg-lime text-ink hover:bg-[#C6FF33]",
   secondary: "bg-white text-ink hover:bg-[#EDE7FF]",
+  ink: "bg-ink text-white hover:bg-[#1C1830]",
   ghost: "text-white hover:text-lime",
 };
 
@@ -26,6 +29,7 @@ const variants: Record<Variant, string> = {
 const circulo: Record<Exclude<Variant, "ghost">, string> = {
   primary: "bg-ink text-lime",
   secondary: "bg-brand text-white",
+  ink: "bg-lime text-ink",
 };
 
 const sizes: Record<Size, { solo: string; flecha: string; circulo: string }> = {

@@ -36,12 +36,29 @@ export function Badge({
   );
 }
 
-/** Etiqueta pequeña en mayúsculas (eyebrow). */
+/** Etiqueta pequeña (eyebrow): punto lima + texto en mayúsculas (D-138). */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className={cn("text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-brand-soft", className)}>
+    <p className={cn("flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog", className)}>
+      <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-lime" />
       {children}
     </p>
+  );
+}
+
+/**
+ * Título en dos tonos (D-138): la primera frase en blanco y lo que sigue a la primera
+ * coma o punto en gris (`tono`). No cambia el texto: solo el color. Si no hay coma ni
+ * punto en medio, todo queda en blanco.
+ */
+export function DosTonos({ texto, tono = "text-fog-dim" }: { texto: ReactNode; tono?: string }) {
+  if (typeof texto !== "string") return <>{texto}</>;
+  const m = texto.match(/^(.+?[,.:?])\s+(.+)$/);
+  if (!m) return <>{texto}</>;
+  return (
+    <>
+      {m[1]} <span className={tono}>{m[2]}</span>
+    </>
   );
 }
 
@@ -63,7 +80,7 @@ export function SectionHeader({
     <div className={cn("flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="max-w-2xl">
         <h2 id={id} className="font-display text-v2-h2 font-bold tracking-heading text-white">
-          {title}
+          <DosTonos texto={title} />
         </h2>
         {subtitle && <p className="mt-3 max-w-xl text-v2-lead text-fog">{subtitle}</p>}
       </div>

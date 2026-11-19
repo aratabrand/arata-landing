@@ -141,30 +141,30 @@ export default function SistemaV2() {
                 Terciario
               </Button>
             </div>
-            <div className="mt-4 rounded-card bg-brand p-5">
-              <p className="mb-3 text-sm font-semibold text-white">Sobre un bloque morado (paquete recomendado, banda final)</p>
-              <Button href="#" size="lg" arrow>
+            <div className="mt-4 rounded-[28px] bg-paper p-6">
+              <p className="mb-3 text-sm font-semibold text-ink">Sobre una tarjeta blanca (paquete recomendado, precio, banda final): variante ink</p>
+              <Button href="#" variant="ink" size="lg" arrow>
                 Agenda tu reunión
               </Button>
             </div>
             <ul className="mt-4 space-y-1.5 text-sm text-fog">
-              <li>Un solo botón lima por vista (el CTA principal). Los demás, blancos o de texto.</li>
+              <li>Un solo botón lima por vista (el CTA principal). Los demás, blancos, negros (sobre blanco) o de texto.</li>
               <li>La flecha va en un círculo al final: ink con flecha lima en el primario, morado con flecha blanca en el blanco.</li>
               <li>Al pasar el mouse la flecha sale por la derecha y entra otra (solo transform). Sin brillos ni degradados.</li>
             </ul>
           </Bloque>
 
-          <Bloque id="b-color-plano" titulo="Color plano · cómo se usa el color (D-137)">
+          <Bloque id="b-color-plano" titulo="Color plano y blancos · cómo se usa el color (D-138)">
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-card bg-brand p-5">
-                <p className="font-display text-lg font-bold text-white">Bloque morado</p>
-                <p className="mt-2 text-sm text-white">Lo que queremos que elijan: paquete recomendado, precio, banda final. Texto siempre blanco al 100 % (4,6:1).</p>
+              <div className="rounded-[28px] bg-paper p-5 text-ink">
+                <p className="font-display text-lg font-bold">Tarjeta blanca</p>
+                <p className="mt-2 text-sm text-ink/70">Lo que queremos que elijan: paquete recomendado, precio, banda final. Texto ink (20:1). Una o dos por página.</p>
               </div>
               <div className="v2-card p-5">
                 <p className="font-display text-lg font-bold text-white">
-                  Palabra en <span className="text-lime">lima</span>
+                  Títulos, <span className="text-fog-dim">en dos tonos</span>
                 </p>
-                <p className="mt-2 text-sm text-fog">El color se nota en pocos lugares: una palabra del título, una cifra, el botón principal.</p>
+                <p className="mt-2 text-sm text-fog">Hasta la primera coma en blanco, el resto en gris. El lima queda para el botón principal y una cifra clave.</p>
               </div>
               <div className="v2-card p-5">
                 <p className="font-display text-lg font-bold text-white">Tarjeta oscura</p>
