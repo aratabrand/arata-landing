@@ -9,94 +9,42 @@
    CSS del sitio: en Vercel, según qué archivo se procesara primero, el sitio quedaba compilado con
    la configuración del panel (sin text-v2-hero, gap-6, etc.) y se veía roto. Aquí no se usa @config.
    ────────────────────────────────────────────────────────────────────── */
-/* ── Base visual del panel (D-136, en color plano desde D-139) ──────────────
+/* ── Base visual del panel (D-136) ───────────────────────────────────────
    Superficies en capas (fondo ink → contenido canvas → tarjeta → detalle dentro de la tarjeta),
-   bordes finos, **color plano**: sin degradados, sin luces ni brillos (igual que el sitio, D-137).
-   Morado de marca para actuar y elegir; lima solo para destacar un dato (sube, completado, nuevo).
-   Solo dentro de .pn-root (layout del panel): el CSS del sitio no cambia. */
+   bordes finos, sin luces de color ni brillos. Morado de marca para actuar y elegir; lima solo
+   para destacar un dato (sube, completado, nuevo). Solo dentro de .pn-root (layout del panel). */
 .pn-root .v2-card {
-  background: #100d1a;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #100d1a;
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 20px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.35);
 }
-/* Tarjeta que es un enlace: al pasar el mouse, tinte blanco plano (como el sitio) */
-.pn-root a.v2-card:hover, .pn-root button.v2-card:hover { background: #17141f; }
-/* Tarjeta resaltada (tu tarjeta en Equipo): misma superficie con borde morado. Sin degradado */
+/* Tarjeta destacada (la primera cifra): mismo cuerpo, con un filo morado arriba. Sin desenfoque ni luz de fondo */
 .pn-root .v2-glass {
   isolation: auto;
   overflow: visible;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-radius: 20px;
-  border: 1px solid rgba(125, 83, 255, 0.4);
-  background: #100d1a;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(125, 83, 255, 0.28);
+  background: linear-gradient(180deg, rgba(125, 83, 255, 0.1), rgba(125, 83, 255, 0.02) 70%), #100d1a;
+  box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 .pn-root .v2-glass::before { display: none; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
 
-/* Botón principal: píldora morada plana, texto blanco (4,6:1). Uno por vista. Sin degradado ni sombra
-   de color (D-139). La forma de píldora va en el marcado (rounded-full); con flecha, ver FlechaPanel. */
+/* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */
 .pn-primario {
-  background: #7d53ff;
+  background: linear-gradient(180deg, #7d53ff, #6d45f0);
   color: #fff;
-  transition: background-color 0.2s, transform 0.15s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(125, 83, 255, 0.8);
+  transition: filter 0.2s, transform 0.15s;
 }
-.pn-primario:hover { background: #6a40f5; }
+.pn-primario:hover { filter: brightness(1.1); }
 .pn-primario:active { transform: translateY(1px); }
-.pn-primario:disabled { opacity: 0.5; cursor: not-allowed; background: #7d53ff; }
+.pn-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
 .pn-primario:focus-visible { outline: 2px solid #b9a4ff; outline-offset: 2px; }
-
-/* Botón negro para usar SOBRE la tarjeta blanca (como el botón ink del sitio, D-138) */
-.pn-ink {
-  background: #03010b;
-  color: #fff;
-  transition: background-color 0.2s;
-}
-.pn-ink:hover { background: #1c1830; }
-.pn-ink:focus-visible { outline: 2px solid #7d53ff; outline-offset: 2px; }
-
-/* Etiqueta en mayúsculas con punto lima (como las del sitio, D-138) */
-.pn-etiqueta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #8a84a8;
-}
-.pn-etiqueta::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-radius: 9999px;
-  background: #b6ff00;
-}
-
-/* ── Tarjeta blanca (D-139): lo más importante de la vista, máximo una o dos por página ──
-   Fondo blanco con texto ink (20:1). Las clases de color de adentro se ajustan aquí, sin tocar
-   el marcado: blanco → ink, gris → ink al 70/60 %, lima de texto → ink sobre lima, rosa → rosa
-   oscuro (el lima y el rosa claro no se leen sobre blanco). */
-.pn-root .pn-blanca {
-  background: #fff;
-  color: #03010b;
-  border: 1px solid #fff;
-  border-radius: 24px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-.pn-root .pn-blanca .text-white { color: #03010b; }
-.pn-root .pn-blanca .text-fog { color: rgba(3, 1, 11, 0.7); }
-.pn-root .pn-blanca .text-fog-dim { color: rgba(3, 1, 11, 0.6); }
-.pn-root .pn-blanca .text-lime { color: #03010b; }
-.pn-root .pn-blanca .bg-lime\/10 { background: #b6ff00; }
-.pn-root .pn-blanca .text-\[\#FF9BB0\] { color: #b0143a; }
-.pn-root .pn-blanca .bg-\[\#FF6B8B\]\/10 { background: rgba(176, 20, 58, 0.1); }
-.pn-root .pn-blanca .pn-icono { color: #7d53ff; background: rgba(125, 83, 255, 0.1); border-color: transparent; border-radius: 9999px; }
 
 /* Cuadrito con ícono al inicio de una tarjeta o cifra */
 .pn-icono {
@@ -109,6 +57,7 @@
   color: #b9a4ff;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* ── Escena del login (D-136): esfera de luz solo con CSS ─────────────────

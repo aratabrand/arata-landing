@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { CalendarClock, Check, ExternalLink, Mail, MessageCircle, RotateCcw, Trash2, Video, X } from "lucide-react";
 import { borrarInteresado, descartarInteresado, reabrirInteresado } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import { CAL_POR_ACEPTAR, cuandoTexto, etiquetaTipo, momentoDe, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
-import { FlechaPanel, Pill } from "./ui";
+import { Pill } from "./ui";
 import { BotonSecundario, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
@@ -273,10 +273,10 @@ function Fila({
             href={CAL_POR_ACEPTAR}
             target="_blank"
             rel="noopener noreferrer"
-            className="pn-primario group inline-flex h-11 items-center justify-center gap-3 rounded-full pl-5 pr-1.5 text-sm font-semibold sm:w-auto"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold sm:w-auto"
           >
-            Aceptar o rechazar en Cal.com
-            <FlechaPanel />
+            <Check aria-hidden className="h-4 w-4" /> Aceptar o rechazar en Cal.com
+            <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
           </a>
         )}
         {pendiente && llamada && (
@@ -285,12 +285,12 @@ function Fila({
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "inline-flex h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold sm:w-auto",
-              ahoraEs ? "pn-primario group gap-3 pl-5 pr-1.5" : "border border-white/10 bg-surface-2 px-5 text-white hover:border-white/20"
+              "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold sm:w-auto",
+              ahoraEs ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
             )}
           >
             <Video aria-hidden className="h-4 w-4" /> {ahoraEs ? "Entrar ahora" : i.enlaceLlamada ? "Entrar a la llamada" : "Abrir la reserva en Cal"}
-            {ahoraEs ? <FlechaPanel /> : <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />}
+            <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
           </a>
         )}
         {pendiente && puedeEditar && (
@@ -300,12 +300,11 @@ function Fila({
               onClick={() => onConfirmar(i)}
               disabled={acc.pendiente}
               className={cn(
-                "inline-flex h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold disabled:opacity-50 sm:w-auto",
-                m === "pasada" ? "pn-primario group gap-3 pl-5 pr-1.5" : "border border-white/10 bg-surface-2 px-5 text-white hover:border-white/20"
+                "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold disabled:opacity-50 sm:w-auto",
+                m === "pasada" ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
               )}
             >
-              {m !== "pasada" && <Check aria-hidden className="h-4 w-4" />} Confirmar y pasar a cliente
-              {m === "pasada" && <FlechaPanel />}
+              <Check aria-hidden className="h-4 w-4" /> Confirmar y pasar a cliente
             </button>
             <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => acc.correr(() => descartarInteresado(i.id))} className="h-11 sm:w-auto">
               <X aria-hidden className="h-4 w-4" /> No avanzó
@@ -328,7 +327,7 @@ function Fila({
             aria-label={`Borrar a ${i.nombre} de interesados`}
             disabled={acc.pendiente}
             onClick={() => window.confirm(`¿Borrar a ${i.nombre} de la lista de interesados?${i.clienteId ? " El cliente que se creó desde aquí no se borra." : ""} Queda en el historial.`) && acc.correr(() => borrarInteresado(i.id))}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-[#FF9BB0] sm:ml-auto"
+            className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-[#FF9BB0] sm:ml-auto"
           >
             <Trash2 aria-hidden className="h-4 w-4" />
           </button>

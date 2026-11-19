@@ -48,7 +48,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <p className="pn-etiqueta">{servicio?.nombre ?? "Sin servicio"}</p>
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brand-soft">{servicio?.nombre ?? "Sin servicio"}</p>
           <h1 className="mt-1 font-display text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.05] tracking-heading text-white">{p.nombre}</h1>
           <p className="mt-1 text-fog">{nombreCliente(cliente)}</p>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -266,7 +266,7 @@ function EtapaPasos({
                   aria-label={`Quitar paso: ${t.texto}`}
                   disabled={acc.pendiente}
                   onClick={() => window.confirm(`¿Quitar "${t.texto}"?`) && acc.correr(() => borrarPaso(t.id))}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white"
                 >
                   <Trash2 aria-hidden className="h-4 w-4" />
                 </button>

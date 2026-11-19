@@ -351,9 +351,9 @@ export function Embudo({ pasos }: { pasos: { nombre: string; valor: number; form
                 {pasa !== null && <span className="ml-2 font-body text-xs font-semibold text-brand-soft">{pasa.toFixed(0)} % pasa</span>}
               </span>
             </div>
-            <div className="h-9 overflow-hidden rounded-full bg-white/5">
+            <div className="h-9 overflow-hidden rounded-btn bg-white/5">
               <div
-                className={cn("pn-barra h-full origin-left rounded-full", visto && "is-visible")}
+                className={cn("pn-barra h-full origin-left rounded-btn", visto && "is-visible")}
                 style={{
                   width: `${Math.max(6, (p.valor / max) * 100)}%`,
                   background: i === pasos.length - 1 ? LIMA : `rgba(125,83,255,${0.95 - i * 0.22})`,

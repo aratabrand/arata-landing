@@ -26,9 +26,7 @@ El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-di
 | Fase "En revisión" (solo panel) | — | `#FFC76B` (punto y franja, nunca texto largo) |
 
 Reglas:
-- **El botón principal es una píldora morada plana** (`.pn-primario` + `rounded-full`: `#7D53FF` con texto blanco, 4,6:1, sin degradado ni sombra de color, D-139). Uno por vista. Antes era lima y hacía ver el panel "neón". Si lleva a algo, termina en **círculo blanco con flecha morada** (`FlechaPanel`).
-- **Color plano (D-139, igual que el sitio D-137):** tarjetas sólidas, sin degradados, sin brillos interiores ni halos. El desenfoque de la barra superior, la campana y las hojas se mantiene, y también la esfera del login (decisión de Sergio).
-- **Tarjeta blanca** (`.pn-blanca`, D-139): solo la cifra más importante de la vista (Ventas), máximo una o dos por página. Texto `ink`; sobre ella el botón es **negro** (`.pn-ink`) con círculo lima.
+- **El botón principal es morado** (`.pn-primario`: `#7D53FF` con texto blanco, 4,6:1). Uno por vista. Antes era lima y hacía ver el panel "neón".
 - **El lima solo destaca un dato, en dosis pequeñas.** Nunca en botones, íconos de menú, enlaces, interruptores ni fondos grandes.
 - Sin luces de color de fondo, sin desenfoque en las tarjetas y sin el brillo que recorre los botones (`v2-shine` queda apagado dentro del panel).
 - En gráficos, **morado** para la serie; **lima** solo para el punto o el valor que hay que mirar (último dato, primer lugar). Las barras verticales van apagadas y la elegida (la que tocas o la última) va en morado con un punto lima.
@@ -79,14 +77,9 @@ Tarjeta dividida de hasta 1040 px: a la izquierda una **esfera de luz hecha solo
 | `Hoja` | `Clientes.tsx` | Panel lateral en escritorio / hoja desde abajo en celular. Escape y clic afuera cierran, bloquea el scroll, devuelve el foco |
 | Campos | clase `.pn-input` | 44 px de alto, borde fino, foco morado con halo |
 | Botón principal | clase `.pn-primario` | Morado de marca, texto blanco. Se combina con `h-11 rounded-btn px-5 text-sm font-semibold` |
-| Botón negro | clase `.pn-ink` | Solo sobre la tarjeta blanca (D-139). Píldora `ink`, texto blanco, círculo lima con flecha `ink` |
-| Flecha del botón | `FlechaPanel` (`ui.tsx`) | Círculo de 32 px al final de un botón en píldora (`group pl-5 pr-1.5`). Por defecto blanco con flecha morada |
-| Títulos en dos tonos | `DosTonos` (`ui.tsx`) | Automático en `PanelHeader` y `Tarjeta`: hasta la primera coma, punto, dos puntos o "?" en blanco, el resto en gris |
-| Etiqueta | clase `.pn-etiqueta` | Mayúsculas, `fog-dim`, con punto lima. Grupos del menú, secciones de la campana, servicio del proyecto |
-| Tarjeta blanca | clase `.pn-blanca` (con `v2-card`) | La cifra de Ventas. Cambia sola los colores de adentro a `ink` |
 | Cuadrito de ícono | clase `.pn-icono` | 36 px, borde fino, ícono `brand-soft`. Al inicio de cada cifra y de las tarjetas con `icono` |
 
-La primera cifra del Resumen y de Finanzas (Ventas) usa la **tarjeta blanca** (`.pn-blanca`, D-139). `v2-glass` queda solo para tu tarjeta en Equipo: superficie plana con borde morado. Las demás, `v2-card`.
+La primera cifra del Resumen (Ventas) usa `v2-glass`, que dentro del panel es la misma tarjeta con un filo morado arriba (sin desenfoque ni luz de fondo). Las demás, `v2-card`.
 
 ## 5. Gráficos (`components/panel/graficos.tsx`)
 

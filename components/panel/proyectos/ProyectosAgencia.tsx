@@ -126,7 +126,7 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
       className={cn("v2-card group flex h-full flex-col p-4 transition-colors hover:border-white/16 sm:p-5", a.entregado && "opacity-80")}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="pn-etiqueta min-w-0 max-w-full"><span className="truncate">{servicio?.nombre ?? "Sin servicio"}</span></p>
+        <p className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-brand-soft">{servicio?.nombre ?? "Sin servicio"}</p>
         <Pill tono={comercial[p.estado].t}>{comercial[p.estado].l}</Pill>
       </div>
       <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-brand-soft">{p.nombre}</h2>

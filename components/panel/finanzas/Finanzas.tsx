@@ -49,7 +49,7 @@ export default function Finanzas({ datos, hoy }: { datos: DatosFinanzas; hoy: st
       <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} />
 
       <div className="-mx-4 overflow-x-auto px-4 pb-1">
-        <div role="tablist" aria-label="Secciones de finanzas" className="inline-flex gap-1 rounded-full border border-white/8 bg-surface-1 p-1">
+        <div role="tablist" aria-label="Secciones de finanzas" className="inline-flex gap-1 rounded-btn border border-white/8 bg-surface-1 p-1">
           {vistas.map((v) => (
             <button
               key={v.valor}
@@ -58,7 +58,7 @@ export default function Finanzas({ datos, hoy }: { datos: DatosFinanzas; hoy: st
               aria-selected={vista === v.valor}
               onClick={() => setVista(v.valor)}
               className={cn(
-                "h-9 whitespace-nowrap rounded-full px-3.5 text-sm font-semibold transition-colors",
+                "h-9 whitespace-nowrap rounded-[7px] px-3.5 text-sm font-semibold transition-colors",
                 vista === v.valor ? "bg-surface-3 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" : "text-fog-dim hover:text-white"
               )}
             >
@@ -124,7 +124,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
           { k: "Ganancia", v: pesos(r.ganancia), n: `margen ${porcentaje(r.margenPct, 0)}`, icon: Scale },
           { k: "Fondos de Arata", v: pesos(todo.fondos), n: `${pesos(todo.disponible)} disponibles para invertir`, icon: PiggyBank },
         ].map((k) => (
-          <article key={k.k} className={cn("v2-card p-4 sm:p-5", k.glass && "pn-blanca")}>
+          <article key={k.k} className={cn("v2-card p-4 sm:p-5", k.glass && "v2-glass")}>
             <div className="flex items-center gap-3">
               <span className="pn-icono">
                 <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />

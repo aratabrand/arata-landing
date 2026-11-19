@@ -98,7 +98,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
       <button
         type="submit"
         disabled={enviando || codigo.length < 6}
-        className="h-11 w-full rounded-full pn-primario text-sm font-semibold disabled:opacity-50"
+        className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-50"
       >
         {enviando ? "Verificando…" : paso.paso === "qr" ? "Activar" : "Entrar"}
       </button>
@@ -122,7 +122,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
               {error}
             </p>
           )}
-          <button type="submit" disabled={enviando} className="h-11 w-full rounded-full pn-primario text-sm font-semibold disabled:opacity-60">
+          <button type="submit" disabled={enviando} className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-60">
             {enviando ? "Preparando…" : "Continuar"}
           </button>
         </form>
@@ -168,11 +168,11 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
           <button
             type="button"
             onClick={() => navigator.clipboard?.writeText(paso.codigos.join("\n")).catch(() => {})}
-            className="h-11 w-full rounded-full border border-white/10 bg-surface-2 text-sm font-semibold text-white hover:bg-surface-3"
+            className="h-11 w-full rounded-btn border border-white/10 bg-surface-2 text-sm font-semibold text-white hover:bg-surface-3"
           >
             Copiar códigos
           </button>
-          <button type="button" onClick={() => window.location.assign("/panel")} className="h-11 w-full rounded-full pn-primario text-sm font-semibold">
+          <button type="button" onClick={() => window.location.assign("/panel")} className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">
             Ya los guardé, entrar al panel
           </button>
         </div>

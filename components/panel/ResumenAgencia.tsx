@@ -9,7 +9,7 @@ import type { ClienteAgencia } from "@/lib/panel/clientes/datos";
 import { resumenAgencia, type PeriodoResumen } from "@/lib/panel/resumen/agencia";
 import { fechaCorta, numero, pesos, pesosCorto, porcentaje } from "@/lib/panel/formato";
 import { Anillo, BarrasHorizontales, Embudo, GraficoArea } from "./graficos";
-import { Delta, FlechaPanel, PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
+import { Delta, PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { Segmentado } from "./Resumen";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
   return (
     <PanelPage>
       <PanelHeader
-        titulo={`Hola, ${nombre}`}
+        titulo={<>Hola, {nombre}</>}
         bajada={<>Así le fue a Arata San en {textoPeriodo}, comparado con el periodo anterior.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />
@@ -54,7 +54,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
           { k: "Clientes nuevos", v: numero(r.clientesNuevos), d: r.deltaClientes, n: `${numero(clientes.length)} en total`, icon: Users },
           { k: "Proyectos en proceso", v: numero(r.enProceso), d: undefined, n: r.tarde ? `${r.tarde} ${r.tarde === 1 ? "va" : "van"} tarde` : "ninguno va tarde", icon: Calendar, alerta: r.tarde > 0 },
         ].map((k) => (
-          <article key={k.k} className={cn("v2-card flex flex-col p-4 sm:p-5", k.glass && "pn-blanca")}>
+          <article key={k.k} className={cn("v2-card flex flex-col p-4 sm:p-5", k.glass && "v2-glass")}>
             <div className="flex items-center gap-3">
               <span className="pn-icono">
                 <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
@@ -66,12 +66,6 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
               {k.d !== undefined && <Delta valor={k.d} />}
               <span className={cn("text-xs", k.alerta ? "text-[#FF9BB0]" : "text-fog-dim")}>{k.n}</span>
             </div>
-            {k.glass && (
-              <Link href="/panel/finanzas" className="pn-ink group mt-4 inline-flex h-10 items-center gap-3 self-start rounded-full pl-4 pr-1 text-sm font-semibold">
-                Ver finanzas
-                <FlechaPanel className="bg-lime text-ink" />
-              </Link>
-            )}
           </article>
         ))}
       </div>

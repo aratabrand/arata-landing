@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, ArrowRight, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Piezas base del panel (docs/panel-cliente/03-sistema-de-diseno.md §4).
@@ -9,36 +9,6 @@ import { cn } from "@/lib/utils";
 /** Contenedor de cada módulo: márgenes mobile-first, máx. 1280 px. */
 export function PanelPage({ children }: { children: ReactNode }) {
   return <div className="mx-auto w-full max-w-[1280px] space-y-6 px-4 pt-6 sm:px-6 lg:px-10 lg:pt-10">{children}</div>;
-}
-
-/**
- * Título en dos tonos (D-139, igual al sitio D-138): hasta la primera coma, punto, dos puntos o
- * signo de pregunta en blanco y el resto en gris. Automático, no cambia el texto. Copia propia del
- * panel: el panel nunca importa piezas del sitio (D-115).
- */
-export function DosTonos({ texto, tono = "text-fog-dim" }: { texto: ReactNode; tono?: string }) {
-  if (typeof texto !== "string") return <>{texto}</>;
-  const m = texto.match(/^(.+?[,.:?])\s+(.+)$/);
-  if (!m) return <>{texto}</>;
-  return (
-    <>
-      {m[1]} <span className={tono}>{m[2]}</span>
-    </>
-  );
-}
-
-/**
- * Círculo con flecha al final de un botón en píldora (D-139, como el sitio D-137). Al pasar el mouse
- * una flecha sale por la derecha y otra entra (solo transform; quieta con movimiento reducido).
- * El botón lleva `group` y `pl-5 pr-1.5`. Colores: en el botón morado, círculo blanco y flecha morada.
- */
-export function FlechaPanel({ className = "bg-white text-brand" }: { className?: string }) {
-  return (
-    <span aria-hidden className={cn("relative grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full", className)}>
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-[180%] motion-reduce:transition-none" />
-      <ArrowRight className="absolute h-4 w-4 -translate-x-[180%] transition-transform duration-300 ease-out group-hover:translate-x-0 motion-reduce:hidden" />
-    </span>
-  );
 }
 
 /** Encabezado de módulo: el único <h1> de la vista. */
@@ -51,9 +21,7 @@ export function PanelHeader({ titulo, bajada, accion, volver }: { titulo: ReactN
             <ArrowLeft aria-hidden className="h-4 w-4" /> {volver.texto}
           </Link>
         )}
-        <h1 className="font-display text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.05] tracking-heading text-white">
-          <DosTonos texto={titulo} />
-        </h1>
+        <h1 className="font-display text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.05] tracking-heading text-white">{titulo}</h1>
         {bajada && <p className="mt-2 max-w-xl text-sm text-fog sm:text-[0.95rem]">{bajada}</p>}
       </div>
       {accion && <div className="shrink-0">{accion}</div>}
@@ -85,11 +53,7 @@ export function Tarjeta({
           <div className="flex min-w-0 items-center gap-3">
             {icono && <span className="pn-icono">{icono}</span>}
             <div className="min-w-0">
-              {titulo && (
-                <h2 className="font-display text-base font-bold tracking-heading text-white sm:text-lg">
-                  <DosTonos texto={titulo} />
-                </h2>
-              )}
+              {titulo && <h2 className="font-display text-base font-bold tracking-heading text-white sm:text-lg">{titulo}</h2>}
               {bajada && <p className="mt-0.5 text-xs text-fog-dim">{bajada}</p>}
             </div>
           </div>

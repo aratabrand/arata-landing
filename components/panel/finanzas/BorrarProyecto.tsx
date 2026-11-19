@@ -96,7 +96,7 @@ function Alerta({ proyectoId, nombre, onCerrar, onBorrado }: { proyectoId: strin
             type="button"
             disabled={!coincide || !c || acc.pendiente}
             onClick={() => acc.correr(() => borrarProyecto(proyectoId, escrito), onBorrado)}
-            className="h-11 flex-1 rounded-full bg-[#FF9BB0] px-4 text-sm font-semibold text-ink hover:bg-[#ffb3c3] disabled:opacity-40"
+            className="h-11 flex-1 rounded-btn bg-[#FF9BB0] px-4 text-sm font-semibold text-ink hover:bg-[#ffb3c3] disabled:opacity-40"
           >
             {acc.pendiente ? "Borrando…" : "Borrar para siempre"}
           </button>
