@@ -49,7 +49,7 @@ export function Segmentado<T extends string | number>({
   etiqueta: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={etiqueta} className="inline-flex rounded-btn border border-white/8 bg-surface-1 p-1">
+    <div role="radiogroup" aria-label={etiqueta} className="inline-flex rounded-full border border-white/8 bg-surface-1 p-1">
       {opciones.map((o) => (
         <button
           key={String(o.valor)}
@@ -58,7 +58,7 @@ export function Segmentado<T extends string | number>({
           aria-checked={valor === o.valor}
           onClick={() => onChange(o.valor)}
           className={cn(
-            "h-9 rounded-[7px] px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
+            "h-9 rounded-full px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
             valor === o.valor ? "bg-surface-3 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" : "text-fog-dim hover:text-white"
           )}
         >
@@ -135,7 +135,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
   return (
     <PanelPage>
       <PanelHeader
-        titulo={<>Hola, {negocio.contacto}</>}
+        titulo={`Hola, ${negocio.contacto}`}
         bajada={<>Así le fue a {negocio.nombre} en los últimos {periodo} días, comparado con los {periodo} días anteriores.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />
@@ -143,7 +143,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
       {/* Cifras principales */}
       <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {kpis.map((k, i) => (
-          <article key={k.label} className={cn("v2-card flex flex-col p-4 sm:p-5", i === 0 && "v2-glass")}>
+          <article key={k.label} className={cn("v2-card flex flex-col p-4 sm:p-5", i === 0 && "pn-blanca")}>
             <div className="flex items-center gap-3">
               <span className="pn-icono">
                 <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />

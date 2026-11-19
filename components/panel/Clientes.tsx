@@ -63,7 +63,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
           <button
             type="button"
             onClick={() => setCreando(true)}
-            className="inline-flex h-11 items-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold transition-colors"
+            className="inline-flex h-11 items-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold transition-colors"
           >
             <Plus aria-hidden className="h-4 w-4" />
             Agregar cliente
@@ -154,7 +154,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                       aria-label={`Escribirle a ${c.nombre} por WhatsApp`}
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-btn border border-white/10 text-fog transition-colors hover:border-brand/60 hover:text-brand-soft"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-fog transition-colors hover:border-brand/60 hover:text-brand-soft"
                     >
                       <MessageCircle aria-hidden className="h-4 w-4" />
                     </a>
@@ -256,7 +256,7 @@ export function Hoja({ titulo, onClose, children }: { titulo: string; onClose: (
       >
         <div className="mb-5 flex items-start justify-between gap-3">
           <h2 className="font-display text-xl font-bold tracking-heading text-white">{titulo}</h2>
-          <button type="button" onClick={onClose} aria-label="Cerrar" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-btn border border-white/10 text-fog hover:text-white">
+          <button type="button" onClick={onClose} aria-label="Cerrar" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-fog hover:text-white">
             <X aria-hidden className="h-4 w-4" />
           </button>
         </div>
@@ -295,7 +295,7 @@ function FichaCliente({ cliente: c, onChange, onDelete }: { cliente: Cliente; on
         href={wa(c.telefono, c.nombre)}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-11 w-full items-center justify-center gap-2 rounded-btn pn-primario text-sm font-semibold"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-full pn-primario text-sm font-semibold"
       >
         <MessageCircle aria-hidden className="h-4 w-4" />
         Escribirle por WhatsApp
@@ -377,7 +377,7 @@ function NuevoCliente({ hoy, onSave }: { hoy: string; onSave: (c: Cliente) => vo
       </div>
       <Campo label="Notas"><textarea name="notas" rows={3} className="pn-input h-auto py-2.5" maxLength={500} /></Campo>
       {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
-      <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">
+      <button type="submit" className="h-11 w-full rounded-full pn-primario text-sm font-semibold">
         Guardar cliente
       </button>
     </form>

@@ -169,7 +169,7 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
   const grupo = (titulo: string, lista: readonly Opcion[]) =>
     lista.length > 0 && (
       <div>
-        <p className="px-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">{titulo}</p>
+        <p className="pn-etiqueta px-3">{titulo}</p>
         <ul className="mt-2.5 space-y-1">
           {lista.map(({ href, label, icon: Icon, rutas }) => {
             const on = activo(path, rutas);
@@ -199,10 +199,10 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
       {sel && (
         <span
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+          className="pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] transition-transform duration-300 ease-out motion-reduce:transition-none"
           style={{ height: sel.h, transform: `translateY(${sel.y}px)` }}
         >
-          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand shadow-[0_0_12px_rgba(125,83,255,0.8)]" />
+          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand" />
         </span>
       )}
       {grupo("Menú", principal)}
@@ -270,17 +270,17 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
             <p className="truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</p>
           </div>
           <div className="my-1 h-px bg-white/[0.06]" />
-          <a role="menuitem" href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-between rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+          <a role="menuitem" href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-between rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
             Ver mi página <ArrowUpRight aria-hidden className="h-4 w-4" />
           </a>
           {/* En el panel de la propia agencia no tiene sentido escribirse a sí mismos */}
           {negocio.tipo !== "agencia" && (
-            <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+            <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <MessageCircle aria-hidden className="h-4 w-4 text-brand-soft" /> Escribirle a Arata San
             </a>
           )}
           {conSesion && (
-            <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+            <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <LogOut aria-hidden className="h-4 w-4" /> Salir
             </button>
           )}

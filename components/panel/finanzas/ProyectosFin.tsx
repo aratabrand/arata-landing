@@ -305,7 +305,7 @@ function QuienTrabajo({
             <li key={h.id} className="flex items-center gap-2 px-3 py-2 text-sm">
               <span className="min-w-0 flex-1 text-white">{nombre(h.personaId)} <span className="text-fog">· {h.actividad} · {textoDias(h.dias)}</span></span>
               <span className="text-xs tabular-nums text-fog">{pesos(Math.round(h.dias * r.tarifaDia))}</span>
-              <button type="button" aria-label={`Quitar ${nombre(h.personaId)} · ${h.actividad}`} onClick={() => setQuitar((l) => [...l, h.id])} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+              <button type="button" aria-label={`Quitar ${nombre(h.personaId)} · ${h.actividad}`} onClick={() => setQuitar((l) => [...l, h.id])} className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-white">
                 <Trash2 aria-hidden className="h-4 w-4" />
               </button>
             </li>
@@ -317,7 +317,7 @@ function QuienTrabajo({
                 <span className="ml-1.5 text-[0.68rem] text-lime">nuevo</span>
               </span>
               <span className="text-xs tabular-nums text-fog">{pesos(Math.round(Number(n.dias.replace(",", ".")) * r.tarifaDia))}</span>
-              <button type="button" aria-label={`Quitar ${nombre(n.personaId)} · ${n.actividad}`} onClick={() => setNuevas((l) => l.filter((x) => x.clave !== n.clave))} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+              <button type="button" aria-label={`Quitar ${nombre(n.personaId)} · ${n.actividad}`} onClick={() => setNuevas((l) => l.filter((x) => x.clave !== n.clave))} className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-white">
                 <Trash2 aria-hidden className="h-4 w-4" />
               </button>
             </li>
@@ -574,7 +574,7 @@ export function Lista({
                 aria-label={`Quitar ${f.izq}`}
                 disabled={acc.pendiente}
                 onClick={() => window.confirm("¿Quitar este registro?") && acc.correr(() => onBorrar(f.id))}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white"
               >
                 <Trash2 aria-hidden className="h-4 w-4" />
               </button>
@@ -640,7 +640,7 @@ export function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: st
               <div className="flex h-11 items-center justify-between gap-2 self-start pt-[1.4rem]">
                 <span className="text-xs tabular-nums text-fog">{diasValidos(f.dias) ? `= ${pesos(Math.round(Number(f.dias.replace(",", ".")) * tarifa))}` : ""}</span>
                 {filas.length > 1 && (
-                  <button type="button" aria-label={`Quitar fila ${i + 1}`} onClick={() => setFilas((l) => l.filter((x) => x.clave !== f.clave))} className="flex h-10 w-10 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+                  <button type="button" aria-label={`Quitar fila ${i + 1}`} onClick={() => setFilas((l) => l.filter((x) => x.clave !== f.clave))} className="flex h-10 w-10 items-center justify-center rounded-full text-fog-dim hover:text-white">
                     <Trash2 aria-hidden className="h-4 w-4" />
                   </button>
                 )}
@@ -653,7 +653,7 @@ export function FormTrabajo({ proyectoId, datos, hoy, tarifa }: { proyectoId: st
       <button
         type="button"
         onClick={() => setFilas((l) => [...l, { clave: Date.now(), personaId: siguiente(), actividad: "", dias: "" }])}
-        className="inline-flex h-10 items-center gap-1.5 rounded-btn border border-dashed border-white/15 px-3 text-sm font-semibold text-fog hover:border-white/30 hover:text-white"
+        className="inline-flex h-10 items-center gap-1.5 rounded-full border border-dashed border-white/15 px-3 text-sm font-semibold text-fog hover:border-white/30 hover:text-white"
       >
         <Plus aria-hidden className="h-4 w-4" /> Añadir persona
       </button>

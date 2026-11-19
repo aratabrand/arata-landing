@@ -69,7 +69,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
           <button
             type="button"
             onClick={() => setCreando("por-hacer")}
-            className="inline-flex h-11 items-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold"
+            className="inline-flex h-11 items-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold"
           >
             <Plus aria-hidden className="h-4 w-4" /> Nuevo proyecto
           </button>
@@ -168,7 +168,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
                     type="button"
                     onClick={() => setCreando(f.valor)}
                     aria-label={`Agregar proyecto en ${f.label}`}
-                    className="flex h-8 w-8 items-center justify-center rounded-btn text-fog-dim hover:bg-surface-2 hover:text-white"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-fog-dim hover:bg-surface-2 hover:text-white"
                   >
                     <Plus aria-hidden className="h-4 w-4" />
                   </button>
@@ -306,7 +306,7 @@ function TarjetaProyecto({
           disabled={i === 0}
           onClick={() => onMove(-1)}
           aria-label={`Mover "${p.titulo}" a ${fases[i - 1]?.label ?? ""}`}
-          className="flex h-8 w-8 items-center justify-center rounded-btn border border-white/8 text-fog transition-colors hover:text-white disabled:opacity-25"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/8 text-fog transition-colors hover:text-white disabled:opacity-25"
         >
           <ChevronLeft aria-hidden className="h-4 w-4" />
         </button>
@@ -315,7 +315,7 @@ function TarjetaProyecto({
           disabled={i === fases.length - 1}
           onClick={() => onMove(1)}
           aria-label={`Mover "${p.titulo}" a ${fases[i + 1]?.label ?? ""}`}
-          className="flex h-8 min-w-0 items-center gap-1 rounded-btn border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-brand/50 hover:text-brand-soft disabled:opacity-25"
+          className="flex h-8 min-w-0 items-center gap-1 rounded-full border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-brand/50 hover:text-brand-soft disabled:opacity-25"
         >
           <span className="truncate whitespace-nowrap">{fases[i + 1]?.label.replace(/^En /, "A ") ?? "Listo"}</span>
           <ChevronRight aria-hidden className="h-4 w-4" />
@@ -372,7 +372,7 @@ function DetalleProyecto({ p, onChange, onDelete }: { p: Proyecto; onChange: (c:
                 type="button"
                 aria-label={`Quitar tarea: ${t.texto}`}
                 onClick={() => onChange({ tareas: p.tareas.filter((x) => x.id !== t.id) })}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white"
               >
                 <Trash2 aria-hidden className="h-4 w-4" />
               </button>
@@ -382,7 +382,7 @@ function DetalleProyecto({ p, onChange, onDelete }: { p: Proyecto; onChange: (c:
         <form onSubmit={agregar} className="mt-2 flex gap-2">
           <label className="sr-only" htmlFor="nueva-tarea">Nueva tarea</label>
           <input id="nueva-tarea" value={nueva} onChange={(e) => setNueva(e.target.value)} placeholder="Agregar una tarea" maxLength={120} className="pn-input" />
-          <button type="submit" className="h-11 shrink-0 rounded-btn border border-white/10 bg-surface-2 px-4 text-sm font-semibold text-white hover:border-white/20">
+          <button type="submit" className="h-11 shrink-0 rounded-full border border-white/10 bg-surface-2 px-4 text-sm font-semibold text-white hover:border-white/20">
             Agregar
           </button>
         </form>
@@ -437,7 +437,7 @@ function NuevoProyecto({ fase, hoy, onSave }: { fase: FaseProyecto; hoy: string;
         </label>
       </div>
       {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
-      <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">Crear proyecto</button>
+      <button type="submit" className="h-11 w-full rounded-full pn-primario text-sm font-semibold">Crear proyecto</button>
     </form>
   );
 }

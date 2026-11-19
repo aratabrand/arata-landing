@@ -117,7 +117,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                 <div className="space-y-4">
                   {datos.alertas.length > 0 && (
                     <section>
-                      <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Entregas</p>
+                      <p className="pn-etiqueta mb-2">Entregas</p>
                       <ul className="space-y-1.5">
                         {datos.alertas.map((a) => (
                           <li key={a.id}>
@@ -137,7 +137,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                     </section>
                   )}
                   <section>
-                    <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Últimos cambios</p>
+                    <p className="pn-etiqueta mb-2">Últimos cambios</p>
                     <Historial eventos={datos.eventos} nuevos={nuevos} compacto vacio="Todavía no hay cambios." />
                   </section>
                 </div>
