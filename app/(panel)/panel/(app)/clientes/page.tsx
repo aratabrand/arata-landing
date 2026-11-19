@@ -7,9 +7,10 @@ import { cargarClientesAgencia } from "@/lib/panel/clientes/datos";
 export const metadata: Metadata = { title: "Clientes" };
 
 // Arata San con sesión: clientes reales desde Neon (D-110). Si no, el ejemplo.
-export default async function PanelClientesPage() {
+export default async function PanelClientesPage({ searchParams }: { searchParams: Promise<{ ver?: string }> }) {
   const real = await cargarClientesAgencia();
-  if (real) return <ClientesAgencia datos={real} />;
+  // El aviso de "nuevo interesado" abre /panel/clientes?ver=interesados
+  if (real) return <ClientesAgencia datos={real} vistaInicial={(await searchParams).ver === "interesados" ? "interesados" : "clientes"} />;
   const { clientes, hoy } = obtenerPanel();
   return <Clientes iniciales={clientes} hoy={hoy} />;
 }

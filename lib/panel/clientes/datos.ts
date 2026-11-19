@@ -2,6 +2,7 @@ import { db } from "../db";
 import { fechaBogota } from "../fecha";
 import { panelActivo } from "../config";
 import { contextoAgencia } from "../finanzas/datos";
+import type { Interesado } from "./interesados";
 
 // Clientes de Arata San (solo servidor, D-110): datos de cada cliente, de dónde
 // vino y sus proyectos (servicio, estado, valor) desde Finanzas.
@@ -45,7 +46,17 @@ export type ClienteAgencia = {
 export type Pais = { codigo: string; nombre: string };
 export type Ciudad = { id: string; pais: string; nombre: string; departamento: string | null };
 
-export type DatosClientes = { puedeEditar: boolean; puedeBorrar: boolean; clientes: ClienteAgencia[]; paises: Pais[]; ciudades: Ciudad[] };
+export type DatosClientes = {
+  puedeEditar: boolean;
+  puedeBorrar: boolean;
+  clientes: ClienteAgencia[];
+  paises: Pais[];
+  ciudades: Ciudad[];
+  /** Personas que agendaron reunión por Cal.com (D-133). */
+  interesados: Interesado[];
+  /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
+  ahora: string;
+};
 
 /** País con lista de ciudades (D-119): en los demás la ciudad queda bloqueada. */
 export const PAIS_CON_CIUDADES = "CO";
@@ -70,7 +81,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [cl, pr, lugares] = await Promise.all([
+  const [cl, pr, lugares, it] = await Promise.all([
     db().query(
       `select c.id, c.nombre, c.empresa, c.telefono, c.pais, pa.nombre pais_nombre, c.ciudad_id, ci.nombre ciudad,
               c.sitio_web, c.instagram, c.estado, c.origen, c.origen_detalle, c.notas, c.creado
@@ -86,6 +97,12 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
       [ctx.negocioId]
     ),
     cargarLugares(),
+    db().query(
+      `select id, nombre, correo, whatsapp, necesita, tipo, pagina_web, cuando, inversion, reunion_inicio, reunion_fin,
+              enlace_llamada, enlace_reserva, estado, cliente_id, creado, cerrado_en
+         from interesados where negocio_id = $1 order by reunion_inicio desc limit 300`,
+      [ctx.negocioId]
+    ),
   ]);
   const porCliente = new Map<string, ProyectoDeCliente[]>();
   pr.rows.forEach((r) => {
@@ -97,6 +114,28 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     puedeEditar: ctx.editaFinanzas,
     puedeBorrar: ctx.esDueno,
     ...lugares,
+    ahora: new Date().toISOString(),
+    interesados: it.rows.map(
+      (r): Interesado => ({
+        id: r.id,
+        nombre: r.nombre,
+        correo: r.correo,
+        whatsapp: r.whatsapp,
+        necesita: r.necesita,
+        tipo: r.tipo,
+        paginaWeb: r.pagina_web,
+        cuando: r.cuando,
+        inversion: r.inversion,
+        inicio: r.reunion_inicio.toISOString(),
+        fin: r.reunion_fin ? r.reunion_fin.toISOString() : null,
+        enlaceLlamada: r.enlace_llamada,
+        enlaceReserva: r.enlace_reserva,
+        estado: r.estado,
+        clienteId: r.cliente_id,
+        creado: r.creado.toISOString(),
+        cerradoEn: r.cerrado_en ? r.cerrado_en.toISOString() : null,
+      })
+    ),
     clientes: cl.rows.map((r) => ({
       id: r.id,
       nombre: r.nombre,

@@ -182,6 +182,12 @@ create policy "miembros leen y escriben sus clientes" on clientes
 | `ciudades` | Ciudades de Colombia (74 principales + las que se agreguen desde el panel), con departamento |
 | `clientes.pais`, `clientes.ciudad_id` | Desde las listas. `clientes.correo` y `clientes.ciudad` (texto) quedan sin uso |
 
+### Tabla nueva (D-133, `013_interesados.sql`)
+
+| Tabla | Qué guarda |
+|---|---|
+| `interesados` | Una fila por reserva de Cal.com (`cal_uid` único): nombre, correo, WhatsApp, qué necesita, tipo, página, cuándo empezar, inversión, hora de la reunión, enlace de la llamada y de la reserva. `estado`: `agendada` → `confirmada` (con `cliente_id`) · `cancelada` (Cal.com) · `descartada` ("No avanzó"). Solo la agencia puede tenerla (trigger `exigir_agencia`). El historial acepta la entidad `interesado` |
+
 ## 3. Definición de cada métrica
 
 Escrita para que el número del panel siempre se pueda explicar.

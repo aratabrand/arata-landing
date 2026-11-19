@@ -67,9 +67,9 @@ function redireccionesPanel() {
   if (PANEL_SOLO) {
     return [
       { source: "/", destination: "/panel", permanent: false },
-      // Todo lo que no sea panel, su API (acceso, textos publicados y aviso diario), los archivos de Next o robots/ícono → al sitio público
+      // Todo lo que no sea panel, su API (acceso, textos publicados, aviso diario y avisos de Cal.com), los archivos de Next o robots/ícono → al sitio público
       {
-        source: "/:ruta((?!panel(?:/|$)|api/auth/|api/sitio$|api/avisos/|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
+        source: "/:ruta((?!panel(?:/|$)|api/auth/|api/sitio$|api/avisos/|api/cal/|_next/|robots\\.txt$|icon\\.svg$|favicon\\.ico$).+)",
         destination: `${SITIO}/:ruta`,
         permanent: false,
       },

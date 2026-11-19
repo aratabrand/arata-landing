@@ -5,11 +5,15 @@ import { ExternalLink, History, MapPin, MessageCircle, Phone, Plus, Search, Tras
 import type { ClienteAgencia, DatosClientes } from "@/lib/panel/clientes/datos";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
-import { borrarCliente, guardarCliente, verHistorialCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { borrarCliente, confirmarInteresado, guardarCliente, verHistorialCliente, type EntradaCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import type { Resultado } from "@/app/(panel)/panel/(app)/finanzas/acciones";
+import { cuandoTexto, datosDeCliente, type Interesado } from "@/lib/panel/clientes/interesados";
 import { mascaraCelular, mascaraNombre } from "@/lib/panel/mascaras";
 import { InputCelular, InputInstagram, InputUrl, SelectorLugar } from "./campos";
 import Historial from "./Historial";
 import { Hoja } from "./Clientes";
+import { Segmentado } from "./Resumen";
+import Interesados from "./Interesados";
 import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, LeyendaObligatorios, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
@@ -34,12 +38,20 @@ const wa = (c: ClienteAgencia) => `https://wa.me/${c.pais === "CO" ? "57" + c.te
 
 type Filtro = "todos" | "en-curso" | "origen";
 
-export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
+export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { datos: DatosClientes; vistaInicial?: "clientes" | "interesados" }) {
   const [q, setQ] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [origen, setOrigen] = useState<string>("");
   const [abierto, setAbierto] = useState<string | null>(null);
   const [creando, setCreando] = useState(false);
+  // Pestañas Clientes | Interesados (D-133). "Confirmar" abre el formulario de cliente ya prellenado.
+  const [vista, setVista] = useState<"clientes" | "interesados">(vistaInicial);
+  const [confirmando, setConfirmando] = useState<Interesado | null>(null);
+  const pendientes = datos.interesados.filter((i) => i.estado === "agendada").length;
+  const nombreDeCliente = (id: string) => {
+    const x = datos.clientes.find((c) => c.id === id);
+    return x ? titulo(x) : null;
+  };
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -74,6 +86,31 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
       />
       <AvisoAcceso demo={false} puedeEditar={datos.puedeEditar} />
 
+      <Segmentado
+        etiqueta="Ver"
+        opciones={[
+          { valor: "clientes" as const, label: `Clientes (${datos.clientes.length})` },
+          { valor: "interesados" as const, label: pendientes > 0 ? `Interesados · ${pendientes} por atender` : "Interesados" },
+        ]}
+        valor={vista}
+        onChange={setVista}
+      />
+
+      {vista === "interesados" ? (
+        <Interesados
+          interesados={datos.interesados}
+          ahora={datos.ahora}
+          nombreCliente={nombreDeCliente}
+          puedeEditar={datos.puedeEditar}
+          puedeBorrar={datos.puedeBorrar}
+          onConfirmar={setConfirmando}
+          onVerCliente={(id) => {
+            setVista("clientes");
+            setAbierto(id);
+          }}
+        />
+      ) : (
+      <>
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {[
           { k: "Clientes", v: numero(resumen.total) },
@@ -165,6 +202,28 @@ export default function ClientesAgencia({ datos }: { datos: DatosClientes }) {
           </ul>
         )}
       </Tarjeta>
+      </>
+      )}
+
+      {confirmando && (
+        <Hoja titulo={`Confirmar a ${confirmando.nombre}`} onClose={() => setConfirmando(null)}>
+          <div className="mb-4 rounded-frame border border-lime/30 bg-lime/[0.05] p-3 text-sm text-fog">
+            <p className="font-semibold text-white">La reunión salió bien</p>
+            <p className="mt-1">
+              Revisa los datos y guarda: se crea el cliente y este interesado queda como cliente.
+              {confirmando.necesita ? ` Pidió: ${confirmando.necesita.toLowerCase()}.` : ""} Reunión: {cuandoTexto(confirmando.inicio)}.
+            </p>
+            <p className="mt-1 text-xs text-fog-dim">Falta lo que Cal no trae: la ciudad{confirmando.necesita ? "" : " y los demás datos"}. Si ya es cliente (mismo celular), se vincula en vez de duplicarlo.</p>
+          </div>
+          <FormCliente
+            datos={datos}
+            inicial={datosDeCliente(confirmando)}
+            textoGuardar="Confirmar y crear cliente"
+            guardar={(entrada) => confirmarInteresado({ interesadoId: confirmando.id, cliente: entrada })}
+            onListo={() => setConfirmando(null)}
+          />
+        </Hoja>
+      )}
 
       {actual && (
         <Hoja titulo={titulo(actual)} onClose={() => setAbierto(null)}>
@@ -296,46 +355,62 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
   );
 }
 
-function FormCliente({ c, datos, onListo }: { c?: ClienteAgencia; datos: DatosClientes; onListo: () => void }) {
+type InicialCliente = Partial<Pick<ClienteAgencia, "nombre" | "empresa" | "telefono" | "pais" | "ciudadId" | "sitioWeb" | "instagram" | "estado" | "origen" | "origenDetalle" | "notas">>;
+
+export function FormCliente({
+  c,
+  datos,
+  onListo,
+  inicial,
+  guardar,
+  textoGuardar,
+}: {
+  c?: ClienteAgencia;
+  datos: DatosClientes;
+  onListo: () => void;
+  /** Datos con los que arranca el formulario (ej. un interesado que se confirma). */
+  inicial?: InicialCliente;
+  /** Cómo se guarda, si no es el guardado normal de un cliente. */
+  guardar?: (entrada: EntradaCliente) => Promise<Resultado>;
+  textoGuardar?: string;
+}) {
   const acc = useAccion();
-  const [pais, setPais] = useState(c?.pais ?? "CO");
-  const [ciudadId, setCiudadId] = useState(c?.ciudadId ?? "");
+  // Un cliente que se edita manda sobre los datos iniciales
+  const v0: InicialCliente = { ...(inicial ?? {}), ...(c ?? {}) };
+  const [pais, setPais] = useState(v0.pais ?? "CO");
+  const [ciudadId, setCiudadId] = useState(v0.ciudadId ?? "");
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const v = (k: string) => String(f.get(k) ?? "");
-    acc.correr(
-      () =>
-        guardarCliente({
-          id: c?.id,
-          nombre: v("nombre"),
-          empresa: v("empresa"),
-          telefono: v("telefono"),
-          pais,
-          ciudadId: pais === "CO" ? ciudadId : "",
-          sitioWeb: v("sitioWeb"),
-          instagram: v("instagram"),
-          estado: v("estado"),
-          origen: v("origen"),
-          origenDetalle: v("origenDetalle"),
-          notas: v("notas"),
-        }),
-      onListo
-    );
+    const entrada: EntradaCliente = {
+      nombre: v("nombre"),
+      empresa: v("empresa"),
+      telefono: v("telefono"),
+      pais,
+      ciudadId: pais === "CO" ? ciudadId : "",
+      sitioWeb: v("sitioWeb"),
+      instagram: v("instagram"),
+      estado: v("estado"),
+      origen: v("origen"),
+      origenDetalle: v("origenDetalle"),
+      notas: v("notas"),
+    };
+    acc.correr(() => (guardar ? guardar(entrada) : guardarCliente({ id: c?.id, ...entrada })), onListo);
   };
   return (
     <form onSubmit={enviar} noValidate className="space-y-4">
       <LeyendaObligatorios />
       <div className="grid gap-3 sm:grid-cols-2">
         <Campo etiqueta="Nombre de la persona *">
-          <NombreInput name="nombre" inicial={c?.nombre ?? ""} autoComplete="name" />
+          <NombreInput name="nombre" inicial={v0.nombre ?? ""} autoComplete="name" />
         </Campo>
         <Campo etiqueta="Negocio o empresa" obligatorio={false}>
-          <NombreInput name="empresa" inicial={c?.empresa ?? ""} autoComplete="organization" max={90} />
+          <NombreInput name="empresa" inicial={v0.empresa ?? ""} autoComplete="organization" max={90} />
         </Campo>
-        <InputCelular key={pais} inicial={c?.telefono ?? ""} pais={pais} />
+        <InputCelular key={pais} inicial={v0.telefono ?? ""} pais={pais} />
         <Campo etiqueta="Estado *">
-          <select name="estado" defaultValue={c?.estado ?? "nuevo"} className="pn-input">
+          <select name="estado" defaultValue={v0.estado ?? "nuevo"} className="pn-input">
             {ESTADOS.map((x) => (
               <option key={x.valor} value={x.valor}>{x.label}</option>
             ))}
@@ -354,12 +429,12 @@ function FormCliente({ c, datos, onListo }: { c?: ClienteAgencia; datos: DatosCl
         }}
       />
       <div className="grid gap-3 sm:grid-cols-2">
-        <InputUrl inicial={c?.sitioWeb ?? ""} />
-        <InputInstagram inicial={c?.instagram ?? ""} />
+        <InputUrl inicial={v0.sitioWeb ?? ""} />
+        <InputInstagram inicial={v0.instagram ?? ""} />
       </div>
       <div className="grid gap-3 sm:grid-cols-[1fr_1.6fr]">
         <Campo etiqueta="De dónde llegó" obligatorio={false}>
-          <select name="origen" defaultValue={c?.origen ?? ""} className="pn-input">
+          <select name="origen" defaultValue={v0.origen ?? ""} className="pn-input">
             <option value="">Sin registrar</option>
             {ORIGENES.map((o) => (
               <option key={o}>{o}</option>
@@ -367,15 +442,15 @@ function FormCliente({ c, datos, onListo }: { c?: ClienteAgencia; datos: DatosCl
           </select>
         </Campo>
         <Campo etiqueta="Detalle" obligatorio={false}>
-          <input name="origenDetalle" defaultValue={c?.origenDetalle ?? ""} maxLength={200} placeholder="Ej. lo refirió Andrés, campaña de noviembre…" className="pn-input" />
+          <input name="origenDetalle" defaultValue={v0.origenDetalle ?? ""} maxLength={200} placeholder="Ej. lo refirió Andrés, campaña de noviembre…" className="pn-input" />
         </Campo>
       </div>
       <Campo etiqueta="Notas" obligatorio={false}>
-        <textarea name="notas" defaultValue={c?.notas ?? ""} rows={3} maxLength={2000} className="pn-input h-auto py-2.5" />
+        <textarea name="notas" defaultValue={v0.notas ?? ""} rows={3} maxLength={2000} className="pn-input h-auto py-2.5" />
       </Campo>
       <MensajeError error={acc.error} />
       <BotonPrincipal type="submit" pendiente={acc.pendiente} className="w-full">
-        {c ? "Guardar cambios" : "Agregar cliente"}
+        {textoGuardar ?? (c ? "Guardar cambios" : "Agregar cliente")}
       </BotonPrincipal>
     </form>
   );

@@ -8,7 +8,7 @@ import { avisarEquipo } from "./push";
 // a lo que registra: sobrevive aunque se borre el proyecto o el cliente.
 
 export type Accion = "crear" | "editar" | "borrar" | "marcar" | "cerrar" | "publicar";
-export type Entidad = "proyecto" | "cliente" | "gasto" | "gasto-fijo" | "dias" | "paso" | "reparto" | "servicio" | "persona" | "sitio" | "ciudad";
+export type Entidad = "proyecto" | "cliente" | "gasto" | "gasto-fijo" | "dias" | "paso" | "reparto" | "servicio" | "persona" | "sitio" | "ciudad" | "interesado";
 export type Cambio = { campo: string; antes: string; despues: string };
 
 export type Registro = {
@@ -61,7 +61,38 @@ export async function registrar(ctx: ContextoAgencia, r: Registro) {
   }
 }
 
+/**
+ * Registro que no viene de una persona sino de un sistema (hoy, Cal.com cuando alguien agenda).
+ * Queda como "Cal.com" en el historial, cuenta como sin ver para TODOS y el aviso al celular
+ * le llega a todo el equipo. Nunca hace fallar a quien lo llama.
+ */
+export async function registrarSistema(negocioId: string, quien: string, r: Registro & { cuerpoAviso?: string }) {
+  try {
+    const titulo = corto(r.titulo, 200);
+    await db().query(
+      `insert into panel_historial (negocio_id, usuario_id, quien, accion, entidad, entidad_id, proyecto_id, cliente_id, titulo, cambios, importante)
+       values ($1, null, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        negocioId,
+        corto(quien, 80),
+        r.accion,
+        r.entidad,
+        r.entidadId ?? null,
+        r.proyectoId ?? null,
+        r.clienteId ?? null,
+        titulo,
+        r.cambios?.length ? JSON.stringify(r.cambios.slice(0, 30).map((c) => ({ campo: corto(c.campo, 60), antes: corto(c.antes, 200), despues: corto(c.despues, 200) }))) : null,
+        Boolean(r.importante),
+      ]
+    );
+    if (r.importante) after(() => avisarEquipo(negocioId, { titulo: corto(titulo, 120), cuerpo: r.cuerpoAviso ?? resumenCambios(r.cambios), url: urlDe(r) }));
+  } catch (e) {
+    console.error("[historial] no se pudo registrar:", e instanceof Error ? e.message : e);
+  }
+}
+
 function urlDe(r: Registro) {
+  if (r.entidad === "interesado") return "/panel/clientes?ver=interesados";
   if (r.proyectoId && r.accion !== "borrar") return `/panel/proyectos/${r.proyectoId}`;
   if (r.entidad === "cliente") return "/panel/clientes";
   return "/panel/notificaciones";

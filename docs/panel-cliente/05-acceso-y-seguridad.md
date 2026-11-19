@@ -185,6 +185,30 @@ Activado y probado el 13 nov 2026: Sergio en Windows · Chrome y Android · Chro
 
 > `vercel.json` es del repositorio: el proyecto del sitio también intenta el aviso diario, pero ahí la ruta responde 404 (no tiene la base). No hace nada.
 
+## 3e. Reuniones desde Cal.com (D-133)
+
+```
+Persona agenda en aratasan.com/agendar ──► Cal.com ──► webhook firmado ──► panel.aratasan.com/api/cal/webhook
+                                                                              │
+                                   tabla interesados + historial "Cal.com" ◄──┴──► aviso al celular y computador (todo el equipo)
+```
+
+- Cal.com firma el cuerpo con HMAC-SHA256 y el secreto que se le pone al webhook (cabecera `x-cal-signature-256`). El panel rechaza lo que no venga firmado (401); sin `CAL_WEBHOOK_SECRET` responde 503. La ruta no usa sesión, por eso `next.config.mjs` la deja pasar (`api/cal/`).
+- Eventos que atiende: reserva creada/solicitada, reprogramada y cancelada. Un aviso repetido no duplica (`cal_uid` único). El PING de prueba responde 200 y no hace nada.
+- Los enlaces de llamada solo se guardan si son `https` de Cal.com, Google Meet, Zoom, Teams o Whereby; si no, el botón abre la página de la reserva en Cal.com.
+- El nombre, correo y WhatsApp salen de la reserva; lo demás (necesita, cuándo empezar, inversión, página) de las notas que arma `BookingFlow`. Una reserva hecha directo en Cal.com, sin notas, también queda en la lista.
+
+**Pasos (Sergio, una sola vez; el secreto no pasa por el chat):**
+1. Generar el secreto en tu computador: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
+2. Vercel → proyecto **`arata-panel`** → Settings → Environment Variables (Production, **Sensitive**): `CAL_WEBHOOK_SECRET` = ese valor. Luego **Redeploy**.
+3. Cal.com → Settings → Developer → **Webhooks** → New:
+   - Subscriber URL: `https://panel.aratasan.com/api/cal/webhook`
+   - Triggers: **Booking Created**, **Booking Cancelled**, **Booking Rescheduled** (y **Booking Requested** si alguna reunión pide aprobación)
+   - Secret: el mismo valor del paso 1 · Payload template: el de por defecto
+   - Botón **Ping test**: debe salir respuesta 200.
+4. Prueba real: agendar desde aratasan.com/agendar con tu propio correo. Debe llegar el aviso al celular y aparecer en Clientes → Interesados. Después cancelar la reserva: debe llegar el aviso de cancelación.
+5. Si no llega: Cal.com → Webhooks → ese webhook → historial de entregas (muestra el código de respuesta: 401 = el secreto no coincide, 503 = falta la variable o el redeploy, 404 = el panel no está publicado).
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.

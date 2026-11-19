@@ -14,6 +14,7 @@ import { diferencias, historialDe, registrar, type EventoHistorial } from "@/lib
 // y filtro por negocio_id. Cada cambio queda en el historial (D-119).
 
 const NO = (error: string): Resultado => ({ ok: false, error });
+const SI: Resultado = { ok: true };
 
 const limpio = (v: unknown, max: number) => {
   const t = String(v ?? "").trim().replace(/\s+/g, " ");
@@ -23,7 +24,7 @@ const limpio = (v: unknown, max: number) => {
 // Para comparar nombres sin importar mayúsculas, tildes ni espacios
 const clave = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
-export async function guardarCliente(entrada: {
+export type EntradaCliente = {
   id?: string;
   nombre: string;
   empresa?: string;
@@ -36,7 +37,9 @@ export async function guardarCliente(entrada: {
   origen?: string;
   origenDetalle?: string;
   notas?: string;
-}): Promise<Resultado> {
+};
+
+export async function guardarCliente(entrada: EntradaCliente): Promise<Resultado> {
   try {
     if (!panelActivo) return NO("El panel está en modo ejemplo: los cambios no se guardan.");
     const ctx = await contextoAgencia();
@@ -168,4 +171,116 @@ export async function verHistorialCliente(id: string): Promise<EventoHistorial[]
   const ctx = await contextoAgencia();
   if (!ctx) return [];
   return historialDe(ctx.negocioId, { clienteId: id, limite: 50 });
+}
+
+
+// ── Interesados que agendaron por Cal.com (D-133) ───────────────────
+// Sergio y Andrés confirman, descartan o reabren; solo Sergio borra. Todos los miembros los ven.
+
+async function ctxInteresados(borrar = false) {
+  if (!panelActivo) throw new Error("El panel está en modo ejemplo.");
+  const ctx = await contextoAgencia();
+  if (!ctx) throw new Error("Tu sesión terminó. Vuelve a entrar.");
+  if (borrar ? !ctx.esDueno : !ctx.editaFinanzas) throw new Error(borrar ? "Solo Sergio puede borrar interesados." : "Solo Sergio y Andrés pueden confirmar o descartar interesados.");
+  return ctx;
+}
+
+async function interesadoDe(negocioId: string, id: string) {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) throw new Error("Interesado no válido.");
+  const r = (await db().query(`select id, nombre, estado, cliente_id, reunion_inicio from interesados where id = $1 and negocio_id = $2`, [id, negocioId])).rows[0];
+  if (!r) throw new Error("Ese interesado no existe.");
+  return r as { id: string; nombre: string; estado: string; cliente_id: string | null; reunion_inicio: Date };
+}
+
+/**
+ * La reunión salió bien: se crea el cliente con los datos revisados y el interesado queda como cliente.
+ * Si ya había un cliente con ese celular (alguien que vuelve), no se duplica: se vincula al que ya existe.
+ */
+export async function confirmarInteresado(entrada: { interesadoId: string; cliente: EntradaCliente }): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados();
+    const i = await interesadoDe(ctx.negocioId, entrada.interesadoId);
+    if (i.estado === "confirmada") return NO("Este interesado ya está confirmado.");
+    if (i.estado === "cancelada") return NO("Canceló su reunión en Cal.com. Si agenda otra vez, aparece como un interesado nuevo.");
+
+    // ¿Ya es cliente? Mismo celular, escrito como lo guarda guardarCliente
+    const pais = String(entrada.cliente.pais || "CO").toUpperCase();
+    const tel = String(entrada.cliente.telefono ?? "").replace(/\D/g, "").replace(pais === "CO" ? /^57(?=\d{10}$)/ : /^$/, "");
+    const existente = tel
+      ? (await db().query(`select id, nombre, empresa from clientes where negocio_id = $1 and telefono = $2`, [ctx.negocioId, tel])).rows[0]
+      : null;
+
+    let clienteId: string;
+    if (existente) {
+      clienteId = existente.id;
+    } else {
+      const r = await guardarCliente({ ...entrada.cliente, id: undefined });
+      if (!r.ok) return r;
+      clienteId = r.id!;
+    }
+    await db().query(`update interesados set estado = 'confirmada', cliente_id = $2, cerrado_por = $3, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, clienteId, ctx.usuarioId]);
+    await registrar(ctx, {
+      accion: "crear",
+      entidad: "interesado",
+      entidadId: i.id,
+      clienteId,
+      titulo: existente
+        ? `Confirmó la reunión con ${i.nombre} y lo vinculó al cliente ${existente.empresa ? `${existente.empresa} · ` : ""}${existente.nombre}`
+        : `Confirmó la reunión con ${i.nombre} y lo pasó a clientes`,
+      importante: true,
+    });
+    revalidatePath("/panel/clientes");
+    revalidatePath("/panel/finanzas", "layout");
+    revalidatePath("/panel/notificaciones");
+    return { ok: true, id: clienteId };
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo confirmar.");
+  }
+}
+
+/** La reunión no avanzó (o era spam): queda en "Cerradas", sin crear cliente. */
+export async function descartarInteresado(id: string): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados();
+    const i = await interesadoDe(ctx.negocioId, id);
+    if (i.estado !== "agendada") return NO("Solo se puede descartar una reunión pendiente.");
+    await db().query(`update interesados set estado = 'descartada', cerrado_por = $2, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, ctx.usuarioId]);
+    await registrar(ctx, { accion: "editar", entidad: "interesado", entidadId: i.id, titulo: `Marcó que la reunión con ${i.nombre} no avanzó` });
+    revalidatePath("/panel/clientes");
+    revalidatePath("/panel/notificaciones");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo descartar.");
+  }
+}
+
+/** Deshace un "No avanzó" por error. */
+export async function reabrirInteresado(id: string): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados();
+    const i = await interesadoDe(ctx.negocioId, id);
+    if (i.estado !== "descartada") return NO("Solo se puede reabrir uno que no avanzó.");
+    await db().query(`update interesados set estado = 'agendada', cerrado_por = null, cerrado_en = null, actualizado = now() where id = $1`, [i.id]);
+    await registrar(ctx, { accion: "editar", entidad: "interesado", entidadId: i.id, titulo: `Volvió a dejar pendiente a ${i.nombre}` });
+    revalidatePath("/panel/clientes");
+    revalidatePath("/panel/notificaciones");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo reabrir.");
+  }
+}
+
+/** Quita un interesado (una prueba o spam). Solo Sergio. El cliente que se haya creado desde él no se toca. */
+export async function borrarInteresado(id: string): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados(true);
+    const i = await interesadoDe(ctx.negocioId, id);
+    await db().query(`delete from interesados where id = $1`, [i.id]);
+    await registrar(ctx, { accion: "borrar", entidad: "interesado", entidadId: i.id, titulo: `Borró al interesado ${i.nombre}`, importante: true });
+    revalidatePath("/panel/clientes");
+    revalidatePath("/panel/notificaciones");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo borrar.");
+  }
 }
