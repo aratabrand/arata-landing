@@ -44,7 +44,7 @@ export default function HoverCapsule({
     <div ref={ref} className={cn("v2-capsule-zone relative", className)} onPointerMove={onMove} onPointerLeave={onLeave}>
       {children}
       <span aria-hidden className="v2-capsule">
-        <span className="v2-capsule-in inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-lime px-4 py-2 text-sm font-semibold text-ink">
+        <span className="v2-capsule-in inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-lime px-4 py-2 text-sm font-semibold text-ink shadow-[0_8px_30px_rgba(182,255,0,0.35)]">
           {label}
           <ArrowUpRight className="h-4 w-4" />
         </span>

@@ -1,7 +1,8 @@
+import { CalendarDays, Gauge, Store } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import { TiltedGridHero } from "@/components/ui/tilted-grid-hero";
 import { Button } from "./Button";
-import { Badge, Container } from "./primitives";
+import { Badge, Container, Glow } from "./primitives";
 import { hero } from "@/content/inicio";
 import { esExterno, textosBase, type TextosSitio } from "@/lib/sitio-textos";
 import { capturasIntercaladas } from "@/content/proyectos";
@@ -9,10 +10,14 @@ import { capturasIntercaladas } from "@/content/proyectos";
 // Hero v2 (copy D-038). Debajo del texto, una banda curva con las capturas
 // reales de los proyectos pasando (TiltedGridHero, D-064).
 // Rendimiento: el <h1> NO se anima (es el LCP); las capturas bajan con prioridad baja.
+// Cuadrito de ícono de cada cifra (estilo del panel, D-139), en el orden de hero.pruebas
+const ICONOS_PRUEBAS = [CalendarDays, Gauge, Store];
+
 export default function Hero({ textos = textosBase.portada }: { textos?: TextosSitio["portada"] }) {
   const imagenes = capturasIntercaladas();
   return (
     <section className="relative overflow-hidden pt-28 sm:pt-32">
+      <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
       <div
         aria-hidden
         className="v2-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
@@ -43,6 +48,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
 
       {/* Banda curva con capturas reales del portafolio */}
       <div className="relative mt-8 sm:mt-10">
+        <Glow className="left-1/2 top-1/2 h-[26rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 opacity-70" />
         {/* Celular y escritorio con proporción fija → la curva se pinta correcta desde el servidor (D-064).
             Las capturas se pintan como fondo de cada franja: el <h1> sigue siendo el LCP. */}
         <TiltedGridHero
@@ -76,8 +82,13 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
       {/* Pruebas rápidas, debajo de las capturas */}
       <Container className="relative pb-16 sm:pb-24">
         <dl className="mx-auto mt-2 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
-          {hero.pruebas.map((p) => (
-            <div key={p.texto} className="rounded-frame border border-white/6 bg-surface-1/60 px-2 py-4 sm:px-4">
+          {hero.pruebas.map((p, i) => {
+            const Icono = ICONOS_PRUEBAS[i % ICONOS_PRUEBAS.length];
+            return (
+            <div key={p.texto} className="v2-card !rounded-frame px-3 py-4 sm:px-5 sm:py-5">
+              <span className="v2-icono mb-3 h-8 w-8 sm:h-9 sm:w-9">
+                <Icono aria-hidden className="h-4 w-4" />
+              </span>
               <dt className="sr-only">{p.texto}</dt>
               <dd>
                 <CountUp
@@ -88,7 +99,8 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
                 <span className="mt-1 block text-[0.72rem] leading-snug text-fog-dim sm:text-sm">{p.texto}</span>
               </dd>
             </div>
-          ))}
+            );
+          })}
         </dl>
       </Container>
     </section>

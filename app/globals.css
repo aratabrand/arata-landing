@@ -77,10 +77,33 @@
    ────────────────────────────────────────────────────────────────────── */
 @layer components {
   /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
+  /* D-139: misma tarjeta por capas del panel (D-136): un velo blanco muy suave arriba,
+     borde fino y un filo de luz arriba. Se separa del fondo sin luces de color. */
   .v2-card {
-    background: #0a0714;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #0f0c19;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 24px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Tarjeta destacada (paquete recomendado, precio): cuerpo igual con un filo morado arriba,
+     como la primera cifra del panel. Sin desenfoque ni luz de fondo. */
+  .v2-destacada {
+    background: linear-gradient(180deg, rgba(125, 83, 255, 0.12), rgba(125, 83, 255, 0.02) 70%), #0f0c19;
+    border: 1px solid rgba(125, 83, 255, 0.45);
+    box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Cuadrito con ícono (igual que .pn-icono del panel) */
+  .v2-icono {
+    display: grid;
+    place-items: center;
+    flex: none;
+    border-radius: 10px;
+    color: #b9a4ff;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   /* Vista previa enmarcada DENTRO de una tarjeta (ref. 21st.dev captura 01) */
@@ -104,13 +127,53 @@
     z-index: -1;
     border-radius: inherit;
     pointer-events: none;
-    /* D-137: tinte plano (antes, luz radial morada) */
-    background: rgba(255, 255, 255, 0.03);
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(125, 83, 255, 0.16),
+      transparent 60%
+    );
     opacity: 0;
     transition: opacity 0.35s ease;
   }
   .v2-spotlight:hover::before {
     opacity: 1;
+  }
+
+  /* Brillo que recorre el botón principal al pasar el mouse */
+  .v2-shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .v2-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .v2-shine:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Luces de fondo (atmósfera). Gradiente radial sin filter:blur → barato. */
+  .v2-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: radial-gradient(
+      closest-side,
+      rgba(125, 83, 255, 0.28),
+      rgba(59, 29, 153, 0.12) 45%,
+      transparent 100%
+    );
   }
 
   /* Rejilla muy sutil para superficies */
@@ -179,17 +242,17 @@
   20%, 100% { color: #b9a4ff; }
 }
 
-/* Tarjetas de garantía, pago y mantenimiento (D-068).
-   D-137: color plano. Antes eran vidrio con degradado y una luz de color en la esquina;
-   ahora superficie sólida + borde fino (el nombre se conserva para no tocar los componentes).
+/* Tarjetas glass de garantía, pago y mantenimiento (D-068).
    Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
 .v2-glass {
+  /* D-139: estilo del panel (D-136): sin vidrio ni luz de color en la esquina; filo morado arriba */
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #0a0714;
+  border: 1px solid rgba(125, 83, 255, 0.28);
+  background: linear-gradient(180deg, rgba(125, 83, 255, 0.1), rgba(125, 83, 255, 0.02) 70%), #0f0c19;
+  box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 .v2-draw {
   transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
@@ -574,12 +637,12 @@
   padding: calc(var(--w) * 0.034);
   border-radius: calc(var(--w) * 0.17);
   background: #0a0711;
-  /* canto morado (tono de marca) + borde exterior + sombra neutra (D-137: sin luz de color) */
+  /* canto morado (tono de marca) + borde exterior + sombra con luz morada */
   box-shadow:
     0 0 0 2px #5a43b0,
     0 0 0 3.5px #241a4a,
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-    0 40px 90px -30px rgba(0, 0, 0, 0.7);
+    0 40px 90px -30px rgba(125, 83, 255, 0.45);
 }
 /* botones laterales: volumen (izq., 3 con box-shadow) y encendido (der.) */
 .cx-phone::before,
@@ -717,7 +780,7 @@
 .cx-flecha:hover { background: #b6ff00; border-color: #b6ff00; color: #03010b; }
 .cx-flecha:active { transform: scale(0.92); }
 
-/* Anillos finos detrás del celular (dato visual, no tapa nada) */
+/* Anillos y luz detrás del celular (dato visual, no tapa nada) */
 .cx-anillos {
   position: absolute;
   left: 50%;
@@ -727,6 +790,7 @@
   transform: translate(-50%, -50%);
   border-radius: 9999px;
   background:
+    radial-gradient(closest-side, rgba(125, 83, 255, 0.22), transparent 70%),
     radial-gradient(closest-side, transparent 64%, rgba(255, 255, 255, 0.06) 64.4%, transparent 65%),
     radial-gradient(closest-side, transparent 86%, rgba(255, 255, 255, 0.045) 86.3%, transparent 86.8%);
   pointer-events: none;

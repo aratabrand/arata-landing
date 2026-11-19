@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Gauge, Users } from "lucide-react";
 import BookingFlow from "@/components/v2/BookingFlow";
-import { Badge, Container } from "@/components/v2/primitives";
+import { Badge, Container, Glow } from "@/components/v2/primitives";
 import { agendar as c } from "@/content/agendar";
 import { paginaV2 } from "@/lib/seo";
 
@@ -13,6 +13,7 @@ export const metadata: Metadata = paginaV2({ path: "/agendar", title: c.meta.tit
 export default function Agendar() {
   return (
     <section className="relative overflow-hidden pb-24 pt-28 sm:pt-32">
+      <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
       <Container className="relative">
         <h1 className="font-display text-[clamp(2.1rem,7vw,3.75rem)] font-extrabold leading-[1.02] tracking-display text-white">
           {c.titulo}
