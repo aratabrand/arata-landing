@@ -77,17 +77,17 @@ export default function CookieBanner() {
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-full bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+              <button type="button" onClick={() => decidir(true, true)} className="v2-primario h-11 rounded-btn text-sm font-semibold">
                 {t.aceptar}
               </button>
-              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
+              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
                 {t.rechazar}
               </button>
               <div className="col-span-2 flex items-center justify-center gap-4 text-sm">
                 <button
                   type="button"
                   onClick={() => dialogo.current?.showModal()}
-                  className="h-10 font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:text-lime"
+                  className="h-10 font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:text-brand-soft"
                 >
                   {t.preferencias}
                 </button>
@@ -141,10 +141,10 @@ export default function CookieBanner() {
           </ul>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
+            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
               {t.guardar}
             </button>
-            <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-full bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+            <button type="button" onClick={() => decidir(true, true)} className="v2-primario h-11 rounded-btn text-sm font-semibold">
               {t.aceptarTodas}
             </button>
           </div>
@@ -184,11 +184,11 @@ function Opcion({ id, titulo, texto, activo, onCambiar }: { id: string; titulo: 
           aria-checked={activo}
           aria-labelledby={id}
           onClick={onCambiar}
-          className={cn("relative h-7 w-12 shrink-0 rounded-full border transition-colors", activo ? "border-lime bg-lime" : "border-white/20 bg-surface-3")}
+          className={cn("relative h-7 w-12 shrink-0 rounded-full border transition-colors", activo ? "border-brand bg-brand" : "border-white/20 bg-surface-3")}
         >
           <span
             aria-hidden
-            className={cn("absolute left-0.5 top-0.5 h-5 w-5 rounded-full transition-transform duration-200", activo ? "translate-x-5 bg-ink" : "translate-x-0 bg-white")}
+            className={cn("absolute left-0.5 top-0.5 h-5 w-5 rounded-full transition-transform duration-200", activo ? "translate-x-5 bg-white" : "translate-x-0 bg-white")}
           />
         </button>
       </div>

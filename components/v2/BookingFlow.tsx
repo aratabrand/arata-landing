@@ -8,7 +8,7 @@ import { agendar as c, calLinks, type TipoAgenda } from "@/content/agendar";
 import { site } from "@/lib/site";
 import { medir } from "@/lib/medir";
 import { cn } from "@/lib/utils";
-import { circuloBoton, clasesBoton, FlechaBoton } from "./Button";
+import { clasesBoton, FlechaBoton } from "./Button";
 import {
   LIMITES,
   TIEMPO_MINIMO_MS,
@@ -365,10 +365,10 @@ export default function BookingFlow() {
               )}
               <button
                 type="submit"
-                className={cn("group mt-2 w-full gap-3", clasesBoton({ size: "lg", arrow: true }))}
+                className={cn("group mt-2 w-full", clasesBoton({ size: "lg" }))}
               >
                 {c.botones.elegirHora}
-                <FlechaBoton className={cn(circuloBoton.primary, "h-9 w-9")} />
+                <FlechaBoton />
               </button>
             </form>
           </Pregunta>
@@ -452,7 +452,7 @@ function Opciones({
             onClick={() => onElegir(o.valor)}
             className={cn(
               "flex min-h-[3.75rem] items-center justify-between gap-3 rounded-frame border px-4 py-3 text-left font-medium transition-[background-color,border-color,transform] active:scale-[0.98]",
-              on ? "border-lime bg-lime/[0.08] text-white" : "border-white/10 bg-ink/50 text-white hover:border-white/20 hover:bg-surface-2"
+              on ? "border-brand bg-brand/10 text-white" : "border-white/10 bg-ink/50 text-white hover:border-white/20 hover:bg-surface-2"
             )}
           >
             {o.label}
@@ -460,7 +460,7 @@ function Opciones({
               aria-hidden
               className={cn(
                 "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors",
-                on ? "border-lime bg-lime text-ink" : "border-white/20"
+                on ? "border-brand bg-brand text-white" : "border-white/20"
               )}
             >
               {on && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
@@ -517,10 +517,10 @@ function Siguiente({ onClick, children }: { onClick: () => void; children: React
     <button
       type="button"
       onClick={onClick}
-      className={cn("group mt-6 w-full gap-3 sm:w-auto", clasesBoton({ variant: "secondary", size: "lg", arrow: true }))}
+      className={cn("group mt-6 w-full sm:w-auto", clasesBoton({ variant: "secondary", size: "lg" }))}
     >
       {children}
-      <FlechaBoton className={cn(circuloBoton.secondary, "h-9 w-9")} />
+      <FlechaBoton />
     </button>
   );
 }

@@ -20,7 +20,7 @@ import {
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
-import { Badge, Container, Eyebrow, SectionHeader } from "./primitives";
+import { Badge, Container, Eyebrow, Glow, SectionHeader } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import Spotlight from "./Spotlight";
 import HoverCapsule from "./HoverCapsule";
@@ -61,6 +61,7 @@ export function ServiceHero({
   const [a, b] = casos.map(porSlug);
   return (
     <section className="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32">
+      <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
       <Container className="relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
         <div className="text-center lg:text-left">
           <div className="animate-fade-up">
@@ -83,6 +84,7 @@ export function ServiceHero({
 
         {/* Dos trabajos reales del servicio, enmarcados y superpuestos */}
         <div className="relative mx-auto w-full max-w-xl animate-fade-up [animation-delay:120ms] lg:max-w-none">
+          <Glow className="left-1/2 top-1/2 h-[24rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 opacity-80" />
           <div className="relative pb-[18%] pr-[14%]">
             <div className="v2-card relative p-1.5 shadow-2xl">
               <div className="v2-frame aspect-[16/10]">
@@ -115,8 +117,8 @@ export function ForWhoSection({ titulo, items }: { titulo: string; items: string
         <ul className="mt-10 grid gap-3 sm:grid-cols-2">
           {items.map((t, i) => (
             <Reveal as="li" key={t} delay={i * 70} className="h-full">
-              <div className="flex h-full gap-4 rounded-frame border border-white/8 bg-surface-1 p-5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime/10 text-lime">
+              <div className="v2-card flex h-full gap-4 !rounded-frame p-5">
+                <span className="v2-icono h-9 w-9">
                   <Check aria-hidden className="h-4 w-4" strokeWidth={2.5} />
                 </span>
                 <p className="leading-relaxed text-white">{t}</p>
@@ -176,7 +178,7 @@ export function IncludesSection({
                 >
                   <span
                     className={cn(
-                      "flex h-11 w-11 items-center justify-center rounded-btn border border-white/10 bg-surface-2",
+                      "v2-icono h-11 w-11",
                       clave ? "text-lime" : "text-brand-soft"
                     )}
                   >
@@ -210,14 +212,14 @@ export function PriceBar({
   tipo: string;
 }) {
   return (
-    <div className="mt-6 flex flex-col gap-6 rounded-[28px] bg-paper p-7 text-ink sm:flex-row sm:items-center sm:justify-between sm:p-8">
+    <div className="mt-6 flex flex-col gap-5 v2-destacada rounded-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
       <div>
-        <p className="font-display text-[2rem] font-bold leading-none tracking-display text-ink">
-          {precio} <span className="font-sans text-base font-normal tracking-normal text-ink/60">· {nota}</span>
+        <p className="font-display text-[2rem] font-extrabold leading-none tracking-display text-white">
+          {precio} <span className="font-sans text-base font-normal tracking-normal text-fog">· {nota}</span>
         </p>
-        <p className="mt-2.5 text-sm text-ink/70">{pago}</p>
+        <p className="mt-2 text-sm text-fog">{pago}</p>
       </div>
-      <Button href={agendarCon(tipo)} variant="ink" size="lg" arrow className="shrink-0">
+      <Button href={agendarCon(tipo)} size="lg" arrow className="shrink-0">
         {boton}
       </Button>
     </div>
@@ -235,7 +237,7 @@ export function AddonCallout({ etiqueta, titulo, texto }: { etiqueta: string; ti
             className="v2-glass flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8"
             style={{ ["--glow" as string]: "rgba(125,83,255,0.35)" }}
           >
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-frame border border-white/10 bg-surface-2 text-brand-soft">
+            <span className="v2-icono h-14 w-14 !rounded-frame">
               <SlidersHorizontal aria-hidden className="h-6 w-6" />
             </span>
             <div className="flex-1">
@@ -442,17 +444,16 @@ export function PriceSection({
       <GridBackground orb="50% 30%" />
       <Container>
         <Reveal>
-          <div className="relative mx-auto max-w-3xl rounded-[32px] bg-paper p-8 text-center text-ink sm:p-14">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-white">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime" />
+          <div className="relative mx-auto max-w-3xl v2-destacada rounded-card p-8 text-center sm:p-12">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
               {paquete}
             </span>
-            <h2 id="precio" className="mt-6 font-display text-[clamp(2.4rem,8vw,4rem)] font-bold leading-none tracking-display text-ink">
+            <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">
               {precio}
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-ink/70">{pago}</p>
+            <p className="mx-auto mt-4 max-w-md text-fog">{pago}</p>
             <div className="mt-8 flex justify-center">
-              <Button href={agendarCon(tipo)} variant="ink" size="lg" arrow>
+              <Button href={agendarCon(tipo)} size="lg" arrow>
                 {boton}
               </Button>
             </div>

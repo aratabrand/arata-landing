@@ -50,47 +50,31 @@ Las superficies tienen un leve tinte morado para que el oscuro se sienta de marc
 
 | Token | Valor | Uso | No usar para |
 |---|---|---|---|
-| `lime` | `#B6FF00` | **CTA principal** (fondo lima + texto `ink`), estados activos, cifras clave, palabra destacada de un título | Grandes superficies |
-| `purple` | `#7D53FF` | **Bloques destacados en color plano** (paquete recomendado, precio, banda final), círculo de la flecha del botón blanco, hover, gráficos | Texto pequeño sobre oscuro (≈ 4.5:1, solo texto grande) |
-| `purple-deep` (`brand-ink`) | `#3B1D99` | Detalles de gráficos | Texto y fondos (no se lee sobre oscuro) |
+| `lime` | `#B6FF00` | **CTA principal** (fondo lima + texto `ink`), estados activos, cifras clave | Grandes superficies |
+| `purple` | `#7D53FF` | Brillos, hover, enlaces, gráficos, detalles | Texto pequeño (contraste ≈ 4.5:1, solo texto grande) |
+| `purple-deep` (`brand-ink`) | `#3B1D99` | Tintes de brillos y fondos de luz | Texto (no se lee sobre oscuro) |
 | `brand-soft` | `#B9A4FF` | Texto morado sobre oscuro: etiquetas, íconos de lista (≈9.7:1) | Fondos |
 
-### Color plano y blancos ✅ (D-137 + D-138, reemplaza las luces de fondo de D-044)
+### Luces de fondo ✅ (D-044)
 
-Sergio pidió menos degradados (D-137) y, al ver la primera versión con bloques morados y texto blanco, la descartó: "se ve fatal", pidió algo **más limpio, premium y de alto valor**, jugando con los blancos (D-138). Lo que quedó:
+La referencia usa **luces radiales grandes y borrosas** detrás de las secciones (en 21st son azules). En Arata van en **morado**: `purple` / `purple-deep` con opacidad baja (10–25 %) y desenfoque grande.
+
+- Son atmósfera y nunca llevan contenido encima que dependa de ellas para leerse.
+- Máximo 1–2 luces por pantalla.
+- La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") **sigue vigente para los slides de carruseles**; en el sitio v2 se permiten solo estas luces.
+
+### Estilo del panel aplicado al sitio ✅ (D-141)
+
+El 19 nov se probaron dos direcciones y se descartaron: color plano con bloques morados (D-137) y tarjetas blancas (D-138). Se volvió a esta versión (con las luces) y se le aplicó el estilo del panel (D-136, `docs/panel-cliente/03-sistema-de-diseno.md`):
 
 | Pieza | Cómo va |
 |---|---|
-| Fondo y tarjetas | `ink` + `surface-1` + borde blanco al 6–8 %. **Sin vidrio**, sin luces de color, sin sombras de color |
-| **Lo destacado** (paquete recomendado, precio de cada servicio, banda final) | **Tarjeta blanca** (`paper`) con texto `ink` (20:1), radio 28–32 px. Textos secundarios en `ink` al 60–70 % (≥ 5,7:1). Íconos en morado sobre un círculo morado al 10 % |
-| Botón sobre blanco | Variante **`ink`**: píldora negra, texto blanco, círculo lima con flecha `ink` |
-| Títulos de sección | **Dos tonos**: hasta la primera coma o punto en blanco, el resto en `fog-dim` (`DosTonos`, automático; no cambia el texto). Sobre blanco, `ink` + `ink` al 45 % |
-| Etiquetas (eyebrow) | Punto lima + texto `fog` en mayúsculas |
-| Precio | "Desde" pequeño arriba y el número grande en Funnel Display 700 |
-| Lima | Botón principal, una línea o cifra clave y puntos de estado. Nunca de fondo grande |
-| Morado | Círculo del botón blanco, íconos sobre blanco, gráficos. **No va de fondo detrás de texto** (blanco sobre morado da 4,6:1 y se ve mal en bloques grandes; descartado en D-138) |
-
-Reglas:
-
-- **Nada de degradados de color.** Solo máscaras sin color que desvanecen bordes (rejilla, banda de capturas, franja de logos).
-- Máximo **una o dos tarjetas blancas por página**: son lo que queremos que elijan. Si todo es blanco, nada destaca.
-- Morado y lima no son fondos de sección; el blanco tampoco: va en tarjetas, la página sigue oscura.
-- La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") vale también para el sitio. El panel tiene su propio sistema (`docs/panel-cliente/03-sistema-de-diseno.md`, D-136).
-
----|---|
-| Fondo negro, tarjetas oscuras sólidas con borde fino | `ink` + `surface-1` + borde blanco al 6–8 %. **Sin vidrio** (`backdrop-filter`), sin luz de color en las esquinas |
-| El acento llena **bloques enteros** (plan destacado, testimonio) | **Morado plano** `#7D53FF` en el paquete recomendado, la tarjeta de precio de cada servicio y la banda final (collage tapado al 95 %) |
-| Palabras del título en el color de acento | Lima en una palabra o línea del título (ya pasaba en el hero) |
-| Botón en píldora con un círculo y flecha al final | Botones nuevos (§5): primario lima, secundario blanco |
-| Sin luces ni sombras de color | Se quitaron las luces moradas de fondo (`Glow`), los rayos y la luz del diagrama de servicios, la luz de la rejilla, el brillo de los botones y todas las sombras de color (`glow-purple`, sombras lima) |
-
-Reglas:
-
-- **Nada de degradados de color** en el sitio. Se permiten solo las máscaras que desvanecen bordes (rejilla, banda de capturas, franja de logos): no tienen color.
-- Texto sobre morado: **blanco al 100 %** (4,6:1). Blanco al 80 % baja a 3,5:1 y no pasa para texto pequeño.
-- Sobre un bloque morado el botón es el primario lima (lima sobre morado 3,8:1, botón con texto `ink` 17:1).
-- Morado y lima siguen sin ser **fondos de sección**: el morado llena tarjetas, no secciones.
-- La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") ahora vale **también para el sitio**. El panel tiene su propio sistema (`docs/panel-cliente/03-sistema-de-diseno.md`, D-136).
+| Tarjeta (`.v2-card`) | **Por capas**: velo blanco muy suave arriba (3,5 % → 1 %) sobre `#0F0C19`, borde blanco al 7 % y un filo de luz arriba. Lo usan también las cifras del hero, el Problema y "Es para ti si" |
+| Tarjeta destacada (`.v2-destacada`) | Igual, con **filo morado**: velo morado 12 % → 2 % y borde morado al 45 %. Paquete recomendado y precio de cada servicio (reemplaza el brillo `glow-purple`) |
+| Garantías (`.v2-glass`) | Como la cifra destacada del panel: sin vidrio ni luz en la esquina, borde morado al 28 % |
+| Cuadrito de ícono (`.v2-icono`) | Igual a `.pn-icono`: 10 px de radio, fondo blanco al 4 %, ícono `brand-soft`. En las cifras del hero (calendario, velocímetro, tienda), el Problema, "Es para ti si", "Todo lo que trae" y el adicional |
+| Botones | Los del panel (D-142): morado con texto blanco y oscuro con borde fino (la píldora de D-137 se quitó) |
+| Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-142). Los checks de "Es para ti si" pasan a morado |
 
 ---
 
@@ -122,17 +106,17 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Componente | Descripción | Prioridad |
 |---|---|---|
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
-| Botón | **Píldora** de color plano (D-137). Primario **lima** con texto `ink`; con flecha lleva al final un círculo `ink` con la flecha lima · secundario **blanco** con texto `ink`; con flecha, círculo morado con flecha blanca · **`ink`** (sobre tarjetas blancas, D-138): negro con texto blanco y círculo lima · terciario texto con flecha ("Ver todo →"). Al pasar el mouse la flecha sale por la derecha y entra otra (solo `transform`). Sin brillo | P1 |
+| Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
-| Tarjeta base | Superficie + borde fino de 1 px + radio 24 px; en hover, tinte blanco plano al 3 % (antes, luz morada que seguía el cursor) | P1 |
+| Tarjeta base | Superficie + borde fino de 1 px + radio 24 px; luz que sigue el cursor en hover | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
 | Tarjetas del problema | Apiladas, caja de ícono + título + texto, resaltado que las recorre (D-066) | P1 |
-| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** va en **blanco** con texto `ink`, etiqueta "Recomendado" negra con punto lima dentro de la tarjeta y botón `ink`; las demás, oscuras con botón blanco. "Desde" pequeño sobre el número (captura 03, D-138) | P1 |
-| Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: superficie sólida + borde fino + ícono SVG animado (`Assurances`, D-068; sin vidrio ni luz desde D-137, la clase se sigue llamando `.v2-glass`) | P1 |
+| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada con filo morado (`.v2-destacada`, D-141), badge "Recomendado" y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
+| Tarjetas glass de garantía | Garantía, pago 50/50 y mantenimiento, `backdrop-filter` + ícono SVG animado (`Assurances`, D-068) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
 | Bloque de caso | Problema → solución → resultado | P1 |
@@ -141,11 +125,11 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Preguntas frecuentes | **Dos columnas**: título a la izquierda, acordeón a la derecha; en celular, una columna (captura 02) | P1 |
 | Formulario de 3 pasos | Las 3 preguntas antes del calendario (D-017) | P1 |
 | Calendario Cal.com | Integrado en `/agendar` | P1 |
-| Banda de CTA | **Tarjeta blanca grande** (radio 32 px) con texto `ink` alineado a la izquierda, título en dos tonos, botón `ink` con la nota al lado y, en escritorio, dos trabajos reales enmarcados y girados a la derecha (D-138) | P1 |
+| Banda de CTA | **Tarjeta grande** redondeada con collage de los trabajos al fondo, tintado de morado; título centrado, botón lima y nota corta debajo (captura 04) | P1 |
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
 | Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula lima que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
-| Fondo de rejilla | `components/ui/grid-background.tsx` (ref. 21st.dev): líneas blancas al 5 %, celda de 40 px y bordes desvanecidos (sin luz morada desde D-137). Variantes *rejilla* (Problema, Precios) y *líneas* (Cómo trabajamos). Solo CSS, sin JS. **Nunca en el hero** y nunca en dos secciones seguidas con la misma variante (D-071) | P1 |
+| Fondo de rejilla | `components/ui/grid-background.tsx` (ref. 21st.dev): líneas blancas al 5 %, celda de 40 px, luz morada suave y bordes desvanecidos. Variantes *rejilla* (Problema, Precios) y *líneas* (Cómo trabajamos). Solo CSS, sin JS. **Nunca en el hero** y nunca en dos secciones seguidas con la misma variante (D-071) | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
 
@@ -172,7 +156,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 ## 7. Movimiento
 
 - Se mantienen los patrones v1: reveals con `IntersectionObserver`, contadores y anillos que se dibujan.
-- Patrones nuevos (estilo 21st.dev): indicador que se desliza en el menú, franja de logos en movimiento y flecha del botón que sale y entra al pasar el mouse. La luz que seguía el cursor y el brillo que recorría el botón se quitaron (D-137).
+- Patrones nuevos (estilo 21st.dev) **[decidir con referencias]**: luz que sigue el cursor en tarjetas, brillo que recorre el botón principal, indicador que se desliza en el menú y franja de logos en movimiento.
 - Solo se anima `transform` y `opacity`.
 - Siempre se respeta `prefers-reduced-motion`.
 
@@ -201,7 +185,7 @@ Capturas en [`docs/referencias/21st-dev/`](../referencias/21st-dev/).
 
 ### Lo que **no** se toma
 
-- El **azul eléctrico** de 21st: se reemplaza por morado (bloques y detalles; los brillos se quitaron en D-137) y lima (CTA).
+- El **azul eléctrico** de 21st: se reemplaza por morado (brillos) y lima (CTA).
 - Las **tarjetas de colores claros** de la sección "Built for how you ship" (coral, rosa): rompen la regla de solo fondo oscuro (D-025).
 - La **búsqueda ⌘K** y el "Log in": el sitio no los necesita.
 
@@ -215,11 +199,11 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 
 | Pieza | Archivo | Qué hace |
 |---|---|---|
-| Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple` (ya no se usa en el sitio, D-137); opacidad `8` |
-| Clases base | `app/globals.css` (bloque v2) | `.v2-card`, `.v2-frame`, `.v2-spotlight` (tinte plano), `.v2-glass` (superficie sólida), `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` y `.v2-glow` se borraron (D-137) |
+| Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple`; opacidad `8` |
+| Clases base | `app/globals.css` (bloque v2) | `.v2-card`, `.v2-frame`, `.v2-spotlight`, `.v2-shine`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop` |
 | Contenido | `content/inicio.ts`, `content/proyectos.ts` | Copy aprobado y portafolio. **Para cambiar un texto o sumar un proyecto, se edita aquí**, no en los componentes |
-| Botón | `components/v2/Button.tsx` | `primary` · `secondary` · `ghost`; `md` / `lg`; `arrow`; `external`. Para un `<button>` o enlace propio (formulario, cookies): `clasesBoton()`, `FlechaBoton` y `circuloBoton` |
-| Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `SectionHeader` (`Glow` se borró, D-137) |
+| Botón | `components/v2/Button.tsx` | `primary` · `secondary` · `ghost`; `md` / `lg`; `arrow`; `external` |
+| Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader` |
 | Header | `components/v2/SiteHeader.tsx` | Barra, mega menú "Servicios", panel móvil, Escape y clic afuera cierran |
 | Barra fija | `components/v2/StickyBookBar.tsx` | "Agendar reunión" en celular al bajar del hero |
 | Tarjeta con luz | `components/v2/Spotlight.tsx` | Tarjeta base + luz que sigue el cursor |
@@ -257,7 +241,7 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Precargar **solo la fuente de títulos**; el cuerpo con `preload: false` | Menos archivos compitiendo en conexiones lentas |
 | Lo decorativo se renderiza en el **servidor** y se pasa como `children`/props a los componentes de cliente | El navegador no hidrata lo que no necesita interacción |
 | Contenido oculto (mega menú) se crea **al abrirlo por primera vez** | Menos elementos al cargar |
-| Si alguna vez se usa una luz (el sitio ya no tiene, D-137; el login del panel sí), **gradiente radial sin `filter: blur`** | El blur grande es caro de pintar en celular |
+| Luces de fondo con gradiente radial, **sin `filter: blur`** | El blur grande es caro de pintar en celular |
 | Al combinar una animación con `transform` y un centrado con `translate`, van en **capas distintas** | Si no, la animación pisa el centrado (pasó con el mega menú) |
 | Tamaño del hero **medido**, no adivinado: `clamp(1.8rem, 5.8vw, 4.25rem)` | 3 líneas en 360–430 px y 2 desde tablet (regla de `CLAUDE.md`: máx. 3) |
 | En Tailwind, toda opacidad usada debe existir en la escala (se agregó `8`) | `border-white/8` sin el paso `8` sale invisible (gotcha de `CLAUDE.md`) |
