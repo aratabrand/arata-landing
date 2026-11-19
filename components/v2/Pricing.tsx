@@ -8,7 +8,7 @@ import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
-// la tarjeta recomendada lleva borde morado + brillo + badge y el ÚNICO botón lima.
+// la tarjeta recomendada va en morado plano (D-137, sin brillo) + badge y el ÚNICO botón lima.
 // La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas glass (D-068).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
@@ -16,12 +16,12 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
   return (
     <article
       className={cn(
-        "relative flex h-full flex-col rounded-card border bg-surface-1 p-6 sm:p-7",
-        rec ? "border-brand shadow-glow-purple" : "border-white/8"
+        "relative flex h-full flex-col rounded-card border p-6 sm:p-7",
+        rec ? "border-brand bg-brand" : "border-white/8 bg-surface-1"
       )}
     >
       {rec && (
-        <span className="absolute -top-3 left-6 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
+        <span className="absolute -top-3 left-6 rounded-full border border-white/15 bg-ink px-3 py-1 text-xs font-semibold text-white">
           Recomendado
         </span>
       )}
@@ -29,21 +29,21 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       <p className="mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display text-white">
         {paquete.precio}
       </p>
-      {paquete.nota && <p className="mt-2 text-sm text-fog-dim">{paquete.nota}</p>}
+      {paquete.nota && <p className={cn("mt-2 text-sm", rec ? "text-white" : "text-fog-dim")}>{paquete.nota}</p>}
 
-      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} className="mt-6 w-full">
+      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} arrow className="mt-6 w-full">
         {paquete.boton}
       </Button>
 
-      <ul className="mt-6 space-y-3 border-t border-white/8 pt-6">
+      <ul className={cn("mt-6 space-y-3 border-t pt-6", rec ? "border-white/20" : "border-white/8")}>
         {paquete.incluye.map((item) => (
-          <li key={item} className="flex gap-3 text-sm text-fog">
-            <Check aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+          <li key={item} className={cn("flex gap-3 text-sm", rec ? "text-white" : "text-fog")}>
+            <Check aria-hidden className={cn("mt-0.5 h-4 w-4 shrink-0", rec ? "text-white" : "text-brand-soft")} />
             <span>{item}</span>
           </li>
         ))}
       </ul>
-      {paquete.adicional && <p className="mt-6 text-xs leading-relaxed text-fog-dim">{paquete.adicional}</p>}
+      {paquete.adicional && <p className={cn("mt-6 text-xs leading-relaxed", rec ? "text-white" : "text-fog-dim")}>{paquete.adicional}</p>}
     </article>
   );
 }

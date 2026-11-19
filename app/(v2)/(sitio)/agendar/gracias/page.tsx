@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Check } from "lucide-react";
-import { Container, Glow } from "@/components/v2/primitives";
+import { Container } from "@/components/v2/primitives";
 import TrackOnMount from "@/components/v2/TrackOnMount";
 import { gracias as c } from "@/content/agendar";
 import { site } from "@/lib/site";
@@ -16,9 +16,8 @@ export default function Gracias() {
   return (
     <section className="relative overflow-hidden pb-24 pt-32 sm:pt-40">
       <TrackOnMount event="reunion_confirmada" />
-      <Glow className="left-1/2 top-[-16rem] h-[40rem] w-[60rem] -translate-x-1/2" />
       <Container className="relative max-w-3xl text-center">
-        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-lime text-ink shadow-[0_0_40px_rgba(182,255,0,0.45)]">
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-lime text-ink">
           <Check aria-hidden className="h-8 w-8" strokeWidth={3} />
         </span>
         <h1 className="mt-8 font-display text-[clamp(2rem,6.4vw,3.5rem)] font-extrabold leading-[1.04] tracking-display text-white">

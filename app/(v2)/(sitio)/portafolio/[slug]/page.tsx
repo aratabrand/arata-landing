@@ -7,7 +7,8 @@ import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import { StepsSection } from "@/components/v2/HomeSections";
-import { Container, Eyebrow, Glow } from "@/components/v2/primitives";
+import { Container, Eyebrow } from "@/components/v2/primitives";
+import { clasesBoton } from "@/components/v2/Button";
 import ProjectPreview from "@/components/v2/ProjectPreview";
 import { cn } from "@/lib/utils";
 import { casoTextos as t, proyectos } from "@/content/proyectos";
@@ -72,7 +73,6 @@ export default async function Caso({ params }: Props) {
       />
       {/* Hero del caso */}
       <section className="relative overflow-hidden pb-12 pt-28 sm:pb-16 sm:pt-32">
-        <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative">
           {/* Volver: flecha visible (no todos usan la miga de pan) */}
           <Link
@@ -93,7 +93,7 @@ export default async function Caso({ params }: Props) {
               href={p.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center gap-2 rounded-btn border border-white/10 bg-surface-2 px-5 text-[0.95rem] font-semibold text-white transition-colors hover:border-white/16 hover:bg-surface-3"
+              className={clasesBoton({ variant: "secondary", size: "lg" })}
             >
               {t.verSitio}
               <ArrowUpRight aria-hidden className="h-4 w-4" />

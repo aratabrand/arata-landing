@@ -4,7 +4,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import Ring from "@/components/Ring";
 import { Button } from "@/components/v2/Button";
-import { Badge, Container, Eyebrow, Glow, SectionHeader } from "@/components/v2/primitives";
+import { Badge, Container, Eyebrow, SectionHeader } from "@/components/v2/primitives";
 import Spotlight from "@/components/v2/Spotlight";
 import ProjectPreview from "@/components/v2/ProjectPreview";
 import { GridBackground } from "@/components/ui/grid-background";
@@ -21,12 +21,12 @@ export const metadata: Metadata = {
 const colores = [
   { token: "ink", hex: "#03010B", uso: "Único fondo de página", clase: "bg-ink border border-white/10" },
   { token: "surface-1", hex: "#0A0714", uso: "Tarjetas", clase: "bg-surface-1 border border-white/10" },
-  { token: "surface-2", hex: "#110C20", uso: "Hover, botón secundario", clase: "bg-surface-2" },
+  { token: "surface-2", hex: "#110C20", uso: "Hover, elementos elevados", clase: "bg-surface-2" },
   { token: "surface-3", hex: "#18112D", uso: "Menús y modales", clase: "bg-surface-3" },
-  { token: "lime", hex: "#B6FF00", uso: "CTA principal, cifras clave", clase: "bg-lime" },
-  { token: "brand", hex: "#7D53FF", uso: "Brillos, bordes destacados, gráficos", clase: "bg-brand" },
+  { token: "lime", hex: "#B6FF00", uso: "Botón principal, cifras clave, palabra destacada del título", clase: "bg-lime" },
+  { token: "brand", hex: "#7D53FF", uso: "Bloques destacados en color plano, círculo del botón blanco, gráficos", clase: "bg-brand" },
   { token: "brand-soft", hex: "#B9A4FF", uso: "Texto morado sobre oscuro", clase: "bg-brand-soft" },
-  { token: "brand-ink", hex: "#3B1D99", uso: "Tintes de luces (no es texto)", clase: "bg-brand-ink" },
+  { token: "brand-ink", hex: "#3B1D99", uso: "Detalles de gráficos (no es texto ni fondo)", clase: "bg-brand-ink" },
 ];
 
 const textos = [
@@ -61,7 +61,6 @@ export default function SistemaV2() {
       </header>
 
       <main className="relative overflow-hidden">
-        <Glow className="left-1/2 top-[-20rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative pb-24 pt-16">
           <h1 className="font-display text-v2-hero font-extrabold tracking-display text-white">Sistema de diseño v2</h1>
           <p className="mt-5 max-w-2xl text-v2-lead text-fog">
@@ -124,27 +123,61 @@ export default function SistemaV2() {
             </div>
           </Bloque>
 
-          <Bloque id="b-botones" titulo="Botones · radio 10 px · alto mín. 44 px">
+          <Bloque id="b-botones" titulo="Botones · píldora de color plano · alto mín. 44 px">
             <div className="flex flex-wrap items-center gap-3">
               <Button href="#" size="lg" arrow>
                 Primario (lima)
               </Button>
-              <Button href="#">Primario md</Button>
-              <Button href="#" variant="secondary" size="lg">
-                Secundario
+              <Button href="#" arrow>
+                Primario md
+              </Button>
+              <Button href="#" variant="secondary" size="lg" arrow>
+                Secundario (blanco)
+              </Button>
+              <Button href="#" variant="secondary">
+                Secundario sin flecha
               </Button>
               <Button href="#" variant="ghost" arrow>
                 Terciario
               </Button>
             </div>
-            <p className="mt-4 text-sm text-fog">Regla: un solo botón lima por vista (el CTA principal).</p>
+            <div className="mt-4 rounded-card bg-brand p-5">
+              <p className="mb-3 text-sm font-semibold text-white">Sobre un bloque morado (paquete recomendado, banda final)</p>
+              <Button href="#" size="lg" arrow>
+                Agenda tu reunión
+              </Button>
+            </div>
+            <ul className="mt-4 space-y-1.5 text-sm text-fog">
+              <li>Un solo botón lima por vista (el CTA principal). Los demás, blancos o de texto.</li>
+              <li>La flecha va en un círculo al final: ink con flecha lima en el primario, morado con flecha blanca en el blanco.</li>
+              <li>Al pasar el mouse la flecha sale por la derecha y entra otra (solo transform). Sin brillos ni degradados.</li>
+            </ul>
+          </Bloque>
+
+          <Bloque id="b-color-plano" titulo="Color plano · cómo se usa el color (D-137)">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-card bg-brand p-5">
+                <p className="font-display text-lg font-bold text-white">Bloque morado</p>
+                <p className="mt-2 text-sm text-white">Lo que queremos que elijan: paquete recomendado, precio, banda final. Texto siempre blanco al 100 % (4,6:1).</p>
+              </div>
+              <div className="v2-card p-5">
+                <p className="font-display text-lg font-bold text-white">
+                  Palabra en <span className="text-lime">lima</span>
+                </p>
+                <p className="mt-2 text-sm text-fog">El color se nota en pocos lugares: una palabra del título, una cifra, el botón principal.</p>
+              </div>
+              <div className="v2-card p-5">
+                <p className="font-display text-lg font-bold text-white">Tarjeta oscura</p>
+                <p className="mt-2 text-sm text-fog">Superficie sólida + borde fino. Sin vidrio, sin luces de color detrás, sin sombras de color.</p>
+              </div>
+            </div>
           </Bloque>
 
           <Bloque id="b-badges" titulo="Badges">
             <div className="flex flex-wrap gap-3">
               <Badge live>Tomamos 3 proyectos nuevos al mes</Badge>
               <Badge>Catálogo · Sistema</Badge>
-              <span className="rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">Recomendado</span>
+              <span className="rounded-full border border-white/15 bg-ink px-3 py-1 text-xs font-semibold text-white">Recomendado</span>
             </div>
           </Bloque>
 
@@ -236,7 +269,7 @@ export default function SistemaV2() {
               <li className="v2-card p-4">Solo se anima transform y opacity (GPU).</li>
               <li className="v2-card p-4">Siempre se respeta prefers-reduced-motion.</li>
               <li className="v2-card p-4">El h1 del hero no se anima: aparece en el primer pintado (mejor LCP).</li>
-              <li className="v2-card p-4">Luces de fondo: gradiente radial sin filter:blur.</li>
+              <li className="v2-card p-4">Sin luces ni degradados de color: la profundidad sale de superficies y bordes.</li>
             </ul>
           </Bloque>
         </Container>

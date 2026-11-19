@@ -105,16 +105,9 @@ const PORTRAITS = [
 
 function Portrait({ index, size = 22, uid }: { index: number; size?: number; uid: string }) {
   const p = PORTRAITS[index % PORTRAITS.length];
-  const id = `${uid}pt${index}`;
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
-      <defs>
-        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor={p.bg} />
-          <stop offset="1" stopColor="#9d9a96" />
-        </linearGradient>
-      </defs>
-      <rect width="64" height="64" fill={`url(#${id})`} />
+      <rect width="64" height="64" fill={p.bg} />
       {p.hair === "long" && <path d="M18 30c0-12 6-19 14-19s14 7 14 19v20H18z" fill={p.hairC} />}
       {p.hair === "curly" &&
         [[22, 20], [28, 15], [36, 15], [42, 20], [45, 28], [19, 28]].map(([x, y], i) => (
@@ -197,8 +190,6 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
   const L2 = "M117,73 C186,73 206,120 262,120";
   const R1 = "M378,100 C412,100 418,86 450,86";
   const R2 = "M378,120 C412,120 418,134 450,134";
-  const glow = `${uid}glow`;
-  const rays = `${uid}rays`;
   const c = servicios.bento;
 
   return (
@@ -211,27 +202,7 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
           role="img"
           aria-label="Tus clientes arman su pedido en tu catálogo y te llega ordenado al WhatsApp"
         >
-          <defs>
-            <radialGradient id={glow} cx="320" cy="110" r="200" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#7D53FF" stopOpacity=".22" />
-              <stop offset="1" stopColor="#7D53FF" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id={rays} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#B9A4FF" stopOpacity=".28" />
-              <stop offset="1" stopColor="#B9A4FF" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <rect x="0" y="0" width="640" height="178" fill={`url(#${glow})`} />
-          {[-62, -38, -14, 14, 38, 62].map((a, i) => (
-            <path
-              key={i}
-              d={`M320,110 L${320 + Math.sin((a * Math.PI) / 180) * 260},${110 - Math.cos((a * Math.PI) / 180) * 260} L${
-                320 + Math.sin(((a + 7) * Math.PI) / 180) * 260
-              },${110 - Math.cos(((a + 7) * Math.PI) / 180) * 260}Z`}
-              fill={`url(#${rays})`}
-              opacity=".5"
-            />
-          ))}
+          {/* D-137: sin luz ni rayos de color detrás del catálogo (color plano) */}
 
           {/* Clientes */}
           <g onMouseEnter={() => setSide("left")} onMouseLeave={() => setSide("")}>
@@ -450,7 +421,6 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
   const H = 130;
   const vals = c.valores;
   const { line, area, points } = chartPaths(vals, W, H, 14);
-  const fill = `${uid}area`;
   const last = points[points.length - 1];
   const i = hover >= 0 ? hover : points.length - 1;
   const p = points[i];
@@ -476,19 +446,13 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
           role="img"
           aria-label="Ejemplo de gráfica de ventas por semana en tu panel"
         >
-          <defs>
-            <linearGradient id={fill} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#7D53FF" stopOpacity=".35" />
-              <stop offset="1" stopColor="#7D53FF" stopOpacity="0" />
-            </linearGradient>
-          </defs>
           <text x="14" y="10" fontSize="7" fill="#8A84A8" fontFamily="ui-monospace,monospace">
             EJEMPLO · VENTAS POR SEMANA
           </text>
           {[0.3, 0.55, 0.8].map((g) => (
             <line key={g} x1="14" x2={W - 14} y1={H * g} y2={H * g} stroke="var(--ab-line)" />
           ))}
-          <path d={area} fill={`url(#${fill})`} />
+          <path d={area} fill="#7D53FF" fillOpacity=".16" />
           <path d={line} fill="none" stroke="#B9A4FF" strokeWidth="1.6" pathLength={1} className="ab-line-draw" />
           {hover >= 0 && <line x1={p[0]} x2={p[0]} y1="14" y2={H - 14} stroke="#FFFFFF" strokeOpacity=".3" />}
           {!reduced && hover < 0 && <circle cx={last[0]} cy={last[1]} r="7" fill="#B6FF00" opacity=".25" className="ab-glow" />}
@@ -540,8 +504,8 @@ const AB_CSS = `
 .ab-frame-hover:hover>.ab-c-tr{transform:translate(3px,-3px)}
 .ab-frame-hover:hover>.ab-c-bl{transform:translate(-3px,3px)}
 .ab-frame-hover:hover>.ab-c-br{transform:translate(3px,3px)}
-.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:linear-gradient(180deg,#110C20,#0A0714);border:1px solid var(--ab-line);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .35s}
-.ab-card:hover{border-color:var(--ab-line-strong);box-shadow:0 0 0 1px rgba(125,83,255,.25),0 24px 60px -30px rgba(125,83,255,.55)}
+.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:#0A0714;border:1px solid var(--ab-line);border-radius:18px;overflow:hidden;transition:border-color .3s}
+.ab-card:hover{border-color:var(--ab-line-strong)}
 .ab-diagram{width:100%;height:auto;overflow:visible}
 .ab-flow{stroke:var(--ab-line-strong);fill:none;stroke-width:1.2;transition:stroke .3s}
 .ab-flow-on{stroke:#B6FF00}

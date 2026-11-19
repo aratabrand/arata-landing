@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import CasosReel, { type CasoReel } from "./CasosReel";
-import { Container, Eyebrow, Glow } from "./primitives";
+import { Container, Eyebrow } from "./primitives";
 import Reveal from "@/components/Reveal";
 import { casosExito, casosVisibles, datosDelCaso } from "@/content/casos-exito";
 import { proyectos } from "@/content/proyectos";
@@ -41,7 +41,6 @@ export default function CasosExito({
 
   return (
     <section id={id} aria-labelledby={`${id}-titulo`} className="relative scroll-mt-20 overflow-hidden py-20 sm:py-28">
-      <Glow className="left-[-10%] top-[30%] h-[520px] w-[520px] opacity-60" />
       <Container className="relative">
         <Reveal className="max-w-2xl">
           <Eyebrow>{casosExito.eyebrow}</Eyebrow>

@@ -77,10 +77,10 @@ export default function CookieBanner() {
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+              <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-full bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
                 {t.aceptar}
               </button>
-              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
+              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
                 {t.rechazar}
               </button>
               <div className="col-span-2 flex items-center justify-center gap-4 text-sm">
@@ -141,10 +141,10 @@ export default function CookieBanner() {
           </ul>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-btn border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
+            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
               {t.guardar}
             </button>
-            <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-btn bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
+            <button type="button" onClick={() => decidir(true, true)} className="h-11 rounded-full bg-lime text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]">
               {t.aceptarTodas}
             </button>
           </div>

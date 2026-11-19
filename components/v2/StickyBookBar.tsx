@@ -29,7 +29,7 @@ export default function StickyBookBar({ cta = { texto: menu.cta, enlace: AGENDAR
         show ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-full opacity-0"
       )}
     >
-      <Button href={cta.enlace} external={/^https:\/\//i.test(cta.enlace)} size="lg" className="w-full">
+      <Button href={cta.enlace} external={/^https:\/\//i.test(cta.enlace)} size="lg" arrow className="w-full">
         {cta.texto}
       </Button>
     </div>

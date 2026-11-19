@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
-import { Container, Glow } from "./primitives";
+import { Container } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import { AbrirPreferenciasCookies } from "@/components/CookieBanner";
 import { cookies } from "@/content/cookies";
@@ -46,12 +46,12 @@ export function FaqSection({
 
 type Cta = { titulo: string; texto: string; boton: string; nota?: string; href?: string };
 
-/** CTA final: tarjeta grande con collage de los trabajos tintado de morado (captura 04). */
+/** CTA final: tarjeta grande con collage de los trabajos tapado con morado plano (captura 04, D-137). */
 export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.ReactNode } = {}) {
   return (
     <section aria-labelledby="cta-final" className="pb-24 pt-8 sm:pb-32">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[28px] border border-white/8 bg-surface-1 px-6 py-20 text-center sm:py-28">
+        <div className="relative isolate overflow-hidden rounded-[28px] bg-brand px-6 py-20 text-center sm:py-28">
           {/* Collage de trabajos al fondo */}
           <div aria-hidden className="absolute inset-0 -z-10 grid grid-cols-2 gap-3 p-3 opacity-45 sm:grid-cols-4">
             {proyectos.map((p, i) => (
@@ -64,21 +64,20 @@ export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.Re
               </div>
             ))}
           </div>
-          {/* Tinte morado plano sobre el collage + luz */}
-          <div aria-hidden className="absolute inset-0 -z-10 bg-[#140A3A]/75" />
-          <Glow className="left-1/2 top-1/2 -z-10 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2" />
+          {/* Morado de marca plano sobre el collage: se adivinan los trabajos, sin degradados */}
+          <div aria-hidden className="absolute inset-0 -z-10 bg-brand/95" />
 
           {antes}
           <h2 id="cta-final" className="mx-auto max-w-3xl font-display text-v2-h2 font-bold tracking-heading text-white">
             {cta.titulo}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-v2-lead text-fog">{cta.texto}</p>
+          <p className="mx-auto mt-5 max-w-xl text-v2-lead text-white">{cta.texto}</p>
           <div className="mt-9 flex justify-center">
             <Button href={cta.href ?? AGENDAR} size="lg" arrow>
               {cta.boton}
             </Button>
           </div>
-          {cta.nota && <p className="mt-4 text-sm text-fog-dim">{cta.nota}</p>}
+          {cta.nota && <p className="mt-4 text-sm text-white">{cta.nota}</p>}
         </div>
       </Container>
     </section>

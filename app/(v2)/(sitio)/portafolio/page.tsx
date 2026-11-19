@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CtaCard } from "@/components/v2/Closing";
-import { Container, Glow } from "@/components/v2/primitives";
+import { Container } from "@/components/v2/primitives";
 import { CaseCard } from "@/components/v2/ServiceSections";
 import PortfolioFilter from "@/components/v2/PortfolioFilter";
 import { filtroATipo, portafolioPagina as c, proyectos } from "@/content/proyectos";
@@ -22,7 +22,6 @@ export default function Portafolio() {
     <>
       <JsonLd data={[coleccion(proyectos), migas([{ nombre: "Inicio", path: INICIO }, { nombre: "Portafolio", path: "/portafolio" }])]} />
       <section className="relative overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32">
-        <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative">
           <h1 className="max-w-3xl font-display text-[clamp(2.1rem,7vw,4rem)] font-extrabold leading-[1.02] tracking-display text-white">
             {c.titulo}

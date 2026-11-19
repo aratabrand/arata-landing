@@ -342,7 +342,7 @@ export default function IncludesBento({ id, titulo, items }: { id: string; titul
                 <article
                   className={cn(
                     "flex h-full flex-col overflow-hidden rounded-card border bg-surface-1 p-5",
-                    clave ? "border-lime/30 shadow-[0_0_40px_-12px_rgba(182,255,0,0.35)]" : "border-white/8"
+                    clave ? "border-lime/30" : "border-white/8"
                   )}
                 >
                   <div className={cn("flex flex-1 items-center justify-center", celda.alto)}>{Ilus ? <Ilus /> : null}</div>

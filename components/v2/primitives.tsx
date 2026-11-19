@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 // Piezas pequeñas del sistema v2 (04-sistema-de-diseno.md §5).
@@ -43,11 +43,6 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
       {children}
     </p>
   );
-}
-
-/** Luz de fondo morada (atmósfera). Decorativa: aria-hidden, sin eventos. */
-export function Glow({ className, style }: { className?: string; style?: CSSProperties }) {
-  return <div aria-hidden className={cn("v2-glow", className)} style={style} />;
 }
 
 /** Encabezado de sección: título grande a la izquierda + subtítulo + acción a la derecha (ref. captura 01). */

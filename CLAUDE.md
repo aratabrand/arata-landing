@@ -228,6 +228,7 @@ La landing (secciones 9 y 10 = **v1**) se está reestructurando como **sitio de 
 - Toda decisión nueva se registra en `docs/decisiones.md`.
 - Solo se construye lo que está `Aprobado` en el blueprint. Orden: oferta → copy → diseño → construcción.
 - La base técnica de la sección 10 sigue vigente para la v2.
+- **Color plano en el sitio (D-137):** sin degradados, luces ni sombras de color (la regla de §3 vale también para el sitio; solo se permiten máscaras sin color que desvanecen bordes). Lo destacado va en **morado plano** (paquete recomendado, precio, banda final) con texto blanco al 100 %. **Botones en píldora**: primario lima con círculo ink y flecha lima; secundario blanco con círculo morado; un solo lima por vista. Guía en `docs/blueprint/04-sistema-de-diseno.md` §2.
 - **Sitio v2 lanzado el 9 nov 2026 (D-091):** el Inicio v2 está en `/` y `/v2` redirige allí. Páginas en `app/(v2)/(sitio)/` (comparten menú y footer), componentes en `components/v2/`, contenido en `content/` (textos y portafolio se editan ahí), tokens v2 en `tailwind.config.ts`. Guía viva en `/sistema` (noindex). Interruptor de lanzamiento y SEO: `lib/lanzamiento.ts`, `lib/seo.ts`, `lib/schema.ts`; lista de lanzamiento en `docs/blueprint/06-seo-geo-velocidad.md` §6. Construcción y agenda: `docs/blueprint/05-construccion.md`. Reglas de velocidad aprendidas: `docs/blueprint/04-sistema-de-diseno.md` §12.
 
 ---
