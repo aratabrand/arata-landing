@@ -2,6 +2,7 @@
 import { createHmac } from "node:crypto";
 import { firmaValida, leerAviso, leerNotas, enlaceSeguro, whatsappLimpio, tipoDe } from "../lib/panel/cal";
 import { agendar } from "../content/agendar";
+import { PLAZOS, datosDeCliente, diasParaPlazo, mensajeSeguimiento, plazoDesde, plazoValido, recordatorioEspera, type Interesado } from "../lib/panel/clientes/interesados";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 const secreto = "secreto-de-prueba-0123456789";
 
@@ -85,4 +86,25 @@ const sinInvitado = leerAviso(base({}, { attendees: [] }));
 ok(sinInvitado.accion === "creada" && sinInvitado.nombre === "Sin nombre" && sinInvitado.correo === null, "sin invitado: no falla (nombre 'Sin nombre')");
 const mala = leerAviso(base({}, { attendees: [{ name: "A".repeat(500), email: "no-es-correo", timeZone: "x".repeat(200) }] }));
 ok(mala.accion === "creada" && mala.nombre.length === 120 && mala.correo === null && (mala.zona?.length ?? 0) <= 60, "textos largos o correo malo: se acotan");
+
+// ── En espera (D-141) ──
+// 19 nov 2026, 9:00 p. m. en Bogotá = 20 nov 02:00 UTC: el "hoy" debe ser 19 nov (Bogotá), no 20 (UTC)
+const noche = Date.parse("2026-11-20T02:00:00Z");
+ok(plazoDesde(7, noche) === "2026-11-26" && plazoDesde(1, noche) === "2026-11-20", "plazo: se cuenta desde hoy en Bogotá (de noche no salta un día)");
+ok(diasParaPlazo("2026-11-19", noche) === 0 && diasParaPlazo("2026-11-20", noche) === 1 && diasParaPlazo("2026-11-17", noche) === -2, "días para el plazo: hoy 0, mañana 1, ya pasó negativo");
+ok(PLAZOS.at(-1)!.dias === 7 && plazoValido(7) && plazoValido(1) && !plazoValido(8) && !plazoValido(14) && !plazoValido(0) && !plazoValido("7"), "plazos: de 1 día a 1 semana, nada más");
+const man = recordatorioEspera("Camilo", 1, "Quedó en confirmar con su socio");
+const hoyR = recordatorioEspera("Camilo", 0, null);
+ok(man?.tipo === "manana" && man.titulo.includes("Mañana se cumple el plazo de Camilo") && man.cuerpo.includes("Quedó en confirmar con su socio"), "recordatorio un día antes, con la última nota");
+ok(hoyR?.tipo === "hoy" && hoyR.titulo.includes("Hoy toca escribirle a Camilo"), "recordatorio el día del plazo");
+ok(recordatorioEspera("Camilo", 2, null) === null && recordatorioEspera("Camilo", -1, null) === null, "otros días no hay recordatorio");
+const msg = mensajeSeguimiento({ nombre: "Camilo Andrés Casallas", tipo: "catalogo" }, "Sergio Cuevas");
+ok(msg.startsWith("Hola Camilo, ¿cómo estás? Te saluda Sergio de Arata San.") && msg.includes("tu catálogo"), "mensaje de WhatsApp: primer nombre, quién escribe y qué necesita");
+ok(mensajeSeguimiento({ nombre: "Sin nombre", tipo: null }, "").startsWith("Hola, ¿cómo estás? Te saludamos de Arata San.") && mensajeSeguimiento({ nombre: "Ana", tipo: null }, "Andrés").includes("lo que hablamos en la reunión"), "mensaje sin nombre ni tipo: no queda raro");
+const base2 = { id: "x", nombre: "Camilo", correo: null, whatsapp: "573108150665", necesita: "Un catálogo o tienda", tipo: "catalogo", paginaWeb: null, cuando: null, inversion: null, inicio: "2026-11-19T21:00:00Z", fin: null, enlaceLlamada: null, enlaceReserva: null, estado: "espera", porAceptar: false, esperaHasta: "2026-11-26", clienteId: null, creado: "2026-11-19T18:00:00Z", cerradoEn: null } as const;
+const conNotas: Interesado = { ...base2, notas: [{ texto: "Le escribí, dice que el lunes", quien: "Andrés", creado: "2026-11-24T15:00:00Z" }, { texto: "Quedó en confirmar", quien: "Sergio", creado: "2026-11-19T22:00:00Z" }] };
+const pre = datosDeCliente(conNotas).notas;
+ok(pre.includes("Seguimiento:") && pre.indexOf("Quedó en confirmar") < pre.indexOf("Le escribí"), "al confirmar, las notas pasan al cliente en orden (la primera arriba)");
+ok(datosDeCliente({ ...base2, notas: [] }).notas.includes("Seguimiento") === false, "sin notas, no agrega 'Seguimiento'");
+
 if (process.exitCode) console.log("HAY FALLAS");

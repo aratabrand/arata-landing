@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarClock, Check, ExternalLink, Mail, MessageCircle, RotateCcw, Trash2, Video, X } from "lucide-react";
-import { borrarInteresado, descartarInteresado, reabrirInteresado } from "@/app/(panel)/panel/(app)/clientes/acciones";
-import { CAL_POR_ACEPTAR, cuandoTexto, etiquetaTipo, momentoDe, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
+import { CalendarClock, Check, Clock, ExternalLink, Mail, MessageCircle, NotebookPen, RotateCcw, Trash2, Video, X } from "lucide-react";
+import { agregarNotaInteresado, borrarInteresado, descartarInteresado, ponerEnEspera, reabrirInteresado } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { CAL_POR_ACEPTAR, PLAZOS, cuandoTexto, diasParaPlazo, etiquetaTipo, fechaNota, mensajeSeguimiento, momentoDe, plazoDesde, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
 import { Pill } from "./ui";
-import { BotonSecundario, MensajeError, useAccion } from "./finanzas/comun";
+import { BotonSecundario, Campo, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
 // Interesados (D-133): personas que agendaron reunión desde aratasan.com/agendar (Cal.com).
@@ -19,6 +19,7 @@ const inicial = (n: string) => n.trim().slice(0, 1).toUpperCase() || "?";
 export default function Interesados({
   interesados,
   ahora,
+  yo,
   nombreCliente,
   puedeEditar,
   puedeBorrar,
@@ -28,6 +29,8 @@ export default function Interesados({
   interesados: Interesado[];
   /** Hora del servidor (ISO): evita que la primera pintura difiera de la del navegador. */
   ahora: string;
+  /** Quien está en sesión: firma el mensaje de seguimiento (D-141). */
+  yo: string;
   /** Nombre visible de un cliente por su id (para "Ya es cliente: …"). */
   nombreCliente: (id: string) => string | null;
   puedeEditar: boolean;
@@ -59,7 +62,7 @@ export default function Interesados({
     };
   }, [router]);
 
-  const { porAceptar, porConfirmar, proximas, cerradas } = useMemo(() => {
+  const { porAceptar, porConfirmar, enEspera, proximas, cerradas } = useMemo(() => {
     const dif = (a: Interesado, b: Interesado) => Date.parse(a.inicio) - Date.parse(b.inicio);
     const pend = interesados.filter((i) => i.estado === "agendada" && !i.porAceptar);
     return {
@@ -69,7 +72,9 @@ export default function Interesados({
       porConfirmar: pend.filter((i) => momentoDe(i, ahoraMs) === "pasada").sort((a, b) => dif(b, a)),
       // Las que vienen, la más cercana primero
       proximas: pend.filter((i) => momentoDe(i, ahoraMs) !== "pasada").sort(dif),
-      cerradas: interesados.filter((i) => i.estado !== "agendada").sort((a, b) => Date.parse(b.cerradoEn ?? b.inicio) - Date.parse(a.cerradoEn ?? a.inicio)),
+      // Quedaron en confirmar (D-141): el plazo más cercano primero
+      enEspera: interesados.filter((i) => i.estado === "espera").sort((a, b) => (a.esperaHasta ?? "").localeCompare(b.esperaHasta ?? "")),
+      cerradas: interesados.filter((i) => i.estado !== "agendada" && i.estado !== "espera").sort((a, b) => Date.parse(b.cerradoEn ?? b.inicio) - Date.parse(a.cerradoEn ?? a.inicio)),
     };
   }, [interesados, ahoraMs]);
 
@@ -93,7 +98,7 @@ export default function Interesados({
       {porAceptar.length > 0 && (
         <Grupo titulo="Por aceptar en Cal.com" detalle="Pidieron reunión. Si es real, acéptala en Cal.com; si es spam, recházala allá y aquí se cierra sola." cantidad={porAceptar.length} alerta>
           {porAceptar.map((i) => (
-            <Fila key={i.id} i={i} ahoraMs={ahoraMs} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
+            <Fila key={i.id} i={i} ahoraMs={ahoraMs} yo={yo} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
           ))}
         </Grupo>
       )}
@@ -101,7 +106,20 @@ export default function Interesados({
       {porConfirmar.length > 0 && (
         <Grupo titulo="Por confirmar" detalle="La reunión ya pasó: ¿cómo salió?" cantidad={porConfirmar.length} alerta>
           {porConfirmar.map((i) => (
-            <Fila key={i.id} i={i} ahoraMs={ahoraMs} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
+            <Fila key={i.id} i={i} ahoraMs={ahoraMs} yo={yo} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
+          ))}
+        </Grupo>
+      )}
+
+      {enEspera.length > 0 && (
+        <Grupo
+          titulo="En espera"
+          detalle="Quedaron en confirmar. Te avisamos al celular un día antes del plazo y el día que se cumple."
+          cantidad={enEspera.length}
+          alerta={enEspera.some((i) => i.esperaHasta && diasParaPlazo(i.esperaHasta, ahoraMs) <= 0)}
+        >
+          {enEspera.map((i) => (
+            <Fila key={i.id} i={i} ahoraMs={ahoraMs} yo={yo} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
           ))}
         </Grupo>
       )}
@@ -110,7 +128,7 @@ export default function Interesados({
         {proximas.length === 0 ? (
           <li className="rounded-frame border border-white/[0.06] px-4 py-5 text-sm text-fog">No hay reuniones próximas.</li>
         ) : (
-          proximas.map((i) => <Fila key={i.id} i={i} ahoraMs={ahoraMs} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />)
+          proximas.map((i) => <Fila key={i.id} i={i} ahoraMs={ahoraMs} yo={yo} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />)
         )}
       </Grupo>
 
@@ -125,7 +143,7 @@ export default function Interesados({
           </summary>
           <ul className="mt-3 space-y-3">
             {cerradas.map((i) => (
-              <Fila key={i.id} i={i} ahoraMs={ahoraMs} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
+              <Fila key={i.id} i={i} ahoraMs={ahoraMs} yo={yo} nombreCliente={nombreCliente} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onConfirmar={onConfirmar} onVerCliente={onVerCliente} />
             ))}
           </ul>
         </details>
@@ -156,6 +174,13 @@ const pastilla = (i: Interesado, m: Momento, ahoraMs: number): { texto: string; 
   if (i.estado === "descartada") return { texto: "No avanzó", tono: "neutro" };
   if (i.estado === "rechazada") return { texto: "Rechazada en Cal.com", tono: "neutro" };
   if (i.porAceptar) return { texto: "Por aceptar en Cal.com", tono: "alerta" };
+  if (i.estado === "espera" && i.esperaHasta) {
+    const d = diasParaPlazo(i.esperaHasta, ahoraMs);
+    if (d < 0) return { texto: `Se pasó el plazo hace ${-d} ${d === -1 ? "día" : "días"}`, tono: "alerta" };
+    if (d === 0) return { texto: "Hoy toca escribirle", tono: "alerta" };
+    if (d === 1) return { texto: "Mañana se cumple el plazo", tono: "morado" };
+    return { texto: `En espera hasta el ${fechaNota(i.esperaHasta)}`, tono: "morado" };
+  }
   if (m === "pasada") return { texto: "Por confirmar", tono: "alerta" };
   if (m === "ahora") return { texto: "Es ahora", tono: "lima" };
   if (m === "pronto") return { texto: `Hoy · ${relativo(i.inicio, ahoraMs)}`, tono: "morado" };
@@ -165,6 +190,7 @@ const pastilla = (i: Interesado, m: Momento, ahoraMs: number): { texto: string; 
 function Fila({
   i,
   ahoraMs,
+  yo,
   nombreCliente,
   puedeEditar,
   puedeBorrar,
@@ -173,6 +199,7 @@ function Fila({
 }: {
   i: Interesado;
   ahoraMs: number;
+  yo: string;
   nombreCliente: (id: string) => string | null;
   puedeEditar: boolean;
   puedeBorrar: boolean;
@@ -188,9 +215,36 @@ function Fila({
   const ahoraEs = pendiente && m === "ahora";
   const cliente = i.clienteId ? nombreCliente(i.clienteId) : null;
   const wa = i.whatsapp ? `https://wa.me/${i.whatsapp}?text=${encodeURIComponent(`Hola ${i.nombre.split(" ")[0]}, `)}` : null;
+  // En espera (D-141)
+  const enEspera = i.estado === "espera";
+  const dPlazo = enEspera && i.esperaHasta ? diasParaPlazo(i.esperaHasta, ahoraMs) : null;
+  const toca = dPlazo !== null && dPlazo <= 0;
+  const mensaje = mensajeSeguimiento(i, yo);
+  const seguimiento = i.whatsapp
+    ? { href: `https://wa.me/${i.whatsapp}?text=${encodeURIComponent(mensaje)}`, texto: "Escribirle por WhatsApp", icono: MessageCircle }
+    : i.correo
+      ? { href: `mailto:${i.correo}?subject=${encodeURIComponent("Seguimiento de nuestra reunión · Arata San")}&body=${encodeURIComponent(mensaje)}`, texto: "Escribirle por correo", icono: Mail }
+      : null;
+  const [formulario, setFormulario] = useState<null | "espera" | "nota">(null);
+  const [nota, setNota] = useState("");
+  const [dias, setDias] = useState("");
+  const [todas, setTodas] = useState(false);
+  const notas = todas ? i.notas : i.notas.slice(0, 3);
+  const abrir = (f: "espera" | "nota") => {
+    acc.setError("");
+    setNota("");
+    setDias("");
+    setFormulario(f);
+  };
+  const guardar = () =>
+    acc.correr(
+      () => (formulario === "espera" ? ponerEnEspera({ interesadoId: i.id, nota, dias: Number(dias) }) : agregarNotaInteresado({ interesadoId: i.id, nota })),
+      () => setFormulario(null)
+    );
+  const fechaPlazo = dias ? plazoDesde(Number(dias), ahoraMs) : null;
 
   return (
-    <li className={cn("rounded-card border p-4 sm:p-5", m === "pasada" && pendiente ? "border-[#FF9BB0]/30 bg-[#FF9BB0]/[0.04]" : ahoraEs ? "border-lime/40 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]")}>
+    <li className={cn("rounded-card border p-4 sm:p-5", (m === "pasada" && pendiente) || toca ? "border-[#FF9BB0]/30 bg-[#FF9BB0]/[0.04]" : ahoraEs ? "border-lime/40 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]")}>
       <div className="flex flex-wrap items-start gap-3">
         <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
           {inicial(i.nombre)}
@@ -255,6 +309,87 @@ function Fila({
         )}
       </div>
 
+      {/* Seguimiento: notas de quien habló con la persona (la más reciente arriba) */}
+      {i.notas.length > 0 && (
+        <div className="mt-4 rounded-frame border border-white/[0.07] bg-surface-2/50 p-3 sm:p-4">
+          <p className="flex items-center gap-2 text-xs font-semibold text-fog">
+            <NotebookPen aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Seguimiento
+            {enEspera && i.esperaHasta && <span className="font-normal text-fog-dim">· plazo: {fechaNota(i.esperaHasta)}</span>}
+          </p>
+          <ul className="mt-2 space-y-2">
+            {notas.map((n, k) => (
+              <li key={k} className="text-sm">
+                <p className="text-white">{n.texto}</p>
+                <p className="text-xs text-fog-dim">
+                  {n.quien} · {fechaNota(n.creado)}
+                </p>
+              </li>
+            ))}
+          </ul>
+          {i.notas.length > 3 && (
+            <button type="button" onClick={() => setTodas(!todas)} className="mt-2 text-xs font-semibold text-brand-soft hover:text-white">
+              {todas ? "Ver menos" : `Ver todas (${i.notas.length})`}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Mensaje que se manda al tocar "Escribirle" */}
+      {enEspera && seguimiento && (
+        <p className="mt-3 text-xs leading-relaxed text-fog-dim">
+          <span className="font-semibold text-fog">Mensaje:</span> {mensaje}
+        </p>
+      )}
+
+      {/* Poner en espera o agregar una nota */}
+      {formulario && (
+        <form
+          className="mt-4 space-y-3 rounded-frame border border-brand/30 bg-brand/[0.05] p-3 sm:p-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            guardar();
+          }}
+        >
+          <p className="text-sm font-semibold text-white">{formulario === "espera" ? (enEspera ? "Cambiar el plazo" : "Poner en espera") : "Agregar una nota"}</p>
+          <Campo etiqueta="Nota" obligatorio ayuda={`${nota.length}/500`}>
+            <textarea
+              value={nota}
+              onChange={(e) => setNota(e.target.value)}
+              maxLength={500}
+              required
+              rows={3}
+              autoComplete="off"
+              placeholder={formulario === "espera" ? "Ej.: Le gustó la propuesta, quedó en confirmar después de hablar con su socio." : "Ej.: Le escribí, dice que el lunes nos responde."}
+              className="pn-input h-auto py-2.5 leading-snug"
+            />
+          </Campo>
+          {formulario === "espera" && (
+            <Campo
+              etiqueta="¿Cuánto tiempo te pidió que esperáramos?"
+              obligatorio
+              ayuda={fechaPlazo ? `Te recordamos al celular el ${fechaNota(plazoDesde(Number(dias) - 1, ahoraMs))} y el ${fechaNota(fechaPlazo)}, a las 8 a. m.` : "Máximo una semana."}
+            >
+              <select value={dias} onChange={(e) => setDias(e.target.value)} required className="pn-input">
+                <option value="">Elige el tiempo</option>
+                {PLAZOS.map((x) => (
+                  <option key={x.dias} value={x.dias}>
+                    {x.texto}
+                  </option>
+                ))}
+              </select>
+            </Campo>
+          )}
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <button type="submit" disabled={acc.pendiente} className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-50">
+              {acc.pendiente ? "Guardando…" : formulario === "espera" ? (enEspera ? "Guardar el plazo" : "Poner en espera") : "Guardar nota"}
+            </button>
+            <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => setFormulario(null)} className="h-11">
+              Cancelar
+            </BotonSecundario>
+          </div>
+        </form>
+      )}
+
       {i.estado === "confirmada" && (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-fog">
           <Check aria-hidden className="h-4 w-4 text-lime" /> {cliente ? <>Cliente: <strong className="font-semibold text-white">{cliente}</strong></> : "Ya es cliente"}
@@ -306,6 +441,45 @@ function Fila({
             >
               <Check aria-hidden className="h-4 w-4" /> Confirmar y pasar a cliente
             </button>
+            {!formulario && (
+              <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => abrir("espera")} className="h-11 sm:w-auto">
+                <Clock aria-hidden className="h-4 w-4" /> Poner en espera
+              </BotonSecundario>
+            )}
+            <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => acc.correr(() => descartarInteresado(i.id))} className="h-11 sm:w-auto">
+              <X aria-hidden className="h-4 w-4" /> No avanzó
+            </BotonSecundario>
+          </>
+        )}
+        {enEspera && seguimiento && (
+          <a
+            href={seguimiento.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold sm:w-auto",
+              toca ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+            )}
+          >
+            <seguimiento.icono aria-hidden className="h-4 w-4" /> {seguimiento.texto}
+            <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
+          </a>
+        )}
+        {enEspera && puedeEditar && (
+          <>
+            {!formulario && (
+              <>
+                <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => abrir("nota")} className="h-11 sm:w-auto">
+                  <NotebookPen aria-hidden className="h-4 w-4" /> Agregar nota
+                </BotonSecundario>
+                <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => abrir("espera")} className="h-11 sm:w-auto">
+                  <Clock aria-hidden className="h-4 w-4" /> Cambiar plazo
+                </BotonSecundario>
+              </>
+            )}
+            <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => onConfirmar(i)} className="h-11 sm:w-auto">
+              <Check aria-hidden className="h-4 w-4" /> Confirmar y pasar a cliente
+            </BotonSecundario>
             <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => acc.correr(() => descartarInteresado(i.id))} className="h-11 sm:w-auto">
               <X aria-hidden className="h-4 w-4" /> No avanzó
             </BotonSecundario>
@@ -333,7 +507,9 @@ function Fila({
           </button>
         )}
       </div>
-      <MensajeError error={acc.error} />
+      <div className={cn(acc.error && "mt-3")}>
+        <MensajeError error={acc.error} />
+      </div>
     </li>
   );
 }

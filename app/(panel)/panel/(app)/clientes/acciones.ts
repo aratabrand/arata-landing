@@ -6,6 +6,7 @@ import { panelActivo } from "@/lib/panel/config";
 import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { estadosCliente, origenesCliente } from "@/lib/panel/clientes/datos";
 import { celularValido } from "@/lib/panel/mascaras";
+import { fechaNota, plazoValido } from "@/lib/panel/clientes/interesados";
 import type { Resultado } from "../finanzas/acciones";
 import { diferencias, historialDe, registrar, type EventoHistorial } from "@/lib/panel/historial";
 
@@ -181,7 +182,7 @@ async function ctxInteresados(borrar = false) {
   if (!panelActivo) throw new Error("El panel está en modo ejemplo.");
   const ctx = await contextoAgencia();
   if (!ctx) throw new Error("Tu sesión terminó. Vuelve a entrar.");
-  if (borrar ? !ctx.esDueno : !ctx.editaFinanzas) throw new Error(borrar ? "Solo Sergio puede borrar interesados." : "Solo Sergio y Andrés pueden confirmar o descartar interesados.");
+  if (borrar ? !ctx.esDueno : !ctx.editaFinanzas) throw new Error(borrar ? "Solo Sergio puede borrar interesados." : "Solo Sergio y Andrés pueden confirmar, poner en espera o descartar interesados.");
   return ctx;
 }
 
@@ -219,7 +220,7 @@ export async function confirmarInteresado(entrada: { interesadoId: string; clien
       if (!r.ok) return r;
       clienteId = r.id!;
     }
-    await db().query(`update interesados set estado = 'confirmada', cliente_id = $2, cerrado_por = $3, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, clienteId, ctx.usuarioId]);
+    await db().query(`update interesados set estado = 'confirmada', espera_hasta = null, cliente_id = $2, cerrado_por = $3, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, clienteId, ctx.usuarioId]);
     await registrar(ctx, {
       accion: "crear",
       entidad: "interesado",
@@ -239,13 +240,78 @@ export async function confirmarInteresado(entrada: { interesadoId: string; clien
   }
 }
 
+/* ── En espera (D-141) ─────────────────────────────────────────────────── */
+
+async function nuevaNota(ctx: { negocioId: string; usuarioId: string }, interesadoId: string, texto: string) {
+  const quien = String((await db().query(`select name from "user" where id = $1`, [ctx.usuarioId])).rows[0]?.name ?? "Alguien").slice(0, 80);
+  await db().query(`insert into interesado_notas (interesado_id, negocio_id, texto, usuario_id, quien) values ($1, $2, $3, $4, $5)`, [interesadoId, ctx.negocioId, texto, ctx.usuarioId, quien]);
+}
+
+const notaLimpia = (v: unknown) => {
+  const t = limpio(String(v ?? "").replace(/[\u0000-\u001F\u007F<>]/g, " "), 500);
+  if (!t) throw new Error("Escribe la nota: qué quedó con la persona.");
+  return t;
+};
+
+/**
+ * La reunión salió pero la persona quedó en confirmar: se pone en espera con una nota y el tiempo que
+ * pidió (1 día a 1 semana). El aviso de las 8 a. m. recuerda escribirle un día antes y el día del plazo.
+ * También sirve para cambiar el plazo de uno que ya está en espera.
+ */
+export async function ponerEnEspera(entrada: { interesadoId: string; nota: string; dias: number }): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados();
+    const i = await interesadoDe(ctx.negocioId, entrada.interesadoId);
+    if (i.estado !== "agendada" && i.estado !== "espera") return NO("Solo se puede poner en espera una reunión pendiente.");
+    const dias = Number(entrada.dias);
+    if (!plazoValido(dias)) return NO("Elige cuánto tiempo pidió que esperáramos (máximo una semana).");
+    const nota = notaLimpia(entrada.nota);
+    const r = await db().query(
+      `update interesados set estado = 'espera', por_aceptar = false, espera_hasta = current_date + $2::int, actualizado = now()
+        where id = $1 returning to_char(espera_hasta, 'YYYY-MM-DD') hasta`,
+      [i.id, dias]
+    );
+    await nuevaNota(ctx, i.id, nota);
+    const hasta = String(r.rows[0].hasta);
+    await registrar(ctx, {
+      accion: "editar",
+      entidad: "interesado",
+      entidadId: i.id,
+      titulo: `Puso en espera a ${i.nombre} hasta el ${fechaNota(hasta)}`,
+      cambios: [{ campo: "Nota", antes: "", despues: nota }],
+    });
+    revalidatePath("/panel/clientes");
+    revalidatePath("/panel/notificaciones");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo poner en espera.");
+  }
+}
+
+/** Agrega una nota al seguimiento (en espera o pendiente). Las notas no se editan: se agregan. */
+export async function agregarNotaInteresado(entrada: { interesadoId: string; nota: string }): Promise<Resultado> {
+  try {
+    const ctx = await ctxInteresados();
+    const i = await interesadoDe(ctx.negocioId, entrada.interesadoId);
+    if (i.estado !== "agendada" && i.estado !== "espera") return NO("Solo se agregan notas a reuniones pendientes o en espera.");
+    const nota = notaLimpia(entrada.nota);
+    await nuevaNota(ctx, i.id, nota);
+    await db().query(`update interesados set actualizado = now() where id = $1`, [i.id]);
+    await registrar(ctx, { accion: "editar", entidad: "interesado", entidadId: i.id, titulo: `Agregó una nota a ${i.nombre}`, cambios: [{ campo: "Nota", antes: "", despues: nota }] });
+    revalidatePath("/panel/clientes");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo guardar la nota.");
+  }
+}
+
 /** La reunión no avanzó (o era spam): queda en "Cerradas", sin crear cliente. */
 export async function descartarInteresado(id: string): Promise<Resultado> {
   try {
     const ctx = await ctxInteresados();
     const i = await interesadoDe(ctx.negocioId, id);
-    if (i.estado !== "agendada") return NO("Solo se puede descartar una reunión pendiente.");
-    await db().query(`update interesados set estado = 'descartada', cerrado_por = $2, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, ctx.usuarioId]);
+    if (i.estado !== "agendada" && i.estado !== "espera") return NO("Solo se puede descartar una reunión pendiente o en espera.");
+    await db().query(`update interesados set estado = 'descartada', espera_hasta = null, cerrado_por = $2, cerrado_en = now(), actualizado = now() where id = $1`, [i.id, ctx.usuarioId]);
     await registrar(ctx, { accion: "editar", entidad: "interesado", entidadId: i.id, titulo: `Marcó que la reunión con ${i.nombre} no avanzó` });
     revalidatePath("/panel/clientes");
     revalidatePath("/panel/notificaciones");

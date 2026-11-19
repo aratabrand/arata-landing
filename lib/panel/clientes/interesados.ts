@@ -1,7 +1,9 @@
 // Interesados que agendan reunión por Cal.com (D-133). Tipos y funciones puras que usa la pantalla
 // (sin node:crypto ni base de datos: este archivo también viaja al navegador).
 
-export type EstadoInteresado = "agendada" | "confirmada" | "cancelada" | "descartada" | "rechazada";
+export type EstadoInteresado = "agendada" | "espera" | "confirmada" | "cancelada" | "descartada" | "rechazada";
+
+export type NotaInteresado = { texto: string; quien: string; creado: string };
 export type TipoInteres = "pagina" | "catalogo" | "sistema" | "auditoria";
 
 export type Interesado = {
@@ -23,6 +25,10 @@ export type Interesado = {
   estado: EstadoInteresado;
   /** Pidió la reunión y todavía no se acepta en Cal.com (confirmación manual, D-134). */
   porAceptar: boolean;
+  /** En espera (D-141): hasta qué día esperamos (YYYY-MM-DD, Bogotá). */
+  esperaHasta: string | null;
+  /** Notas del seguimiento, la más reciente primero. */
+  notas: NotaInteresado[];
   clienteId: string | null;
   creado: string;
   cerradoEn: string | null;
@@ -88,13 +94,16 @@ export function paisDeWhatsapp(digitos: string | null): { pais: string; telefono
 /** Lo que se le prellena al formulario "Confirmar y pasar a cliente". */
 export function datosDeCliente(i: Interesado) {
   const { pais, telefono } = paisDeWhatsapp(i.whatsapp);
+  const seguimiento = [...i.notas].reverse().map((n) => `· ${fechaNota(n.creado)}, ${n.quien}: ${n.texto}`);
   const notas = [
     i.necesita ? `Necesita: ${i.necesita}` : null,
     i.cuando ? `Cuándo empezar: ${i.cuando}` : null,
     i.inversion ? `Inversión: ${i.inversion}` : null,
+    seguimiento.length ? `Seguimiento:\n${seguimiento.join("\n")}` : null,
   ]
     .filter(Boolean)
-    .join("\n");
+    .join("\n")
+    .slice(0, 2000);
   return {
     nombre: i.nombre === "Sin nombre" ? "" : i.nombre,
     telefono,
@@ -105,6 +114,60 @@ export function datosDeCliente(i: Interesado) {
     origenDetalle: `Agendó reunión en aratasan.com (${cuandoTexto(i.inicio)})`,
     notas,
   };
+}
+
+/* ── En espera (D-141) ─────────────────────────────────────────────────── */
+
+/** Cuánto tiempo pidió que esperáramos. Máximo una semana (decisión de Sergio). */
+export const PLAZOS = [
+  { dias: 1, texto: "1 día" },
+  { dias: 2, texto: "2 días" },
+  { dias: 3, texto: "3 días" },
+  { dias: 4, texto: "4 días" },
+  { dias: 5, texto: "5 días" },
+  { dias: 7, texto: "1 semana" },
+] as const;
+export const plazoValido = (d: unknown) => PLAZOS.some((p) => p.dias === d);
+
+/** Fecha de hoy en Bogotá (YYYY-MM-DD) para un instante dado. */
+export const diaBogota = (ms: number) => new Date(ms).toLocaleDateString("en-CA", { timeZone: ZONA });
+
+/** Fecha corta para notas y plazos: "jue 26 nov". */
+export const fechaNota = (iso: string) => new Date(iso.length === 10 ? `${iso}T12:00:00-05:00` : iso).toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short", timeZone: ZONA });
+
+/** Días que faltan para el plazo (0 = hoy, negativo = ya pasó). */
+export function diasParaPlazo(esperaHasta: string, ahoraMs: number) {
+  return Math.round((Date.parse(`${esperaHasta}T12:00:00Z`) - Date.parse(`${diaBogota(ahoraMs)}T12:00:00Z`)) / 86_400_000);
+}
+
+/** Fecha del plazo si hoy se ponen `dias` de espera. */
+export function plazoDesde(dias: number, ahoraMs: number) {
+  const hoy = Date.parse(`${diaBogota(ahoraMs)}T12:00:00Z`);
+  return new Date(hoy + dias * 86_400_000).toISOString().slice(0, 10);
+}
+
+/** Recordatorio de las 8 a. m.: un día antes y el día del plazo. null si hoy no toca. */
+export function recordatorioEspera(nombre: string, dias: number, nota: string | null): { tipo: "manana" | "hoy"; titulo: string; cuerpo: string } | null {
+  if (dias !== 0 && dias !== 1) return null;
+  const pila = nota ? `Quedó así: «${nota.length > 90 ? nota.slice(0, 89) + "…" : nota}». ` : "";
+  return dias === 1
+    ? { tipo: "manana", titulo: `⏰ Mañana se cumple el plazo de ${nombre}`, cuerpo: `${pila}Mañana toca escribirle.` }
+    : { tipo: "hoy", titulo: `📲 Hoy toca escribirle a ${nombre}`, cuerpo: `${pila}Se cumplió el tiempo que pidió. Escríbele por WhatsApp desde el panel.` };
+}
+
+const QUE: Record<TipoInteres, string> = {
+  pagina: "tu página web",
+  catalogo: "tu catálogo",
+  sistema: "tu sistema a la medida",
+  auditoria: "la auditoría de tu página",
+};
+
+/** Mensaje de seguimiento para WhatsApp (o correo). `yo` = nombre de quien escribe. */
+export function mensajeSeguimiento(i: Pick<Interesado, "nombre" | "tipo">, yo: string) {
+  const nombre = i.nombre === "Sin nombre" ? "" : ` ${i.nombre.trim().split(/\s+/)[0]}`;
+  const de = yo ? `Te saluda ${yo.trim().split(/\s+/)[0]} de Arata San. ` : "Te saludamos de Arata San. ";
+  const que = i.tipo ? QUE[i.tipo] : "lo que hablamos en la reunión";
+  return `Hola${nombre}, ¿cómo estás? ${de}Te escribo para saber qué decidiste sobre ${que}. Si te quedó alguna duda, con gusto te la resolvemos por aquí. ¡Quedamos atentos!`;
 }
 
 /** Donde se aceptan o rechazan las solicitudes en Cal.com. */
