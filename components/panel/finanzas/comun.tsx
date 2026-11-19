@@ -108,7 +108,7 @@ export function Etiqueta({ texto, obligatorio }: { texto: string; obligatorio?: 
         {limpio}
         {req && (
           <>
-            <span aria-hidden className="ml-0.5 text-lime">*</span>
+            <span aria-hidden className="ml-0.5 text-brand-soft">*</span>
             <span className="sr-only"> (obligatorio)</span>
           </>
         )}
@@ -122,7 +122,7 @@ export function Etiqueta({ texto, obligatorio }: { texto: string; obligatorio?: 
 export function LeyendaObligatorios() {
   return (
     <p className="text-[0.72rem] text-fog-dim">
-      Los campos con <span className="text-lime">*</span> son obligatorios.
+      Los campos con <span className="text-brand-soft">*</span> son obligatorios.
     </p>
   );
 }
@@ -142,7 +142,7 @@ export function BotonPrincipal({ children, pendiente, className, ...p }: React.B
     <button
       {...p}
       disabled={pendiente || p.disabled}
-      className={cn("v2-shine h-11 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-50", className)}
+      className={cn("h-11 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-50", className)}
     >
       {pendiente ? "Guardando…" : children}
     </button>

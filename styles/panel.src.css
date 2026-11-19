@@ -9,6 +9,195 @@
    CSS del sitio: en Vercel, según qué archivo se procesara primero, el sitio quedaba compilado con
    la configuración del panel (sin text-v2-hero, gap-6, etc.) y se veía roto. Aquí no se usa @config.
    ────────────────────────────────────────────────────────────────────── */
+/* ── Base visual del panel (D-136) ───────────────────────────────────────
+   Superficies en capas (fondo ink → contenido canvas → tarjeta → detalle dentro de la tarjeta),
+   bordes finos, sin luces de color ni brillos. Morado de marca para actuar y elegir; lima solo
+   para destacar un dato (sube, completado, nuevo). Solo dentro de .pn-root (layout del panel). */
+.pn-root .v2-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #100d1a;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+/* Tarjeta destacada (la primera cifra): mismo cuerpo, con un filo morado arriba. Sin desenfoque ni luz de fondo */
+.pn-root .v2-glass {
+  isolation: auto;
+  overflow: visible;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 20px;
+  border: 1px solid rgba(125, 83, 255, 0.28);
+  background: linear-gradient(180deg, rgba(125, 83, 255, 0.1), rgba(125, 83, 255, 0.02) 70%), #100d1a;
+  box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.pn-root .v2-glass::before { display: none; }
+/* Sin el brillo que recorre los botones */
+.pn-root .v2-shine::after { display: none; }
+
+/* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */
+.pn-primario {
+  background: linear-gradient(180deg, #7d53ff, #6d45f0);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(125, 83, 255, 0.8);
+  transition: filter 0.2s, transform 0.15s;
+}
+.pn-primario:hover { filter: brightness(1.1); }
+.pn-primario:active { transform: translateY(1px); }
+.pn-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+.pn-primario:focus-visible { outline: 2px solid #b9a4ff; outline-offset: 2px; }
+
+/* Cuadrito con ícono al inicio de una tarjeta o cifra */
+.pn-icono {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: 10px;
+  color: #b9a4ff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Escena del login (D-136): esfera de luz solo con CSS ─────────────────
+   Morado de marca para el cuerpo y la luz; lima en un filo y un reflejo pequeños. Se mueve con
+   transform (flotar y girar) y se detiene con movimiento reducido. */
+.pn-escena {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  --tam: 112px;
+  background: radial-gradient(120% 90% at 18% 6%, #1b1142 0%, #0b0817 52%, #05030c 100%);
+}
+@media (min-width: 1024px) { .pn-escena { --tam: min(52%, 320px); } }
+.pn-malla {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(70% 62% at 50% 50%, #000, transparent 78%);
+  mask-image: radial-gradient(70% 62% at 50% 50%, #000, transparent 78%);
+}
+.pn-halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--tam) * 2.4);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(125, 83, 255, 0.4), rgba(125, 83, 255, 0.12) 55%, transparent);
+}
+.pn-orbita {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--tam) * 1.7);
+  height: calc(var(--tam) * 0.54);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  transform: translate(-50%, -50%) rotate(-17deg);
+}
+.pn-orbe-caja {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--tam);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  animation: pn-flota 9s ease-in-out infinite alternate;
+}
+.pn-orbe {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 23%, rgba(255, 255, 255, 0.92) 0, rgba(255, 255, 255, 0) 8%),
+    radial-gradient(circle at 36% 30%, #d3c4ff 0%, #9b7bff 20%, #7d53ff 42%, #4a2ac0 66%, #150a40 100%);
+  box-shadow:
+    inset -22px -30px 54px rgba(3, 1, 11, 0.72),
+    inset 14px 18px 44px rgba(214, 196, 255, 0.32),
+    0 0 90px rgba(125, 83, 255, 0.5);
+}
+/* Reflejo lima abajo a la derecha, dentro de la esfera */
+.pn-orbe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 88%, rgba(182, 255, 0, 0.5), transparent 36%);
+  mix-blend-mode: screen;
+}
+/* Filo lima que gira alrededor de la esfera */
+.pn-reborde,
+.pn-reborde-luz {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 58%, rgba(182, 255, 0, 0) 60%, rgba(182, 255, 0, 0.95) 79%, rgba(182, 255, 0, 0) 95%, transparent);
+  animation: pn-gira 16s linear infinite;
+}
+.pn-reborde {
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+}
+.pn-reborde-luz {
+  filter: blur(14px);
+  opacity: 0.45;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 3px));
+}
+.pn-suelo {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + var(--tam) * 0.66);
+  width: calc(var(--tam) * 1.05);
+  height: calc(var(--tam) * 0.15);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(125, 83, 255, 0.5), transparent);
+  filter: blur(6px);
+}
+/* Polvo de luz: puntitos fijos */
+.pn-polvo {
+  position: absolute;
+  left: 18%;
+  top: 22%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow:
+    210px 40px 0 rgba(255, 255, 255, 0.45), 320px 150px 0 rgba(185, 164, 255, 0.7), 60px 190px 0 rgba(255, 255, 255, 0.35),
+    120px 330px 0 rgba(185, 164, 255, 0.55), 300px 380px 0 rgba(255, 255, 255, 0.4), 250px 270px 0 rgba(182, 255, 0, 0.7),
+    20px 90px 0 rgba(255, 255, 255, 0.3), 360px 60px 0 rgba(255, 255, 255, 0.3);
+}
+/* Borde suave entre la escena y el formulario (color del fondo del formulario: canvas #0a0813) */
+.pn-escena::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 72px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, #0a0813);
+}
+@media (min-width: 1024px) {
+  .pn-escena::after { inset: 0 0 0 auto; width: 96px; height: auto; background: linear-gradient(90deg, transparent, #0a0813); }
+}
+@keyframes pn-flota {
+  from { transform: translate(-50%, -50%); }
+  to { transform: translate(-50%, calc(-50% - 12px)); }
+}
+@keyframes pn-gira { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .pn-orbe-caja, .pn-reborde, .pn-reborde-luz { animation: none; }
+}
+
 /* Componentes del panel ANTES de las utilidades, para que clases como pl-9 o h-9 les ganen */
 /* Campo de formulario: 44 px de alto, superficie 1, foco morado */
 .pn-input {
@@ -16,9 +205,9 @@
   width: 100%;
   height: 2.75rem;
   padding: 0 0.85rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #0a0714;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #0b0914;
   color: #fff;
   font-size: 16px; /* 16 px: iOS no hace zoom al enfocar */
   line-height: 1.4;

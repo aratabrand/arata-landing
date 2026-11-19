@@ -55,11 +55,13 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
           { k: "Proyectos en proceso", v: numero(r.enProceso), d: undefined, n: r.tarde ? `${r.tarde} ${r.tarde === 1 ? "va" : "van"} tarde` : "ninguno va tarde", icon: Calendar, alerta: r.tarde > 0 },
         ].map((k) => (
           <article key={k.k} className={cn("v2-card flex flex-col p-4 sm:p-5", k.glass && "v2-glass")}>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <span className="pn-icono">
+                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
+              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
-              <k.icon aria-hidden className={cn("h-4 w-4", k.glass ? "text-lime" : "text-brand-soft")} />
             </div>
-            <p className="mt-3 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
+            <p className="mt-4 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {k.d !== undefined && <Delta valor={k.d} />}
               <span className={cn("text-xs", k.alerta ? "text-[#FF9BB0]" : "text-fog-dim")}>{k.n}</span>

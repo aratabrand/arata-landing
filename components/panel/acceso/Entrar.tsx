@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
-import { LockKeyhole } from "lucide-react";
 import { RUTA_DOBLE_FACTOR } from "@/lib/panel/config";
 import { authCliente } from "@/lib/panel/auth-cliente";
 
@@ -15,10 +14,10 @@ export default function Entrar({ activo }: { activo: boolean }) {
 
   if (!activo) {
     return (
-      <div className="text-center">
-        <h1 className="font-display text-2xl font-bold tracking-heading text-white">Acceso en preparación</h1>
+      <div>
+        <h1 className="font-display text-[1.9rem] font-bold leading-tight tracking-heading text-white">Acceso en preparación</h1>
         <p className="mt-3 text-sm text-fog">El inicio de sesión todavía no está conectado. Mientras tanto puedes ver el panel con datos de ejemplo.</p>
-        <Link href="/panel" className="v2-shine mt-6 inline-flex h-11 w-full items-center justify-center rounded-btn bg-lime text-sm font-semibold text-ink">
+        <Link href="/panel" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-btn pn-primario text-sm font-semibold">
           Ver el panel de ejemplo
         </Link>
       </div>
@@ -45,11 +44,8 @@ export default function Entrar({ activo }: { activo: boolean }) {
 
   return (
     <form onSubmit={enviar} noValidate className="space-y-4">
-      <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-btn border border-white/10 bg-surface-2">
-        <LockKeyhole aria-hidden className="h-5 w-5 text-lime" />
-      </div>
       <div>
-        <h1 className="font-display text-2xl font-bold tracking-heading text-white">Entrar al panel</h1>
+        <h1 className="font-display text-[1.9rem] font-bold leading-tight tracking-heading text-white">Entrar al panel</h1>
         <p className="mt-1.5 text-sm text-fog">Después te pediremos el código de tu app de autenticación.</p>
       </div>
       <label className="block">
@@ -68,7 +64,7 @@ export default function Entrar({ activo }: { activo: boolean }) {
       <button
         type="submit"
         disabled={enviando}
-        className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33] disabled:opacity-60"
+        className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-60"
       >
         {enviando ? "Entrando…" : "Continuar"}
       </button>

@@ -63,7 +63,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
           <button
             type="button"
             onClick={() => setCreando(true)}
-            className="v2-shine inline-flex h-11 items-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink transition-colors hover:bg-[#C6FF33]"
+            className="inline-flex h-11 items-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold transition-colors"
           >
             <Plus aria-hidden className="h-4 w-4" />
             Agregar cliente
@@ -154,7 +154,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                       aria-label={`Escribirle a ${c.nombre} por WhatsApp`}
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-btn border border-white/10 text-fog transition-colors hover:border-lime/50 hover:text-lime"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-btn border border-white/10 text-fog transition-colors hover:border-brand/60 hover:text-brand-soft"
                     >
                       <MessageCircle aria-hidden className="h-4 w-4" />
                     </a>
@@ -295,7 +295,7 @@ function FichaCliente({ cliente: c, onChange, onDelete }: { cliente: Cliente; on
         href={wa(c.telefono, c.nombre)}
         target="_blank"
         rel="noopener noreferrer"
-        className="v2-shine flex h-11 w-full items-center justify-center gap-2 rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33]"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-btn pn-primario text-sm font-semibold"
       >
         <MessageCircle aria-hidden className="h-4 w-4" />
         Escribirle por WhatsApp
@@ -377,7 +377,7 @@ function NuevoCliente({ hoy, onSave }: { hoy: string; onSave: (c: Cliente) => vo
       </div>
       <Campo label="Notas"><textarea name="notas" rows={3} className="pn-input h-auto py-2.5" maxLength={500} /></Campo>
       {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
-      <button type="submit" className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33]">
+      <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">
         Guardar cliente
       </button>
     </form>

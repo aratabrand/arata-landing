@@ -2,31 +2,34 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.1 | 10 nov 2026 | Sergio |
+| En revisión | 0.2 | 19 nov 2026 | Sergio |
 
 El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-diseno.md`, tokens en `tailwind.config.ts`). Aquí solo va lo propio del panel.
 
 ---
 
-## 1. Color
+## 1. Color (D-136: más sobrio, con superficies en capas)
 
-| Uso | Token | Valor |
+> El panel tiene sus propias superficies (en `tailwind.panel.config.ts`), un paso más claras y menos saturadas que las del sitio, para que las tarjetas se separen del fondo. El sitio no cambia.
+
+| Capa | Token / clase | Valor |
 |---|---|---|
-| Fondo de página | `ink` | `#03010B` (único fondo, igual que el sitio v2) |
-| Barra lateral y pestañas | — | `#06040F` (un paso más claro que ink) |
-| Tarjetas | `surface-1` + borde blanco 7 % | `#0A0714` |
-| Elevado, hover, campos activos | `surface-2` | `#110C20` |
-| Hojas (modales) y tooltips | `surface-3` | `#18112D` |
+| Marco y barra lateral | `ink` | `#03010B` |
+| Zona de contenido | `canvas` | `#0A0813` |
+| Tarjeta | `surface-1` (+ `.v2-card` del panel: degradado muy suave, borde blanco 7 %, radio 20 px) | `#100D1A` |
+| Detalle dentro de una tarjeta, hover, campos | `surface-2` | `#161226` |
+| Ventanas, menús y tooltips | `surface-3` | `#1D1832` |
 | Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` |
-| Acción principal, dato destacado, "sube" | `lime` | `#B6FF00` |
-| Gráficos, selección, foco de campos | `brand` | `#7D53FF` |
-| Etiquetas moradas sobre oscuro | `brand-soft` | `#B9A4FF` |
-| **"Baja", error, vencido** (solo panel) | — | fondo `#FF6B8B` al 10 %, texto `#FF9BB0` |
+| **Actuar y elegir** (botón principal, selección, foco, interruptores, íconos de interfaz) | `brand` / `brand-soft` | `#7D53FF` / `#B9A4FF` |
+| **Destacar un dato** (sube, completado, nuevo, ganancia, último punto) | `lime` | `#B6FF00` |
+| "Baja", error, vencido (solo panel) | — | fondo `#FF6B8B` al 10 %, texto `#FF9BB0` |
 | Fase "En revisión" (solo panel) | — | `#FFC76B` (punto y franja, nunca texto largo) |
 
 Reglas:
-- **Un solo botón lima por vista** (la acción principal del módulo: Agregar cliente, Nuevo proyecto, Guardar cambios).
-- En gráficos, **morado** para la serie y **lima** para lo que hay que mirar (último dato, primer lugar, último paso del embudo).
+- **El botón principal es morado** (`.pn-primario`: `#7D53FF` con texto blanco, 4,6:1). Uno por vista. Antes era lima y hacía ver el panel "neón".
+- **El lima solo destaca un dato, en dosis pequeñas.** Nunca en botones, íconos de menú, enlaces, interruptores ni fondos grandes.
+- Sin luces de color de fondo, sin desenfoque en las tarjetas y sin el brillo que recorre los botones (`v2-shine` queda apagado dentro del panel).
+- En gráficos, **morado** para la serie; **lima** solo para el punto o el valor que hay que mirar (último dato, primer lugar). Las barras verticales van apagadas y la elegida (la que tocas o la última) va en morado con un punto lima.
 - Rosa solo para malas noticias. Nunca como decoración.
 
 ## 2. Tipografía
@@ -39,31 +42,44 @@ Reglas:
 | Texto, etiquetas, tablas | Plus Jakarta Sans | 12–15 px |
 | Campos de formulario | Plus Jakarta Sans | **16 px en celular** (iOS no hace zoom), 14 px desde 640 px |
 
-## 3. Marco
+## 3. Marco (D-136, reemplaza el menú en píldora de D-120)
 
-> **Actualizado (D-120, 13 nov 2026):** en escritorio ya no hay barra lateral. Barra arriba: logo · menú en píldora de vidrio (`border-white/[0.09] bg-white/[0.035] backdrop-blur-xl`, selector `bg-white/[0.09]` con borde y brillo interior que se desliza con `transform`) · campana (ventana de notificaciones) · cuenta. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, las ventanas `position: fixed` de adentro quedarían atrapadas en ella. Celular: misma barra + 5 pestañas abajo. Opciones: Resumen, Clientes, Proyectos, Finanzas (solo agencia), Configuración (Ajustes del sitio, Equipo, Notificaciones).
+**Escritorio (≥ 1024 px):** barra lateral fija de 248 px a la izquierda y el contenido en una zona más clara (`canvas`) con las esquinas de 28 px y 12 px de aire alrededor.
+
+- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, salir).
+- **Selector que se desliza** detrás de la opción activa (solo `transform`, respeta movimiento reducido) con una marca morada al borde izquierdo.
+- **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y la campana a la derecha. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
+
+**Celular:** barra arriba (logo, campana, cuenta) + 5 pestañas abajo; la activa lleva ícono morado y una raya morada arriba.
 
 | | Celular | Escritorio (≥ 1024 px) |
 |---|---|---|
-| Navegación | Pestañas abajo (64 px + zona segura), barra superior de 56 px con vidrio | Barra lateral fija de 248 px |
-| Márgenes | 16 px | 40 px |
+| Navegación | Pestañas abajo (64 px + zona segura), barra superior de 56 px | Barra lateral fija de 248 px |
+| Márgenes del contenido | 16 px | 40 px |
 | Ancho máximo del contenido | — | 1280 px |
 | Espacio abajo | 112 px (para no tapar con las pestañas) | 48 px |
+
+### Acceso (login y doble factor)
+Tarjeta dividida de hasta 1040 px: a la izquierda una **esfera de luz hecha solo con CSS** (morado de marca, un filo y un reflejo lima; flota y gira suave; 0 KB de imagen, sin JavaScript; quieta con movimiento reducido) con el logo; a la derecha el formulario. En celular la escena queda arriba, más baja. `components/panel/acceso/EscenaAcceso.tsx` + `.pn-escena` en `styles/panel.src.css`.
+
+> Texto nuevo ◻ por aprobar: "Ventas, clientes y proyectos de tu negocio en un solo lugar." (escena del login) y la etiqueta "Panel privado".
 
 ## 4. Componentes (`components/panel/`)
 
 | Componente | Archivo | Uso |
 |---|---|---|
-| `PanelShell` | `PanelShell.tsx` | Marco: barra lateral, pestañas, franja de demo |
+| `PanelShell` | `PanelShell.tsx` | Marco: barra lateral, barra superior, pestañas, franja de demo |
 | `PanelPage`, `PanelHeader` | `ui.tsx` | Contenedor y encabezado (h1 + bajada + acción) de cada módulo |
-| `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada y acción opcional |
+| `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada, acción y **ícono opcional** en cuadrito (`icono`) |
 | `Delta` | `ui.tsx` | Variación vs. periodo anterior (lima ↑ / rosa ↓) |
 | `Pill` | `ui.tsx` | Estado en píldora: `lima`, `morado`, `neutro`, `alerta` |
 | `Segmentado` | `Resumen.tsx` | Selector tipo iOS (periodo, métrica). `role="radiogroup"` |
 | `Hoja` | `Clientes.tsx` | Panel lateral en escritorio / hoja desde abajo en celular. Escape y clic afuera cierran, bloquea el scroll, devuelve el foco |
 | Campos | clase `.pn-input` | 44 px de alto, borde fino, foco morado con halo |
+| Botón principal | clase `.pn-primario` | Morado de marca, texto blanco. Se combina con `h-11 rounded-btn px-5 text-sm font-semibold` |
+| Cuadrito de ícono | clase `.pn-icono` | 36 px, borde fino, ícono `brand-soft`. Al inicio de cada cifra y de las tarjetas con `icono` |
 
-La primera cifra del Resumen (Ventas) usa `v2-glass` (vidrio con luz morada) para marcarla como la más importante. Las demás, `v2-card`.
+La primera cifra del Resumen (Ventas) usa `v2-glass`, que dentro del panel es la misma tarjeta con un filo morado arriba (sin desenfoque ni luz de fondo). Las demás, `v2-card`.
 
 ## 5. Gráficos (`components/panel/graficos.tsx`)
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, LayoutDashboard, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "lucide-react";
+import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "lucide-react";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -16,13 +16,13 @@ async function salir() {
   window.location.assign(RUTA_ENTRAR);
 }
 
-// Marco del panel (docs/panel-cliente/03-sistema-de-diseno.md §3, D-120):
-// - Escritorio (≥1024 px): barra arriba con el menú en una píldora de vidrio; la opción
-//   elegida lleva un selector de vidrio suave que se desliza. Campana (ventana de
-//   notificaciones) y menú de la cuenta a la derecha.
+// Marco del panel (docs/panel-cliente/03-sistema-de-diseno.md §3, D-136; reemplaza el menú en píldora de D-120):
+// - Escritorio (≥1024 px): barra lateral fija a la izquierda (logo, módulos, Configuración y la cuenta abajo)
+//   y el contenido en una zona más clara con las esquinas redondeadas. Arriba del contenido: negocio + campana.
+//   La opción elegida lleva un selector que se desliza (transform) y una marca morada al borde.
 // - Celular: barra arriba (logo, campana, cuenta) + pestañas abajo (zona del pulgar).
-// - "Configuración" agrupa Mi sitio y Equipo (tarjetas en /panel/configuracion).
-// Fondo único ink, igual que el sitio v2.
+// - "Configuración" agrupa Ajustes del sitio, Equipo y Notificaciones (tarjetas en /panel/configuracion).
+// Fondo ink en el marco; el contenido va en `canvas`. Morado para elegir, lima solo para destacar un dato.
 
 export const navPanel = [
   { href: "/panel", label: "Resumen", icon: LayoutDashboard, agencia: false, rutas: ["/panel"] },
@@ -61,39 +61,61 @@ export default function PanelShell({
   const conNotif = conFinanzas;
   const conFranja = !sinFranja.some((r) => path.startsWith(r));
 
+  const principal = nav.filter((n) => n.href !== "/panel/configuracion");
+  const general = nav.filter((n) => n.href === "/panel/configuracion");
+
   return (
     <div className="min-h-screen">
-      {/* ── Barra superior (escritorio y celular) ── */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.06]">
-        {/* El vidrio va en una capa aparte: si la barra misma tuviera backdrop-filter, la ventana
-            de notificaciones (position: fixed en celular) quedaría atrapada dentro de la barra */}
-        <div aria-hidden className="absolute inset-0 -z-10 bg-ink/70 backdrop-blur-xl" />
-        <div className="relative mx-auto flex h-14 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-[76px] lg:px-10">
-          <Link href="/panel" aria-label="Inicio del panel" className="shrink-0">
-            <Logo className="h-4 w-auto lg:h-[18px]" />
-          </Link>
+      {/* ── Barra lateral (escritorio) ── */}
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col px-4 pb-4 pt-7 lg:flex">
+        <Link href="/panel" aria-label="Inicio del panel" className="px-3">
+          <Logo className="h-[18px] w-auto" />
+        </Link>
+        <MenuLateral principal={principal} general={general} path={path} />
+        <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante="tarjeta" />
+      </aside>
 
-          <MenuVidrio nav={nav} path={path} />
+      <div className="lg:pl-[248px]">
+        <div className="lg:p-3 lg:pl-0">
+          <div className="min-h-screen bg-canvas lg:min-h-[calc(100vh-1.5rem)] lg:rounded-[28px] lg:border lg:border-white/[0.06] lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+            {/* ── Barra superior del contenido ── */}
+            <header className="sticky top-0 z-30 lg:rounded-t-[28px]">
+              {/* El vidrio va en una capa aparte: si la barra misma tuviera backdrop-filter, la ventana
+                  de notificaciones (position: fixed en celular) quedaría atrapada dentro de la barra */}
+              <div aria-hidden className="absolute inset-0 -z-10 border-b border-white/[0.05] bg-canvas/80 backdrop-blur-xl lg:rounded-t-[28px]" />
+              <div className="relative mx-auto flex h-14 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-16 lg:px-10">
+                <Link href="/panel" aria-label="Inicio del panel" className="shrink-0 lg:hidden">
+                  <Logo className="h-4 w-auto" />
+                </Link>
+                <p className="hidden items-center gap-2.5 text-sm text-fog lg:flex">
+                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
+                  <span className="font-medium text-white">{negocio.nombre}</span>
+                  <span className="text-fog-dim">· Panel</span>
+                </p>
+                <div className="flex shrink-0 items-center gap-2">
+                  {conNotif && <NotificacionesVentana sinLeer={sinLeer} demo={!conSesion} />}
+                  <div className="lg:hidden">
+                    <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante="circulo" />
+                  </div>
+                </div>
+              </div>
+            </header>
 
-          <div className="flex shrink-0 items-center gap-2">
-            {conNotif && <NotificacionesVentana sinLeer={sinLeer} demo={!conSesion} />}
-            <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} />
+            {conFranja && (
+              <div className="border-b border-brand/20 bg-brand/[0.07] px-4 py-2 text-center text-xs text-brand-soft">
+                Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
+              </div>
+            )}
+
+            <main className="pb-28 lg:pb-12">{children}</main>
           </div>
         </div>
-      </header>
-
-      {conFranja && (
-        <div className="border-b border-brand/30 bg-brand/10 px-4 py-2 text-center text-xs text-brand-soft">
-          Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
-        </div>
-      )}
-
-      <main className="pb-28 lg:pb-12">{children}</main>
+      </div>
 
       {/* ── Pestañas abajo (celular) ── */}
       <nav
         aria-label="Panel"
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-white/8 bg-[#06040F]/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-white/[0.07] bg-ink/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
       >
         <ul className="grid" style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}>
           {nav.map(({ href, label, icon: Icon, rutas }) => {
@@ -103,9 +125,10 @@ export default function PanelShell({
                 <Link
                   href={href}
                   aria-current={on ? "page" : undefined}
-                  className={cn("flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
+                  className={cn("relative flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
-                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-lime")} />
+                  {on && <span aria-hidden className="absolute top-0 h-0.5 w-8 rounded-full bg-brand" />}
+                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-brand-soft")} />
                   {label}
                 </Link>
               </li>
@@ -117,65 +140,79 @@ export default function PanelShell({
   );
 }
 
-// ── Menú en píldora de vidrio con selector que se desliza (solo escritorio) ──
-function MenuVidrio({ nav, path }: { nav: readonly (typeof navPanel)[number][]; path: string }) {
-  const caja = useRef<HTMLUListElement | null>(null);
-  const items = useRef<(HTMLAnchorElement | null)[]>([]);
-  const [sel, setSel] = useState<{ x: number; w: number } | null>(null);
-  const indice = nav.findIndex((n) => activo(path, n.rutas));
+// ── Menú lateral con selector que se desliza (solo escritorio) ──
+type Opcion = (typeof navPanel)[number];
+
+function MenuLateral({ principal, general, path }: { principal: readonly Opcion[]; general: readonly Opcion[]; path: string }) {
+  const caja = useRef<HTMLElement | null>(null);
+  const items = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const [sel, setSel] = useState<{ y: number; h: number } | null>(null);
+  const todas = [...principal, ...general];
+  const elegida = todas.find((n) => activo(path, n.rutas))?.href;
 
   // El selector se mide sobre la opción activa (y otra vez si cambia el tamaño de la ventana)
   useLayoutEffect(() => {
     const medir = () => {
-      const el = items.current[indice];
+      const el = elegida ? items.current[elegida] : null;
       const base = caja.current;
       if (!el || !base) return setSel(null);
-      // Posición relativa a la píldora (no a su casilla: offsetLeft daría 0)
       const r = el.getBoundingClientRect();
       const c = base.getBoundingClientRect();
-      setSel({ x: r.left - c.left - base.clientLeft, w: r.width });
+      setSel({ y: r.top - c.top + base.scrollTop, h: r.height });
     };
     medir();
     window.addEventListener("resize", medir);
     document.fonts?.ready.then(medir).catch(() => {});
     return () => window.removeEventListener("resize", medir);
-  }, [indice, nav.length]);
+  }, [elegida, todas.length]);
+
+  const grupo = (titulo: string, lista: readonly Opcion[]) =>
+    lista.length > 0 && (
+      <div>
+        <p className="px-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">{titulo}</p>
+        <ul className="mt-2.5 space-y-1">
+          {lista.map(({ href, label, icon: Icon, rutas }) => {
+            const on = activo(path, rutas);
+            return (
+              <li key={href}>
+                <Link
+                  ref={(el) => {
+                    items.current[href] = el;
+                  }}
+                  href={href}
+                  aria-current={on ? "page" : undefined}
+                  className={cn("group relative z-10 flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors", on ? "text-white" : "text-fog hover:bg-white/[0.035] hover:text-white")}
+                >
+                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-brand-soft" : "text-fog-dim group-hover:text-fog")} />
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
 
   return (
-    <nav aria-label="Panel" className="hidden lg:block">
-      <ul ref={caja} className="relative flex items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.035] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
-        {/* Selector de vidrio suave */}
-        {sel && (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_20px_-10px_rgba(125,83,255,0.55)] backdrop-blur-md transition-[transform,width] duration-300 ease-out motion-reduce:transition-none"
-            style={{ transform: `translateX(${sel.x}px)`, width: sel.w }}
-          />
-        )}
-        {nav.map(({ href, label, rutas }, i) => {
-          const on = activo(path, rutas);
-          return (
-            <li key={href} className="relative">
-              <Link
-                ref={(el) => {
-                  items.current[i] = el;
-                }}
-                href={href}
-                aria-current={on ? "page" : undefined}
-                className={cn("relative z-10 flex h-10 items-center rounded-full px-4 text-sm font-medium transition-colors", on ? "text-white" : "text-fog hover:text-white")}
-              >
-                {label}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+    <nav ref={caja} aria-label="Panel" className="relative mt-9 min-h-0 flex-1 space-y-7">
+      {/* Selector: fondo suave + marca morada al borde. Solo se mueve con transform */}
+      {sel && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+          style={{ height: sel.h, transform: `translateY(${sel.y}px)` }}
+        >
+          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand shadow-[0_0_12px_rgba(125,83,255,0.8)]" />
+        </span>
+      )}
+      {grupo("Menú", principal)}
+      {grupo("General", general)}
     </nav>
   );
 }
 
 // ── Cuenta: nombre, ver la página, soporte (clientes) y salir ──
-function MenuCuenta({ negocio, usuario, conSesion }: { negocio: Negocio; usuario?: { nombre: string; correo?: string } | null; conSesion: boolean }) {
+function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negocio; usuario?: { nombre: string; correo?: string } | null; conSesion: boolean; variante: "tarjeta" | "circulo" }) {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
   const path = usePathname();
@@ -198,18 +235,36 @@ function MenuCuenta({ negocio, usuario, conSesion }: { negocio: Negocio; usuario
 
   return (
     <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setAbierto((v) => !v)}
-        aria-expanded={abierto}
-        aria-haspopup="menu"
-        aria-label={`Cuenta de ${nombre}`}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] font-display text-sm font-bold text-white backdrop-blur-xl transition-colors hover:border-white/20 lg:h-11 lg:w-11"
-      >
-        {inicial}
-      </button>
+      {variante === "circulo" ? (
+        <button
+          type="button"
+          onClick={() => setAbierto((v) => !v)}
+          aria-expanded={abierto}
+          aria-haspopup="menu"
+          aria-label={`Cuenta de ${nombre}`}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] font-display text-sm font-bold text-white transition-colors hover:border-white/20"
+        >
+          {inicial}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAbierto((v) => !v)}
+          aria-expanded={abierto}
+          aria-haspopup="menu"
+          aria-label={`Cuenta de ${nombre}`}
+          className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-2.5 text-left transition-colors hover:border-white/[0.12] hover:bg-white/[0.055]"
+        >
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand/20 font-display text-sm font-bold text-brand-soft">{inicial}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-semibold text-white">{nombre}</span>
+            <span className="block truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</span>
+          </span>
+          <ChevronsUpDown aria-hidden className="h-4 w-4 shrink-0 text-fog-dim" />
+        </button>
+      )}
       {abierto && (
-        <div role="menu" className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-64 overflow-hidden rounded-frame border border-white/10 bg-surface-3/95 p-1.5 shadow-2xl backdrop-blur-xl">
+        <div role="menu" className={cn("absolute z-50 w-64 overflow-hidden rounded-2xl border border-white/10 bg-surface-3 p-1.5 shadow-2xl", variante === "tarjeta" ? "bottom-[calc(100%+0.5rem)] left-0" : "right-0 top-[calc(100%+0.5rem)]")}>
           <div className="px-3 py-2.5">
             <p className="truncate text-sm font-semibold text-white">{nombre}</p>
             <p className="truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</p>
@@ -221,7 +276,7 @@ function MenuCuenta({ negocio, usuario, conSesion }: { negocio: Negocio; usuario
           {/* En el panel de la propia agencia no tiene sentido escribirse a sí mismos */}
           {negocio.tipo !== "agencia" && (
             <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
-              <MessageCircle aria-hidden className="h-4 w-4 text-lime" /> Escribirle a Arata San
+              <MessageCircle aria-hidden className="h-4 w-4 text-brand-soft" /> Escribirle a Arata San
             </a>
           )}
           {conSesion && (

@@ -24,7 +24,7 @@ export default function Configuracion({ agencia }: { agencia: boolean }) {
             >
               <div className="flex items-start justify-between gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.05]">
-                  <Icon aria-hidden className="h-5 w-5 text-lime" />
+                  <Icon aria-hidden className="h-5 w-5 text-brand-soft" />
                 </span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-fog transition-colors group-hover:border-white/25 group-hover:text-white">
                   <ArrowUpRight aria-hidden className="h-4 w-4" />

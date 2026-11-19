@@ -901,7 +901,7 @@ function ListaServicios({ datos }: { datos: DatosFinanzas }) {
                     aria-label={`${x.nombre} activo`}
                     disabled={acc.pendiente}
                     onClick={() => acc.correr(() => guardarServicio({ id: x.id, nombre: x.nombre, categoria: x.categoria, activo: !x.activo }))}
-                    className={cn("relative h-6 w-10 shrink-0 rounded-full border transition-colors", x.activo ? "border-lime bg-lime" : "border-white/15 bg-surface-2")}
+                    className={cn("relative h-6 w-10 shrink-0 rounded-full border transition-colors", x.activo ? "border-brand bg-brand" : "border-white/15 bg-surface-2")}
                   >
                     <span className={cn("absolute left-0 top-0.5 h-4 w-4 rounded-full transition-transform", x.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
                   </button>

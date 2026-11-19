@@ -69,7 +69,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
           <button
             type="button"
             onClick={() => setCreando("por-hacer")}
-            className="v2-shine inline-flex h-11 items-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33]"
+            className="inline-flex h-11 items-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold"
           >
             <Plus aria-hidden className="h-4 w-4" /> Nuevo proyecto
           </button>
@@ -82,7 +82,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
           <p className="text-xs text-fog">Avance de todas las tareas</p>
           <p className="mt-2 font-display text-[1.75rem] font-bold leading-none text-white">{resumen.pct} %</p>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/6">
-            <div className="h-full origin-left rounded-full bg-lime transition-transform duration-700" style={{ transform: `scaleX(${resumen.pct / 100})` }} />
+            <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-brand")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
           </div>
         </div>
         <div className="v2-card p-4 sm:p-5">
@@ -100,7 +100,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
             <ul className="mt-2 space-y-1.5">
               {resumen.teToca.map((p) => (
                 <li key={p.id}>
-                  <button type="button" onClick={() => setAbierto(p.id)} className="flex w-full items-center justify-between gap-2 text-left text-sm text-white hover:text-lime">
+                  <button type="button" onClick={() => setAbierto(p.id)} className="flex w-full items-center justify-between gap-2 text-left text-sm text-white hover:text-brand-soft">
                     <span className="truncate">{p.titulo}</span>
                     <span className="shrink-0 text-xs text-fog-dim">{fechaCorta(p.fechaLimite)}</span>
                   </button>
@@ -315,7 +315,7 @@ function TarjetaProyecto({
           disabled={i === fases.length - 1}
           onClick={() => onMove(1)}
           aria-label={`Mover "${p.titulo}" a ${fases[i + 1]?.label ?? ""}`}
-          className="flex h-8 min-w-0 items-center gap-1 rounded-btn border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-lime/40 hover:text-lime disabled:opacity-25"
+          className="flex h-8 min-w-0 items-center gap-1 rounded-btn border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-brand/50 hover:text-brand-soft disabled:opacity-25"
         >
           <span className="truncate whitespace-nowrap">{fases[i + 1]?.label.replace(/^En /, "A ") ?? "Listo"}</span>
           <ChevronRight aria-hidden className="h-4 w-4" />
@@ -437,7 +437,7 @@ function NuevoProyecto({ fase, hoy, onSave }: { fase: FaseProyecto; hoy: string;
         </label>
       </div>
       {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
-      <button type="submit" className="v2-shine h-11 w-full rounded-btn bg-lime text-sm font-semibold text-ink hover:bg-[#C6FF33]">Crear proyecto</button>
+      <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">Crear proyecto</button>
     </form>
   );
 }

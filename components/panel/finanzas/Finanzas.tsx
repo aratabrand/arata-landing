@@ -125,11 +125,13 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
           { k: "Fondos de Arata", v: pesos(todo.fondos), n: `${pesos(todo.disponible)} disponibles para invertir`, icon: PiggyBank },
         ].map((k) => (
           <article key={k.k} className={cn("v2-card p-4 sm:p-5", k.glass && "v2-glass")}>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <span className="pn-icono">
+                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
+              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
-              <k.icon aria-hidden className={cn("h-4 w-4", k.glass ? "text-lime" : "text-brand-soft")} />
             </div>
-            <p className="mt-3 font-display text-[clamp(1.35rem,2.4vw,1.85rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
+            <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,1.85rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
             <p className="mt-2 text-xs text-fog-dim">{k.n}</p>
           </article>
         ))}
@@ -210,8 +212,8 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
 
         <Tarjeta titulo="Punto de equilibrio" bajada="Para cubrir los gastos fijos de la empresa">
           <div className="flex items-start gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-frame bg-lime/10">
-              <Target aria-hidden className="h-6 w-6 text-lime" />
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-frame bg-brand/15">
+              <Target aria-hidden className="h-6 w-6 text-brand-soft" />
             </span>
             <div>
               {todo.fijosMes === 0 ? (

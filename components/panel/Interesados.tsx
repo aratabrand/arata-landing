@@ -245,7 +245,7 @@ function Fila({
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         {wa && i.whatsapp && (
           <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-fog hover:text-white">
-            <MessageCircle aria-hidden className="h-4 w-4 text-lime" /> {verWhatsapp(i.whatsapp)}
+            <MessageCircle aria-hidden className="h-4 w-4 text-brand-soft" /> {verWhatsapp(i.whatsapp)}
           </a>
         )}
         {i.correo && (
@@ -273,7 +273,7 @@ function Fila({
             href={CAL_POR_ACEPTAR}
             target="_blank"
             rel="noopener noreferrer"
-            className="v2-shine inline-flex h-11 items-center justify-center gap-2 rounded-btn bg-lime px-5 text-sm font-semibold text-ink hover:bg-[#C6FF33] sm:w-auto"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold sm:w-auto"
           >
             <Check aria-hidden className="h-4 w-4" /> Aceptar o rechazar en Cal.com
             <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
@@ -286,7 +286,7 @@ function Fila({
             rel="noopener noreferrer"
             className={cn(
               "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold sm:w-auto",
-              ahoraEs ? "v2-shine bg-lime text-ink hover:bg-[#C6FF33]" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+              ahoraEs ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
             )}
           >
             <Video aria-hidden className="h-4 w-4" /> {ahoraEs ? "Entrar ahora" : i.enlaceLlamada ? "Entrar a la llamada" : "Abrir la reserva en Cal"}
@@ -301,7 +301,7 @@ function Fila({
               disabled={acc.pendiente}
               className={cn(
                 "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold disabled:opacity-50 sm:w-auto",
-                m === "pasada" ? "v2-shine bg-lime text-ink hover:bg-[#C6FF33]" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+                m === "pasada" ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
               )}
             >
               <Check aria-hidden className="h-4 w-4" /> Confirmar y pasar a cliente

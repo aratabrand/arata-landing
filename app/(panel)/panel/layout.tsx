@@ -13,14 +13,16 @@ export const metadata: Metadata = {
   // Se puede instalar como app (necesario en iPhone para recibir avisos, D-119)
   manifest: "/panel/manifest.webmanifest",
   appleWebApp: { capable: true, title: "Arata Panel", statusBarStyle: "black-translucent" },
-  icons: { apple: "/panel/icono-180.png" },
+  // D-136: `icons` reemplaza por completo al del sitio (no se mezclan), por eso aquí van los dos:
+  // sin `icon`, el panel se quedaba sin favicon y solo conservaba el de Apple.
+  icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }], apple: "/panel/icono-180.png" },
 };
 
 export const viewport: Viewport = { themeColor: "#03010B" };
 
 export default function PanelRaizLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-ink text-white [color-scheme:dark]">
+    <div className="pn-root min-h-screen bg-ink text-white [color-scheme:dark]">
       <style>{`html,body{background:#03010B}`}</style>
       {children}
     </div>
