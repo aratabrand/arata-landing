@@ -13,7 +13,7 @@
 | Celular (< 1024 px) | Barra superior con logo y nombre del negocio + **4 pestañas abajo** (Resumen, Clientes, Proyectos, Mi sitio) |
 | Escritorio (≥ 1024 px) | **Barra lateral fija** (248 px): logo, tarjeta "Tu negocio", 4 opciones, "Ver mi página" y "Escribirle a Arata San" (WhatsApp de soporte) |
 
-- La opción activa lleva ícono lima y un punto lima. `aria-current="page"`.
+- La opción activa lleva un fondo suave que se desliza y una marca morada al borde (D-136; antes, ícono y punto lima). `aria-current="page"`.
 - Si el panel está en modo demo, una franja morada arriba lo dice: *"Estás viendo un panel de ejemplo con datos ficticios."*
 - Cada módulo tiene **un solo `<h1>`** (el título del módulo).
 
@@ -50,12 +50,12 @@
 
 | Pieza | Qué hace |
 |---|---|
-| Encabezado | "Clientes" + "Quién te compra, cuánto y hace cuánto…" + botón lima **Agregar cliente** |
+| Encabezado | "Clientes" + "Quién te compra, cuánto y hace cuánto…" + botón principal (morado, D-136) **Agregar cliente** |
 | 4 cifras | Clientes · Nuevos este mes · Recurrentes · Compra promedio por cliente |
 | Buscador | Por nombre, teléfono o ciudad |
 | Filtros | Todos · Nuevo · Activo · Recurrente · Inactivo (con conteo) |
 | Lista | **Escritorio:** tabla (cliente, estado, llegó por, compras, total, última compra, botón WhatsApp). **Celular:** tarjetas (iniciales, nombre, compras y total, estado). Orden: última compra primero |
-| Ficha (hoja lateral / desde abajo en celular) | Compras, total, última compra · botón lima **Escribirle por WhatsApp** (mensaje con su nombre) · teléfono, correo, ciudad, origen, cliente desde · **cambiar estado** · **notas** · borrar (con confirmación) |
+| Ficha (hoja lateral / desde abajo en celular) | Compras, total, última compra · botón principal (morado, D-136) **Escribirle por WhatsApp** (mensaje con su nombre) · teléfono, correo, ciudad, origen, cliente desde · **cambiar estado** · **notas** · borrar (con confirmación) |
 | Agregar cliente | Nombre*, celular*, correo, ciudad, llegó por, notas. Validación: nombre ≥ 2 letras, celular ≥ 7 números. Entra como "Nuevo" |
 
 **Estados de cliente** (regla para calcularlos automático en la fase 4):

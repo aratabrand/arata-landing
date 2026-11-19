@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.3 | 9 nov 2026 | Sergio |
+| En revisión | 0.4 | 19 nov 2026 | Sergio |
 
 ---
 
@@ -155,6 +155,10 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Fase 5: SEO por página, datos estructurados, imágenes para compartir, sitemap/llms.txt con interruptor, QA 360 px (`06-seo-geo-velocidad.md`, D-087 a D-089)
 - [x] **PageSpeed ≥ 90 en la URL publicada (puerta de la Fase 5)** — 93–99 con GA4 (D-093, D-098)
 - [x] **Fase 6: sitio v2 lanzado (D-091)**, medido, con GA4, Search Console y Google Business listos (D-096 a D-100)
+- [x] Casos de éxito con video en celular, también en catálogos y sistemas (D-128, D-129)
+- [x] Cookies con permiso previo, formulario endurecido y Microsoft Clarity listo para encender (D-130 a D-132)
+- [x] **Estilo visual vigente: el del panel aplicado al sitio, con botones del panel** (D-141, D-142; historial de lo descartado en `04-sistema-de-diseno.md` §13)
+- [ ] Microsoft Clarity: falta el ID del proyecto para encenderlo (D-132)
 - [ ] ⏸ Pendiente: prueba de Astro para páginas de clientes (D-101)
 - [ ] Blueprint consolidado
 
