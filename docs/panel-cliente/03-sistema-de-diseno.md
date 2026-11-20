@@ -14,14 +14,15 @@ El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-di
 
 > **La fuente es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema único de Arata San). Aquí solo va cómo se aplica en el panel.
 
-El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia con el interruptor **"Modo claro / Modo oscuro"** del menú de la cuenta. Se guarda un año en la cookie `pn-tema`, y el servidor pone el tema en `data-tema` de `.pn-root`, así que no hay destello al abrir (`lib/panel/tema.ts`, `app/(panel)/panel/layout.tsx`). **El acceso (login y doble factor) va siempre en oscuro.**
+El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia con el **interruptor de sol y luna** de la barra de arriba, **al lado de la campana** (D-152; `components/panel/InterruptorTema.tsx`, `role="switch"`, perilla que se desliza con `transform`). Se guarda un año en la cookie `pn-tema`, y el servidor pone el tema en `data-tema` de `.pn-root`, así que no hay destello al abrir (`lib/panel/tema.ts`, `app/(panel)/panel/layout.tsx`). **El acceso (login y doble factor) va siempre en oscuro.**
 
 | Capa | Token | Oscuro | Claro |
 |---|---|---|---|
 | Marco y barra lateral | `noche` | `#020104` | `#F2F2F5` |
 | Zona de contenido | `canvas` | `#08080A` | `#FAFAFB` |
-| Tarjeta (`.v2-card`) | variables `--pn-tarjeta*` | blanco 2 % + borde blanco 7 % | blanca + borde tinta 8 % + sombra suave |
-| Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | blanco 4,5 % + borde blanco 20 % | blanca + borde tinta 22 % |
+| Tarjeta (`.v2-card`) | variables `--pn-tarjeta*` | **negra con humo** (D-153, igual al sitio): degradado `#0E0E10`→`#060607`, nube blanca suave, borde blanco 13 % | blanca con humo de tinta 3,5 % + borde tinta 10 % + sombra suave |
+| Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | más humo + borde blanco 42 % | blanca + borde tinta 32 % |
+| Píldora (`.pn-pildora`) | `--pn-pildora*` | negra con degradado + borde blanco 24 % (como `.v2-pildora`) | blanca + borde tinta 16 % |
 | Superficies sólidas | `surface-1/2/3` | `#0F0F12` · `#16161A` · `#1D1D22` | `#FFF` · `#F3F3F6` · `#FFF` |
 | Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` | `#03010B` / `#52505C` / `#686572` |
 | **Datos** (sube, completado, nuevo) | `dato` (texto) · `lime` (relleno con texto ink) | `#B6FF00` | **morado** (D-151): texto `#6D45F0`, relleno `#9B7BFF` |
@@ -52,9 +53,9 @@ Reglas:
 
 **Escritorio (≥ 1024 px):** barra lateral fija de 248 px a la izquierda y el contenido en una zona más clara (`canvas`) con las esquinas de 28 px y 12 px de aire alrededor.
 
-- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, **modo claro / oscuro** (D-149), salir).
+- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, salir).
 - **Selector que se desliza** detrás de la opción activa (solo `transform`, respeta movimiento reducido) con una marca morada al borde izquierdo.
-- **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y la campana a la derecha. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
+- **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y, a la derecha, el **interruptor de modo claro/oscuro** y la campana (D-152). El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
 
 **Celular:** barra arriba (logo, campana, cuenta) + 5 pestañas abajo; la activa lleva una raya morada arriba (es navegación: cuenta como botón).
 
@@ -78,7 +79,8 @@ Tarjeta dividida de hasta 1040 px, **siempre en oscuro**: a la izquierda una **e
 | `PanelPage`, `PanelHeader` | `ui.tsx` | Contenedor y encabezado (h1 + bajada + acción) de cada módulo |
 | `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada y acción. La prop `icono` ya no pinta nada (D-149) |
 | `Delta` | `ui.tsx` | Variación vs. periodo anterior (lima ↑ / rosa ↓) |
-| `Pill` | `ui.tsx` | Estado en píldora: `lima`, `neutro`, `alerta` (`morado` se ve neutro desde D-149) |
+| `Pill` | `ui.tsx` | Estado en píldora: `lima`, `neutro` (= `.pn-pildora`, D-153), `alerta` (`morado` se ve neutro desde D-149). Los filtros sin elegir también son `.pn-pildora` |
+| `IconoMarca` | `IconosMarca.tsx` | Íconos SVG propios en grises (capas, tienda, sistema), copia de los del sitio. Solo en las tarjetas de proyecto de Arata, según el servicio (`iconoDeServicio()`); si el servicio no encaja, no se pinta nada (D-153) |
 | `Segmentado` | `Resumen.tsx` | Selector tipo iOS (periodo, métrica). `role="radiogroup"` |
 | `Hoja` | `Clientes.tsx` | Panel lateral en escritorio / hoja desde abajo en celular. Escape y clic afuera cierran, bloquea el scroll, devuelve el foco |
 | Campos | clase `.pn-input` | 44 px de alto, borde fino, foco morado con halo |

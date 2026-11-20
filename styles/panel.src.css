@@ -31,11 +31,15 @@
   --pn-alerta: 255 155 176;
   --pn-alerta-fuerte: 255 107 139;
   --pn-ambar: 255 199 107;
-  --pn-tarjeta: rgb(255 255 255 / 0.02);
-  --pn-tarjeta-borde: rgb(255 255 255 / 0.07);
-  --pn-tarjeta-sombra: inset 0 1px 0 rgb(255 255 255 / 0.04);
-  --pn-destacada: rgb(255 255 255 / 0.045);
-  --pn-destacada-borde: rgb(255 255 255 / 0.2);
+  /* D-153: tarjetas del sistema (D-150): negras con humo blanco suave y borde gris */
+  --pn-tarjeta: radial-gradient(70% 55% at 88% 108%, rgb(255 255 255 / 0.055), transparent 70%), linear-gradient(180deg, #0e0e10 0%, #060607 100%);
+  --pn-tarjeta-borde: rgb(255 255 255 / 0.13);
+  --pn-tarjeta-sombra: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --pn-destacada: radial-gradient(38% 30% at 80% 84%, rgb(255 255 255 / 0.14), transparent 70%), radial-gradient(48% 36% at 96% 100%, rgb(255 255 255 / 0.1), transparent 70%), radial-gradient(34% 28% at 62% 98%, rgb(255 255 255 / 0.06), transparent 70%), linear-gradient(180deg, #111113 0%, #060607 100%);
+  --pn-destacada-borde: rgb(255 255 255 / 0.42);
+  --pn-pildora: linear-gradient(180deg, #151517 0%, #070708 100%);
+  --pn-pildora-borde: rgb(255 255 255 / 0.24);
+  --pn-pildora-sombra: inset 0 1px 0 rgb(255 255 255 / 0.08);
   --pn-campo: #0b0b0e;
   color-scheme: dark;
 }
@@ -55,11 +59,15 @@
   --pn-alerta: 190 18 60;
   --pn-alerta-fuerte: 225 29 72;
   --pn-ambar: 161 98 7;
-  --pn-tarjeta: #ffffff;
-  --pn-tarjeta-borde: rgb(3 1 11 / 0.08);
+  /* En claro: blancas con un humo gris muy suave (el mismo gesto, invertido) */
+  --pn-tarjeta: radial-gradient(70% 55% at 88% 108%, rgb(3 1 11 / 0.035), transparent 70%), #ffffff;
+  --pn-tarjeta-borde: rgb(3 1 11 / 0.1);
   --pn-tarjeta-sombra: 0 1px 2px rgb(3 1 11 / 0.04), 0 8px 24px -16px rgb(3 1 11 / 0.12);
-  --pn-destacada: #ffffff;
-  --pn-destacada-borde: rgb(3 1 11 / 0.22);
+  --pn-destacada: radial-gradient(38% 30% at 80% 84%, rgb(3 1 11 / 0.07), transparent 70%), radial-gradient(48% 36% at 96% 100%, rgb(3 1 11 / 0.05), transparent 70%), #ffffff;
+  --pn-destacada-borde: rgb(3 1 11 / 0.32);
+  --pn-pildora: linear-gradient(180deg, #ffffff 0%, #f3f3f6 100%);
+  --pn-pildora-borde: rgb(3 1 11 / 0.16);
+  --pn-pildora-sombra: 0 1px 1px rgb(3 1 11 / 0.04);
   --pn-campo: #ffffff;
   color-scheme: light;
 }
@@ -87,6 +95,12 @@
 .pn-root .v2-glass::before { display: none; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
+/* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro) */
+.pn-pildora {
+  background: var(--pn-pildora);
+  border: 1px solid var(--pn-pildora-borde);
+  box-shadow: var(--pn-pildora-sombra);
+}
 
 /* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */
 .pn-primario {

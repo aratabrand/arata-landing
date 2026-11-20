@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-151) | 1.2 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-153) | 1.3 | 20 nov 2026 | Sergio |
 
 **Es la fuente única para todos los productos de Arata San.** Hoy se aplica a dos productos:
 
@@ -53,8 +53,8 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 |---|---|---|
 | `noche` | `#020104` | **Fondo de página**: negro casi neutro, sin tinte morado (D-145) |
 | `canvas` | `#08080A` | Zona de contenido del panel |
-| Tarjeta | **negra con humo** (D-150): degradado `#0E0E10` → `#060607`, una nube blanca muy suave abajo a la derecha (5,5 %), borde blanco al 13 % y filo de luz arriba | `.v2-card` (sitio). En el panel sigue transparente (blanco 2 %, borde 7 %): es una herramienta de uso diario y lleva muchas tarjetas |
-| Tarjeta destacada | negra con **más humo** (varias nubes blancas abajo, hasta 14 %) y **borde blanco al 42 %** (D-150) | `.v2-destacada` en el sitio (en el panel, `.pn-root .v2-glass`: blanco 4,5 % + borde 20 %): lo que queremos que elijan. Una o dos por vista |
+| Tarjeta | **negra con humo** (D-150): degradado `#0E0E10` → `#060607`, una nube blanca muy suave abajo a la derecha (5,5 %), borde blanco al 13 % y filo de luz arriba | `.v2-card` en el sitio y en el panel (D-153; en el panel por la variable `--pn-tarjeta`) |
+| Tarjeta destacada | negra con **más humo** (varias nubes blancas abajo, hasta 14 %) y **borde blanco al 42 %** (D-150) | `.v2-destacada` en el sitio, `.pn-root .v2-glass` en el panel (D-153): lo que queremos que elijan o mirar primero. Una o dos por vista |
 | `surface-1/2/3` | `#0B0B0D` · `#121215` · `#19191D` (sitio); `#0F0F12` · `#16161A` · `#1D1D22` (panel) | Superficies sólidas: menús, ventanas, botón secundario |
 | Texto | `white` `#FFFFFF` · `fog` `#B4AECB` · `fog-dim` `#8A84A8` | Títulos · párrafos · notas (20:1 · 9,8:1 · 5,9:1) |
 | Alerta / ámbar | `#FF9BB0` · `#FFC76B` | Solo malas noticias / "en revisión" |
@@ -97,11 +97,11 @@ Ambas van auto-hospedadas con `next/font/local` (sin red). Los títulos van en u
 | **Botón principal** | Rectangular, radio 10 px, morado con texto blanco y filo de luz arriba; 44 px mínimo. Uno por vista | `Button` / `.v2-primario` | `.pn-primario` |
 | **Botón secundario** | Superficie oscura con borde fino (en claro: blanco con borde) | `Button variant="secondary"` | `BotonSecundario` |
 | Botón de texto | Texto con flecha que se corre al pasar el mouse | `variant="ghost"` | enlaces |
-| **Tarjeta** | Transparente (oscuro) / blanca (claro), borde fino, radio 20–24 px | `.v2-card` | `.v2-card` del panel |
-| **Tarjeta destacada** | Un paso más clara, borde más visible, **sin morado** | `.v2-destacada` | `.v2-glass` del panel |
+| **Tarjeta** | Negra con humo y borde gris (oscuro) / blanca con un humo de tinta casi invisible (claro), radio 20–24 px (D-150, D-153) | `.v2-card` | `.v2-card` del panel |
+| **Tarjeta destacada** | Más humo y borde más visible (42 % en oscuro, 32 % en claro), **sin morado** | `.v2-destacada` | `.v2-glass` del panel |
 | **Lista con números** | `01`, `02`… en Funnel Display en vez de íconos | Problema, "Todo lo que trae" | — |
-| **Píldora** (badge, etiqueta de sección, "Recomendado", filtros) | Negra con degradado sutil, **borde blanco al 24 %**, texto blanco (`.v2-pildora`, D-150); "en vivo" con punto lima que titila. La etiqueta de sección (`Eyebrow`) es una píldora | `Badge`, `Eyebrow`, `.v2-pildora` | `Pill` |
-| **Íconos de marca** | SVG propio en **grises metálicos con volumen** (capas, tienda, sistema), sin color. **Solo en algunas tarjetas** donde ayudan a distinguir opciones (hoy: paquetes de precio). Nunca en todas | `components/v2/IconosMarca.tsx` | — |
+| **Píldora** (badge, etiqueta de sección, "Recomendado", filtros) | Negra con degradado sutil, **borde blanco al 24 %**, texto blanco (`.v2-pildora`, D-150); "en vivo" con punto lima que titila. La etiqueta de sección (`Eyebrow`) es una píldora. En el panel: estados neutros y filtros sin elegir (D-153); el filtro elegido va en morado porque actúa como botón | `Badge`, `Eyebrow`, `.v2-pildora` | `.pn-pildora`, `Pill tono="neutro"` |
+| **Íconos de marca** | SVG propio en **grises metálicos con volumen** (capas, tienda, sistema), sin color. **Solo en algunas tarjetas** donde ayudan a distinguir opciones (hoy: paquetes de precio). Nunca en todas | `components/v2/IconosMarca.tsx` (paquetes de precio) | `components/panel/IconosMarca.tsx` (tarjetas de proyecto según el servicio, `iconoDeServicio()`, D-153) |
 | **Íconos** | **Phosphor** en trazo `light` (check en `regular`; play/pausa en `fill`). Solo los que cumplen una función: flechas, abrir y cerrar, menú, acciones, estados. **Nunca decorativos** | `components/v2/iconos.tsx` | `components/panel/iconos.tsx` |
 | Campo | 44 px, borde fino, foco morado con halo | `BookingFlow` | `.pn-input` |
 | Interruptor | Encendido en morado (es un botón) | Cookies | Ajustes |
@@ -169,6 +169,7 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 
 | Versión | Fecha | Qué |
 |---|---|---|
+| 1.3 | 20 nov 2026 | El panel usa las mismas piezas del sitio: tarjetas con humo, píldoras negras con borde e íconos de marca en las tarjetas de proyecto; en claro, su versión blanca (D-153) |
 | 1.2 | 20 nov 2026 | En el modo claro del panel el dato va en morado, no en verde (D-151) |
 | 1.1 | 20 nov 2026 | Tarjetas negras con humo y borde gris, píldoras negras con borde, íconos SVG propios en grises solo en algunas tarjetas (D-150) |
 | 1.0 | 20 nov 2026 | Sistema único para el sitio y el panel: fondo `#020104`, tarjetas transparentes, morado solo en botones, lima solo en datos, sin íconos decorativos, Phosphor, líneas verticales con haces (sitio), modo claro del panel (D-145 a D-149) |

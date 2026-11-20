@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-150) | 0.9 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-153) | 1.0 | 20 nov 2026 | Sergio |
 
 > **La fuente única es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema de Arata San para el sitio, el panel y todo producto nuevo, D-149). Este documento queda como el detalle del **sitio**: componentes, historial y reglas de velocidad.
 >
@@ -302,6 +302,7 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-153 (20 nov) | El **panel adopta las piezas del sitio**: tarjetas con humo, píldoras con borde e íconos de marca en las tarjetas de proyecto (versión blanca en el modo claro) | ✅ Vigente |
 | D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | ✅ Vigente |
 | D-149 (20 nov) | **Sistema único** para sitio y panel (`docs/sistema-de-diseno.md`); el panel adopta el sistema y suma modo claro | ✅ Vigente |
 | D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
@@ -316,8 +317,10 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | Sitio (`app/globals.css`) | Panel (`styles/panel.src.css`) |
 |---|---|
 | `.v2-primario` | `.pn-primario` (iguales: si cambia uno, cambia el otro) |
-| `.v2-card` (transparente) | `.pn-root .v2-card` (transparente en oscuro, blanca en claro) |
-| `.v2-destacada` | `.pn-root .v2-glass` |
+| `.v2-card` (negra con humo) | `.pn-root .v2-card` (con humo en oscuro, blanca en claro; `--pn-tarjeta`) |
+| `.v2-destacada` | `.pn-root .v2-glass` (`--pn-destacada`) |
+| `.v2-pildora` | `.pn-pildora` (`--pn-pildora`) |
+| `components/v2/IconosMarca.tsx` | `components/panel/IconosMarca.tsx` (ids `pn-im-*`) |
 | `components/v2/iconos.tsx` (Phosphor `light`) | `components/panel/iconos.tsx` (Phosphor `light`) |
 
 Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio lleva líneas verticales con haces y luces blancas suaves; el panel no (es una herramienta) y tiene **modo claro** (D-149).

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Calendar, Plus } from "../iconos";
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
+import { IconoMarca, iconoDeServicio } from "../IconosMarca";
 import { avance, estaEntregado, etapas, etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta } from "@/lib/panel/formato";
 import { Hoja } from "../Clientes";
@@ -85,7 +86,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
             type="button"
             aria-pressed={filtro === f.v}
             onClick={() => setFiltro(f.v)}
-            className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "border-white/10 text-fog hover:text-white")}
+            className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "pn-pildora text-fog hover:text-white")}
           >
             {f.l}
           </button>
@@ -120,13 +121,18 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
   const cliente = datos.clientes.find((c) => c.id === p.clienteId);
   const servicio = datos.servicios.find((s) => s.id === p.servicioId);
   const actual = etapas.findIndex((e) => e.valor === a.etapaActual);
+  const icono = iconoDeServicio(servicio?.nombre);
   return (
     <Link
       href={`/panel/proyectos/${p.id}`}
       className={cn("v2-card group flex h-full flex-col p-4 transition-colors hover:border-white/16 sm:p-5", a.entregado && "opacity-80")}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-fog">{servicio?.nombre ?? "Sin servicio"}</p>
+        <p className="flex min-w-0 items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-fog">
+          {/* D-153: ícono de marca del servicio (sistema de diseño) */}
+          {icono && <IconoMarca icono={icono} className="h-7 w-7 shrink-0" />}
+          <span className="truncate">{servicio?.nombre ?? "Sin servicio"}</span>
+        </p>
         <Pill tono={comercial[p.estado].t}>{comercial[p.estado].l}</Pill>
       </div>
       <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-white">{p.nombre}</h2>
