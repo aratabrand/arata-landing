@@ -86,7 +86,7 @@ Sitio: el sitio solo tiene tema oscuro.
 | Texto, etiquetas, botones | **Plus Jakarta Sans** 400–600 |
 | Campos de formulario | 16 px en celular (iOS no hace zoom) |
 
-Ambas van auto-hospedadas con `next/font/local` (sin red), **una fuente variable por familia recortada a los caracteres del español** (D-156): títulos 600–800 y texto 400–700, 2 archivos en total. Los títulos van en un solo tono, sin degradados ni contornos.
+Ambas van auto-hospedadas con `next/font/local` (sin red), **una fuente variable por familia recortada a los caracteres del español** (D-156, D-158): títulos 600–800 y texto 400–700, 2 archivos en total (25 KB), los dos precargados. Los títulos van en un solo tono, sin degradados ni contornos.
 
 ---
 
@@ -149,7 +149,7 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 - Imágenes grandes que se mueven: en `<canvas>`, porque así no cuentan para el LCP.
 - Íconos: la versión SSR de Phosphor, importada por nombre.
 - Imágenes: `sizes` con el ancho real (restando márgenes) y carruseles que montan solo la imagen que se ve (D-157).
-- Fuentes: **una variable por familia**, recortada al español y al rango de pesos que se usa (D-156). Nunca un archivo por peso.
+- Fuentes: **una variable por familia**, recortada al español y al rango de pesos que se usa, y precargada (D-156, D-158). Nunca un archivo por peso.
 - Meta: PageSpeed móvil ≥ 90 en la URL publicada. El resto de reglas está en [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) §12.
 
 ---
