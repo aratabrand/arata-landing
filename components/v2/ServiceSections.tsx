@@ -353,7 +353,7 @@ export function NeedsSection({
               {items.map((it, i) => (
                 <li
                   key={it.titulo}
-                  className="nd-row flex items-center gap-4 rounded-frame border border-white/6 bg-ink/60 p-4"
+                  className="nd-row flex items-center gap-4 rounded-frame border border-white/6 bg-noche/60 p-4"
                   style={{ ["--d" as string]: `${0.5 + i * 0.8}s` }}
                 >
                   <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-white/20">
@@ -506,7 +506,7 @@ export function CustomSystemSection({
           <Reveal variant="right">
             <ul className="space-y-2">
               {items.map((it) => (
-                <li key={it.titulo} className="flex items-start gap-4 rounded-frame border border-white/6 bg-ink/60 p-4">
+                <li key={it.titulo} className="flex items-start gap-4 rounded-frame border border-white/6 bg-noche/60 p-4">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand-soft">
                     <Check aria-hidden className="h-3.5 w-3.5" strokeWidth={2.5} />
                   </span>

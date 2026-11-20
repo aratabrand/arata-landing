@@ -152,7 +152,7 @@ export function StepsSection({
   const encendido = (i: number) => `clamp(0, calc((var(--p) * ${tramos} - ${i}) * 4 + 1), 1)`;
   return (
     <section aria-labelledby={id} className="relative isolate py-20 sm:py-28">
-      <GridBackground variant="lineas" orb="50% 60%" glow={0.1} />
+      <GridBackground variant="lineas" orb="50% 60%" glow={0.1} haces={[-4, 1, 5]} />
       <Container>
         <SectionHeader id={id} title={titulo} />
         <ScrollPaint

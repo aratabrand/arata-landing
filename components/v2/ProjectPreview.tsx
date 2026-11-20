@@ -126,8 +126,8 @@ function MockCatalogo({ device }: { device: "desktop" | "phone" }) {
       <div className="flex items-center justify-between">
         <span className="h-2.5 w-14 rounded-full bg-white/30" />
         <span className="flex h-5 items-center gap-1 rounded-md px-2" style={{ background: "var(--acc)" }}>
-          <span className="h-1.5 w-1.5 rounded-full bg-ink/70" />
-          <span className="h-1.5 w-5 rounded-full bg-ink/50" />
+          <span className="h-1.5 w-1.5 rounded-full bg-noche/70" />
+          <span className="h-1.5 w-5 rounded-full bg-noche/50" />
         </span>
       </div>
       <div className="flex gap-1.5">

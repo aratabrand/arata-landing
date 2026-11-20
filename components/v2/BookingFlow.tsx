@@ -457,7 +457,7 @@ function Opciones({
             onClick={() => onElegir(o.valor)}
             className={cn(
               "flex min-h-[3.75rem] items-center justify-between gap-3 rounded-frame border px-4 py-3 text-left font-medium transition-[background-color,border-color,transform] active:scale-[0.98]",
-              on ? "border-brand bg-brand/10 text-white" : "border-white/10 bg-ink/50 text-white hover:border-white/20 hover:bg-surface-2"
+              on ? "border-brand bg-brand/10 text-white" : "border-white/10 bg-noche/50 text-white hover:border-white/20 hover:bg-surface-2"
             )}
           >
             {o.label}
@@ -500,7 +500,7 @@ function Campo({
         aria-invalid={!!error}
         aria-describedby={error ? errId : undefined}
         className={cn(
-          "mt-2 block h-12 w-full rounded-btn border bg-ink px-4 text-base text-white placeholder:text-fog-dim/70 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/30",
+          "mt-2 block h-12 w-full rounded-btn border bg-noche px-4 text-base text-white placeholder:text-fog-dim/70 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/30",
           error ? "border-[#FF6B8A]/70" : "border-white/10"
         )}
       />
@@ -610,7 +610,7 @@ function Calendario({
   // Sin Cal.com configurado: se termina por WhatsApp con las respuestas ya escritas
   if (!link) {
     return (
-      <div className="rounded-frame border border-white/8 bg-ink/50 p-5">
+      <div className="rounded-frame border border-white/8 bg-noche/50 p-5">
         <p className="text-fog">{c.calendario.sinCalendario}</p>
         <a
           href={hrefWhatsapp}
@@ -627,7 +627,7 @@ function Calendario({
   }
 
   return (
-    <div className="relative min-h-[560px] overflow-hidden rounded-frame border border-white/8 bg-ink/50">
+    <div className="relative min-h-[560px] overflow-hidden rounded-frame border border-white/8 bg-noche/50">
       {!listo && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center" aria-live="polite">
           <p className="text-sm text-fog-dim">{c.calendario.cargando}</p>

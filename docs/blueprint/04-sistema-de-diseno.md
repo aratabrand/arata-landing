@@ -12,7 +12,7 @@
 
 | Tema | v1 (landing actual) | v2 (sitio de agencia) |
 |---|---|---|
-| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro** `#03010B` |
+| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro**: `#020104` desde D-144 (antes `#03010B`) |
 | Colores de marca | Morado y lima como acentos | Igual: morado, lima y demás colores de marca **solo como acentos** sobre el oscuro |
 | Tipografía | Funnel Display + Plus Jakarta Sans | **Igual** |
 | Estilo de componentes | Píldora glass, bento, timeline | Referencia **21st.dev** para componentes, menú y animaciones; **tarjetas, botones e íconos iguales a los del panel** (D-141, D-142) |
@@ -29,7 +29,8 @@ Como todo es oscuro, la profundidad no sale del cambio de fondo sino de **capas 
 
 | Token | Valor | Uso |
 |---|---|---|
-| `ink` | `#03010B` | Único fondo de página |
+| `noche` | `#020104` | **Único fondo de página** (D-144): negro casi neutro, para que el morado no se lea como "look de IA" |
+| `ink` | `#03010B` | Texto sobre lima y fondo del panel (el panel no cambió) |
 | `surface-1` | `#0A0714` | Tarjetas |
 | `surface-2` | `#110C20` | Tarjeta en hover, elementos elevados |
 | `surface-3` | `#18112D` | Menús desplegables, modales |
@@ -56,7 +57,20 @@ Las superficies tienen un leve tinte morado para que el oscuro se sienta de marc
 | `purple-deep` (`brand-ink`) | `#3B1D99` | Tintes de brillos y fondos de luz | Texto (no se lee sobre oscuro) |
 | `brand-soft` | `#B9A4FF` | Texto morado sobre oscuro: etiquetas, íconos de lista (≈9.7:1) | Fondos |
 
-### Luces de fondo ✅ (D-044)
+### Fondo premium ✅ (D-144)
+
+Sergio sintió el sitio "muy IA". Lo que más lo causaba: morado brillante sobre un negro con tinte morado, cuadrícula de fondo y cuadritos de ícono en todo. Cambios:
+
+| Pieza | Cómo va |
+|---|---|
+| Fondo | `noche` `#020104` en toda la página (antes `ink` `#03010B`, con tinte morado) |
+| Cuadrícula | **Fuera.** Solo líneas verticales (`GridBackground`, también en el hero) |
+| Haces de luz | Luces finas que bajan por algunas líneas del hero y de Cómo trabajamos, lejos del texto. Solo `transform`; con movimiento reducido no salen |
+| Grano | Textura de grano fija al 4,5 % sobre toda la página (`.v2-grano`, SVG en línea, sin red ni animación) |
+| Luces moradas | Más suaves: 0,17 / 0,06 (antes 0,28 / 0,12) |
+| Cifras del hero | Transparentes, sin íconos y más grandes en escritorio |
+
+### Luces de fondo ✅ (D-044, más suaves desde D-144)
 
 La referencia usa **luces radiales grandes y borrosas** detrás de las secciones (en 21st son azules). En Arata van en **morado**: `purple` / `purple-deep` con opacidad baja (10–25 %) y desenfoque grande.
 
@@ -116,7 +130,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
 | Tarjetas del problema | Apiladas, tarjeta por capas + cuadrito de ícono (`.v2-icono`) + título + texto, resaltado que las recorre (D-066, D-141) | P1 |
-| Cifras del hero | 3 tarjetas por capas con cuadrito de ícono arriba (calendario, velocímetro, tienda) + cifra con contador + texto (D-141) | P1 |
+| Cifras del hero | 3 tarjetas **transparentes** (blanco al 2 %, borde 7 %), **sin íconos**, más grandes en escritorio (cifra 48 px, ancho hasta 1024 px) + cifra con contador + texto (D-144) | P1 |
 | Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada con filo morado (`.v2-destacada`, D-141), badge "Recomendado" y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
 | Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: como la cifra destacada del panel (`.v2-glass`: sin vidrio ni luz en la esquina, borde y velo morados suaves) + ícono SVG animado (`Assurances`, D-068, D-141) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
@@ -133,7 +147,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
 | Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula morada (D-142; antes lima) que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
-| Fondo de rejilla | `components/ui/grid-background.tsx` (ref. 21st.dev): líneas blancas al 5 %, celda de 40 px, luz morada suave y bordes desvanecidos. Variantes *rejilla* (Problema, Precios) y *líneas* (Cómo trabajamos). Solo CSS, sin JS. **Nunca en el hero** y nunca en dos secciones seguidas con la misma variante (D-071) | P1 |
+| Fondo de líneas | `components/ui/grid-background.tsx` (ref. 21st.dev): **solo líneas verticales** (D-144, sin cuadrícula), blancas al 5 %, una cada 80 px y centradas en la sección; franja y luz morada muy suaves; bordes desvanecidos. Prop `haces`: luces finas que bajan por algunas líneas (hero y Cómo trabajamos), fuera de la columna del texto. Solo CSS, sin JS | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
 
@@ -275,8 +289,9 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-144 (20 nov) | **Menos "look de IA"**: fondo negro `#020104`, sin cuadrícula (solo líneas verticales), haces de luz, grano, luces moradas más suaves, cifras del hero sin íconos | ✅ Vigente |
 
-**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, tarjetas blancas sobre el oscuro, títulos en dos tonos y botones en píldora con círculo.
+**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-144).
 
 **Sitio y panel comparten base visual.** Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
 
@@ -287,4 +302,4 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | `.v2-icono` | `.pn-icono` |
 | `.v2-primario` | `.pn-primario` |
 
-Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio conserva las luces moradas de fondo, la rejilla y la línea lima del título del hero; el panel no tiene luces.
+Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio usa fondo `noche` `#020104`, conserva luces moradas suaves, líneas verticales con haces, grano y la línea lima del título del hero (D-144); el panel sigue en `ink` y sin luces.

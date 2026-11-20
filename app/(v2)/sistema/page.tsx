@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 const colores = [
-  { token: "ink", hex: "#03010B", uso: "Único fondo de página", clase: "bg-ink border border-white/10" },
+  { token: "ink", hex: "#03010B", uso: "Único fondo de página", clase: "bg-noche border border-white/10" },
   { token: "surface-1", hex: "#0A0714", uso: "Tarjetas", clase: "bg-surface-1 border border-white/10" },
   { token: "surface-2", hex: "#110C20", uso: "Hover, botón secundario", clase: "bg-surface-2" },
   { token: "surface-3", hex: "#18112D", uso: "Menús y modales", clase: "bg-surface-3" },
@@ -240,17 +240,20 @@ export default function SistemaV2() {
             />
           </Bloque>
 
-          <Bloque id="b-rejilla" titulo="Fondo de rejilla · sutil, en secciones alternas (nunca en el hero)">
+          <Bloque id="b-rejilla" titulo="Fondo de líneas verticales · sin cuadrícula (D-144)">
             <div className="grid gap-4 sm:grid-cols-2">
-              {(["rejilla", "lineas"] as const).map((v) => (
-                <div key={v} className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
-                  <GridBackground variant={v} />
-                  <p className="text-sm text-fog">
-                    <span className="font-semibold text-white">{v === "rejilla" ? "Rejilla" : "Líneas"}</span> ·{" "}
-                    {v === "rejilla" ? "Problema y Precios" : "Cómo trabajamos"}
-                  </p>
-                </div>
-              ))}
+              <div className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
+                <GridBackground />
+                <p className="text-sm text-fog">
+                  <span className="font-semibold text-white">Líneas</span> · una cada 80 px, centradas; Problema, Precios y más
+                </p>
+              </div>
+              <div className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
+                <GridBackground haces={[-2, 1, 3]} />
+                <p className="text-sm text-fog">
+                  <span className="font-semibold text-white">Líneas con haces</span> · luces que bajan; hero y Cómo trabajamos
+                </p>
+              </div>
             </div>
           </Bloque>
 
@@ -259,7 +262,7 @@ export default function SistemaV2() {
               <li className="v2-card p-4">Solo se anima transform y opacity (GPU).</li>
               <li className="v2-card p-4">Siempre se respeta prefers-reduced-motion.</li>
               <li className="v2-card p-4">El h1 del hero no se anima: aparece en el primer pintado (mejor LCP).</li>
-              <li className="v2-card p-4">Luces de fondo: gradiente radial sin filter:blur.</li>
+              <li className="v2-card p-4">Luces de fondo suaves (gradiente radial sin filter:blur), grano fijo al 4,5 % y haces que bajan por las líneas.</li>
             </ul>
           </Bloque>
         </Container>

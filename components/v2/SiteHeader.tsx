@@ -151,9 +151,9 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
         mobile
-          ? "border-b border-white/6 bg-ink"
+          ? "border-b border-white/6 bg-noche"
           : scrolled
-            ? "border-b border-white/6 bg-ink/80 backdrop-blur-xl"
+            ? "border-b border-white/6 bg-noche/80 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
       )}
     >
@@ -303,7 +303,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
         aria-label="Menú"
         // React 18 no tipa `inert`: cerrado, el panel no recibe foco ni toques
         {...((mobile ? {} : { inert: "true" }) as Record<string, string>)}
-        className={cn("v2-mnav fixed inset-0 z-[45] flex flex-col bg-ink lg:hidden", mobile && "is-open")}
+        className={cn("v2-mnav fixed inset-0 z-[45] flex flex-col bg-noche lg:hidden", mobile && "is-open")}
       >
         <div
           aria-hidden
@@ -352,7 +352,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
 
         {/* Acción principal siempre a mano, en la zona del pulgar */}
         <div
-          className="v2-mnav-item relative border-t border-white/8 bg-ink px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4"
+          className="v2-mnav-item relative border-t border-white/8 bg-noche px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4"
           style={{ ["--d" as string]: 5 }}
         >
           <Button href={cta.enlace} external={ctaExterno} size="lg" arrow className="w-full" onClick={closeAll}>

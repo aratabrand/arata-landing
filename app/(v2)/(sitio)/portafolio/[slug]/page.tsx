@@ -181,13 +181,13 @@ export default async function Caso({ params }: Props) {
                 <p className="mt-4 text-fog">{t.puntajes.texto}</p>
                 <dl className="mt-8 grid grid-cols-2 gap-3">
                   {completo && (
-                    <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                    <div className="rounded-frame border border-white/8 bg-noche/50 p-4">
                       <dt className="text-xs text-fog-dim">{t.puntajes.abre}</dt>
                       <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-lime">{p.puntajes.abreEnCelular}</dd>
                       <dd className="text-xs text-fog-dim">{t.puntajes.celular.toLowerCase()}</dd>
                     </div>
                   )}
-                  <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                  <div className="rounded-frame border border-white/8 bg-noche/50 p-4">
                     <dt className="text-xs text-fog-dim">
                       {t.puntajes.rendimiento} · {t.puntajes.escritorio.toLowerCase()}
                     </dt>

@@ -104,7 +104,7 @@ export default function CookieBanner() {
       <dialog
         ref={dialogo}
         aria-labelledby="cookies-pref-titulo"
-        className="as-cookies-dialogo m-auto w-[min(32rem,calc(100vw-1.5rem))] rounded-[24px] border border-white/10 bg-surface-1 p-0 text-white backdrop:bg-ink/70"
+        className="as-cookies-dialogo m-auto w-[min(32rem,calc(100vw-1.5rem))] rounded-[24px] border border-white/10 bg-surface-1 p-0 text-white backdrop:bg-noche/70"
         onClick={(e) => {
           // Tocar fuera de la tarjeta (el fondo) cierra sin cambiar nada
           if (e.target === e.currentTarget) dialogo.current?.close();
@@ -127,7 +127,7 @@ export default function CookieBanner() {
           <p className="mt-2 text-sm leading-relaxed text-fog">{t.prefIntro}</p>
 
           <ul className="mt-6 space-y-3">
-            <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
+            <li className="rounded-frame border border-white/8 bg-noche/50 p-4">
               <div className="flex items-center justify-between gap-4">
                 <h3 className="font-semibold">{t.necesarias.titulo}</h3>
                 <span className="shrink-0 rounded-full bg-white/8 px-2.5 py-1 text-xs font-semibold text-fog">{t.necesarias.estado}</span>
@@ -173,7 +173,7 @@ export function AbrirPreferenciasCookies({ className, children }: { className?: 
 /** Un permiso con su interruptor (apagado por defecto; la ley exige que no vengan marcados). */
 function Opcion({ id, titulo, texto, activo, onCambiar }: { id: string; titulo: string; texto: string; activo: boolean; onCambiar: () => void }) {
   return (
-    <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
+    <li className="rounded-frame border border-white/8 bg-noche/50 p-4">
       <div className="flex items-center justify-between gap-4">
         <h3 id={id} className="font-semibold">
           {titulo}

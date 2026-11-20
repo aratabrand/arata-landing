@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-ink px-4 text-center text-white [color-scheme:dark]">
-      <style>{`html,body{background:#03010B}`}</style>
+    <main className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-noche px-4 text-center text-white [color-scheme:dark]">
+      <style>{`html,body{background:#020104}`}</style>
       <GridBackground orb="50% 45%" glow={0.16} />
       <Glow className="left-1/2 top-1/2 -z-10 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2" />
 
