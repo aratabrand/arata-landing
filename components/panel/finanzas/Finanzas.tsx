@@ -58,8 +58,8 @@ export default function Finanzas({ datos, hoy }: { datos: DatosFinanzas; hoy: st
               aria-selected={vista === v.valor}
               onClick={() => setVista(v.valor)}
               className={cn(
-                "h-9 whitespace-nowrap rounded-[7px] px-3.5 text-sm font-semibold transition-colors",
-                vista === v.valor ? "bg-surface-3 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" : "text-fog-dim hover:text-white"
+                "h-9 whitespace-nowrap rounded-[7px] border px-3.5 text-sm font-semibold transition-colors",
+                vista === v.valor ? "pn-pildora-activa" : "border-transparent text-fog-dim hover:text-white"
               )}
             >
               {v.label}

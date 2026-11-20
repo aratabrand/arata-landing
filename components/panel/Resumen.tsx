@@ -58,8 +58,9 @@ export function Segmentado<T extends string | number>({
           aria-checked={valor === o.valor}
           onClick={() => onChange(o.valor)}
           className={cn(
-            "h-9 rounded-[7px] px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
-            valor === o.valor ? "bg-surface-3 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]" : "text-fog-dim hover:text-white"
+            "h-9 rounded-[7px] border px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
+            // D-155: la opción activa va en el verde de Arata (en claro, morado)
+            valor === o.valor ? "pn-pildora-activa" : "border-transparent text-fog-dim hover:text-white"
           )}
         >
           {o.label}
