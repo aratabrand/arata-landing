@@ -23,7 +23,7 @@ El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia co
 | Tarjeta (`.v2-card`) | variables `--pn-tarjeta*` | **negra con humo** (D-153, igual al sitio): degradado `#0E0E10`→`#060607`, nube blanca suave, borde blanco 13 % | blanca con humo de tinta 3,5 % + borde tinta 10 % + sombra suave |
 | Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | más humo + borde blanco 42 % | blanca + borde tinta 32 % |
 | Píldora (`.pn-pildora`) | `--pn-pildora*` | negra con degradado + borde blanco 24 %, texto gris (como `.v2-pildora`) | blanca + borde tinta 16 %, texto gris |
-| Píldora activa (`.pn-pildora-activa`) | `--pn-activa*` | **verde de Arata (D-155)**: tinte lima suave, borde lima 55 %, texto lima. Solo el filtro o la pestaña elegida | morado (como el dato, D-151) |
+| Píldora activa (`.pn-pildora-activa`) | `--pn-activa*` | **verde de Arata (D-155)**: tinte lima suave, borde lima 55 %, texto lima. Solo el filtro, la pestaña o la opción elegida de un selector (`Segmentado`: 7/30/90 días, Ventas/Pedidos/Visitas; secciones de Finanzas) | morado (como el dato, D-151) |
 | Semáforo (`verde`, `ambar`, `alerta`) | `--pn-verde`, `--pn-ambar`, `--pn-alerta*` | verde `#4ADE80` · ámbar `#FFC76B` · rojo `#FF9BB0` | verde `#15803D` · ámbar `#A16207` · rojo `#BE123C` |
 | Superficies sólidas | `surface-1/2/3` | `#0F0F12` · `#16161A` · `#1D1D22` | `#FFF` · `#F3F3F6` · `#FFF` |
 | Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` | `#03010B` / `#52505C` / `#686572` |

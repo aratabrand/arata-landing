@@ -8,24 +8,19 @@ import { V2_PUBLICADO } from "@/lib/lanzamiento";
 import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
 
-// Fuentes de marca auto-hospedadas (sin dependencias de red en runtime)
+// Fuentes de marca auto-hospedadas (sin dependencias de red en runtime).
+// D-156: una sola fuente VARIABLE por familia (antes 7 archivos, 87 KB → 2 archivos, 33 KB),
+// recortada a los caracteres del español (latín básico + latín-1 + comillas, rayas, €, flechas)
+// y al rango de pesos que se usa. Menos archivos = cadena de carga más corta (Lighthouse:
+// "Árbol de dependencias de red"). Cómo regenerarlas: docs/blueprint/04-sistema-de-diseno.md §12.
 const display = localFont({
-  src: [
-    { path: "./fonts/funnel-display-latin-600-normal.woff2", weight: "600", style: "normal" },
-    { path: "./fonts/funnel-display-latin-700-normal.woff2", weight: "700", style: "normal" },
-    { path: "./fonts/funnel-display-latin-800-normal.woff2", weight: "800", style: "normal" },
-  ],
+  src: [{ path: "./fonts/funnel-display-wght-600-800.woff2", weight: "600 800", style: "normal" }],
   variable: "--font-display",
   display: "swap",
 });
 
 const body = localFont({
-  src: [
-    { path: "./fonts/plus-jakarta-sans-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/plus-jakarta-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
-    { path: "./fonts/plus-jakarta-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
-    { path: "./fonts/plus-jakarta-sans-latin-700-normal.woff2", weight: "700", style: "normal" },
-  ],
+  src: [{ path: "./fonts/plus-jakarta-sans-wght-400-700.woff2", weight: "400 700", style: "normal" }],
   variable: "--font-body",
   display: "swap",
   // Solo se precarga la fuente de títulos (el h1 es el LCP). El cuerpo entra con
