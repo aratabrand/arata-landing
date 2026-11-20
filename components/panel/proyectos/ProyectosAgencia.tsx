@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Calendar, Plus } from "lucide-react";
+import { Calendar, Plus } from "../iconos";
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
 import { avance, estaEntregado, etapas, etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta } from "@/lib/panel/formato";
@@ -69,7 +69,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
         ].map((x) => (
           <div key={x.k} className="v2-card p-4 sm:p-5">
             <p className="text-xs text-fog">{x.k}</p>
-            <p className={cn("mt-2 font-display text-[clamp(1.4rem,2.6vw,1.9rem)] font-bold leading-none", x.alerta ? "text-[#FF9BB0]" : "text-white")}>{x.v}</p>
+            <p className={cn("mt-2 font-display text-[clamp(1.4rem,2.6vw,1.9rem)] font-bold leading-none", x.alerta ? "text-alerta" : "text-white")}>{x.v}</p>
           </div>
         ))}
       </div>
@@ -126,15 +126,15 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
       className={cn("v2-card group flex h-full flex-col p-4 transition-colors hover:border-white/16 sm:p-5", a.entregado && "opacity-80")}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-brand-soft">{servicio?.nombre ?? "Sin servicio"}</p>
+        <p className="truncate text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-fog">{servicio?.nombre ?? "Sin servicio"}</p>
         <Pill tono={comercial[p.estado].t}>{comercial[p.estado].l}</Pill>
       </div>
-      <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-brand-soft">{p.nombre}</h2>
+      <h2 className="mt-2 font-display text-lg font-bold leading-tight tracking-heading text-white group-hover:text-white">{p.nombre}</h2>
       <p className="mt-0.5 truncate text-sm text-fog">{nombreCliente(cliente)}</p>
 
       {/* Etapa actual */}
       <div className="mt-4 flex items-center gap-2">
-        <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", a.entregado ? "bg-lime text-ink" : a.etapaActual ? "bg-brand/20 text-white" : "bg-white/5 text-fog")}>
+        <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", a.entregado ? "bg-lime text-ink" : a.etapaActual ? "bg-white/10 text-white" : "bg-white/5 text-fog")}>
           {etiquetaEtapa(a.etapaActual, a.entregado)}
         </span>
         {!a.entregado && a.siguiente && <span className="truncate text-xs text-fog-dim">Sigue: {a.siguiente}</span>}
@@ -147,7 +147,7 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
             <span
               className={cn(
                 "block h-1.5 rounded-full",
-                e.total === 0 ? "bg-white/5" : e.completa ? "bg-lime" : i === actual ? "bg-brand" : "bg-white/12"
+                e.total === 0 ? "bg-white/5" : e.completa ? "bg-lime" : i === actual ? "bg-white" : "bg-white/12"
               )}
             />
             <span className={cn("mt-1 block truncate text-[0.62rem]", i === actual && !a.entregado ? "text-white" : "text-fog-dim")}>{e.label}</span>
@@ -158,7 +158,7 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
       <div className="mt-auto pt-4">
         <div className="flex items-center justify-between text-xs">
           {p.fechaLimite ? (
-            <span className={cn("inline-flex items-center gap-1", vence !== null && vence < 0 ? "text-[#FF9BB0]" : "text-fog-dim")}>
+            <span className={cn("inline-flex items-center gap-1", vence !== null && vence < 0 ? "text-alerta" : "text-fog-dim")}>
               <Calendar aria-hidden className="h-3.5 w-3.5" />
               {a.entregado ? `Entrega ${fechaCorta(p.fechaLimite)}` : vence === null ? fechaCorta(p.fechaLimite) : vence < 0 ? `Venció hace ${-vence} ${vence === -1 ? "día" : "días"}` : vence === 0 ? "Se entrega hoy" : `Faltan ${vence} ${vence === 1 ? "día" : "días"}`}
             </span>

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarClock, Check, Clock, ExternalLink, Mail, MessageCircle, NotebookPen, RotateCcw, Trash2, Video, X } from "lucide-react";
+import { CalendarClock, Check, Clock, ExternalLink, Mail, MessageCircle, NotebookPen, RotateCcw, Trash2, Video, X } from "./iconos";
 import { agregarNotaInteresado, borrarInteresado, descartarInteresado, ponerEnEspera, reabrirInteresado } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import { CAL_POR_ACEPTAR, PLAZOS, cuandoTexto, diasParaPlazo, etiquetaTipo, fechaNota, mensajeSeguimiento, momentoDe, plazoDesde, relativo, type Interesado, type Momento } from "@/lib/panel/clientes/interesados";
 import { Pill } from "./ui";
@@ -83,7 +83,7 @@ export default function Interesados({
   if (interesados.length === 0) {
     return (
       <div className="rounded-card border border-white/[0.08] bg-white/[0.03] px-5 py-12 text-center">
-        <CalendarClock aria-hidden className="mx-auto h-8 w-8 text-brand-soft" />
+        <CalendarClock aria-hidden className="mx-auto h-8 w-8 text-fog" />
         <p className="mt-3 font-display text-lg font-bold text-white">Todavía nadie ha agendado</p>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-fog">
           Cuando alguien agende una reunión desde aratasan.com/agendar, aparece aquí con lo que respondió, y te llega un aviso al celular.
@@ -158,7 +158,7 @@ function Grupo({ titulo, detalle, cantidad, alerta, children }: { titulo: string
   return (
     <section>
       <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h2 className={cn("font-display text-lg font-bold tracking-heading", alerta ? "text-[#FF9BB0]" : "text-white")}>
+        <h2 className={cn("font-display text-lg font-bold tracking-heading", alerta ? "text-alerta" : "text-white")}>
           {titulo} <span className="ml-1 text-sm font-normal text-fog-dim">{cantidad}</span>
         </h2>
         {detalle && <p className="text-sm text-fog">{detalle}</p>}
@@ -244,9 +244,9 @@ function Fila({
   const fechaPlazo = dias ? plazoDesde(Number(dias), ahoraMs) : null;
 
   return (
-    <li className={cn("rounded-card border p-4 sm:p-5", (m === "pasada" && pendiente) || toca ? "border-[#FF9BB0]/30 bg-[#FF9BB0]/[0.04]" : ahoraEs ? "border-lime/40 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]")}>
+    <li className={cn("rounded-card border p-4 sm:p-5", (m === "pasada" && pendiente) || toca ? "border-alerta/30 bg-alerta/[0.04]" : ahoraEs ? "border-lime/40 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]")}>
       <div className="flex flex-wrap items-start gap-3">
-        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
+        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
           {inicial(i.nombre)}
         </span>
         <div className="min-w-0 flex-1 basis-56">
@@ -256,7 +256,7 @@ function Fila({
             {i.tipo && <Pill>{etiquetaTipo[i.tipo]}</Pill>}
           </div>
           <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-sm text-fog">
-            <CalendarClock aria-hidden className="h-4 w-4 text-brand-soft" />
+            <CalendarClock aria-hidden className="h-4 w-4 text-fog" />
             <span className="text-white">{cuandoTexto(i.inicio)}</span>
             <span className="text-fog-dim">· hora de Bogotá · {relativo(i.inicio, ahoraMs)}</span>
           </p>
@@ -287,7 +287,7 @@ function Fila({
             <div className="flex gap-2">
               <dt className="shrink-0 text-fog-dim">Su página</dt>
               <dd className="min-w-0 truncate">
-                <a href={i.paginaWeb} target="_blank" rel="noopener noreferrer" className="text-brand-soft hover:text-white">
+                <a href={i.paginaWeb} target="_blank" rel="noopener noreferrer" className="text-fog hover:text-white">
                   {i.paginaWeb.replace(/^https?:\/\//, "")}
                 </a>
               </dd>
@@ -299,12 +299,12 @@ function Fila({
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         {wa && i.whatsapp && (
           <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-fog hover:text-white">
-            <MessageCircle aria-hidden className="h-4 w-4 text-brand-soft" /> {verWhatsapp(i.whatsapp)}
+            <MessageCircle aria-hidden className="h-4 w-4 text-fog" /> {verWhatsapp(i.whatsapp)}
           </a>
         )}
         {i.correo && (
           <a href={`mailto:${i.correo}`} className="inline-flex min-w-0 items-center gap-1.5 text-fog hover:text-white">
-            <Mail aria-hidden className="h-4 w-4 shrink-0 text-brand-soft" /> <span className="truncate">{i.correo}</span>
+            <Mail aria-hidden className="h-4 w-4 shrink-0 text-fog" /> <span className="truncate">{i.correo}</span>
           </a>
         )}
       </div>
@@ -313,7 +313,7 @@ function Fila({
       {i.notas.length > 0 && (
         <div className="mt-4 rounded-frame border border-white/[0.07] bg-surface-2/50 p-3 sm:p-4">
           <p className="flex items-center gap-2 text-xs font-semibold text-fog">
-            <NotebookPen aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Seguimiento
+            <NotebookPen aria-hidden className="h-3.5 w-3.5 text-fog" /> Seguimiento
             {enEspera && i.esperaHasta && <span className="font-normal text-fog-dim">· plazo: {fechaNota(i.esperaHasta)}</span>}
           </p>
           <ul className="mt-2 space-y-2">
@@ -327,7 +327,7 @@ function Fila({
             ))}
           </ul>
           {i.notas.length > 3 && (
-            <button type="button" onClick={() => setTodas(!todas)} className="mt-2 text-xs font-semibold text-brand-soft hover:text-white">
+            <button type="button" onClick={() => setTodas(!todas)} className="mt-2 text-xs font-semibold text-fog hover:text-white">
               {todas ? "Ver menos" : `Ver todas (${i.notas.length})`}
             </button>
           )}
@@ -344,7 +344,7 @@ function Fila({
       {/* Poner en espera o agregar una nota */}
       {formulario && (
         <form
-          className="mt-4 space-y-3 rounded-frame border border-brand/30 bg-brand/[0.05] p-3 sm:p-4"
+          className="mt-4 space-y-3 rounded-frame border border-white/15 bg-white/[0.03] p-3 sm:p-4"
           onSubmit={(e) => {
             e.preventDefault();
             guardar();
@@ -392,9 +392,9 @@ function Fila({
 
       {i.estado === "confirmada" && (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-fog">
-          <Check aria-hidden className="h-4 w-4 text-lime" /> {cliente ? <>Cliente: <strong className="font-semibold text-white">{cliente}</strong></> : "Ya es cliente"}
+          <Check aria-hidden className="h-4 w-4 text-dato" /> {cliente ? <>Cliente: <strong className="font-semibold text-white">{cliente}</strong></> : "Ya es cliente"}
           {i.clienteId && cliente && (
-            <button type="button" onClick={() => onVerCliente(i.clienteId!)} className="font-semibold text-brand-soft hover:text-white">
+            <button type="button" onClick={() => onVerCliente(i.clienteId!)} className="font-semibold text-fog hover:text-white">
               Ver cliente →
             </button>
           )}
@@ -501,7 +501,7 @@ function Fila({
             aria-label={`Borrar a ${i.nombre} de interesados`}
             disabled={acc.pendiente}
             onClick={() => window.confirm(`¿Borrar a ${i.nombre} de la lista de interesados?${i.clienteId ? " El cliente que se creó desde aquí no se borra." : ""} Queda en el historial.`) && acc.correr(() => borrarInteresado(i.id))}
-            className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-[#FF9BB0] sm:ml-auto"
+            className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-alerta sm:ml-auto"
           >
             <Trash2 aria-hidden className="h-4 w-4" />
           </button>

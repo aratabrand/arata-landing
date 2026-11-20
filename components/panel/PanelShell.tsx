@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "lucide-react";
+import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Moon, Settings, SquareKanban, Sun, Users, Wallet } from "./iconos";
+import { aplicarTema, type Tema } from "@/lib/panel/tema";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -102,7 +103,7 @@ export default function PanelShell({
             </header>
 
             {conFranja && (
-              <div className="border-b border-brand/20 bg-brand/[0.07] px-4 py-2 text-center text-xs text-brand-soft">
+              <div className="border-b border-white/10 bg-white/[0.04] px-4 py-2 text-center text-xs text-fog">
                 Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
               </div>
             )}
@@ -115,7 +116,7 @@ export default function PanelShell({
       {/* ── Pestañas abajo (celular) ── */}
       <nav
         aria-label="Panel"
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-white/[0.07] bg-ink/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-white/[0.07] bg-noche/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
       >
         <ul className="grid" style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}>
           {nav.map(({ href, label, icon: Icon, rutas }) => {
@@ -128,7 +129,7 @@ export default function PanelShell({
                   className={cn("relative flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
                   {on && <span aria-hidden className="absolute top-0 h-0.5 w-8 rounded-full bg-brand" />}
-                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-brand-soft")} />
+                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-fog")} />
                   {label}
                 </Link>
               </li>
@@ -183,7 +184,7 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
                   aria-current={on ? "page" : undefined}
                   className={cn("group relative z-10 flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors", on ? "text-white" : "text-fog hover:bg-white/[0.035] hover:text-white")}
                 >
-                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-brand-soft" : "text-fog-dim group-hover:text-fog")} />
+                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-fog" : "text-fog-dim group-hover:text-fog")} />
                   {label}
                 </Link>
               </li>
@@ -202,7 +203,7 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
           className="pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
           style={{ height: sel.h, transform: `translateY(${sel.y}px)` }}
         >
-          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand shadow-[0_0_12px_rgba(125,83,255,0.8)]" />
+          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand" />
         </span>
       )}
       {grupo("Menú", principal)}
@@ -214,8 +215,18 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
 // ── Cuenta: nombre, ver la página, soporte (clientes) y salir ──
 function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negocio; usuario?: { nombre: string; correo?: string } | null; conSesion: boolean; variante: "tarjeta" | "circulo" }) {
   const [abierto, setAbierto] = useState(false);
+  const [tema, setTema] = useState<Tema>("oscuro");
   const ref = useRef<HTMLDivElement | null>(null);
   const path = usePathname();
+  // El tema real lo pone el servidor en .pn-root (cookie pn-tema, D-149)
+  useEffect(() => {
+    setTema(document.querySelector<HTMLElement>(".pn-root")?.dataset.tema === "claro" ? "claro" : "oscuro");
+  }, []);
+  const cambiarTema = () => {
+    const nuevo: Tema = tema === "claro" ? "oscuro" : "claro";
+    aplicarTema(nuevo);
+    setTema(nuevo);
+  };
   const nombre = usuario?.nombre || negocio.contacto || negocio.nombre;
   const inicial = nombre.trim().charAt(0).toUpperCase() || "A";
   const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
@@ -255,7 +266,7 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
           aria-label={`Cuenta de ${nombre}`}
           className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-2.5 text-left transition-colors hover:border-white/[0.12] hover:bg-white/[0.055]"
         >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand/20 font-display text-sm font-bold text-brand-soft">{inicial}</span>
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.08] font-display text-sm font-bold text-fog">{inicial}</span>
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-semibold text-white">{nombre}</span>
             <span className="block truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</span>
@@ -276,9 +287,22 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
           {/* En el panel de la propia agencia no tiene sentido escribirse a sí mismos */}
           {negocio.tipo !== "agencia" && (
             <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
-              <MessageCircle aria-hidden className="h-4 w-4 text-brand-soft" /> Escribirle a Arata San
+              <MessageCircle aria-hidden className="h-4 w-4 text-fog" /> Escribirle a Arata San
             </a>
           )}
+          {/* D-149: modo claro / oscuro (oscuro por defecto) */}
+          <button
+            role="menuitemcheckbox"
+            aria-checked={tema === "claro"}
+            type="button"
+            onClick={cambiarTema}
+            className="flex h-10 w-full items-center justify-between gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white"
+          >
+            <span className="flex items-center gap-2">
+              {tema === "claro" ? <Moon aria-hidden className="h-4 w-4" /> : <Sun aria-hidden className="h-4 w-4" />}
+              {tema === "claro" ? "Modo oscuro" : "Modo claro"}
+            </span>
+          </button>
           {conSesion && (
             <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <LogOut aria-hidden className="h-4 w-4" /> Salir

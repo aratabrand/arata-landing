@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 // punto brillante en el extremo. Se dibujan al entrar en vista (solo opacity,
 // transform y el trazo del SVG) y quedan quietos con movimiento reducido.
 
-const MORADO = "#7D53FF";
-const LIMA = "#B6FF00";
+// D-149: colores del tema (variables de styles/panel.src.css): sin morado en gráficos; lima solo para el dato
+const MORADO = "rgb(var(--pn-fg))"; // la serie va en blanco (tinta en claro); se conserva el nombre
+const LIMA = "rgb(var(--pn-dato))";
+const TENUE = "rgb(var(--pn-fog-dim))";
+const FONDO = "rgb(var(--pn-canvas))";
 
 /** true cuando el elemento ya entró en vista (o de inmediato con movimiento reducido). */
 function useVisto<T extends Element>() {
@@ -128,8 +131,8 @@ export function GraficoArea({
 
         {marcas.map((m) => (
           <g key={m}>
-            <line x1={pad.l} x2={W - pad.r} y1={y(max * m)} y2={y(max * m)} stroke="rgba(255,255,255,0.06)" strokeDasharray={m === 0 ? undefined : "3 5"} />
-            <text x={pad.l - 10} y={y(max * m) + 4} textAnchor="end" fontSize="11" fill="#8A84A8">
+            <line x1={pad.l} x2={W - pad.r} y1={y(max * m)} y2={y(max * m)} stroke="rgb(var(--pn-fg) / 0.06)" strokeDasharray={m === 0 ? undefined : "3 5"} />
+            <text x={pad.l - 10} y={y(max * m) + 4} textAnchor="end" fontSize="11" fill={TENUE}>
               {formatoEje(max * m)}
             </text>
           </g>
@@ -138,7 +141,7 @@ export function GraficoArea({
         {puntos.map((p, i) =>
           // Cada N puntos y el último; se salta la penúltima si quedaría encima del último
           (i % cadaEtiqueta === 0 && puntos.length - 1 - i >= Math.max(1, cadaEtiqueta * 0.75)) || i === puntos.length - 1 ? (
-            <text key={i} x={x(i)} y={H - 8} textAnchor={i === 0 ? "start" : i === puntos.length - 1 ? "end" : "middle"} fontSize="11" fill="#8A84A8">
+            <text key={i} x={x(i)} y={H - 8} textAnchor={i === 0 ? "start" : i === puntos.length - 1 ? "end" : "middle"} fontSize="11" fill={TENUE}>
               {p.etiqueta}
             </text>
           ) : null
@@ -163,8 +166,8 @@ export function GraficoArea({
 
         {hover !== null && (
           <g pointerEvents="none">
-            <line x1={coords[hover][0]} x2={coords[hover][0]} y1={pad.t} y2={H - pad.b} stroke="rgba(255,255,255,0.18)" />
-            <circle cx={coords[hover][0]} cy={coords[hover][1]} r="5" fill="#03010B" stroke={LIMA} strokeWidth="2.5" />
+            <line x1={coords[hover][0]} x2={coords[hover][0]} y1={pad.t} y2={H - pad.b} stroke="rgb(var(--pn-fg) / 0.18)" />
+            <circle cx={coords[hover][0]} cy={coords[hover][1]} r="5" fill={FONDO} stroke={LIMA} strokeWidth="2.5" />
           </g>
         )}
       </svg>
@@ -245,24 +248,24 @@ export function BarrasVerticales({ puntos, formato, alto = 150 }: { puntos: Punt
     <div ref={ref}>
       <div className="flex items-end gap-1.5 sm:gap-2" style={{ height: alto }}>
         {puntos.map((p, i) => {
-          // Barras apagadas; la elegida (la que tocas o, si no, la última) va en morado con un punto lima
+          // Barras apagadas; la elegida (la que tocas o, si no, la última) va en blanco (tinta en claro) con un punto lima (D-149)
           const activa = i === (hover ?? puntos.length - 1);
           return (
             <div
               key={i}
-              className="group relative flex h-full flex-1 items-end"
+              className="group relative flex h-full flex-1 items-end justify-center"
               onPointerEnter={() => setHover(i)}
               onPointerLeave={() => setHover(null)}
             >
               <div
-                className={cn("pn-columna relative w-full origin-bottom rounded-full", visto && "is-visible")}
+                className={cn("pn-columna relative w-full max-w-[44px] origin-bottom rounded-full", visto && "is-visible")} /* con pocos meses no se vuelven manchas anchas */
                 style={{
                   height: `${Math.max(4, (p.valor / max) * 100)}%`,
-                  background: activa ? `linear-gradient(180deg, #9B7BFF, ${MORADO})` : "rgba(255,255,255,0.09)",
+                  background: activa ? MORADO : "rgb(var(--pn-fg) / 0.09)",
                   transitionDelay: `${i * 45}ms`,
                 }}
               >
-                {activa && <span aria-hidden className="absolute left-1/2 top-1 h-1.5 w-1.5 -translate-x-1/2 rounded-full" style={{ background: LIMA, boxShadow: "0 0 0 3px rgba(182,255,0,0.18)" }} />}
+                {activa && <span aria-hidden className="absolute left-1/2 top-1 h-1.5 w-1.5 -translate-x-1/2 rounded-full" style={{ background: LIMA, boxShadow: "0 0 0 3px rgb(var(--pn-dato) / 0.18)" }} />}
               </div>
               {hover === i && (
                 <span className="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-surface-3 px-2 py-1 text-[0.7rem] font-semibold text-white">
@@ -308,7 +311,7 @@ export function Anillo({
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: tam, height: tam }}>
       <svg ref={ref} viewBox={`0 0 ${tam} ${tam}`} width={tam} height={tam} aria-hidden className="-rotate-90">
-        <circle cx={tam / 2} cy={tam / 2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={grosor} />
+        <circle cx={tam / 2} cy={tam / 2} r={r} fill="none" stroke="rgb(var(--pn-fg) / 0.08)" strokeWidth={grosor} />
         <circle
           cx={tam / 2}
           cy={tam / 2}
@@ -324,7 +327,7 @@ export function Anillo({
       </svg>
       <svg viewBox={`0 0 ${tam} ${tam}`} width={tam} height={tam} aria-hidden className={cn("pn-fade absolute inset-0", visto && "is-visible")} style={{ transitionDelay: "1.2s" }}>
         <circle cx={dot[0]} cy={dot[1]} r={grosor * 0.85} fill={color} opacity="0.2" />
-        <circle cx={dot[0]} cy={dot[1]} r={grosor * 0.32} fill="#03010B" />
+        <circle cx={dot[0]} cy={dot[1]} r={grosor * 0.32} fill={FONDO} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
         <span className="font-display text-[1.75rem] font-bold leading-none text-white">{centro}</span>
@@ -348,7 +351,7 @@ export function Embudo({ pasos }: { pasos: { nombre: string; valor: number; form
               <span className="text-fog">{p.nombre}</span>
               <span className="font-display font-bold text-white">
                 {p.formato}
-                {pasa !== null && <span className="ml-2 font-body text-xs font-semibold text-brand-soft">{pasa.toFixed(0)} % pasa</span>}
+                {pasa !== null && <span className="ml-2 font-body text-xs font-semibold text-fog">{pasa.toFixed(0)} % pasa</span>}
               </span>
             </div>
             <div className="h-9 overflow-hidden rounded-btn bg-white/5">
@@ -356,7 +359,7 @@ export function Embudo({ pasos }: { pasos: { nombre: string; valor: number; form
                 className={cn("pn-barra h-full origin-left rounded-btn", visto && "is-visible")}
                 style={{
                   width: `${Math.max(6, (p.valor / max) * 100)}%`,
-                  background: i === pasos.length - 1 ? LIMA : `rgba(125,83,255,${0.95 - i * 0.22})`,
+                  background: i === pasos.length - 1 ? LIMA : `rgb(var(--pn-fg) / ${0.9 - i * 0.2})`,
                   transitionDelay: `${i * 150}ms`,
                 }}
               />

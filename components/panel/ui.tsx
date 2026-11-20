@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowLeft, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, TrendingDown, TrendingUp } from "./iconos";
 import { cn } from "@/lib/utils";
 
 // Piezas base del panel (docs/panel-cliente/03-sistema-de-diseno.md §4).
@@ -42,6 +42,7 @@ export function Tarjeta({
   bajada?: ReactNode;
   accion?: ReactNode;
   /** Cuadrito con ícono antes del título (D-136). */
+  /** Sin uso desde D-149 (sin íconos decorativos); se acepta para no tocar cada tarjeta. */
   icono?: ReactNode;
   children: ReactNode;
   className?: string;
@@ -51,7 +52,6 @@ export function Tarjeta({
       {(titulo || accion) && (
         <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
-            {icono && <span className="pn-icono">{icono}</span>}
             <div className="min-w-0">
               {titulo && <h2 className="font-display text-base font-bold tracking-heading text-white sm:text-lg">{titulo}</h2>}
               {bajada && <p className="mt-0.5 text-xs text-fog-dim">{bajada}</p>}
@@ -74,7 +74,7 @@ export function Delta({ valor, className }: { valor: number | null; className?: 
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
-        sube ? "bg-lime/10 text-lime" : "bg-[#FF6B8B]/10 text-[#FF9BB0]",
+        sube ? "bg-lime/10 text-dato" : "bg-alerta-fuerte/10 text-alerta",
         className
       )}
     >
@@ -88,10 +88,10 @@ export function Delta({ valor, className }: { valor: number | null; className?: 
 /** Píldora de estado (clientes, prioridad, fase). */
 export function Pill({ children, tono = "neutro", className }: { children: ReactNode; tono?: "lima" | "morado" | "neutro" | "alerta"; className?: string }) {
   const tonos = {
-    lima: "border-lime/30 bg-lime/10 text-lime",
-    morado: "border-brand/40 bg-brand/15 text-brand-soft",
+    lima: "border-lime/30 bg-lime/10 text-dato",
+    morado: "border-white/20 bg-white/[0.06] text-fog", // D-149: sin morado (nombre se conserva)
     neutro: "border-white/10 bg-white/5 text-fog",
-    alerta: "border-[#FF6B8B]/30 bg-[#FF6B8B]/10 text-[#FF9BB0]",
+    alerta: "border-alerta-fuerte/30 bg-alerta-fuerte/10 text-alerta",
   } as const;
   return (
     <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[0.72rem] font-semibold", tonos[tono], className)}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type DragEvent, type FormEvent } from "react";
-import { Calendar, Check, ChevronLeft, ChevronRight, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { Calendar, Check, ChevronLeft, ChevronRight, Plus, RotateCcw, Trash2 } from "./iconos";
 import type { FaseProyecto, Prioridad, Proyecto } from "@/content/panel/tipos";
 import { fechaCorta } from "@/lib/panel/formato";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
@@ -15,11 +15,12 @@ import { cn } from "@/lib/utils";
 // también funcionan con teclado, así que arrastrar nunca es la única forma.
 
 export const fases: { valor: FaseProyecto; label: string; color: string }[] = [
-  { valor: "por-hacer", label: "Por hacer", color: "#8A84A8" },
-  { valor: "diseno", label: "En diseño", color: "#B9A4FF" },
-  { valor: "construccion", label: "En construcción", color: "#7D53FF" },
-  { valor: "revision", label: "En revisión", color: "#FFC76B" },
-  { valor: "entregado", label: "Entregado", color: "#B6FF00" },
+  // D-149: colores del tema, sin morado (gris → blanco por avance, ámbar en revisión, lima entregado)
+  { valor: "por-hacer", label: "Por hacer", color: "rgb(var(--pn-fog-dim))" },
+  { valor: "diseno", label: "En diseño", color: "rgb(var(--pn-fog))" },
+  { valor: "construccion", label: "En construcción", color: "rgb(var(--pn-fg))" },
+  { valor: "revision", label: "En revisión", color: "rgb(var(--pn-ambar))" },
+  { valor: "entregado", label: "Entregado", color: "rgb(var(--pn-dato))" },
 ];
 const prioridades: { valor: Prioridad; label: string; tono: "alerta" | "morado" | "neutro" }[] = [
   { valor: "alta", label: "Alta", tono: "alerta" },
@@ -82,7 +83,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
           <p className="text-xs text-fog">Avance de todas las tareas</p>
           <p className="mt-2 font-display text-[1.75rem] font-bold leading-none text-white">{resumen.pct} %</p>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/6">
-            <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-brand")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
+            <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-white")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
           </div>
         </div>
         <div className="v2-card p-4 sm:p-5">
@@ -94,13 +95,13 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
             ))}
           </div>
         </div>
-        <div className="v2-card border-brand/40 p-4 sm:p-5">
-          <p className="text-xs font-semibold text-brand-soft">Te toca a ti</p>
+        <div className="v2-card p-4 sm:p-5">
+          <p className="text-xs font-semibold text-fog">Te toca a ti</p>
           {resumen.teToca.length ? (
             <ul className="mt-2 space-y-1.5">
               {resumen.teToca.map((p) => (
                 <li key={p.id}>
-                  <button type="button" onClick={() => setAbierto(p.id)} className="flex w-full items-center justify-between gap-2 text-left text-sm text-white hover:text-brand-soft">
+                  <button type="button" onClick={() => setAbierto(p.id)} className="flex w-full items-center justify-between gap-2 text-left text-sm text-white hover:text-white">
                     <span className="truncate">{p.titulo}</span>
                     <span className="shrink-0 text-xs text-fog-dim">{fechaCorta(p.fechaLimite)}</span>
                   </button>
@@ -147,9 +148,9 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
                 key={f.valor}
                 aria-label={f.label}
                 className={cn(
-                  "rounded-card border border-white/6 bg-[#06040F] p-3 transition-colors",
+                  "rounded-card border border-white/6 bg-noche p-3 transition-colors",
                   faseMovil === f.valor ? "block" : "hidden lg:block",
-                  sobre === f.valor && "border-brand/60 bg-brand/5"
+                  sobre === f.valor && "border-white/40 bg-white/[0.04]"
                 )}
                 onDragOver={(e) => {
                   e.preventDefault();
@@ -290,7 +291,7 @@ function TarjetaProyecto({
       <div className="mt-3">
         <div className="mb-1 flex justify-between text-[0.7rem] text-fog-dim">
           <span>{hechas}/{p.tareas.length} tareas</span>
-          <span className={cn("inline-flex items-center gap-1", vencido && "text-[#FF9BB0]")}>
+          <span className={cn("inline-flex items-center gap-1", vencido && "text-alerta")}>
             <Calendar aria-hidden className="h-3 w-3" />
             {vencido ? "Venció " : ""}{fechaCorta(p.fechaLimite)}
           </span>
@@ -315,7 +316,7 @@ function TarjetaProyecto({
           disabled={i === fases.length - 1}
           onClick={() => onMove(1)}
           aria-label={`Mover "${p.titulo}" a ${fases[i + 1]?.label ?? ""}`}
-          className="flex h-8 min-w-0 items-center gap-1 rounded-btn border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-brand/50 hover:text-brand-soft disabled:opacity-25"
+          className="flex h-8 min-w-0 items-center gap-1 rounded-btn border border-white/8 px-2.5 text-xs text-fog transition-colors hover:border-brand/50 hover:text-white disabled:opacity-25"
         >
           <span className="truncate whitespace-nowrap">{fases[i + 1]?.label.replace(/^En /, "A ") ?? "Listo"}</span>
           <ChevronRight aria-hidden className="h-4 w-4" />
@@ -391,7 +392,7 @@ function DetalleProyecto({ p, onChange, onDelete }: { p: Proyecto; onChange: (c:
       <button
         type="button"
         onClick={() => window.confirm(`¿Borrar "${p.titulo}"?`) && onDelete()}
-        className="inline-flex items-center gap-2 text-sm text-[#FF9BB0] hover:text-white"
+        className="inline-flex items-center gap-2 text-sm text-alerta hover:text-white"
       >
         <Trash2 aria-hidden className="h-4 w-4" /> Borrar proyecto
       </button>
@@ -436,7 +437,7 @@ function NuevoProyecto({ fase, hoy, onSave }: { fase: FaseProyecto; hoy: string;
           <input name="fecha" type="date" defaultValue={hoy} className={sel} />
         </label>
       </div>
-      {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
+      {error && <p role="alert" className="text-sm text-alerta">{error}</p>}
       <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">Crear proyecto</button>
     </form>
   );

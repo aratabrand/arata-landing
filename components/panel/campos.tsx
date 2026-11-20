@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus } from "./iconos";
 import { completarUrl, mascaraCelular, mascaraInstagram, mascaraUrl } from "@/lib/panel/mascaras";
 import { agregarCiudad } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import type { Ciudad, Pais } from "@/lib/panel/clientes/datos";
@@ -120,8 +120,8 @@ export function SelectorLugar({
         </label>
       </div>
       {agregando && (
-        <div className="space-y-2 rounded-frame border border-brand/40 bg-brand/5 p-3">
-          <p className="text-xs font-semibold text-brand-soft">Ciudad nueva de Colombia (queda en la lista para todos)</p>
+        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+          <p className="text-xs font-semibold text-fog">Ciudad nueva de Colombia (queda en la lista para todos)</p>
           <div className="grid grid-cols-2 gap-2">
             <input placeholder="Ciudad *" aria-label="Nombre de la ciudad" maxLength={60} value={nueva.nombre} onChange={(e) => setNueva({ ...nueva, nombre: e.target.value.replace(/[^\p{L} .'-]/gu, "") })} className="pn-input" />
             <input list="departamentos-co" placeholder="Departamento *" aria-label="Departamento" maxLength={60} value={nueva.departamento} onChange={(e) => setNueva({ ...nueva, departamento: e.target.value.replace(/[^\p{L} .,'-]/gu, "") })} className="pn-input" />

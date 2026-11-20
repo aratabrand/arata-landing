@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CircleCheck, Megaphone, Monitor, Plus, RotateCcw, Send, Smartphone, Trash2 } from "lucide-react";
+import { CircleCheck, Megaphone, Monitor, Plus, RotateCcw, Send, Smartphone, Trash2 } from "./iconos";
 import type { BotonSitio, ConfigSitio as Config, Negocio } from "@/content/panel/tipos";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
 import { LIM, enlaceValido, errores } from "@/lib/panel/sitio/reglas";
@@ -145,11 +145,11 @@ function EditorSitio({
                   {pub.pendiente ? "Publicando…" : `Publicar en ${dominioDe(negocio.sitio)}`}
                 </button>
                 {!remoto.puedePublicar && <span className="text-xs text-fog-dim">Falta conectar el panel con Vercel (SITIO_DEPLOY_HOOK).</span>}
-                {pub.error && <span role="alert" className="text-xs text-[#FF9BB0]">{pub.error}</span>}
+                {pub.error && <span role="alert" className="text-xs text-alerta">{pub.error}</span>}
               </div>
             )}
             {publicando && pendientes.length === 0 && (
-              <p className="mt-3 inline-flex items-center gap-2 text-sm text-lime" aria-live="polite">
+              <p className="mt-3 inline-flex items-center gap-2 text-sm text-dato" aria-live="polite">
                 <CircleCheck aria-hidden className="h-4 w-4" /> Enviado. La página se actualiza en 1–2 minutos.
               </p>
             )}
@@ -195,7 +195,7 @@ function EditorSitio({
                 onClick={() => set("anuncio", { ...borrador.anuncio, activo: !borrador.anuncio.activo })}
                 className={cn("relative h-7 w-12 rounded-full border transition-colors", borrador.anuncio.activo ? "border-brand bg-brand" : "border-white/15 bg-surface-2")}
               >
-                <span className={cn("absolute left-0 top-0.5 h-5 w-5 rounded-full transition-transform", borrador.anuncio.activo ? "translate-x-[22px] bg-ink" : "translate-x-0.5 bg-fog")} />
+                <span className={cn("absolute left-0 top-0.5 h-5 w-5 rounded-full transition-transform", borrador.anuncio.activo ? "translate-x-[22px] bg-noche" : "translate-x-0.5 bg-fog")} />
               </button>
             }
           >
@@ -228,7 +228,7 @@ function EditorSitio({
               {borrador.botones.map((b) => (
                 <li key={b.id} className="rounded-frame border border-white/8 bg-surface-2/50 p-3 sm:p-4">
                   <div className="mb-3 flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-soft">{b.ubicacion}</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-fog">{b.ubicacion}</p>
                     {!remoto && <button
                       type="button"
                       onClick={() => set("botones", borrador.botones.filter((x) => x.id !== b.id))}
@@ -297,8 +297,8 @@ function EditorSitio({
                 <p className="mt-1 text-[0.82rem] leading-relaxed text-[#4D5156]">{recortar(borrador.seo.descripcion, LIM.seoDesc) || "Descripción de tu página"}</p>
               </div>
             ) : (
-              <div className="mx-auto w-full max-w-[300px] rounded-[34px] border border-white/12 bg-[#0D0A18] p-2.5 shadow-2xl">
-                <div className="overflow-hidden rounded-[26px] bg-ink">
+              <div className="mx-auto w-full max-w-[300px] rounded-[34px] border border-white/12 bg-noche p-2.5 shadow-2xl">
+                <div className="overflow-hidden rounded-[26px] bg-noche">
                   {borrador.anuncio.activo && borrador.anuncio.texto && (
                     <p className="flex items-center justify-center gap-1.5 bg-lime px-3 py-1.5 text-center text-[0.65rem] font-semibold text-ink">
                       <Megaphone aria-hidden className="h-3 w-3" /> {borrador.anuncio.texto}
@@ -331,7 +331,7 @@ function EditorSitio({
                         ))}
                     </div>
                   </div>
-                  <div className="mx-4 mb-4 h-24 rounded-[14px] bg-gradient-to-br from-brand/30 to-surface-2" aria-hidden />
+                  <div className="mx-4 mb-4 h-24 rounded-[14px] bg-gradient-to-br from-white/15 to-surface-2" aria-hidden />
                 </div>
               </div>
             )}
@@ -341,14 +341,14 @@ function EditorSitio({
 
       {/* Barra de guardado */}
       <div className="sticky bottom-20 z-20 lg:bottom-6">
-        <div className={cn("flex flex-col gap-3 rounded-card border p-3 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:p-4", sucio ? "border-brand/50 bg-surface-3/90" : "border-white/8 bg-surface-1/90")}>
+        <div className={cn("flex flex-col gap-3 rounded-card border p-3 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:p-4", sucio ? "border-white/30 bg-surface-3/90" : "border-white/8 bg-surface-1/90")}>
           <p className="text-sm text-fog" aria-live="polite">
             {acc.error ? (
-              <span className="text-[#FF9BB0]">{acc.error}</span>
+              <span className="text-alerta">{acc.error}</span>
             ) : aviso ? (
-              <span className="inline-flex items-center gap-2 text-lime"><CircleCheck aria-hidden className="h-4 w-4" /> Cambios guardados</span>
+              <span className="inline-flex items-center gap-2 text-dato"><CircleCheck aria-hidden className="h-4 w-4" /> Cambios guardados</span>
             ) : hayErrores ? (
-              <span className="text-[#FF9BB0]">Revisa los campos marcados antes de guardar.</span>
+              <span className="text-alerta">Revisa los campos marcados antes de guardar.</span>
             ) : sucio ? (
               "Tienes cambios sin guardar."
             ) : guardado.actualizado ? (
@@ -408,7 +408,7 @@ function TituloDosColores({ texto }: { texto: string }) {
   if (!m) return <>{texto || "Título de la portada"}</>;
   return (
     <>
-      {m[1]} <span className="text-lime">{m[2]}</span>
+      {m[1]} <span className="text-dato">{m[2]}</span>
     </>
   );
 }
@@ -435,20 +435,20 @@ function Campo({ label, usado, limite, error, opcional, children }: { label: str
           {label.replace(/\s*\*$/, "")}
           {req && (
             <>
-              <span aria-hidden className="ml-0.5 text-brand-soft">*</span>
+              <span aria-hidden className="ml-0.5 text-fog">*</span>
               <span className="sr-only"> (obligatorio)</span>
             </>
           )}
           {opcional && <span className="ml-1.5 font-normal text-fog-dim">· Opcional</span>}
         </span>
         {limite !== undefined && (
-          <span className={cn("tabular-nums", pasado ? "text-[#FF9BB0]" : "text-fog-dim")}>
+          <span className={cn("tabular-nums", pasado ? "text-alerta" : "text-fog-dim")}>
             {usado}/{limite}
           </span>
         )}
       </span>
       {children}
-      {error && <span className="mt-1.5 block text-xs text-[#FF9BB0]">{error}</span>}
+      {error && <span className="mt-1.5 block text-xs text-alerta">{error}</span>}
     </label>
   );
 }

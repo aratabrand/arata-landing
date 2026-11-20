@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { CircleAlert, Lock } from "lucide-react";
+import { CircleAlert, Lock } from "../iconos";
 import type { Resultado } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { EMPRESA, type Persona } from "@/lib/panel/finanzas/tipos";
 import { cn } from "@/lib/utils";
@@ -32,7 +32,7 @@ export function useAccion() {
 export function MensajeError({ error }: { error: string }) {
   if (!error) return null;
   return (
-    <p role="alert" className="flex items-start gap-2 text-sm text-[#FF9BB0]">
+    <p role="alert" className="flex items-start gap-2 text-sm text-alerta">
       <CircleAlert aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
       {error}
     </p>
@@ -43,14 +43,14 @@ export function MensajeError({ error }: { error: string }) {
 export function AvisoAcceso({ demo, puedeEditar, texto }: { demo: boolean; puedeEditar: boolean; texto?: string }) {
   if (demo)
     return (
-      <div className="rounded-frame border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand-soft">
+      <div className="rounded-frame border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-fog">
         Estás viendo <strong className="text-white">finanzas de ejemplo</strong> con números ficticios. Con el panel conectado verás los datos reales de Arata San.
       </div>
     );
   if (puedeEditar) return null;
   return (
     <div className="flex items-center gap-2 rounded-frame border border-white/8 bg-surface-1 px-4 py-3 text-sm text-fog">
-      <Lock aria-hidden className="h-4 w-4 text-brand-soft" />
+      <Lock aria-hidden className="h-4 w-4 text-fog" />
       {texto ?? "Puedes ver todo. Sergio y Andrés cambian los números; el valor del día, solo Sergio."}
     </div>
   );
@@ -108,7 +108,7 @@ export function Etiqueta({ texto, obligatorio }: { texto: string; obligatorio?: 
         {limpio}
         {req && (
           <>
-            <span aria-hidden className="ml-0.5 text-brand-soft">*</span>
+            <span aria-hidden className="ml-0.5 text-fog">*</span>
             <span className="sr-only"> (obligatorio)</span>
           </>
         )}
@@ -122,7 +122,7 @@ export function Etiqueta({ texto, obligatorio }: { texto: string; obligatorio?: 
 export function LeyendaObligatorios() {
   return (
     <p className="text-[0.72rem] text-fog-dim">
-      Los campos con <span className="text-brand-soft">*</span> son obligatorios.
+      Los campos con <span className="text-fog">*</span> son obligatorios.
     </p>
   );
 }
@@ -167,7 +167,8 @@ export function nombreDe(id: string, personas: Persona[]) {
 }
 
 /** Color fijo por persona (para barras y puntos). */
-export const colorPersona = (i: number) => ["#7D53FF", "#B9A4FF", "#5B8CFF", "#FFC76B", "#FF9BB0"][i % 5];
+// D-149: sin morado; colores claros que se leen con texto ink y como puntos en los dos temas
+export const colorPersona = (i: number) => ["#A1A1AA", "#5B8CFF", "#FFC76B", "#2DD4BF", "#F9A8D4"][i % 5];
 export const COLOR_EMPRESA = "#B6FF00";
 
 

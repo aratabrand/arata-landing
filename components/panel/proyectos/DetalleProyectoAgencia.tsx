@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, Check, Clock, History, Plus, Trash2, Wallet } from "lucide-react";
+import { ArrowLeft, Check, Clock, History, Plus, Trash2, Wallet } from "../iconos";
 import { nombreCliente, type DatosFinanzas, type FinProyecto } from "@/lib/panel/finanzas/tipos";
 import { avance, etapas, etiquetaEtapa, type Etapa } from "@/lib/panel/finanzas/procesos";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
@@ -48,7 +48,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brand-soft">{servicio?.nombre ?? "Sin servicio"}</p>
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-fog">{servicio?.nombre ?? "Sin servicio"}</p>
           <h1 className="mt-1 font-display text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.05] tracking-heading text-white">{p.nombre}</h1>
           <p className="mt-1 text-fog">{nombreCliente(cliente)}</p>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
                   <span
                     className={cn(
                       "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold",
-                      e.completa ? "border-lime bg-lime text-ink" : on ? "border-brand bg-brand text-white" : "border-white/12 text-fog-dim",
+                      e.completa ? "border-lime bg-lime text-ink" : on ? "border-white bg-white text-noche" : "border-white/12 text-fog-dim",
                       e.total === 0 && "opacity-40"
                     )}
                   >
@@ -87,7 +87,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
                   </span>
                   <span className={cn("hidden h-px flex-1 sm:block", e.completa ? "bg-lime/60" : "bg-white/10")} aria-hidden />
                 </div>
-                <p className={cn("mt-2 truncate text-xs font-semibold sm:text-sm", on ? "text-white" : e.completa ? "text-lime" : "text-fog")}>{e.label}</p>
+                <p className={cn("mt-2 truncate text-xs font-semibold sm:text-sm", on ? "text-white" : e.completa ? "text-dato" : "text-fog")}>{e.label}</p>
                 <p className="text-[0.68rem] text-fog-dim">{e.total ? `${e.hechas}/${e.total}` : "—"}</p>
               </li>
             );
@@ -150,7 +150,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
               ].map((x) => (
                 <div key={x.k} className="flex justify-between gap-3">
                   <dt className="text-fog-dim">{x.k}</dt>
-                  <dd className={cn("text-right", x.alerta ? "text-[#FF9BB0]" : "text-white")}>{x.v}</dd>
+                  <dd className={cn("text-right", x.alerta ? "text-alerta" : "text-white")}>{x.v}</dd>
                 </div>
               ))}
             </dl>
@@ -163,7 +163,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
               <ul className="mb-3 space-y-2 text-sm">
                 {[...horasPor.entries()].map(([id, h]) => (
                   <li key={id} className="flex justify-between">
-                    <span className="flex items-center gap-2 text-white"><Clock aria-hidden className="h-4 w-4 text-brand-soft" />{nombreDe(id, datos.personas)}</span>
+                    <span className="flex items-center gap-2 text-white"><Clock aria-hidden className="h-4 w-4 text-fog" />{nombreDe(id, datos.personas)}</span>
                     <span className="font-display font-bold text-white">{diasTxt(h)}</span>
                   </li>
                 ))}
@@ -177,14 +177,14 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
               onBorrar={edita ? (id) => borrarTrabajo(id) : undefined}
             />
             {edita && <FormTrabajo proyectoId={p.id} datos={datos} hoy={hoy} tarifa={p.tarifaDia ?? datos.config.tarifaDia} />}
-            <Link href="/panel/finanzas" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-soft hover:text-white">
+            <Link href="/panel/finanzas" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-fog hover:text-white">
               <Wallet aria-hidden className="h-4 w-4" /> Gastos y reparto en Finanzas →
             </Link>
           </Tarjeta>
         </div>
       </div>
 
-      <Tarjeta titulo="Historial" bajada="Quién hizo cada cambio y cuándo" accion={<History aria-hidden className="h-4 w-4 text-brand-soft" />}>
+      <Tarjeta titulo="Historial" bajada="Quién hizo cada cambio y cuándo" accion={<History aria-hidden className="h-4 w-4 text-fog" />}>
         <Historial eventos={historial} vacio="Sin cambios registrados todavía." />
       </Tarjeta>
 

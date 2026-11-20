@@ -91,7 +91,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
         />
       </label>
       {error && (
-        <p role="alert" className="text-sm text-[#FF9BB0]">
+        <p role="alert" className="text-sm text-alerta">
           {error}
         </p>
       )}
@@ -118,7 +118,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
             <input name="clave" type="password" autoComplete="current-password" autoFocus className="pn-input" />
           </label>
           {error && (
-            <p role="alert" className="text-sm text-[#FF9BB0]">
+            <p role="alert" className="text-sm text-alerta">
               {error}
             </p>
           )}
@@ -194,7 +194,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
               setCodigo("");
               setError("");
             }}
-            className="w-full text-center text-xs text-brand-soft hover:text-white"
+            className="w-full text-center text-xs text-fog hover:text-white"
           >
             {usarRespaldo ? "Usar la app de autenticación" : "No tengo el celular: usar un código de respaldo"}
           </button>

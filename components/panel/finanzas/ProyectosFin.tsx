@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { CalendarDays, Lock, Plus, Receipt, Trash2 } from "lucide-react";
+import { CalendarDays, Lock, Plus, Receipt, Trash2 } from "../iconos";
 import { EMPRESA, HORAS_POR_DIA, actividades, categoriasGasto, categoriasServicio, nombreCliente, type DatosFinanzas, type EstadoProyecto, type FinProyecto, type RegistroTrabajo } from "@/lib/panel/finanzas/tipos";
 import { calcularProyecto, reglasActuales, textoDias } from "@/lib/panel/finanzas/calculo";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
@@ -111,7 +111,7 @@ export default function ProyectosFin({ datos, hoy }: { datos: DatosFinanzas; hoy
                       </span>
                       <span>
                         <span className="block text-[0.68rem] text-fog-dim">Ganancia</span>
-                        <span className={cn("font-display font-bold", r.ganancia < 0 ? "text-[#FF9BB0]" : "text-lime")}>{pesos(r.ganancia)}</span>
+                        <span className={cn("font-display font-bold", r.ganancia < 0 ? "text-alerta" : "text-dato")}>{pesos(r.ganancia)}</span>
                       </span>
                     </span>
                   </button>
@@ -195,7 +195,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
         </Campo>
       ) : (
         <p className="flex items-center gap-2 text-xs text-fog-dim">
-          <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Valor del día: {pesos(p?.tarifaDia ?? datos.config.tarifaDia)} (solo Sergio lo cambia).
+          <Lock aria-hidden className="h-3.5 w-3.5 text-fog" /> Valor del día: {pesos(p?.tarifaDia ?? datos.config.tarifaDia)} (solo Sergio lo cambia).
         </p>
       )}
       <Campo etiqueta="Fecha de entrega prometida" obligatorio={false} ayuda="Para avisar si el proyecto va tarde (2 días antes, el día y si se pasa).">
@@ -220,7 +220,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
       )}
       {estado === "cerrado" && !p?.repartoCongelado && (
         <p className="flex items-start gap-2 rounded-frame border border-white/8 bg-surface-1 p-3 text-xs text-fog">
-          <Lock aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-soft" />
+          <Lock aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-fog" />
           Al cerrar, el proyecto guarda su valor del día y quiénes reciben parte igual. Si después cambia el reparto o el equipo, este proyecto no cambia.
         </p>
       )}
@@ -293,7 +293,7 @@ function QuienTrabajo({
   };
 
   return (
-    <section className="space-y-3 rounded-frame border border-brand/40 bg-brand/[0.06] p-3 sm:p-4">
+    <section className="space-y-3 rounded-frame border border-white/15 bg-white/[0.03] p-3 sm:p-4">
       <div>
         <h3 className="text-sm font-semibold text-white">¿Quién trabajó?</h3>
         <p className="text-xs text-fog-dim">Persona, área y días (1 día = 8 h, a {pesos(r.tarifaDia)}). Se pagan antes de repartir por partes iguales.</p>
@@ -314,7 +314,7 @@ function QuienTrabajo({
             <li key={n.clave} className="flex items-center gap-2 px-3 py-2 text-sm">
               <span className="min-w-0 flex-1 text-white">
                 {nombre(n.personaId)} <span className="text-fog">· {n.actividad} · {textoDias(Number(n.dias.replace(",", ".")))}</span>
-                <span className="ml-1.5 text-[0.68rem] text-lime">nuevo</span>
+                <span className="ml-1.5 text-[0.68rem] text-dato">nuevo</span>
               </span>
               <span className="text-xs tabular-nums text-fog">{pesos(Math.round(Number(n.dias.replace(",", ".")) * r.tarifaDia))}</span>
               <button type="button" aria-label={`Quitar ${nombre(n.personaId)} · ${n.actividad}`} onClick={() => setNuevas((l) => l.filter((x) => x.clave !== n.clave))} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
@@ -355,7 +355,7 @@ function QuienTrabajo({
         <div className="rounded-frame border border-white/8 bg-surface-1 p-3 text-xs">
           <p className="mb-1.5 font-semibold text-white">Así queda el reparto</p>
           {r.perdida ? (
-            <p className="text-[#FF9BB0]">El proyecto da pérdida: no se reparte y la absorbe Arata.</p>
+            <p className="text-alerta">El proyecto da pérdida: no se reparte y la absorbe Arata.</p>
           ) : (
             <ul className="flex flex-wrap gap-x-4 gap-y-1 text-fog">
               {r.personas
@@ -366,11 +366,11 @@ function QuienTrabajo({
                   </li>
                 ))}
               <li>
-                Arata <strong className="tabular-nums text-lime">{pesos(r.empresa)}</strong>
+                Arata <strong className="tabular-nums text-dato">{pesos(r.empresa)}</strong>
               </li>
             </ul>
           )}
-          {r.recortado && <p className="mt-1 text-[#FFC76B]">Los días cuestan más que la ganancia: se pagan en proporción.</p>}
+          {r.recortado && <p className="mt-1 text-ambar">Los días cuestan más que la ganancia: se pagan en proporción.</p>}
         </div>
       )}
     </section>
@@ -403,7 +403,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
         {[
           { k: "Valor", v: pesos(r.ingreso) },
           { k: "Gastos", v: pesos(r.gastos) },
-          { k: "Ganancia", v: pesos(r.ganancia), c: r.ganancia < 0 ? "text-[#FF9BB0]" : "text-lime" },
+          { k: "Ganancia", v: pesos(r.ganancia), c: r.ganancia < 0 ? "text-alerta" : "text-dato" },
         ].map((x) => (
           <div key={x.k} className="rounded-frame border border-white/8 bg-surface-1 p-3">
             <dt className="text-[0.7rem] text-fog-dim">{x.k}</dt>
@@ -416,7 +416,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
       <section>
         <h3 className="mb-2 text-sm font-semibold text-white">Reparto de la ganancia</h3>
         {r.perdida ? (
-          <p className="text-sm text-[#FF9BB0]">Este proyecto da pérdida ({pesos(r.ganancia)}): no se reparte y la absorbe la empresa.</p>
+          <p className="text-sm text-alerta">Este proyecto da pérdida ({pesos(r.ganancia)}): no se reparte y la absorbe la empresa.</p>
         ) : r.ganancia === 0 ? (
           <p className="text-sm text-fog">Sin ganancia todavía: agrega el valor del proyecto.</p>
         ) : (
@@ -432,7 +432,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
               </div>
             </dl>
             {r.recortado && (
-              <p className="mb-3 text-xs text-[#FFC76B]">
+              <p className="mb-3 text-xs text-ambar">
                 Los días ({pesos(r.pagoDiasCompleto)}) cuestan más que la ganancia: se pagan en proporción hasta {pesos(r.ganancia)} y no hay parte igual.
               </p>
             )}
@@ -473,7 +473,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
                   </td>
                   <td />
                   <td />
-                  <td className="py-2 text-right font-display font-bold text-lime">{pesos(r.empresa)}</td>
+                  <td className="py-2 text-right font-display font-bold text-dato">{pesos(r.empresa)}</td>
                 </tr>
               </tbody>
             </table>
@@ -481,13 +481,13 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
         )}
         {p.repartoCongelado && (
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-fog-dim">
-            <Lock aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Calculado con el valor del día ({pesos(r.tarifaDia)}) y las {r.numPartes} partes del cierre.
+            <Lock aria-hidden className="h-3.5 w-3.5 text-fog" /> Calculado con el valor del día ({pesos(r.tarifaDia)}) y las {r.numPartes} partes del cierre.
             {datos.esDueno && congeladoDistinto && (
               <button
                 type="button"
                 disabled={acc.pendiente}
                 onClick={() => window.confirm("¿Recalcular este proyecto con el reparto de hoy?") && acc.correr(() => aplicarReglasActuales(p.id))}
-                className="font-semibold text-brand-soft hover:text-white"
+                className="font-semibold text-fog hover:text-white"
               >
                 Usar el reparto de hoy
               </button>
@@ -500,7 +500,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
       {/* Días trabajados: quién hizo qué */}
       <section>
         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
-          <CalendarDays aria-hidden className="h-4 w-4 text-brand-soft" /> Quién trabajó
+          <CalendarDays aria-hidden className="h-4 w-4 text-fog" /> Quién trabajó
         </h3>
         <p className="mb-2 text-xs text-fog-dim">Días de {HORAS_POR_DIA} horas a {pesos(r.tarifaDia)}. Se pagan antes de repartir por partes iguales.</p>
         <Lista
@@ -519,7 +519,7 @@ function DetalleProyecto({ p, datos, hoy, onBorrado }: { p: FinProyecto; datos: 
       {/* Gastos */}
       <section>
         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
-          <Receipt aria-hidden className="h-4 w-4 text-brand-soft" /> Gastos del proyecto
+          <Receipt aria-hidden className="h-4 w-4 text-fog" /> Gastos del proyecto
         </h3>
         <Lista
           vacio="Sin gastos registrados."
@@ -756,8 +756,8 @@ function SelectorCliente({ datos, valor, onCambio }: { datos: DatosFinanzas; val
         </select>
       </Campo>
       {creando && (
-        <div className="space-y-2 rounded-frame border border-brand/40 bg-brand/5 p-3">
-          <p className="text-xs font-semibold text-brand-soft">Cliente nuevo (queda guardado en Clientes)</p>
+        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+          <p className="text-xs font-semibold text-fog">Cliente nuevo (queda guardado en Clientes)</p>
           <div className="grid grid-cols-2 gap-2">
             <Campo etiqueta="Nombre de la persona *">
               <input maxLength={80} autoComplete="off" value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: mascaraNombre(e.target.value) })} className="pn-input" />
@@ -826,8 +826,8 @@ function SelectorServicio({ datos, valor, onCambio }: { datos: DatosFinanzas; va
         </select>
       </Campo>
       {creando && (
-        <div className="space-y-2 rounded-frame border border-brand/40 bg-brand/5 p-3">
-          <p className="text-xs font-semibold text-brand-soft">Servicio nuevo (queda en la lista para todos los proyectos)</p>
+        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+          <p className="text-xs font-semibold text-fog">Servicio nuevo (queda en la lista para todos los proyectos)</p>
           <div className="grid grid-cols-[1.4fr_1fr] gap-2">
             <Campo etiqueta="Nombre del servicio *">
               <input maxLength={80} value={nuevo.nombre} onChange={(e) => setNuevo({ ...nuevo, nombre: mascaraNombre(e.target.value) })} className="pn-input" />
@@ -891,7 +891,7 @@ function ListaServicios({ datos }: { datos: DatosFinanzas }) {
                 </>
               ) : (
                 <>
-                  <button type="button" onClick={() => (setEditando(x.id), setNombre(x.nombre))} className="text-xs font-semibold text-brand-soft hover:text-white">
+                  <button type="button" onClick={() => (setEditando(x.id), setNombre(x.nombre))} className="text-xs font-semibold text-fog hover:text-white">
                     Renombrar
                   </button>
                   <button
@@ -903,7 +903,7 @@ function ListaServicios({ datos }: { datos: DatosFinanzas }) {
                     onClick={() => acc.correr(() => guardarServicio({ id: x.id, nombre: x.nombre, categoria: x.categoria, activo: !x.activo }))}
                     className={cn("relative h-6 w-10 shrink-0 rounded-full border transition-colors", x.activo ? "border-brand bg-brand" : "border-white/15 bg-surface-2")}
                   >
-                    <span className={cn("absolute left-0 top-0.5 h-4 w-4 rounded-full transition-transform", x.activo ? "translate-x-[18px] bg-ink" : "translate-x-0.5 bg-fog")} />
+                    <span className={cn("absolute left-0 top-0.5 h-4 w-4 rounded-full transition-transform", x.activo ? "translate-x-[18px] bg-noche" : "translate-x-0.5 bg-fog")} />
                   </button>
                 </>
               ))}

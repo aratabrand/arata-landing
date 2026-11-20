@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
+import { COOKIE_TEMA, FONDO_TEMA, temaDe } from "@/lib/panel/tema";
 // D-135: CSS del panel generado aparte (npm run panel:css) desde styles/panel.src.css.
 import "@/styles/panel.generated.css";
 
@@ -18,12 +20,15 @@ export const metadata: Metadata = {
   icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }], apple: "/panel/icono-180.png" },
 };
 
-export const viewport: Viewport = { themeColor: "#03010B" };
+export const viewport: Viewport = { themeColor: "#020104" };
 
-export default function PanelRaizLayout({ children }: { children: React.ReactNode }) {
+// D-149: tema oscuro (por defecto) o claro, desde la cookie `pn-tema` (interruptor en el menú de la cuenta).
+// El servidor lo pone en data-tema: sin destello al abrir. Colores en styles/panel.src.css.
+export default async function PanelRaizLayout({ children }: { children: React.ReactNode }) {
+  const tema = temaDe((await cookies()).get(COOKIE_TEMA)?.value);
   return (
-    <div className="pn-root min-h-screen bg-ink text-white [color-scheme:dark]">
-      <style>{`html,body{background:#03010B}`}</style>
+    <div className="pn-root min-h-screen bg-noche text-white" data-tema={tema}>
+      <style>{`html,body{background:${FONDO_TEMA[tema]}}`}</style>
       {children}
     </div>
   );

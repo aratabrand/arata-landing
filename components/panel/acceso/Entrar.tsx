@@ -57,7 +57,7 @@ export default function Entrar({ activo }: { activo: boolean }) {
         <input name="clave" type="password" autoComplete="current-password" required className="pn-input" />
       </label>
       {error && (
-        <p role="alert" className="text-sm text-[#FF9BB0]">
+        <p role="alert" className="text-sm text-alerta">
           {error}
         </p>
       )}

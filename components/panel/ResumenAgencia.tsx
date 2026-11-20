@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Calendar, Camera, CircleCheck, Eye, ShoppingBag, TrendingUp, Users } from "lucide-react";
+import { Calendar, Camera, CircleCheck, Eye, ShoppingBag, TrendingUp, Users } from "./iconos";
 import { nombreCliente, type DatosFinanzas } from "@/lib/panel/finanzas/tipos";
 import { etiquetaEtapa } from "@/lib/panel/finanzas/procesos";
 import type { ClienteAgencia } from "@/lib/panel/clientes/datos";
@@ -41,7 +41,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
       />
 
       {vacio && (
-        <div className="rounded-frame border border-brand/30 bg-brand/10 px-4 py-3 text-sm text-brand-soft">
+        <div className="rounded-frame border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-fog">
           Todavía no hay datos. Agrega tus <Link href="/panel/clientes" className="font-semibold text-white underline">clientes</Link> y tus{" "}
           <Link href="/panel/proyectos" className="font-semibold text-white underline">proyectos</Link>, y este resumen se llena solo.
         </div>
@@ -56,15 +56,12 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
         ].map((k) => (
           <article key={k.k} className={cn("v2-card flex flex-col p-4 sm:p-5", k.glass && "v2-glass")}>
             <div className="flex items-center gap-3">
-              <span className="pn-icono">
-                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
-              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
             </div>
             <p className="mt-4 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {k.d !== undefined && <Delta valor={k.d} />}
-              <span className={cn("text-xs", k.alerta ? "text-[#FF9BB0]" : "text-fog-dim")}>{k.n}</span>
+              <span className={cn("text-xs", k.alerta ? "text-alerta" : "text-fog-dim")}>{k.n}</span>
             </div>
           </article>
         ))}
@@ -95,7 +92,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
           <div className="flex items-center gap-5">
             <Anillo key={periodo} valor={r.tasa} max={100} centro={porcentaje(r.tasa, 0)} bajada="compran" />
             <p className="text-sm text-fog">
-              De cada <strong className="text-white">10 clientes</strong>, <strong className="text-lime">{Math.round(r.tasa / 10)}</strong> ya cerraron un proyecto con Arata.
+              De cada <strong className="text-white">10 clientes</strong>, <strong className="text-dato">{Math.round(r.tasa / 10)}</strong> ya cerraron un proyecto con Arata.
             </p>
           </div>
           <div className="mt-6">
@@ -114,7 +111,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
         <Tarjeta
           titulo={vistaProyectos === "proceso" ? "Proyectos en proceso" : "Proyectos terminados"}
           bajada={vistaProyectos === "proceso" ? "Los que se entregan primero arriba" : `${r.terminadosPeriodo} en ${textoPeriodo} · ${r.aTiempo} a tiempo`}
-          accion={<Link href="/panel/proyectos" className="text-xs font-semibold text-brand-soft hover:text-white">Ver todos →</Link>}
+          accion={<Link href="/panel/proyectos" className="text-xs font-semibold text-fog hover:text-white">Ver todos →</Link>}
         >
           <div className="mb-3">
             <Segmentado
@@ -135,7 +132,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
                 {r.terminados.slice(0, 6).map(({ p, entregado, aTiempo }) => (
                   <li key={p.id}>
                     <Link href={`/panel/proyectos/${p.id}`} className="flex items-center gap-3 rounded-frame border border-white/6 bg-surface-2/50 p-3 hover:border-white/16">
-                      <CircleCheck aria-hidden className="h-4 w-4 shrink-0 text-lime" />
+                      <CircleCheck aria-hidden className="h-4 w-4 shrink-0 text-dato" />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium text-white">{p.nombre}</span>
                         <span className="block truncate text-[0.7rem] text-fog-dim">
@@ -164,10 +161,10 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
                     </div>
                     <div className="mt-0.5 flex items-center justify-between gap-2 text-[0.7rem]">
                       <span className="truncate text-fog-dim">{etiquetaEtapa(a.etapaActual, a.entregado)}</span>
-                      {vence !== null && <span className={vence < 0 ? "text-[#FF9BB0]" : "text-fog-dim"}>{vence < 0 ? `venció hace ${-vence} d` : vence === 0 ? "se entrega hoy" : `faltan ${vence} d`}</span>}
+                      {vence !== null && <span className={vence < 0 ? "text-alerta" : "text-fog-dim"}>{vence < 0 ? `venció hace ${-vence} d` : vence === 0 ? "se entrega hoy" : `faltan ${vence} d`}</span>}
                     </div>
                     <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/6">
-                      <div className="h-full origin-left rounded-full bg-brand" style={{ transform: `scaleX(${a.pct / 100})` }} />
+                      <div className="h-full origin-left rounded-full bg-white/70" style={{ transform: `scaleX(${a.pct / 100})` }} />
                     </div>
                   </Link>
                 </li>
@@ -206,7 +203,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
                 const s = datos.servicios.find((x) => x.id === p.servicioId);
                 return (
                   <li key={p.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                    <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
+                    <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
                       {(c?.empresa ?? c?.nombre ?? "?").slice(0, 1).toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -224,11 +221,11 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
         <Tarjeta titulo="Visitas al sitio e Instagram" accion={<Pill>Pendiente</Pill>}>
           <ul className="space-y-3 text-sm text-fog">
             <li className="flex items-start gap-3">
-              <Eye aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+              <Eye aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-fog" />
               <span><strong className="text-white">Visitas de aratasan.com</strong>: se traen de Google Analytics cuando conectemos el flujo de n8n.</span>
             </li>
             <li className="flex items-start gap-3">
-              <Camera aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+              <Camera aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-fog" />
               <span><strong className="text-white">Visualizaciones de @arata.san.web</strong>: se traen de Meta (Instagram) en el mismo flujo.</span>
             </li>
           </ul>
