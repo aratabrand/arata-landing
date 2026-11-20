@@ -404,7 +404,7 @@ export function PriceSection({
       <Container>
         <Reveal>
           <div className="relative mx-auto max-w-3xl v2-destacada rounded-card p-8 text-center sm:p-12">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">
+            <span className="v2-pildora absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold">
               {paquete}
             </span>
             <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">

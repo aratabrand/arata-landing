@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-149) | 1.0 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-150) | 1.1 | 20 nov 2026 | Sergio |
 
 **Es la fuente única para todos los productos de Arata San.** Hoy se aplica a dos productos:
 
@@ -28,7 +28,7 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 |---|---|
 | Morado brillante sobre negro con tinte morado, luces moradas grandes | Es la paleta de casi todas las plantillas de herramientas de IA |
 | Cuadrícula de fondo | Recurso de plantilla |
-| Cuadritos con ícono en cada tarjeta | Lo primero que delata una plantilla; se reemplazan por números o nada |
+| Cuadritos con ícono en cada tarjeta | Lo primero que delata una plantilla; se reemplazan por números o nada. Solo **algunas** tarjetas llevan un ícono SVG propio en grises (§4) |
 | Íconos de Lucide | Los usa casi todo producto hecho con IA; se usa Phosphor en trazo fino |
 | Vidrio borroso, brillos que recorren los botones, sombras de color, grano | "Efectos" que no aportan información |
 | Bloques grandes de morado con texto blanco, tarjetas blancas sobre oscuro, títulos en dos tonos, botones en píldora con círculo | Se probaron y Sergio los descartó (D-137, D-138) |
@@ -53,8 +53,8 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 |---|---|---|
 | `noche` | `#020104` | **Fondo de página**: negro casi neutro, sin tinte morado (D-145) |
 | `canvas` | `#08080A` | Zona de contenido del panel |
-| Tarjeta | blanco al 2 % + borde blanco al 7 % | `.v2-card`: transparente, con un filo de luz arriba (D-146) |
-| Tarjeta destacada | blanco al 4,5 % + borde blanco al 20 % | `.v2-destacada` en el sitio y `.pn-root .v2-glass` en el panel: lo que queremos que elijan (paquete recomendado, primera cifra). Una o dos por vista |
+| Tarjeta | **negra con humo** (D-150): degradado `#0E0E10` → `#060607`, una nube blanca muy suave abajo a la derecha (5,5 %), borde blanco al 13 % y filo de luz arriba | `.v2-card` (sitio). En el panel sigue transparente (blanco 2 %, borde 7 %): es una herramienta de uso diario y lleva muchas tarjetas |
+| Tarjeta destacada | negra con **más humo** (varias nubes blancas abajo, hasta 14 %) y **borde blanco al 42 %** (D-150) | `.v2-destacada` en el sitio (en el panel, `.pn-root .v2-glass`: blanco 4,5 % + borde 20 %): lo que queremos que elijan. Una o dos por vista |
 | `surface-1/2/3` | `#0B0B0D` · `#121215` · `#19191D` (sitio); `#0F0F12` · `#16161A` · `#1D1D22` (panel) | Superficies sólidas: menús, ventanas, botón secundario |
 | Texto | `white` `#FFFFFF` · `fog` `#B4AECB` · `fog-dim` `#8A84A8` | Títulos · párrafos · notas (20:1 · 9,8:1 · 5,9:1) |
 | Alerta / ámbar | `#FF9BB0` · `#FFC76B` | Solo malas noticias / "en revisión" |
@@ -100,7 +100,8 @@ Ambas van auto-hospedadas con `next/font/local` (sin red). Los títulos van en u
 | **Tarjeta** | Transparente (oscuro) / blanca (claro), borde fino, radio 20–24 px | `.v2-card` | `.v2-card` del panel |
 | **Tarjeta destacada** | Un paso más clara, borde más visible, **sin morado** | `.v2-destacada` | `.v2-glass` del panel |
 | **Lista con números** | `01`, `02`… en Funnel Display en vez de íconos | Problema, "Todo lo que trae" | — |
-| **Etiqueta (badge)** | Píldora con borde fino; "en vivo" con punto lima que titila | `Badge` | `Pill` |
+| **Píldora** (badge, etiqueta de sección, "Recomendado", filtros) | Negra con degradado sutil, **borde blanco al 24 %**, texto blanco (`.v2-pildora`, D-150); "en vivo" con punto lima que titila. La etiqueta de sección (`Eyebrow`) es una píldora | `Badge`, `Eyebrow`, `.v2-pildora` | `Pill` |
+| **Íconos de marca** | SVG propio en **grises metálicos con volumen** (capas, tienda, sistema), sin color. **Solo en algunas tarjetas** donde ayudan a distinguir opciones (hoy: paquetes de precio). Nunca en todas | `components/v2/IconosMarca.tsx` | — |
 | **Íconos** | **Phosphor** en trazo `light` (check en `regular`; play/pausa en `fill`). Solo los que cumplen una función: flechas, abrir y cerrar, menú, acciones, estados. **Nunca decorativos** | `components/v2/iconos.tsx` | `components/panel/iconos.tsx` |
 | Campo | 44 px, borde fino, foco morado con halo | `BookingFlow` | `.pn-input` |
 | Interruptor | Encendido en morado (es un botón) | Cookies | Ajustes |
@@ -117,6 +118,7 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 | Líneas | **Líneas verticales** cada 80 px, centradas, blancas al 4,5 %, **continuas en toda la página** (`.v2-fondo`, fijo); se desvanecen a los lados. **Nunca cuadrícula** | No (es una herramienta de trabajo) |
 | Haces de luz | Luces finas que bajan por algunas líneas, a los lados del texto | No |
 | Luces | **Blancas y muy suaves** detrás de algunas secciones (6,5 % al centro) | No |
+| Humo en tarjetas | Sí: nubes blancas muy suaves dentro de las tarjetas (solo gradientes, sin `filter: blur`) | No |
 | Grano, vidrio, sombras de color | No | No |
 
 ---
@@ -167,4 +169,5 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 
 | Versión | Fecha | Qué |
 |---|---|---|
+| 1.1 | 20 nov 2026 | Tarjetas negras con humo y borde gris, píldoras negras con borde, íconos SVG propios en grises solo en algunas tarjetas (D-150) |
 | 1.0 | 20 nov 2026 | Sistema único para el sitio y el panel: fondo `#020104`, tarjetas transparentes, morado solo en botones, lima solo en datos, sin íconos decorativos, Phosphor, líneas verticales con haces (sitio), modo claro del panel (D-145 a D-149) |

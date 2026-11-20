@@ -3,6 +3,7 @@ import { Check } from "./iconos";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
+import { IconoMarca } from "./IconosMarca";
 import { Container, SectionHeader } from "./primitives";
 import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
@@ -21,10 +22,11 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       )}
     >
       {rec && (
-        <span className="absolute -top-3 left-6 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">
+        <span className="v2-pildora absolute -top-3 left-6 px-3 py-1 text-xs font-semibold">
           Recomendado
         </span>
       )}
+      {paquete.icono && <IconoMarca icono={paquete.icono} className="mb-4 h-9 w-9" />}
       <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
       <p className="mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display text-white">
         {paquete.precio}

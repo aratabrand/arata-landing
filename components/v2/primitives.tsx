@@ -21,7 +21,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-white/10 bg-surface-1/80 px-3 py-1.5 text-xs font-medium text-fog",
+        "v2-pildora px-3 py-1.5 text-xs font-medium", // D-150: píldora negra con borde gris claro
         className
       )}
     >
@@ -36,11 +36,11 @@ export function Badge({
   );
 }
 
-/** Etiqueta pequeña en mayúsculas (eyebrow). */
+/** Etiqueta de sección (eyebrow). D-150: píldora negra con borde, como en la referencia ("Pricing"). */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className={cn("text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog", className)}>
-      {children}
+    <p className={cn("w-fit", className)}>
+      <span className="v2-pildora px-3 py-1 text-xs font-medium">{children}</span>
     </p>
   );
 }

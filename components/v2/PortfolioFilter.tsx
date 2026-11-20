@@ -30,7 +30,7 @@ export default function PortfolioFilter({
               onClick={() => setActivo(f.tipo)}
               className={cn(
                 "inline-flex h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors",
-                on ? "border-white bg-white text-ink" : "border-white/10 bg-surface-1 text-fog hover:text-white"
+                on ? "border-white bg-white text-ink" : "border-white/20 bg-gradient-to-b from-[#151517] to-[#070708] text-fog hover:border-white/35 hover:text-white"
               )}
             >
               {f.label}

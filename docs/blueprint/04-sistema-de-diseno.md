@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-149) | 0.8 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-150) | 0.9 | 20 nov 2026 | Sergio |
 
 > **La fuente única es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema de Arata San para el sitio, el panel y todo producto nuevo, D-149). Este documento queda como el detalle del **sitio**: componentes, historial y reglas de velocidad.
 >
@@ -134,7 +134,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
 | Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
-| Tarjeta base | **Transparente** (`.v2-card`, D-146): blanco al 2 %, borde fino de 1 px, filo de luz y radio 24 px; luz blanca suave que sigue el cursor en hover (`Spotlight`) | P1 |
+| Tarjeta base | **Negra con humo** (`.v2-card`, D-150): degradado `#0E0E10`→`#060607`, nube blanca suave abajo a la derecha, borde blanco 13 %, radio 24 px; luz blanca que sigue el cursor (`Spotlight`). La usan también las cifras del hero, el bento de servicios y las garantías | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
@@ -302,6 +302,7 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | ✅ Vigente |
 | D-149 (20 nov) | **Sistema único** para sitio y panel (`docs/sistema-de-diseno.md`); el panel adopta el sistema y suma modo claro | ✅ Vigente |
 | D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
 | D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
