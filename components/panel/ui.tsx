@@ -90,7 +90,7 @@ export function Pill({ children, tono = "neutro", className }: { children: React
   const tonos = {
     lima: "border-lime/30 bg-lime/10 text-dato",
     morado: "border-white/20 bg-white/[0.06] text-fog", // D-149: sin morado (nombre se conserva)
-    neutro: "border-white/10 bg-white/5 text-fog",
+    neutro: "pn-pildora text-fog", // D-153: píldora del sistema (negra con borde; blanca en claro)
     alerta: "border-alerta-fuerte/30 bg-alerta-fuerte/10 text-alerta",
   } as const;
   return (

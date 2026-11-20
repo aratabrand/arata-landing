@@ -109,7 +109,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
                   onClick={() => setFiltro(e.valor)}
                   className={cn(
                     "h-9 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors",
-                    filtro === e.valor ? "border-brand bg-brand/20 text-white" : "border-white/10 text-fog hover:text-white"
+                    filtro === e.valor ? "border-brand bg-brand/20 text-white" : "pn-pildora text-fog hover:text-white"
                   )}
                 >
                   {e.label} <span className="ml-1 text-fog-dim">{n}</span>
