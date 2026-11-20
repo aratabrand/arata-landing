@@ -24,7 +24,7 @@ El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia co
 | Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | blanco 4,5 % + borde blanco 20 % | blanca + borde tinta 22 % |
 | Superficies sólidas | `surface-1/2/3` | `#0F0F12` · `#16161A` · `#1D1D22` | `#FFF` · `#F3F3F6` · `#FFF` |
 | Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` | `#03010B` / `#52505C` / `#686572` |
-| **Datos** (sube, completado, nuevo) | `dato` (texto) · `lime` (fondo con texto ink) | `#B6FF00` | texto `#4D7C0F`; fondo sigue lima |
+| **Datos** (sube, completado, nuevo) | `dato` (texto) · `lime` (relleno con texto ink) | `#B6FF00` | **morado** (D-151): texto `#6D45F0`, relleno `#9B7BFF` |
 | **Botones y lo que actúa como botón** | `brand` | `#7D53FF` | igual |
 | Malas noticias | `alerta` · `alerta-fuerte` | `#FF9BB0` · `#FF6B8B` | `#BE123C` · `#E11D48` |
 | "En revisión" | `ambar` | `#FFC76B` | `#A16207` |
@@ -32,7 +32,7 @@ El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia co
 Reglas:
 - **Todos los colores que cambian con el tema son variables** (canales RGB en `styles/panel.src.css`, bloque "Temas del panel"), y `tailwind.panel.config.ts` los usa. Por eso `text-white`, `bg-white/5` y `border-white/10` se vuelven tinta en claro. **Nunca escribir colores fijos** (`text-[#…]`, `rgba(255,255,255,…)`) en un componente del panel: usar los tokens o `rgb(var(--pn-…))` en SVG y estilos en línea. Fijos en los dos temas: `brand`, `lime` como fondo, `ink` y `blanco` (texto sobre morado).
 - **El morado es solo para botones** y lo que actúa como botón: botón principal (`.pn-primario`), filtro y pestaña activa, interruptor encendido, marca de la opción del menú, foco de los campos. Nunca en tarjetas, avatares, barras de avance, gráficos ni íconos.
-- **El lima solo destaca un dato.** En claro, como texto, va en verde oscuro (`text-dato`).
+- **El lima solo destaca un dato.** En claro el dato va en **morado** (D-151, decisión de Sergio): `text-dato` `#6D45F0` y `lime` `#9B7BFF` (los dos son variables, cambian solos con el tema).
 - **Sin íconos decorativos**: las cifras van sin cuadrito de ícono (`.pn-icono` ya no se usa). Íconos con **Phosphor `light`** desde `components/panel/iconos.tsx` (D-149; antes Lucide).
 - Sin luces de color, sin desenfoque en las tarjetas y sin brillos.
 - En gráficos, la serie va en **blanco** (tinta en claro) y el lima marca el dato a mirar. Ver §5.
@@ -135,4 +135,4 @@ Tono: tú, frases cortas, sin signos de admiración de más. Los mensajes de err
 - Foco visible lima en todo (regla global) y halo morado en campos.
 - Todo lo que se hace arrastrando se puede hacer con botones (flechas en proyectos).
 - Selectores con `role="radiogroup"/"radio"`, interruptor con `role="switch"`, casillas con `role="checkbox"`, pestañas con `role="tab"`.
-- Contraste AA o más en los **dos temas**: textos en `white`, `fog` o `fog-dim`; en claro el lima de texto pasa a `dato` (#4D7C0F, 5,2:1).
+- Contraste AA o más en los **dos temas**: textos en `white`, `fog` o `fog-dim`; en claro el dato pasa a morado (`#6D45F0`, 5,6:1; rellenos `#9B7BFF` con texto ink, 6,4:1).

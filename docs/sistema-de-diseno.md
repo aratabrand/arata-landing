@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-150) | 1.1 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-151) | 1.2 | 20 nov 2026 | Sergio |
 
 **Es la fuente única para todos los productos de Arata San.** Hoy se aplica a dos productos:
 
@@ -68,7 +68,7 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 | Tarjeta | blanca + borde tinta al 8 % + sombra muy suave | Se separa del fondo sin bloques de color |
 | Tarjeta destacada | blanca + borde tinta al 22 % | |
 | Texto | `ink` `#03010B` · `#52505C` · `#686572` | 20:1 · 7,8:1 · 5,6:1 sobre blanco |
-| Dato (lima) | `#4D7C0F` (verde oscuro) | El lima `#B6FF00` no se lee como texto sobre blanco; en claro las cifras van en este verde (5,2:1). Como fondo de una etiqueta sigue el lima con texto `ink` |
+| Dato | **Morado** (D-151, decisión de Sergio: no verde) | Texto `#6D45F0` (5,6:1 sobre blanco); rellenos (barras, etiquetas) `#9B7BFF` con texto `ink` encima (6,4:1). El lima `#B6FF00` no se lee sobre blanco. En claro el morado marca botones **y** datos; los distingue la forma (un botón es un botón) |
 | Alerta / ámbar | `#BE123C` · `#A16207` | |
 | Botón principal | Igual que en oscuro: morado con texto blanco | |
 
@@ -169,5 +169,6 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 
 | Versión | Fecha | Qué |
 |---|---|---|
+| 1.2 | 20 nov 2026 | En el modo claro del panel el dato va en morado, no en verde (D-151) |
 | 1.1 | 20 nov 2026 | Tarjetas negras con humo y borde gris, píldoras negras con borde, íconos SVG propios en grises solo en algunas tarjetas (D-150) |
 | 1.0 | 20 nov 2026 | Sistema único para el sitio y el panel: fondo `#020104`, tarjetas transparentes, morado solo en botones, lima solo en datos, sin íconos decorativos, Phosphor, líneas verticales con haces (sitio), modo claro del panel (D-145 a D-149) |
