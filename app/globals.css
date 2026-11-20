@@ -137,6 +137,28 @@
     .v2-haz { display: none; }
   }
 
+  /* Fondo continuo de toda la página (D-147): una línea vertical de 1 px cada 80 px, centradas,
+     blancas al 4,5 %; se desvanecen hacia los lados. Fijo detrás del contenido. */
+  .v2-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background-image: linear-gradient(
+      90deg,
+      transparent calc(50% - 0.5px),
+      rgba(255, 255, 255, 0.045) calc(50% - 0.5px),
+      rgba(255, 255, 255, 0.045) calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    );
+    background-size: 80px 100%;
+    background-repeat: repeat-x;
+    background-position: center top;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
   /* Grano muy fino sobre toda la página (D-145). Imagen SVG en línea (sin red), fija y sin
      animación: el navegador la pinta una vez. No recibe clics. */
   .v2-grano {

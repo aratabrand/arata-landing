@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, Check, MessageCircle } from "lucide-react";
+import { ArrowLeft, Check, MessageCircle } from "./iconos";
 import { agendar as c, calLinks, type TipoAgenda } from "@/content/agendar";
 import { site } from "@/lib/site";
 import { medir } from "@/lib/medir";

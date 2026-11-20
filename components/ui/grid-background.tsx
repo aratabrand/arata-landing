@@ -2,6 +2,8 @@ import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 // Fondo de líneas verticales (ref. 21st.dev "grid-background"), adaptado a Arata San (D-071, D-145):
+// - D-147: las líneas ya las dibuja el fondo continuo de la página (.v2-fondo); este componente pone
+//   la luz blanca suave de cada sección (con `lineas` vuelve a dibujarlas, solo para muestras).
 // - D-145: SOLO líneas verticales (Sergio no quiere cuadrícula). La variante "rejilla" ya no pinta
 //   cuadros: se dibuja igual que "lineas" (se acepta para no tocar cada sección).
 // - Líneas blancas muy tenues cada 80 px, centradas en la sección, una franja y una luz BLANCAS muy
@@ -26,6 +28,8 @@ export type GridBackgroundProps = {
   glow?: number;
   /** Haces de luz que bajan por las líneas (posición relativa al centro, en líneas). */
   haces?: number[];
+  /** Dibujar también las líneas (solo para muestras: en el sitio las pone el fondo continuo). */
+  lineas?: boolean;
   /** Máscara propia (por defecto, elipse centrada). */
   mascara?: string;
   className?: string;
@@ -37,6 +41,7 @@ export function GridBackground({
   orb = "50% 55%",
   glow = 0.08,
   haces = [],
+  lineas = false,
   mascara,
   className,
 }: GridBackgroundProps) {
@@ -47,15 +52,18 @@ export function GridBackground({
 
   // Una línea de 1 px en el centro de cada franja de 80 px; las franjas se centran en la sección,
   // así siempre hay una línea justo en el medio y los haces caen exactamente sobre una línea.
+  // D-147: las líneas las dibuja el fondo continuo de la página (.v2-fondo en app/(v2)/layout.tsx).
+  // Aquí solo va la luz blanca suave de la sección (y las líneas si se pide `lineas`, p. ej. en /sistema).
+  const capas = [
+    `linear-gradient(90deg, transparent 30%, rgba(255,255,255,${+(glow * 0.25).toFixed(3)}) 50%, transparent 70%)`,
+    luz,
+  ];
+  if (lineas) capas.splice(1, 0, `linear-gradient(90deg, transparent calc(50% - 0.5px), ${l} calc(50% - 0.5px), ${l} calc(50% + 0.5px), transparent calc(50% + 0.5px))`);
   const style: CSSProperties = {
-    backgroundImage: [
-      `linear-gradient(90deg, transparent 30%, rgba(255,255,255,${+(glow * 0.25).toFixed(3)}) 50%, transparent 70%)`,
-      `linear-gradient(90deg, transparent calc(50% - 0.5px), ${l} calc(50% - 0.5px), ${l} calc(50% + 0.5px), transparent calc(50% + 0.5px))`,
-      luz,
-    ].join(","),
-    backgroundSize: `100% 100%, ${paso}px 100%, 100% 100%`,
-    backgroundRepeat: "no-repeat, repeat-x, no-repeat",
-    backgroundPosition: "0 0, center top, 0 0",
+    backgroundImage: capas.join(","),
+    backgroundSize: lineas ? `100% 100%, ${paso}px 100%, 100% 100%` : "100% 100%, 100% 100%",
+    backgroundRepeat: lineas ? "no-repeat, repeat-x, no-repeat" : "no-repeat, no-repeat",
+    backgroundPosition: lineas ? "0 0, center top, 0 0" : "0 0, 0 0",
   };
 
   // Radios = 50 % del alto y ~55 % del ancho: llega a transparente justo en los bordes (sin cortes).

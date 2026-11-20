@@ -16,10 +16,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
     <section className="relative isolate overflow-hidden pt-28 sm:pt-32">
       <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
       {/* D-145: solo líneas verticales (sin cuadrícula) y haces de luz que bajan por algunas */}
-      <GridBackground
-        haces={[-7, -5, 5, 7]}
-        mascara="radial-gradient(ellipse 75% 70% at 50% 0%, #000 35%, transparent 100%)"
-      />
+      <GridBackground mascara="radial-gradient(ellipse 75% 70% at 50% 0%, #000 35%, transparent 100%)" />
 
       <Container className="relative text-center">
         <div className="animate-fade-up">

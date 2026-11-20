@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Cookie, X } from "lucide-react";
+import { X } from "@/components/v2/iconos";
 import { cookies as t } from "@/content/cookies";
 import {
   CLARITY_ACTIVO,
@@ -65,10 +65,7 @@ export default function CookieBanner() {
           style={{ animationDelay: `${retraso}s` }}
         >
           <div className="rounded-[22px] border border-white/10 bg-surface-1/95 p-5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl">
-            <div className="flex items-start gap-3">
-              <span aria-hidden className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.06] text-fog">
-                <Cookie className="h-4 w-4" />
-              </span>
+            <div>
               <div>
                 <h2 id="cookies-titulo" className="font-display text-base font-bold text-white">
                   {t.titulo}

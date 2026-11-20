@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronRight } from "./iconos";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import ProjectPreview from "./ProjectPreview";

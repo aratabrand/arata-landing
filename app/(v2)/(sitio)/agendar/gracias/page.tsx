@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check } from "@/components/v2/iconos";
 import { Container, Glow } from "@/components/v2/primitives";
 import TrackOnMount from "@/components/v2/TrackOnMount";
 import { gracias as c } from "@/content/agendar";

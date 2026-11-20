@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check } from "./iconos";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";

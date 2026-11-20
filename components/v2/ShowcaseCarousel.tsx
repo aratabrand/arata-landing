@@ -3,7 +3,7 @@
 import Link from "next/link";
 import HoverCapsule from "./HoverCapsule";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./iconos";
 import { cn } from "@/lib/utils";
 
 // Parte interactiva del portafolio destacado (ref. 21st.dev captura 01).

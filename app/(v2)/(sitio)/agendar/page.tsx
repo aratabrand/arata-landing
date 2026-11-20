@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Gauge, Users } from "lucide-react";
 import BookingFlow from "@/components/v2/BookingFlow";
 import { Badge, Container, Glow } from "@/components/v2/primitives";
 import { agendar as c } from "@/content/agendar";
@@ -40,14 +39,12 @@ export default function Agendar() {
                 ))}
               </ol>
             </div>
-            <div className="v2-glass flex gap-3 p-5" style={{ ["--glow" as string]: "rgba(182,255,0,0.12)" }}>
-              <Gauge aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-lime" />
+            <div className="v2-glass p-5">
               <p className="text-sm leading-relaxed text-fog">
                 <strong className="font-semibold text-white">{c.lateral.garantiaFuerte}</strong> · {c.lateral.garantia}
               </p>
             </div>
-            <div className="flex items-center gap-3 px-1">
-              <Users aria-hidden className="h-4 w-4 text-fog-dim" />
+            <div className="px-1">
               <Badge live>{c.lateral.cupos}</Badge>
             </div>
           </aside>

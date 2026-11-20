@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown, ChevronUp, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Pause, Play, Volume2, VolumeX } from "./iconos";
 import { medir } from "@/lib/medir";
 import type { Testimonio } from "@/content/casos-exito";
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "@/components/v2/iconos";
 import Ring from "@/components/Ring";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";

@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./iconos";
 import { onInView } from "@/lib/inview";
 import { servicios } from "@/content/inicio";
 

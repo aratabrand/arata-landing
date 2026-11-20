@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { CalendarDays } from "lucide-react";
 import Logo from "@/components/Logo";
 import Ring from "@/components/Ring";
 import { Button } from "@/components/v2/Button";
@@ -144,11 +143,8 @@ export default function SistemaV2() {
           <Bloque id="b-panel" titulo="Tarjetas transparentes · morado solo en botones (D-146)">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="v2-card p-6">
-                <span className="v2-icono h-9 w-9">
-                  <CalendarDays aria-hidden className="h-4 w-4" />
-                </span>
-                <p className="mt-4 font-display text-2xl font-bold text-white">5 días</p>
-                <p className="mt-1 text-sm text-fog">.v2-card + .v2-icono: tarjeta transparente y cuadrito con ícono blanco.</p>
+                <p className="font-display text-2xl font-bold text-white">5 días</p>
+                <p className="mt-1 text-sm text-fog">.v2-card: tarjeta transparente. Sin íconos decorativos (D-147).</p>
               </div>
               <div className="v2-destacada rounded-card p-6">
                 <p className="text-xs font-semibold text-fog">Destacada</p>
@@ -243,15 +239,15 @@ export default function SistemaV2() {
           <Bloque id="b-rejilla" titulo="Fondo de líneas verticales · sin cuadrícula (D-145)">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
-                <GridBackground />
+                <GridBackground lineas />
                 <p className="text-sm text-fog">
-                  <span className="font-semibold text-white">Líneas</span> · una cada 80 px, centradas; Problema, Precios y más
+                  <span className="font-semibold text-white">Líneas</span> · una cada 80 px, centradas; fondo continuo de toda la página (D-147)
                 </p>
               </div>
               <div className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
-                <GridBackground haces={[-2, 1, 3]} />
+                <GridBackground lineas haces={[-2, 1, 3]} />
                 <p className="text-sm text-fog">
-                  <span className="font-semibold text-white">Líneas con haces</span> · luces que bajan; hero y Cómo trabajamos
+                  <span className="font-semibold text-white">Líneas con haces</span> · luces que bajan por algunas líneas, a los lados del texto
                 </p>
               </div>
             </div>
