@@ -56,7 +56,7 @@ export default function ProyectosFin({ datos, hoy }: { datos: DatosFinanzas; hoy
               onClick={() => setFiltro(e.valor)}
               className={cn(
                 "h-9 shrink-0 rounded-full border px-3.5 text-xs font-semibold",
-                filtro === e.valor ? "border-brand bg-brand/20 text-white" : "pn-pildora text-fog hover:text-white"
+                filtro === e.valor ? "border-brand bg-brand/20 text-white" : "pn-pildora hover:text-white"
               )}
             >
               {e.label} <span className="ml-1 text-fog-dim">{e.valor === "todos" ? datos.proyectos.length : datos.proyectos.filter((p) => p.estado === e.valor).length}</span>

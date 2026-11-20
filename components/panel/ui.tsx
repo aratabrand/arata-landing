@@ -89,8 +89,8 @@ export function Delta({ valor, className }: { valor: number | null; className?: 
 export function Pill({ children, tono = "neutro", className }: { children: ReactNode; tono?: "lima" | "morado" | "neutro" | "alerta"; className?: string }) {
   const tonos = {
     lima: "border-lime/30 bg-lime/10 text-dato",
-    morado: "border-white/20 bg-white/[0.06] text-fog", // D-149: sin morado (nombre se conserva)
-    neutro: "pn-pildora text-fog", // D-153: píldora del sistema (negra con borde; blanca en claro)
+    morado: "pn-pildora", // D-149: sin morado (el nombre se conserva); D-154: igual a la píldora del sistema
+    neutro: "pn-pildora", // D-153/D-154: píldora del sistema (en oscuro, verde de Arata; en claro, blanca)
     alerta: "border-alerta-fuerte/30 bg-alerta-fuerte/10 text-alerta",
   } as const;
   return (

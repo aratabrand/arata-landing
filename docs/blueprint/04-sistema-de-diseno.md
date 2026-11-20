@@ -302,6 +302,7 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-154 (20 nov) | **Variante del panel:** en oscuro las píldoras van en el verde de Arata (borde y texto lima). El sitio sigue con la píldora gris | ✅ Vigente |
 | D-153 (20 nov) | El **panel adopta las piezas del sitio**: tarjetas con humo, píldoras con borde e íconos de marca en las tarjetas de proyecto (versión blanca en el modo claro) | ✅ Vigente |
 | D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | ✅ Vigente |
 | D-149 (20 nov) | **Sistema único** para sitio y panel (`docs/sistema-de-diseno.md`); el panel adopta el sistema y suma modo claro | ✅ Vigente |
@@ -319,7 +320,7 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | `.v2-primario` | `.pn-primario` (iguales: si cambia uno, cambia el otro) |
 | `.v2-card` (negra con humo) | `.pn-root .v2-card` (con humo en oscuro, blanca en claro; `--pn-tarjeta`) |
 | `.v2-destacada` | `.pn-root .v2-glass` (`--pn-destacada`) |
-| `.v2-pildora` | `.pn-pildora` (`--pn-pildora`) |
+| `.v2-pildora` (gris) | `.pn-pildora` (`--pn-pildora`; en oscuro va en lima, D-154: única diferencia a propósito) |
 | `components/v2/IconosMarca.tsx` | `components/panel/IconosMarca.tsx` (ids `pn-im-*`) |
 | `components/v2/iconos.tsx` (Phosphor `light`) | `components/panel/iconos.tsx` (Phosphor `light`) |
 

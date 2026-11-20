@@ -144,7 +144,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
                 type="button"
                 aria-pressed={filtro === f.v}
                 onClick={() => setFiltro(f.v)}
-                className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "pn-pildora text-fog hover:text-white")}
+                className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "pn-pildora hover:text-white")}
               >
                 {f.l}
               </button>

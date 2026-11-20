@@ -38,8 +38,10 @@
   --pn-destacada: radial-gradient(38% 30% at 80% 84%, rgb(255 255 255 / 0.14), transparent 70%), radial-gradient(48% 36% at 96% 100%, rgb(255 255 255 / 0.1), transparent 70%), radial-gradient(34% 28% at 62% 98%, rgb(255 255 255 / 0.06), transparent 70%), linear-gradient(180deg, #111113 0%, #060607 100%);
   --pn-destacada-borde: rgb(255 255 255 / 0.42);
   --pn-pildora: linear-gradient(180deg, #151517 0%, #070708 100%);
-  --pn-pildora-borde: rgb(255 255 255 / 0.24);
-  --pn-pildora-sombra: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  /* D-154: en oscuro la píldora va en el verde de Arata (borde y texto lima) */
+  --pn-pildora-borde: rgb(182 255 0 / 0.4);
+  --pn-pildora-sombra: inset 0 1px 0 rgb(182 255 0 / 0.1);
+  --pn-pildora-texto: 182 255 0;
   --pn-campo: #0b0b0e;
   color-scheme: dark;
 }
@@ -68,6 +70,7 @@
   --pn-pildora: linear-gradient(180deg, #ffffff 0%, #f3f3f6 100%);
   --pn-pildora-borde: rgb(3 1 11 / 0.16);
   --pn-pildora-sombra: 0 1px 1px rgb(3 1 11 / 0.04);
+  --pn-pildora-texto: 82 80 92; /* en claro sigue neutra: el lima no va como texto sobre blanco */
   --pn-campo: #ffffff;
   color-scheme: light;
 }
@@ -95,8 +98,10 @@
 .pn-root .v2-glass::before { display: none; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
-/* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro) */
+/* Píldora del sistema (D-150, D-153, D-154): en oscuro negra con borde y texto lima (verde de Arata);
+   en claro blanca con borde tinta y texto gris */
 .pn-pildora {
+  color: rgb(var(--pn-pildora-texto));
   background: var(--pn-pildora);
   border: 1px solid var(--pn-pildora-borde);
   box-shadow: var(--pn-pildora-sombra);
