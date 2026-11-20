@@ -2,8 +2,10 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión (D-145 a D-147 en vista previa) | 0.7 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-150) | 0.9 | 20 nov 2026 | Sergio |
 
+> **La fuente única es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema de Arata San para el sitio, el panel y todo producto nuevo, D-149). Este documento queda como el detalle del **sitio**: componentes, historial y reglas de velocidad.
+>
 > Esta versión registra la **dirección** que dio Sergio (D-025, D-026), la traducción de las referencias de 21st.dev (D-044, §9), la **implementación en código** (§10–§12) y el **estilo vigente desde el 19 nov 2026: el del panel aplicado al sitio** (D-141, D-142; §2 y §13). Se ve en vivo en `/sistema` (guía) y en aratasan.com. **El sitio y el panel comparten base visual**: si se cambia una pieza en uno, se revisa en el otro (§13).
 
 ---
@@ -132,7 +134,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
 | Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
-| Tarjeta base | **Transparente** (`.v2-card`, D-146): blanco al 2 %, borde fino de 1 px, filo de luz y radio 24 px; luz blanca suave que sigue el cursor en hover (`Spotlight`) | P1 |
+| Tarjeta base | **Negra con humo** (`.v2-card`, D-150): degradado `#0E0E10`→`#060607`, nube blanca suave abajo a la derecha, borde blanco 13 %, radio 24 px; luz blanca que sigue el cursor (`Spotlight`). La usan también las cifras del hero, el bento de servicios y las garantías | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
@@ -300,6 +302,8 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | ✅ Vigente |
+| D-149 (20 nov) | **Sistema único** para sitio y panel (`docs/sistema-de-diseno.md`); el panel adopta el sistema y suma modo claro | ✅ Vigente |
 | D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
 | D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
 | D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | ✅ Vigente (en vista previa) |
@@ -307,13 +311,13 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 
 **Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **morado fuera de los botones** (D-146), **íconos decorativos en tarjetas** (D-147), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
 
-**Sitio y panel comparten el botón principal; las tarjetas ya no son iguales** (desde D-146 las del sitio son transparentes y sin morado; las del panel siguen por capas con filo morado, D-136). Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
+**Sitio y panel siguen el mismo sistema desde D-149** ([`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)). Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
 
 | Sitio (`app/globals.css`) | Panel (`styles/panel.src.css`) |
 |---|---|
 | `.v2-primario` | `.pn-primario` (iguales: si cambia uno, cambia el otro) |
-| `.v2-card` (transparente) | `.pn-root .v2-card` (por capas, `#100D1A`) — distintas desde D-146 |
-| `.v2-destacada` (borde blanco) | `.pn-root .v2-glass` (filo morado) — distintas desde D-146 |
-| `.v2-icono` (ícono blanco) | `.pn-icono` (ícono morado claro) — distintas desde D-146 |
+| `.v2-card` (transparente) | `.pn-root .v2-card` (transparente en oscuro, blanca en claro) |
+| `.v2-destacada` | `.pn-root .v2-glass` |
+| `components/v2/iconos.tsx` (Phosphor `light`) | `components/panel/iconos.tsx` (Phosphor `light`) |
 
-Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio usa fondo `noche` `#020104`, tarjetas transparentes, luces blancas suaves, líneas verticales con haces, grano y la línea lima del título del hero (D-145, D-146); el panel sigue en `ink`, con sus tarjetas por capas y sin luces. Si Sergio quiere el panel igual, es una decisión aparte.
+Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio lleva líneas verticales con haces y luces blancas suaves; el panel no (es una herramienta) y tiene **modo claro** (D-149).

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { Mail, MapPin, MessageCircle, Phone, Plus, RotateCcw, Search, Trash2, X } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone, Plus, RotateCcw, Search, Trash2, X } from "./iconos";
 import type { Cliente, EstadoCliente, OrigenCliente } from "@/content/panel/tipos";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
@@ -154,7 +154,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
                       aria-label={`Escribirle a ${c.nombre} por WhatsApp`}
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-btn border border-white/10 text-fog transition-colors hover:border-brand/60 hover:text-brand-soft"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-btn border border-white/10 text-fog transition-colors hover:border-brand/60 hover:text-white"
                     >
                       <MessageCircle aria-hidden className="h-4 w-4" />
                     </a>
@@ -170,7 +170,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
           {visibles.map((c) => (
             <li key={c.id}>
               <button type="button" onClick={() => setAbierto(c.id)} className="flex w-full items-center gap-3 rounded-frame border border-white/6 bg-surface-2/50 p-3 text-left">
-                <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
+                <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
                   {iniciales2(c.nombre)}
                 </span>
                 <span className="min-w-0 flex-1">
@@ -245,7 +245,7 @@ export function Hoja({ titulo, onClose, children }: { titulo: string; onClose: (
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center lg:items-stretch lg:justify-end">
-      <button type="button" aria-label="Cerrar" className="pn-fade is-visible absolute inset-0 bg-ink/70 backdrop-blur-sm" onClick={onClose} />
+      <button type="button" aria-label="Cerrar" className="pn-fade is-visible absolute inset-0 bg-noche/70 backdrop-blur-sm" onClick={onClose} />
       <div
         ref={ref}
         tabIndex={-1}
@@ -302,9 +302,9 @@ function FichaCliente({ cliente: c, onChange, onDelete }: { cliente: Cliente; on
       </a>
 
       <ul className="space-y-2 text-sm text-fog">
-        <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-brand-soft" />{c.telefono}</li>
-        {c.correo && <li className="flex items-center gap-2"><Mail aria-hidden className="h-4 w-4 text-brand-soft" />{c.correo}</li>}
-        <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-brand-soft" />{c.ciudad} · llegó por {c.origen} · desde {fechaCorta(c.creado)}</li>
+        <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-fog" />{c.telefono}</li>
+        {c.correo && <li className="flex items-center gap-2"><Mail aria-hidden className="h-4 w-4 text-fog" />{c.correo}</li>}
+        <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-fog" />{c.ciudad} · llegó por {c.origen} · desde {fechaCorta(c.creado)}</li>
       </ul>
 
       <Campo label="Estado">
@@ -330,7 +330,7 @@ function FichaCliente({ cliente: c, onChange, onDelete }: { cliente: Cliente; on
         onClick={() => {
           if (window.confirm(`¿Borrar a ${c.nombre}? Esto no se puede deshacer.`)) onDelete();
         }}
-        className="inline-flex items-center gap-2 text-sm text-[#FF9BB0] hover:text-white"
+        className="inline-flex items-center gap-2 text-sm text-alerta hover:text-white"
       >
         <Trash2 aria-hidden className="h-4 w-4" /> Borrar cliente
       </button>
@@ -376,7 +376,7 @@ function NuevoCliente({ hoy, onSave }: { hoy: string; onSave: (c: Cliente) => vo
         </Campo>
       </div>
       <Campo label="Notas"><textarea name="notas" rows={3} className="pn-input h-auto py-2.5" maxLength={500} /></Campo>
-      {error && <p role="alert" className="text-sm text-[#FF9BB0]">{error}</p>}
+      {error && <p role="alert" className="text-sm text-alerta">{error}</p>}
       <button type="submit" className="h-11 w-full rounded-btn pn-primario text-sm font-semibold">
         Guardar cliente
       </button>

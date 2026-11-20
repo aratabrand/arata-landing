@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { AlarmClock, Bell, BellRing, X } from "lucide-react";
+import { AlarmClock, Bell, BellRing, X } from "./iconos";
 import { verNotificacionesRecientes } from "@/app/(panel)/panel/(app)/notificaciones/acciones";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import type { TipoAlerta } from "@/lib/panel/alertas";
@@ -82,7 +82,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
       {abierta && (
         <>
           {/* Celular: fondo atenuado (la ventana no ocupa toda la pantalla) */}
-          <div aria-hidden className="fixed inset-0 top-14 z-40 bg-ink/50 backdrop-blur-[2px] lg:hidden" />
+          <div aria-hidden className="fixed inset-0 top-14 z-40 bg-noche/50 backdrop-blur-[2px] lg:hidden" />
           <div
             role="dialog"
             aria-label="Notificaciones"
@@ -97,7 +97,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
             <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
               <p className="font-display text-base font-bold text-white">Notificaciones</p>
               <div className="flex items-center gap-1">
-                <Link href="/panel/notificaciones" className="rounded-btn px-2.5 py-1.5 text-xs font-semibold text-brand-soft hover:text-white">
+                <Link href="/panel/notificaciones" className="rounded-btn px-2.5 py-1.5 text-xs font-semibold text-fog hover:text-white">
                   Ver todas
                 </Link>
                 <button type="button" onClick={() => setAbierta(false)} aria-label="Cerrar" className="flex h-8 w-8 items-center justify-center rounded-full text-fog-dim hover:text-white">
@@ -108,7 +108,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
 
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
               {error ? (
-                <p className="text-sm text-[#FF9BB0]">{error}</p>
+                <p className="text-sm text-alerta">{error}</p>
               ) : !datos ? (
                 <p className="py-6 text-center text-sm text-fog-dim">Cargando…</p>
               ) : demo ? (
@@ -125,10 +125,10 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                               href={`/panel/proyectos/${a.id}`}
                               className={cn(
                                 "flex items-start gap-2.5 rounded-frame border px-3 py-2.5 text-sm text-white hover:border-white/20",
-                                a.tipo === "tarde" ? "border-[#FF9BB0]/35 bg-[#FF9BB0]/[0.06]" : a.tipo === "hoy" ? "border-lime/35 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]"
+                                a.tipo === "tarde" ? "border-alerta/35 bg-alerta/[0.06]" : a.tipo === "hoy" ? "border-lime/35 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]"
                               )}
                             >
-                              <AlarmClock aria-hidden className={cn("mt-0.5 h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-[#FF9BB0]" : a.tipo === "hoy" ? "text-lime" : "text-brand-soft")} />
+                              <AlarmClock aria-hidden className={cn("mt-0.5 h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-dato" : "text-fog")} />
                               {a.texto}
                             </Link>
                           </li>
@@ -145,7 +145,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
             </div>
 
             <Link href="/panel/notificaciones" className="flex items-center justify-center gap-2 border-t border-white/[0.06] px-4 py-3 text-xs font-semibold text-fog hover:text-white">
-              <BellRing aria-hidden className="h-3.5 w-3.5 text-brand-soft" /> Avisos en este dispositivo e historial completo
+              <BellRing aria-hidden className="h-3.5 w-3.5 text-fog" /> Avisos en este dispositivo e historial completo
             </Link>
           </div>
         </>

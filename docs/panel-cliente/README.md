@@ -27,7 +27,7 @@ Este folder documenta **el panel** para ver cómo va el negocio y manejarlo desd
 | [`00-plan.md`](00-plan.md) | Objetivo, para quién es, módulos, qué entra en el MVP y qué después, fases, decisiones pendientes y riesgos |
 | [`01-arquitectura.md`](01-arquitectura.md) | Rutas, navegación y cada módulo pieza por pieza: qué muestra, de dónde sale el dato y qué puede hacer el cliente |
 | [`02-modelo-de-datos.md`](02-modelo-de-datos.md) | Tablas (Neon), acceso por negocio, definición exacta de cada métrica e integraciones (GA4, Instagram, ventas, n8n) |
-| [`03-sistema-de-diseno.md`](03-sistema-de-diseno.md) | Cómo se aplica el sistema v2 de Arata al panel: marco, componentes, gráficos, movimiento, accesibilidad y palabras del panel |
+| [`03-sistema-de-diseno.md`](03-sistema-de-diseno.md) | Cómo se aplica el **sistema de diseño de Arata San** ([`../sistema-de-diseno.md`](../sistema-de-diseno.md)) al panel: temas oscuro y claro, marco, componentes, gráficos, movimiento, accesibilidad y palabras del panel |
 | [`04-construccion.md`](04-construccion.md) | Carpetas y archivos, cómo montar el panel de un cliente nuevo (lista paso a paso), cómo pasar de datos de ejemplo a Supabase, seguridad y verificación |
 | [`06-finanzas.md`](06-finanzas.md) | **Finanzas y Equipo (solo Arata San):** reparto de ganancia (bolsa por horas + % de socios y empresa), gastos, fondos, punto de equilibrio, proyección y quién ve qué |
 | [`05-acceso-y-seguridad.md`](05-acceso-y-seguridad.md) | **Acceso con doble factor** (Neon + Better Auth), cómo crear la base y el usuario de Sergio, qué hacer si se pierde el celular y pruebas de seguridad |

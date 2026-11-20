@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { TriangleAlert, Trash2 } from "lucide-react";
+import { TriangleAlert, Trash2 } from "../iconos";
 import { borrarProyecto, verContenidoProyecto, type ContenidoProyecto } from "@/app/(panel)/panel/(app)/finanzas/acciones";
 import { pesos } from "@/lib/panel/formato";
 import { BotonSecundario, MensajeError, useAccion } from "./comun";
@@ -13,7 +13,7 @@ export default function BorrarProyecto({ proyectoId, nombre, onBorrado }: { proy
   const [abierto, setAbierto] = useState(false);
   return (
     <>
-      <BotonSecundario type="button" className="text-[#FF9BB0]" onClick={() => setAbierto(true)}>
+      <BotonSecundario type="button" className="text-alerta" onClick={() => setAbierto(true)}>
         <Trash2 aria-hidden className="h-4 w-4" /> Borrar proyecto
       </BotonSecundario>
       {abierto && <Alerta proyectoId={proyectoId} nombre={nombre} onCerrar={() => setAbierto(false)} onBorrado={onBorrado} />}
@@ -44,18 +44,18 @@ function Alerta({ proyectoId, nombre, onCerrar, onBorrado }: { proyectoId: strin
   const coincide = norm(escrito) === norm(nombre);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ink/80 p-4 backdrop-blur-sm sm:items-center" onClick={onCerrar}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-noche/80 p-4 backdrop-blur-sm sm:items-center" onClick={onCerrar}>
       <div
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="borrar-titulo"
         aria-describedby="borrar-detalle"
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md rounded-card border border-[#FF9BB0]/30 bg-surface-1 p-5 shadow-2xl"
+        className="w-full max-w-md rounded-card border border-alerta/30 bg-surface-1 p-5 shadow-2xl"
       >
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FF9BB0]/15">
-            <TriangleAlert aria-hidden className="h-5 w-5 text-[#FF9BB0]" />
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-alerta/15">
+            <TriangleAlert aria-hidden className="h-5 w-5 text-alerta" />
           </span>
           <div>
             <h2 id="borrar-titulo" className="font-display text-lg font-bold text-white">¿Borrar “{nombre}”?</h2>
@@ -76,7 +76,7 @@ function Alerta({ proyectoId, nombre, onCerrar, onBorrado }: { proyectoId: strin
               <li className="flex justify-between gap-3"><span className="text-fog">Pasos del proceso</span><span className="tabular-nums text-white">{c.pasos}</span></li>
             </ul>
           )}
-          {c?.cerrado && <p className="mt-2 text-xs text-[#FFC76B]">Es una venta cerrada: también sale de Finanzas, del reparto y del Equipo.</p>}
+          {c?.cerrado && <p className="mt-2 text-xs text-ambar">Es una venta cerrada: también sale de Finanzas, del reparto y del Equipo.</p>}
         </div>
 
         <label className="mt-4 block">
@@ -96,7 +96,7 @@ function Alerta({ proyectoId, nombre, onCerrar, onBorrado }: { proyectoId: strin
             type="button"
             disabled={!coincide || !c || acc.pendiente}
             onClick={() => acc.correr(() => borrarProyecto(proyectoId, escrito), onBorrado)}
-            className="h-11 flex-1 rounded-btn bg-[#FF9BB0] px-4 text-sm font-semibold text-ink hover:bg-[#ffb3c3] disabled:opacity-40"
+            className="h-11 flex-1 rounded-btn bg-alerta px-4 text-sm font-semibold text-noche hover:bg-alerta/85 disabled:opacity-40"
           >
             {acc.pendiente ? "Borrando…" : "Borrar para siempre"}
           </button>

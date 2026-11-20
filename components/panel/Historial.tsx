@@ -1,10 +1,10 @@
-import { ArrowRight, CircleCheck, Pencil, Plus, Send, Trash2, Lock } from "lucide-react";
+import { ArrowRight, CircleCheck, Pencil, Plus, Send, Trash2, Lock } from "./iconos";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import { cn } from "@/lib/utils";
 
 // Lista del historial (D-119): quién hizo qué y cuándo, con lo que cambió (antes → después).
 const icono = { crear: Plus, editar: Pencil, borrar: Trash2, marcar: CircleCheck, cerrar: Lock, publicar: Send } as const;
-const tono = { crear: "text-lime", editar: "text-brand-soft", borrar: "text-[#FF9BB0]", marcar: "text-lime", cerrar: "text-lime", publicar: "text-lime" } as const;
+const tono = { crear: "text-dato", editar: "text-fog", borrar: "text-alerta", marcar: "text-dato", cerrar: "text-dato", publicar: "text-dato" } as const;
 
 export function cuando(iso: string) {
   return new Date(iso).toLocaleString("es-CO", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZone: "America/Bogota" });

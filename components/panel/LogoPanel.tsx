@@ -13,7 +13,7 @@ export default function LogoPanel({
 }) {
   // surface dark  -> texto blanco
   // surface light -> texto oscuro (ink)
-  const c = surface === "dark" ? "#FFFFFF" : "#03010B";
+  const c = surface === "dark" ? "rgb(var(--pn-fg))" : "#03010B"; // D-149: sigue el tema del panel
 
   return (
     <svg

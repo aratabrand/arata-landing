@@ -51,7 +51,7 @@ export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.Re
   return (
     <section aria-labelledby="cta-final" className="pb-24 pt-8 sm:pb-32">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[28px] border border-white/8 bg-surface-1 px-6 py-20 text-center sm:py-28">
+        <div className="relative isolate overflow-hidden rounded-[28px] border border-white/15 bg-[#060607] px-6 py-20 text-center sm:py-28">
           {/* Collage de trabajos al fondo */}
           <div aria-hidden className="absolute inset-0 -z-10 grid grid-cols-2 gap-3 p-3 opacity-45 sm:grid-cols-4">
             {proyectos.map((p, i) => (
@@ -65,7 +65,9 @@ export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.Re
             ))}
           </div>
           {/* Tinte morado plano sobre el collage + luz */}
-          <div aria-hidden className="absolute inset-0 -z-10 bg-[#140A3A]/75" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-[#060607]/85" />
+          {/* D-150: humo blanco suave, como la tarjeta de referencia (sin morado) */}
+          <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(45%_60%_at_70%_60%,rgba(255,255,255,0.08),transparent_70%),radial-gradient(35%_45%_at_15%_100%,rgba(255,255,255,0.06),transparent_70%)]" />
           <Glow className="left-1/2 top-1/2 -z-10 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2" />
 
           {antes}

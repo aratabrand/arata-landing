@@ -4,9 +4,10 @@ import EscenaAcceso from "@/components/panel/acceso/EscenaAcceso";
 
 // Pantallas de acceso (D-136): tarjeta dividida. A la izquierda la escena de luz de Arata con el logo;
 // a la derecha el formulario. En celular la escena queda arriba, más baja. Sin menú del panel.
+// D-149: el acceso va siempre en oscuro (data-tema="oscuro"), aunque la persona use el panel en claro.
 export default function AccesoLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex min-h-screen items-center justify-center p-3 sm:p-6">
+    <main data-tema="oscuro" className="flex min-h-screen items-center justify-center bg-noche p-3 text-white sm:p-6">
       <div className="grid w-full max-w-[1040px] overflow-hidden rounded-[28px] border border-white/[0.08] bg-canvas shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] lg:min-h-[640px] lg:grid-cols-2">
         <div className="relative min-h-[176px] lg:min-h-0">
           <EscenaAcceso />

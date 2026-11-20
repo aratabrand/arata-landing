@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Camera, Eye, MousePointerClick, ShoppingBag, Users } from "lucide-react";
+import { Camera, Eye, MousePointerClick, ShoppingBag, Users } from "./iconos";
 import type { DatosPanel } from "@/lib/panel/datos";
 import type { Periodo } from "@/content/panel/tipos";
 import {
@@ -145,9 +145,6 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
         {kpis.map((k, i) => (
           <article key={k.label} className={cn("v2-card flex flex-col p-4 sm:p-5", i === 0 && "v2-glass")}>
             <div className="flex items-center gap-3">
-              <span className="pn-icono">
-                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
-              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.label}</p>
             </div>
             <p className="mt-4 font-display text-[clamp(1.5rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.valor}</p>
@@ -155,7 +152,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
               <Delta valor={k.delta} />
               <span className="text-xs text-fog-dim">{k.nota}</span>
             </div>
-            <Sparkline valores={k.spark} className="mt-4" color="#7D53FF" />
+            <Sparkline valores={k.spark} className="mt-4" color="rgb(var(--pn-fg) / 0.7)" />
           </article>
         ))}
       </div>
@@ -193,7 +190,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
             <Anillo key={periodo} valor={tasa} max={10} centro={porcentaje(tasa)} bajada="compran" />
             <p className="text-sm text-fog">
               De cada <strong className="text-white">100 personas</strong> que entran a tu página,{" "}
-              <strong className="text-lime">{tasa.toFixed(1).replace(".", ",")}</strong> terminan haciendo un pedido.
+              <strong className="text-dato">{tasa.toFixed(1).replace(".", ",")}</strong> terminan haciendo un pedido.
             </p>
           </div>
           <div className="mt-6">
@@ -255,7 +252,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
         <ul className="divide-y divide-white/6">
           {datos.ventasRecientes.map((v) => (
             <li key={v.id} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-              <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
+              <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
                 {v.cliente.split(" ").map((p) => p[0]).slice(0, 2).join("")}
               </span>
               <div className="min-w-0 flex-1">

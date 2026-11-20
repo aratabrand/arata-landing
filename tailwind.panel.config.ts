@@ -22,10 +22,25 @@ const config: Config = {
     ...base.theme,
     extend: {
       ...base.theme?.extend,
+      // D-149: colores que cambian con el tema (oscuro/claro) como variables de styles/panel.src.css.
+      // `white` también: en claro, text-white / bg-white/5 / border-white/10 pasan a tinta.
+      // Fijos: brand (botones), ink y `blanco` (texto sobre morado). `lime` cambia en claro a morado (D-151).
       colors: {
         ...colores,
-        surface: { 1: "#100D1A", 2: "#161226", 3: "#1D1832" },
-        canvas: "#0A0813", // zona de contenido (la barra lateral va sobre ink)
+        white: "rgb(var(--pn-fg) / <alpha-value>)",
+        blanco: "#FFFFFF",
+        fog: { DEFAULT: "rgb(var(--pn-fog) / <alpha-value>)", dim: "rgb(var(--pn-fog-dim) / <alpha-value>)" },
+        noche: "rgb(var(--pn-noche) / <alpha-value>)",
+        canvas: "rgb(var(--pn-canvas) / <alpha-value>)", // zona de contenido (la barra lateral va sobre noche)
+        surface: {
+          1: "rgb(var(--pn-s1) / <alpha-value>)",
+          2: "rgb(var(--pn-s2) / <alpha-value>)",
+          3: "rgb(var(--pn-s3) / <alpha-value>)",
+        },
+        dato: "rgb(var(--pn-dato) / <alpha-value>)", // lima de las cifras (en claro, morado legible, D-151)
+        lime: "rgb(var(--pn-lima) / <alpha-value>)", // rellenos de dato (en claro, morado claro con texto ink, D-151)
+        alerta: { DEFAULT: "rgb(var(--pn-alerta) / <alpha-value>)", fuerte: "rgb(var(--pn-alerta-fuerte) / <alpha-value>)" },
+        ambar: "rgb(var(--pn-ambar) / <alpha-value>)",
       },
     },
   },

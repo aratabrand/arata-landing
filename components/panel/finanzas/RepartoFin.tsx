@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Info, Lock } from "lucide-react";
+import { Info, Lock } from "../iconos";
 import { EMPRESA, type DatosFinanzas, type RegistroTrabajo } from "@/lib/panel/finanzas/tipos";
 import { calcularProyecto, partesActuales } from "@/lib/panel/finanzas/calculo";
 import { pesos } from "@/lib/panel/formato";
@@ -48,15 +48,15 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
         <div className="space-y-6">
           <ol className="space-y-3 text-sm">
             <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 font-display text-xs font-bold text-brand-soft">1</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-xs font-bold text-fog">1</span>
               <span className="text-fog"><strong className="text-white">Ganancia</strong> = valor del proyecto − sus gastos.</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 font-display text-xs font-bold text-brand-soft">2</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-xs font-bold text-fog">2</span>
               <span className="text-fog">Primero se pagan los <strong className="text-white">días trabajados</strong> de quien hizo cada actividad: días × valor del día (1 día = 8 horas).</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 font-display text-xs font-bold text-brand-soft">3</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-xs font-bold text-fog">3</span>
               <span className="text-fog">
                 Lo que queda se reparte en <strong className="text-white">{partes.length} partes iguales</strong>: {partes.map((id) => nombreDe(id, datos.personas).replace(" (empresa)", "")).join(", ")}.
               </span>
@@ -95,7 +95,7 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
           </section>
 
           <p className="flex items-start gap-2 rounded-frame border border-white/8 bg-surface-2/60 p-3 text-xs text-fog">
-            <Info aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-soft" />
+            <Info aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-fog" />
             Quién recibe parte igual sale de Equipo (socios activos). Al cerrar un proyecto se guardan su valor del día y sus partes: cambiar algo después no altera lo ya cerrado. Si los días cuestan más que la ganancia, se pagan en proporción hasta la ganancia y no hay parte igual.
           </p>
 
@@ -103,7 +103,7 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
             <div className="space-y-2">
               {!tarifaValida && <MensajeError error="El valor del día va de $1.000 a $10.000.000." />}
               <MensajeError error={acc.error} />
-              {guardado && !sucio && <p className="text-sm text-lime">Reparto guardado.</p>}
+              {guardado && !sucio && <p className="text-sm text-dato">Reparto guardado.</p>}
               <div className="flex gap-2">
                 <BotonSecundario type="button" disabled={!sucio || acc.pendiente} onClick={() => { setTarifa(datos.config.tarifaDia); setReserva(datos.config.reservaMeses); }}>
                   Descartar
@@ -143,8 +143,8 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
           <div className="flex justify-between"><dt className="text-fog">− Días ({String(ejDias).replace(".", ",")} × {pesos(ej.tarifaDia)})</dt><dd className="tabular-nums text-white">{pesos(-ej.pagoDias)}</dd></div>
           <div className="flex justify-between border-t border-white/8 pt-1.5"><dt className="text-fog">= Para repartir en {ej.numPartes} partes</dt><dd className="tabular-nums font-semibold text-white">{pesos(ej.paraRepartir)}</dd></div>
         </dl>
-        {ej.recortado && <p className="mt-2 text-xs text-[#FFC76B]">Los días cuestan más que la ganancia: se pagan en proporción hasta {pesos(ej.ganancia)}.</p>}
-        {ej.perdida && <p className="mt-2 text-xs text-[#FF9BB0]">El proyecto pierde plata: no se reparte y la pérdida la absorbe Arata.</p>}
+        {ej.recortado && <p className="mt-2 text-xs text-ambar">Los días cuestan más que la ganancia: se pagan en proporción hasta {pesos(ej.ganancia)}.</p>}
+        {ej.perdida && <p className="mt-2 text-xs text-alerta">El proyecto pierde plata: no se reparte y la pérdida la absorbe Arata.</p>}
         <ul className="mt-4 divide-y divide-white/6 border-t border-white/8">
           {ej.personas
             .filter((x) => datos.personas.some((a) => a.id === x.personaId && a.activo))
@@ -158,8 +158,8 @@ export default function RepartoFin({ datos }: { datos: DatosFinanzas }) {
               </li>
             ))}
           <li className={cn("flex items-center justify-between py-2.5 text-sm")}>
-            <span className="font-semibold text-lime">{nombreDe(EMPRESA, datos.personas)}</span>
-            <span className="font-display font-bold text-lime">{pesos(ej.empresa)}</span>
+            <span className="font-semibold text-dato">{nombreDe(EMPRESA, datos.personas)}</span>
+            <span className="font-display font-bold text-dato">{pesos(ej.empresa)}</span>
           </li>
         </ul>
       </Tarjeta>

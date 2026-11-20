@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { HandCoins, Landmark, PiggyBank, Scale, Target, TrendingUp } from "lucide-react";
+import { HandCoins, Landmark, PiggyBank, Scale, Target, TrendingUp } from "../iconos";
 import type { DatosFinanzas } from "@/lib/panel/finanzas/tipos";
 import { EMPRESA } from "@/lib/panel/finanzas/tipos";
 import { participacionHistorica, proyectar, resumenFinanzas } from "@/lib/panel/finanzas/calculo";
@@ -126,9 +126,6 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
         ].map((k) => (
           <article key={k.k} className={cn("v2-card p-4 sm:p-5", k.glass && "v2-glass")}>
             <div className="flex items-center gap-3">
-              <span className="pn-icono">
-                <k.icon aria-hidden className="h-[1.05rem] w-[1.05rem]" />
-              </span>
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
             </div>
             <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,1.85rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
@@ -174,12 +171,12 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
               max={todo.reserva || 1}
               centro={pesosCorto(Math.max(0, todo.fondos))}
               bajada="en fondos"
-              color={todo.fondos >= todo.reserva ? "#B6FF00" : "#7D53FF"}
+              color={todo.fondos >= todo.reserva ? "rgb(var(--pn-dato))" : "rgb(var(--pn-fg))"}
             />
             <p className="text-sm text-fog">
               {todo.fondos >= todo.reserva ? (
                 <>
-                  La reserva de <strong className="text-white">{datos.config.reservaMeses} meses</strong> está cubierta. Hay <strong className="text-lime">{pesos(todo.disponible)}</strong> para invertir.
+                  La reserva de <strong className="text-white">{datos.config.reservaMeses} meses</strong> está cubierta. Hay <strong className="text-dato">{pesos(todo.disponible)}</strong> para invertir.
                 </>
               ) : (
                 <>
@@ -198,7 +195,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
             ].map((x) => (
               <div key={x.k} className="flex justify-between gap-3">
                 <dt className={cn(x.fuerte ? "font-semibold text-white" : "text-fog")}>{x.k}</dt>
-                <dd className={cn("tabular-nums", x.lima ? "font-display font-bold text-lime" : x.fuerte ? "font-display font-bold text-white" : "text-fog")}>{pesos(x.v)}</dd>
+                <dd className={cn("tabular-nums", x.lima ? "font-display font-bold text-dato" : x.fuerte ? "font-display font-bold text-white" : "text-fog")}>{pesos(x.v)}</dd>
               </div>
             ))}
           </dl>
@@ -211,10 +208,8 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
         </Tarjeta>
 
         <Tarjeta titulo="Punto de equilibrio" bajada="Para cubrir los gastos fijos de la empresa">
+          {/* D-149: sin cuadrito de ícono */}
           <div className="flex items-start gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-frame bg-brand/15">
-              <Target aria-hidden className="h-6 w-6 text-brand-soft" />
-            </span>
             <div>
               {todo.fijosMes === 0 ? (
                 <p className="text-sm text-fog">Registra los gastos fijos mensuales en la pestaña Gastos para calcularlo.</p>
@@ -231,7 +226,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
                   </p>
                 </>
               )}
-              <button type="button" onClick={() => irA("proyeccion")} className="mt-3 text-sm font-semibold text-brand-soft hover:text-white">
+              <button type="button" onClick={() => irA("proyeccion")} className="mt-3 text-sm font-semibold text-fog hover:text-white">
                 Hacer una proyección →
               </button>
             </div>
@@ -332,7 +327,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
               </span>
               <span className="text-right">
                 <span className="block font-display font-bold text-white">{pesos(p.empresa)}</span>
-                <span className={cn("block text-[0.7rem]", p.empresaNeta >= 0 ? "text-lime" : "text-[#FF9BB0]")}>
+                <span className={cn("block text-[0.7rem]", p.empresaNeta >= 0 ? "text-dato" : "text-alerta")}>
                   {p.empresaNeta >= 0 ? "le quedan" : "le faltan"} {pesos(Math.abs(p.empresaNeta))} después de gastos fijos
                 </span>
               </span>
@@ -348,7 +343,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
               <p className="text-sm text-fog">Con estos valores a la empresa no le queda nada por proyecto.</p>
             ) : (
               <p className="text-sm text-fog">
-                Se necesitan <strong className="font-display text-2xl text-lime">{p.equilibrio}</strong> proyectos al mes para cubrir {pesos(todo.fijosMes)} de gastos fijos.
+                Se necesitan <strong className="font-display text-2xl text-dato">{p.equilibrio}</strong> proyectos al mes para cubrir {pesos(todo.fijosMes)} de gastos fijos.
                 {proyectosMes >= (p.equilibrio ?? 0) ? " Con este ritmo ya se cubren." : ` Faltan ${(p.equilibrio ?? 0) - proyectosMes} al mes.`}
               </p>
             )}
@@ -357,12 +352,12 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
             <p className="text-sm text-fog">
               Disponible hoy: <strong className="text-white">{pesos(todo.disponible)}</strong>.{" "}
               {mesesMeta === 0 ? (
-                <span className="text-lime">La meta ya está cubierta.</span>
+                <span className="text-dato">La meta ya está cubierta.</span>
               ) : mesesMeta === null ? (
                 "Con este ritmo la empresa no ahorra: no se llega a la meta."
               ) : (
                 <>
-                  Con este ritmo se llega a {pesos(meta)} en <strong className="font-display text-xl text-lime">{mesesMeta}</strong> {mesesMeta === 1 ? "mes" : "meses"}.
+                  Con este ritmo se llega a {pesos(meta)} en <strong className="font-display text-xl text-dato">{mesesMeta}</strong> {mesesMeta === 1 ? "mes" : "meses"}.
                 </>
               )}
             </p>
@@ -385,7 +380,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
             </thead>
             <tbody>
               {filas.map((f) => (
-                <tr key={f.n} className={cn("border-b border-white/6 last:border-0", f.n === proyectosMes && "bg-brand/10")}>
+                <tr key={f.n} className={cn("border-b border-white/6 last:border-0", f.n === proyectosMes && "bg-white/[0.05]")}>
                   <td className="py-2.5 pr-3 font-display font-bold text-white">
                     {f.n}
                     {p.equilibrio !== null && f.n === p.equilibrio && <Pill tono="lima" className="ml-2">equilibrio</Pill>}
@@ -394,7 +389,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
                   {f.porPersona.map((x) => (
                     <td key={x.persona.id} className="py-2.5 pr-3 text-right tabular-nums text-white">{pesosCorto(x.total)}</td>
                   ))}
-                  <td className={cn("py-2.5 text-right tabular-nums font-semibold", f.empresaNeta >= 0 ? "text-lime" : "text-[#FF9BB0]")}>{pesosCorto(f.empresaNeta)}</td>
+                  <td className={cn("py-2.5 text-right tabular-nums font-semibold", f.empresaNeta >= 0 ? "text-dato" : "text-alerta")}>{pesosCorto(f.empresaNeta)}</td>
                 </tr>
               ))}
             </tbody>

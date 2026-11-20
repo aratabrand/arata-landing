@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { AlarmClock, Bell, BellOff, BellRing, CalendarClock, Smartphone } from "lucide-react";
+import { AlarmClock, Bell, BellOff, BellRing, CalendarClock, Smartphone } from "./iconos";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import type { TipoAlerta } from "@/lib/panel/alertas";
 import { guardarSuscripcion, marcarNotificacionesVistas, probarAviso, quitarSuscripcion } from "@/app/(panel)/panel/(app)/notificaciones/acciones";
@@ -51,7 +51,7 @@ export default function Notificaciones({
 
       <AvisosDispositivo push={push} demo={demo} />
 
-      <Tarjeta titulo="Alertas de entrega" bajada="2 días antes, el día de entrega y si va tarde" accion={<CalendarClock aria-hidden className="h-4 w-4 text-brand-soft" />}>
+      <Tarjeta titulo="Alertas de entrega" bajada="2 días antes, el día de entrega y si va tarde" accion={<CalendarClock aria-hidden className="h-4 w-4 text-fog" />}>
         {alertas.length === 0 ? (
           <p className="text-sm text-fog">Ningún proyecto está por vencer ni va tarde.</p>
         ) : (
@@ -62,10 +62,10 @@ export default function Notificaciones({
                   href={`/panel/proyectos/${a.id}`}
                   className={cn(
                     "flex items-center gap-3 rounded-frame border p-3 hover:border-white/20",
-                    a.tipo === "tarde" ? "border-[#FF9BB0]/40 bg-[#FF9BB0]/5" : a.tipo === "hoy" ? "border-lime/40 bg-lime/5" : "border-white/8 bg-surface-2/50"
+                    a.tipo === "tarde" ? "border-alerta/40 bg-alerta/5" : a.tipo === "hoy" ? "border-lime/40 bg-lime/5" : "border-white/8 bg-surface-2/50"
                   )}
                 >
-                  <AlarmClock aria-hidden className={cn("h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-[#FF9BB0]" : a.tipo === "hoy" ? "text-lime" : "text-brand-soft")} />
+                  <AlarmClock aria-hidden className={cn("h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-dato" : "text-fog")} />
                   <span className="min-w-0 flex-1 text-sm text-white">{a.texto}</span>
                   <Pill tono={a.tipo === "tarde" ? "alerta" : a.tipo === "hoy" ? "lima" : "morado"}>{a.tipo === "tarde" ? "Va tarde" : a.tipo === "hoy" ? "Hoy" : "Por vencer"}</Pill>
                 </Link>
@@ -262,7 +262,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
 
   const titulo = estado === "encendido" ? "Avisos activados en este dispositivo" : "Avisos al celular y al computador";
   return (
-    <Tarjeta titulo={titulo} bajada="Vencimientos (8 a. m.) y cambios clave: cierres, valores, gastos, días y borrados" accion={estado === "encendido" ? <BellRing aria-hidden className="h-4 w-4 text-lime" /> : <Bell aria-hidden className="h-4 w-4 text-brand-soft" />}>
+    <Tarjeta titulo={titulo} bajada="Vencimientos (8 a. m.) y cambios clave: cierres, valores, gastos, días y borrados" accion={estado === "encendido" ? <BellRing aria-hidden className="h-4 w-4 text-dato" /> : <Bell aria-hidden className="h-4 w-4 text-fog" />}>
       {demo ? (
         <p className="text-sm text-fog">Disponible con el panel conectado.</p>
       ) : !push.activo ? (
@@ -271,7 +271,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
         <p className="text-sm text-fog-dim">Revisando este dispositivo…</p>
       ) : estado === "iphone-instalar" ? (
         <div className="flex items-start gap-3 text-sm text-fog">
-          <Smartphone aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-brand-soft" />
+          <Smartphone aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-fog" />
           <p>
             En iPhone los avisos solo llegan si el panel está instalado: toca <strong className="text-white">Compartir</strong> → <strong className="text-white">Agregar a inicio</strong>, abre el panel desde ese ícono y vuelve aquí a activarlos.
           </p>
@@ -280,7 +280,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
         <p className="text-sm text-fog">Este navegador no recibe avisos. Usa Chrome, Edge, Firefox o Safari actualizados.</p>
       ) : estado === "bloqueado" ? (
         <div className="flex items-start gap-3 text-sm text-fog">
-          <BellOff aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-[#FF9BB0]" />
+          <BellOff aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-alerta" />
           <p>Los avisos están bloqueados para este sitio. Actívalos en la configuración del navegador (ícono del candado junto a la dirección → Notificaciones → Permitir) y recarga.</p>
         </div>
       ) : (
@@ -301,7 +301,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
               </>
             )}
           </div>
-          {probado && <p className="text-sm text-lime">Listo: debe llegarte en unos segundos.</p>}
+          {probado && <p className="text-sm text-dato">Listo: debe llegarte en unos segundos.</p>}
           <p className="text-xs text-fog-dim">Se activa por dispositivo: hazlo en tu celular y en tu computador. No te llegan avisos de lo que haces tú.</p>
           <MensajeError error={acc.error} />
         </div>

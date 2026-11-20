@@ -145,6 +145,8 @@ export type Paquete = {
   adicional?: string;
   boton: string;
   recomendado?: boolean;
+  /** Ícono SVG propio del paquete (D-150, components/v2/IconosMarca.tsx). */
+  icono?: "capas" | "tienda" | "sistema";
 };
 
 export const precios = {
@@ -152,6 +154,7 @@ export const precios = {
   paquetes: [
     {
       nombre: "Página Lista en 5 Días",
+      icono: "capas",
       precio: "Desde 400 USD",
       incluye: [
         "5 secciones",
@@ -169,6 +172,7 @@ export const precios = {
     },
     {
       nombre: "Tienda por WhatsApp en 5 Días",
+      icono: "tienda",
       precio: "Desde 800 USD",
       nota: "El precio depende del tamaño de tu tienda",
       incluye: [
@@ -188,6 +192,7 @@ export const precios = {
     },
     {
       nombre: "Tu Negocio en Orden",
+      icono: "sistema",
       precio: "Lo cotizamos contigo",
       incluye: [
         "Sistema de reservas, menú digital, registro de clientes (CRM) o lo que tu negocio necesite",

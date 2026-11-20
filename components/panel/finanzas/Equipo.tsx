@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { Clock, Pencil, Plus, Wallet } from "lucide-react";
+import { Clock, Pencil, Plus, Wallet } from "../iconos";
 import type { DatosFinanzas, Persona } from "@/lib/panel/finanzas/tipos";
 import { calcularProyecto, resumenFinanzas } from "@/lib/panel/finanzas/calculo";
 import { fechaCorta, pesos } from "@/lib/panel/formato";
@@ -113,7 +113,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                   <th className="py-2.5 pr-3 font-medium">Proyecto</th>
                   <th className="py-2.5 pr-3 text-right font-medium">Ganancia</th>
                   {datos.personas.map((pe) => (
-                    <th key={pe.id} className={cn("py-2.5 pr-3 text-right font-medium", pe.id === datos.miPersonaId && "text-lime")}>{pe.nombre}</th>
+                    <th key={pe.id} className={cn("py-2.5 pr-3 text-right font-medium", pe.id === datos.miPersonaId && "text-dato")}>{pe.nombre}</th>
                   ))}
                   <th className="py-2.5 text-right font-medium">Arata</th>
                 </tr>
@@ -135,7 +135,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                         </td>
                       );
                     })}
-                    <td className="py-2.5 text-right tabular-nums text-lime">{pesos(r.empresa)}</td>
+                    <td className="py-2.5 text-right tabular-nums text-dato">{pesos(r.empresa)}</td>
                   </tr>
                 ))}
               </tbody>

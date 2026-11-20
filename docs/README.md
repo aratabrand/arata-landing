@@ -10,6 +10,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 
 | Archivo | Qué contiene | Fase |
 |---|---|---|
+| [`sistema-de-diseno.md`](sistema-de-diseno.md) | **Sistema de diseño de Arata San**: fuente única para el sitio, el panel y todo producto nuevo (colores oscuro y claro, botones, tarjetas, íconos, fondo, velocidad, cómo aplicarlo) | Todas |
 | [`blueprint/00-plan-maestro.md`](blueprint/00-plan-maestro.md) | Objetivo, alcance, mapa del sitio, fases, estado y decisiones pendientes | 0 |
 | [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Paquetes y precios, avatar, ecuación de valor, nombres, garantías, gancho, embudo y guion de llamada | 1 |
 | [`blueprint/02-arquitectura.md`](blueprint/02-arquitectura.md) | Menú, flujo de agendamiento y estructura sección por sección de cada página | 2 |

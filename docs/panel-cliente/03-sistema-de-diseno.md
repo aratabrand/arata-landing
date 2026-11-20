@@ -2,36 +2,40 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado | 0.3 | 19 nov 2026 | Sergio |
+| Aprobado | 0.4 | 20 nov 2026 | Sergio |
 
 El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-diseno.md`, tokens en `tailwind.config.ts`). Aquí solo va lo propio del panel.
 
-> **Desde el 19 nov 2026 el sitio usa el estilo de este panel** (D-141, D-142): tarjeta por capas, filo morado en lo destacado, cuadrito de ícono y botón principal morado. Las piezas están **copiadas** en `app/globals.css` (`.v2-card`, `.v2-destacada`, `.v2-icono`, `.v2-primario`) porque el CSS del panel se compila aparte (D-135). Si se cambia una aquí, se cambia también allá (tabla en `04-sistema-de-diseno.md` §13). Se probó llevar el diseño plano de la web al panel (D-139) y se revirtió (D-140).
+> **Desde el 20 nov 2026 el panel y el sitio siguen el mismo sistema** ([`docs/sistema-de-diseno.md`](../sistema-de-diseno.md), D-149): fondo `#020104`, tarjetas transparentes, morado solo en botones, lima solo en datos, sin íconos decorativos y con íconos Phosphor. Las piezas comunes (botón principal, tarjetas) están **copiadas** en `app/globals.css` y `styles/panel.src.css` porque el CSS del panel se compila aparte (D-135): si cambias una, cambia la otra. Lo propio del panel es el **modo claro** (§1).
 
 ---
 
-## 1. Color (D-136: más sobrio, con superficies en capas)
+## 1. Color y temas (D-149: mismo sistema que el sitio, con modo claro)
 
-> El panel tiene sus propias superficies (en `tailwind.panel.config.ts`), un paso más claras y menos saturadas que las del sitio, para que las tarjetas se separen del fondo. El sitio usa la misma tarjeta por capas sobre `#0F0C19` (D-141).
+> **La fuente es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema único de Arata San). Aquí solo va cómo se aplica en el panel.
 
-| Capa | Token / clase | Valor |
-|---|---|---|
-| Marco y barra lateral | `ink` | `#03010B` |
-| Zona de contenido | `canvas` | `#0A0813` |
-| Tarjeta | `surface-1` (+ `.v2-card` del panel: degradado muy suave, borde blanco 7 %, radio 20 px) | `#100D1A` |
-| Detalle dentro de una tarjeta, hover, campos | `surface-2` | `#161226` |
-| Ventanas, menús y tooltips | `surface-3` | `#1D1832` |
-| Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` |
-| **Actuar y elegir** (botón principal, selección, foco, interruptores, íconos de interfaz) | `brand` / `brand-soft` | `#7D53FF` / `#B9A4FF` |
-| **Destacar un dato** (sube, completado, nuevo, ganancia, último punto) | `lime` | `#B6FF00` |
-| "Baja", error, vencido (solo panel) | — | fondo `#FF6B8B` al 10 %, texto `#FF9BB0` |
-| Fase "En revisión" (solo panel) | — | `#FFC76B` (punto y franja, nunca texto largo) |
+El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia con el interruptor **"Modo claro / Modo oscuro"** del menú de la cuenta. Se guarda un año en la cookie `pn-tema`, y el servidor pone el tema en `data-tema` de `.pn-root`, así que no hay destello al abrir (`lib/panel/tema.ts`, `app/(panel)/panel/layout.tsx`). **El acceso (login y doble factor) va siempre en oscuro.**
+
+| Capa | Token | Oscuro | Claro |
+|---|---|---|---|
+| Marco y barra lateral | `noche` | `#020104` | `#F2F2F5` |
+| Zona de contenido | `canvas` | `#08080A` | `#FAFAFB` |
+| Tarjeta (`.v2-card`) | variables `--pn-tarjeta*` | blanco 2 % + borde blanco 7 % | blanca + borde tinta 8 % + sombra suave |
+| Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | blanco 4,5 % + borde blanco 20 % | blanca + borde tinta 22 % |
+| Superficies sólidas | `surface-1/2/3` | `#0F0F12` · `#16161A` · `#1D1D22` | `#FFF` · `#F3F3F6` · `#FFF` |
+| Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` | `#03010B` / `#52505C` / `#686572` |
+| **Datos** (sube, completado, nuevo) | `dato` (texto) · `lime` (relleno con texto ink) | `#B6FF00` | **morado** (D-151): texto `#6D45F0`, relleno `#9B7BFF` |
+| **Botones y lo que actúa como botón** | `brand` | `#7D53FF` | igual |
+| Malas noticias | `alerta` · `alerta-fuerte` | `#FF9BB0` · `#FF6B8B` | `#BE123C` · `#E11D48` |
+| "En revisión" | `ambar` | `#FFC76B` | `#A16207` |
 
 Reglas:
-- **El botón principal es morado** (`.pn-primario`: `#7D53FF` con texto blanco, 4,6:1). Uno por vista. Antes era lima y hacía ver el panel "neón".
-- **El lima solo destaca un dato, en dosis pequeñas.** Nunca en botones, íconos de menú, enlaces, interruptores ni fondos grandes.
-- Sin luces de color de fondo, sin desenfoque en las tarjetas y sin el brillo que recorre los botones (`v2-shine` queda apagado dentro del panel).
-- En gráficos, **morado** para la serie; **lima** solo para el punto o el valor que hay que mirar (último dato, primer lugar). Las barras verticales van apagadas y la elegida (la que tocas o la última) va en morado con un punto lima.
+- **Todos los colores que cambian con el tema son variables** (canales RGB en `styles/panel.src.css`, bloque "Temas del panel"), y `tailwind.panel.config.ts` los usa. Por eso `text-white`, `bg-white/5` y `border-white/10` se vuelven tinta en claro. **Nunca escribir colores fijos** (`text-[#…]`, `rgba(255,255,255,…)`) en un componente del panel: usar los tokens o `rgb(var(--pn-…))` en SVG y estilos en línea. Fijos en los dos temas: `brand`, `lime` como fondo, `ink` y `blanco` (texto sobre morado).
+- **El morado es solo para botones** y lo que actúa como botón: botón principal (`.pn-primario`), filtro y pestaña activa, interruptor encendido, marca de la opción del menú, foco de los campos. Nunca en tarjetas, avatares, barras de avance, gráficos ni íconos.
+- **El lima solo destaca un dato.** En claro el dato va en **morado** (D-151, decisión de Sergio): `text-dato` `#6D45F0` y `lime` `#9B7BFF` (los dos son variables, cambian solos con el tema).
+- **Sin íconos decorativos**: las cifras van sin cuadrito de ícono (`.pn-icono` ya no se usa). Íconos con **Phosphor `light`** desde `components/panel/iconos.tsx` (D-149; antes Lucide).
+- Sin luces de color, sin desenfoque en las tarjetas y sin brillos.
+- En gráficos, la serie va en **blanco** (tinta en claro) y el lima marca el dato a mirar. Ver §5.
 - Rosa solo para malas noticias. Nunca como decoración.
 
 ## 2. Tipografía
@@ -48,11 +52,11 @@ Reglas:
 
 **Escritorio (≥ 1024 px):** barra lateral fija de 248 px a la izquierda y el contenido en una zona más clara (`canvas`) con las esquinas de 28 px y 12 px de aire alrededor.
 
-- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, salir).
+- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, **modo claro / oscuro** (D-149), salir).
 - **Selector que se desliza** detrás de la opción activa (solo `transform`, respeta movimiento reducido) con una marca morada al borde izquierdo.
 - **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y la campana a la derecha. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
 
-**Celular:** barra arriba (logo, campana, cuenta) + 5 pestañas abajo; la activa lleva ícono morado y una raya morada arriba.
+**Celular:** barra arriba (logo, campana, cuenta) + 5 pestañas abajo; la activa lleva una raya morada arriba (es navegación: cuenta como botón).
 
 | | Celular | Escritorio (≥ 1024 px) |
 |---|---|---|
@@ -62,7 +66,7 @@ Reglas:
 | Espacio abajo | 112 px (para no tapar con las pestañas) | 48 px |
 
 ### Acceso (login y doble factor)
-Tarjeta dividida de hasta 1040 px: a la izquierda una **esfera de luz hecha solo con CSS** (morado de marca, un filo y un reflejo lima; flota y gira suave; 0 KB de imagen, sin JavaScript; quieta con movimiento reducido) con el logo; a la derecha el formulario. En celular la escena queda arriba, más baja. `components/panel/acceso/EscenaAcceso.tsx` + `.pn-escena` en `styles/panel.src.css`.
+Tarjeta dividida de hasta 1040 px, **siempre en oscuro**: a la izquierda una **esfera de luz hecha solo con CSS** (plateada desde D-149, antes morada; con un filo y un reflejo lima; flota y gira suave; 0 KB de imagen, sin JavaScript; quieta con movimiento reducido) con el logo; a la derecha el formulario. En celular la escena queda arriba, más baja. `components/panel/acceso/EscenaAcceso.tsx` + `.pn-escena` en `styles/panel.src.css`.
 
 > Texto nuevo ◻ por aprobar: "Ventas, clientes y proyectos de tu negocio en un solo lugar." (escena del login) y la etiqueta "Panel privado".
 
@@ -72,16 +76,16 @@ Tarjeta dividida de hasta 1040 px: a la izquierda una **esfera de luz hecha solo
 |---|---|---|
 | `PanelShell` | `PanelShell.tsx` | Marco: barra lateral, barra superior, pestañas, franja de demo |
 | `PanelPage`, `PanelHeader` | `ui.tsx` | Contenedor y encabezado (h1 + bajada + acción) de cada módulo |
-| `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada, acción y **ícono opcional** en cuadrito (`icono`) |
+| `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada y acción. La prop `icono` ya no pinta nada (D-149) |
 | `Delta` | `ui.tsx` | Variación vs. periodo anterior (lima ↑ / rosa ↓) |
-| `Pill` | `ui.tsx` | Estado en píldora: `lima`, `morado`, `neutro`, `alerta` |
+| `Pill` | `ui.tsx` | Estado en píldora: `lima`, `neutro`, `alerta` (`morado` se ve neutro desde D-149) |
 | `Segmentado` | `Resumen.tsx` | Selector tipo iOS (periodo, métrica). `role="radiogroup"` |
 | `Hoja` | `Clientes.tsx` | Panel lateral en escritorio / hoja desde abajo en celular. Escape y clic afuera cierran, bloquea el scroll, devuelve el foco |
 | Campos | clase `.pn-input` | 44 px de alto, borde fino, foco morado con halo |
 | Botón principal | clase `.pn-primario` | Morado de marca, texto blanco. Se combina con `h-11 rounded-btn px-5 text-sm font-semibold` |
-| Cuadrito de ícono | clase `.pn-icono` | 36 px, borde fino, ícono `brand-soft`. Al inicio de cada cifra y de las tarjetas con `icono` |
+| Íconos | `iconos.tsx` | Phosphor `light` con los nombres que usaba Lucide (D-149). Sin íconos decorativos |
 
-La primera cifra del Resumen (Ventas) usa `v2-glass`, que dentro del panel es la misma tarjeta con un filo morado arriba (sin desenfoque ni luz de fondo). Las demás, `v2-card`.
+La primera cifra del Resumen (Ventas) usa `v2-glass`, que dentro del panel es la tarjeta destacada (un paso más clara y con borde más visible, sin morado). Las demás, `v2-card`.
 
 ## 5. Gráficos (`components/panel/graficos.tsx`)
 
@@ -89,7 +93,7 @@ SVG propio, **sin librerías** (CLAUDE.md §9). Estética dashboard-premium.
 
 | Gráfico | Dónde | Detalles |
 |---|---|---|
-| `GraficoArea` | Cómo van las ventas | Curva suave, relleno morado que se desvanece, rejilla punteada al 6 %, eje Y con techo "bonito", punto lima con halo en el último dato, tooltip al tocar/pasar |
+| `GraficoArea` | Cómo van las ventas | Curva suave en blanco (tinta en claro), relleno que se desvanece, rejilla punteada al 6 %, eje Y con techo "bonito", punto lima con halo en el último dato, tooltip al tocar/pasar |
 | `Sparkline` | Cifras principales | Línea mínima, sin ejes |
 | `Anillo` | Clientes que compran | Arco con punta redondeada y punto en la punta, número XL centrado |
 | `Embudo` | Clientes que compran | Barras de 36 px que se acortan; "X % pasa" entre pasos; último paso lima |
@@ -131,4 +135,4 @@ Tono: tú, frases cortas, sin signos de admiración de más. Los mensajes de err
 - Foco visible lima en todo (regla global) y halo morado en campos.
 - Todo lo que se hace arrastrando se puede hacer con botones (flechas en proyectos).
 - Selectores con `role="radiogroup"/"radio"`, interruptor con `role="switch"`, casillas con `role="checkbox"`, pestañas con `role="tab"`.
-- Contraste: textos en `white`, `fog` o `fog-dim` sobre ink/surface (AA o más).
+- Contraste AA o más en los **dos temas**: textos en `white`, `fog` o `fog-dim`; en claro el dato pasa a morado (`#6D45F0`, 5,6:1; rellenos `#9B7BFF` con texto ink, 6,4:1).

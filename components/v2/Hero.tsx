@@ -81,7 +81,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
           {hero.pruebas.map((p) => (
             <div
               key={p.texto}
-              className="rounded-frame border border-white/[0.07] bg-white/[0.02] px-3 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-7"
+              className="v2-card !rounded-frame px-3 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-7"
             >
               <dt className="sr-only">{p.texto}</dt>
               <dd>

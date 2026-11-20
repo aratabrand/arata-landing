@@ -9,26 +9,80 @@
    CSS del sitio: en Vercel, según qué archivo se procesara primero, el sitio quedaba compilado con
    la configuración del panel (sin text-v2-hero, gap-6, etc.) y se veía roto. Aquí no se usa @config.
    ────────────────────────────────────────────────────────────────────── */
-/* ── Base visual del panel (D-136) ───────────────────────────────────────
-   Superficies en capas (fondo ink → contenido canvas → tarjeta → detalle dentro de la tarjeta),
-   bordes finos, sin luces de color ni brillos. Morado de marca para actuar y elegir; lima solo
-   para destacar un dato (sube, completado, nuevo). Solo dentro de .pn-root (layout del panel). */
-.pn-root .v2-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #100d1a;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 20px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.35);
+/* ── Temas del panel (D-149): oscuro (por defecto) y claro ─────────────────
+   Todos los colores que cambian con el tema son variables (canales RGB) que usa
+   tailwind.panel.config.ts: `white` (texto principal y velos), `fog`, `noche`, `canvas`,
+   `surface`, `dato` (lima para cifras), `alerta`, `ambar`. Así `text-white`, `bg-white/5`,
+   `border-white/10` se vuelven tinta sobre claro sin tocar cada componente.
+   Fijos en los dos temas: el morado de los botones, el lima de fondo (con texto ink) y `ink`.
+   El tema se guarda en la cookie `pn-tema` y el servidor lo pone en `data-tema` (sin destello). */
+.pn-root,
+[data-tema="oscuro"] {
+  --pn-fg: 255 255 255;
+  --pn-fog: 180 174 203;
+  --pn-fog-dim: 138 132 168;
+  --pn-noche: 2 1 4;
+  --pn-canvas: 8 8 10;
+  --pn-s1: 15 15 18;
+  --pn-s2: 22 22 26;
+  --pn-s3: 29 29 34;
+  --pn-dato: 182 255 0;
+  --pn-lima: 182 255 0;
+  --pn-alerta: 255 155 176;
+  --pn-alerta-fuerte: 255 107 139;
+  --pn-ambar: 255 199 107;
+  --pn-tarjeta: rgb(255 255 255 / 0.02);
+  --pn-tarjeta-borde: rgb(255 255 255 / 0.07);
+  --pn-tarjeta-sombra: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --pn-destacada: rgb(255 255 255 / 0.045);
+  --pn-destacada-borde: rgb(255 255 255 / 0.2);
+  --pn-campo: #0b0b0e;
+  color-scheme: dark;
 }
-/* Tarjeta destacada (la primera cifra): mismo cuerpo, con un filo morado arriba. Sin desenfoque ni luz de fondo */
+[data-tema="claro"] {
+  --pn-fg: 3 1 11;
+  --pn-fog: 82 80 92;
+  --pn-fog-dim: 104 101 114;
+  --pn-noche: 242 242 245;
+  --pn-canvas: 250 250 251;
+  --pn-s1: 255 255 255;
+  --pn-s2: 243 243 246;
+  --pn-s3: 255 255 255;
+  /* D-151: en claro el dato va en MORADO (no verde): texto #6D45F0 (5,6:1 sobre blanco) y
+     rellenos #9B7BFF (con texto ink encima, 6,4:1) */
+  --pn-dato: 109 69 240;
+  --pn-lima: 155 123 255;
+  --pn-alerta: 190 18 60;
+  --pn-alerta-fuerte: 225 29 72;
+  --pn-ambar: 161 98 7;
+  --pn-tarjeta: #ffffff;
+  --pn-tarjeta-borde: rgb(3 1 11 / 0.08);
+  --pn-tarjeta-sombra: 0 1px 2px rgb(3 1 11 / 0.04), 0 8px 24px -16px rgb(3 1 11 / 0.12);
+  --pn-destacada: #ffffff;
+  --pn-destacada-borde: rgb(3 1 11 / 0.22);
+  --pn-campo: #ffffff;
+  color-scheme: light;
+}
+
+/* ── Base visual del panel (D-136 → D-149: mismo sistema que el sitio) ─────
+   Tarjetas transparentes en oscuro (blancas en claro), bordes finos, sin luces de color.
+   El morado es solo para botones y lo que actúa como botón; el lima, solo para datos. */
+.pn-root .v2-card {
+  background: var(--pn-tarjeta);
+  border: 1px solid var(--pn-tarjeta-borde);
+  border-radius: 20px;
+  box-shadow: var(--pn-tarjeta-sombra);
+}
+/* Tarjeta destacada (la primera cifra): un poco más clara y con borde más visible. Sin morado */
 .pn-root .v2-glass {
   isolation: auto;
   overflow: visible;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-radius: 20px;
-  border: 1px solid rgba(125, 83, 255, 0.28);
-  background: linear-gradient(180deg, rgba(125, 83, 255, 0.1), rgba(125, 83, 255, 0.02) 70%), #100d1a;
-  box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--pn-destacada-borde);
+  background: var(--pn-destacada);
+  box-shadow: var(--pn-tarjeta-sombra);
 }
 .pn-root .v2-glass::before { display: none; }
 /* Sin el brillo que recorre los botones */
@@ -44,21 +98,9 @@
 .pn-primario:hover { filter: brightness(1.1); }
 .pn-primario:active { transform: translateY(1px); }
 .pn-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
-.pn-primario:focus-visible { outline: 2px solid #b9a4ff; outline-offset: 2px; }
+.pn-primario:focus-visible { outline: 2px solid #7d53ff; outline-offset: 2px; }
 
-/* Cuadrito con ícono al inicio de una tarjeta o cifra */
-.pn-icono {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex: none;
-  border-radius: 10px;
-  color: #b9a4ff;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
+/* Cuadrito con ícono: SIN USO desde D-149 (los íconos decorativos se quitaron, como en el sitio, D-147) */
 
 /* ── Escena del login (D-136): esfera de luz solo con CSS ─────────────────
    Morado de marca para el cuerpo y la luz; lima en un filo y un reflejo pequeños. Se mueve con
@@ -69,7 +111,7 @@
   isolation: isolate;
   overflow: hidden;
   --tam: 112px;
-  background: radial-gradient(120% 90% at 18% 6%, #1b1142 0%, #0b0817 52%, #05030c 100%);
+  background: radial-gradient(120% 90% at 18% 6%, #17171b 0%, #09090b 52%, #020104 100%); /* D-149: sin morado */
 }
 @media (min-width: 1024px) { .pn-escena { --tam: min(52%, 320px); } }
 .pn-malla {
@@ -90,7 +132,7 @@
   width: calc(var(--tam) * 2.4);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(125, 83, 255, 0.4), rgba(125, 83, 255, 0.12) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04) 55%, transparent);
 }
 .pn-orbita {
   position: absolute;
@@ -118,11 +160,11 @@
   overflow: hidden;
   background:
     radial-gradient(circle at 30% 23%, rgba(255, 255, 255, 0.92) 0, rgba(255, 255, 255, 0) 8%),
-    radial-gradient(circle at 36% 30%, #d3c4ff 0%, #9b7bff 20%, #7d53ff 42%, #4a2ac0 66%, #150a40 100%);
+    radial-gradient(circle at 36% 30%, #ffffff 0%, #d9d9de 18%, #8d8d96 42%, #3a3a41 68%, #0d0d10 100%); /* esfera plateada (D-149) */
   box-shadow:
     inset -22px -30px 54px rgba(3, 1, 11, 0.72),
     inset 14px 18px 44px rgba(214, 196, 255, 0.32),
-    0 0 90px rgba(125, 83, 255, 0.5);
+    0 0 90px rgba(255, 255, 255, 0.18);
 }
 /* Reflejo lima abajo a la derecha, dentro de la esfera */
 .pn-orbe::after {
@@ -159,7 +201,7 @@
   height: calc(var(--tam) * 0.15);
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(125, 83, 255, 0.5), transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent);
   filter: blur(6px);
 }
 /* Polvo de luz: puntitos fijos */
@@ -172,11 +214,11 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.7);
   box-shadow:
-    210px 40px 0 rgba(255, 255, 255, 0.45), 320px 150px 0 rgba(185, 164, 255, 0.7), 60px 190px 0 rgba(255, 255, 255, 0.35),
-    120px 330px 0 rgba(185, 164, 255, 0.55), 300px 380px 0 rgba(255, 255, 255, 0.4), 250px 270px 0 rgba(182, 255, 0, 0.7),
+    210px 40px 0 rgba(255, 255, 255, 0.45), 320px 150px 0 rgba(255, 255, 255, 0.55), 60px 190px 0 rgba(255, 255, 255, 0.35),
+    120px 330px 0 rgba(255, 255, 255, 0.45), 300px 380px 0 rgba(255, 255, 255, 0.4), 250px 270px 0 rgba(182, 255, 0, 0.7),
     20px 90px 0 rgba(255, 255, 255, 0.3), 360px 60px 0 rgba(255, 255, 255, 0.3);
 }
-/* Borde suave entre la escena y el formulario (color del fondo del formulario: canvas #0a0813) */
+/* Borde suave entre la escena y el formulario (color del fondo del formulario: canvas oscuro #08080a) */
 .pn-escena::after {
   content: "";
   position: absolute;
@@ -184,10 +226,10 @@
   height: 72px;
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent, #0a0813);
+  background: linear-gradient(180deg, transparent, #08080a);
 }
 @media (min-width: 1024px) {
-  .pn-escena::after { inset: 0 0 0 auto; width: 96px; height: auto; background: linear-gradient(90deg, transparent, #0a0813); }
+  .pn-escena::after { inset: 0 0 0 auto; width: 96px; height: auto; background: linear-gradient(90deg, transparent, #08080a); }
 }
 @keyframes pn-flota {
   from { transform: translate(-50%, -50%); }
@@ -206,17 +248,17 @@
   height: 2.75rem;
   padding: 0 0.85rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: #0b0914;
-  color: #fff;
+  border: 1px solid rgb(var(--pn-fg) / 0.1);
+  background: var(--pn-campo);
+  color: rgb(var(--pn-fg));
   font-size: 16px; /* 16 px: iOS no hace zoom al enfocar */
   line-height: 1.4;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.pn-input::placeholder { color: #8a84a8; }
-.pn-input:hover { border-color: rgba(255, 255, 255, 0.16); }
+.pn-input::placeholder { color: rgb(var(--pn-fog-dim)); }
+.pn-input:hover { border-color: rgb(var(--pn-fg) / 0.18); }
 .pn-input:focus { outline: none; border-color: #7d53ff; box-shadow: 0 0 0 3px rgba(125, 83, 255, 0.25); }
-select.pn-input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #8a84a8 50%), linear-gradient(135deg, #8a84a8 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 2rem; }
+select.pn-input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, rgb(var(--pn-fog-dim)) 50%), linear-gradient(135deg, rgb(var(--pn-fog-dim)) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 2rem; }
 @media (min-width: 640px) { .pn-input { font-size: 0.875rem; } }
 
 

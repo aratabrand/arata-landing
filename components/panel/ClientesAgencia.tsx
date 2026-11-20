@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { ExternalLink, History, MapPin, MessageCircle, Phone, Plus, Search, Trash2 } from "lucide-react";
+import { ExternalLink, History, MapPin, MessageCircle, Phone, Plus, Search, Trash2 } from "./iconos";
 import type { ClienteAgencia, DatosClientes } from "@/lib/panel/clientes/datos";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
@@ -174,7 +174,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
               return (
                 <li key={c.id}>
                   <button type="button" onClick={() => setAbierto(c.id)} className="flex w-full flex-wrap items-center gap-x-4 gap-y-2 py-3.5 text-left hover:bg-surface-2/40">
-                    <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 font-display text-sm font-bold text-brand-soft">
+                    <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
                       {titulo(c).slice(0, 1).toUpperCase()}
                     </span>
                     <span className="min-w-0 flex-1 basis-48">
@@ -281,12 +281,12 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
         <h3 className="mb-2 text-sm font-semibold text-white">Datos</h3>
         <ul className="space-y-2 text-sm text-fog">
           <li className="text-white">{c.nombre}{c.empresa && <span className="text-fog"> · {c.empresa}</span>}</li>
-          <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-brand-soft" />{mascaraCelular(c.telefono, c.pais)}</li>
-          <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-brand-soft" />{[c.ciudad, c.paisNombre].filter(Boolean).join(", ")}</li>
+          <li className="flex items-center gap-2"><Phone aria-hidden className="h-4 w-4 text-fog" />{mascaraCelular(c.telefono, c.pais)}</li>
+          <li className="flex items-center gap-2"><MapPin aria-hidden className="h-4 w-4 text-fog" />{[c.ciudad, c.paisNombre].filter(Boolean).join(", ")}</li>
           {c.sitioWeb && (
             <li>
               <a href={c.sitioWeb} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-white">
-                <ExternalLink aria-hidden className="h-4 w-4 text-brand-soft" /> {c.sitioWeb.replace(/^https:\/\//, "")}
+                <ExternalLink aria-hidden className="h-4 w-4 text-fog" /> {c.sitioWeb.replace(/^https:\/\//, "")}
               </a>
             </li>
           )}
@@ -333,7 +333,7 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
 
       <section>
         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
-          <History aria-hidden className="h-4 w-4 text-brand-soft" /> Historial
+          <History aria-hidden className="h-4 w-4 text-fog" /> Historial
         </h3>
         {historial === null ? <p className="text-sm text-fog-dim">Cargando…</p> : <Historial eventos={historial} vacio="Sin cambios registrados todavía." />}
       </section>
@@ -344,7 +344,7 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
           {puedeBorrar && c.proyectos.length === 0 && (
             <BotonSecundario
               type="button"
-              className="text-[#FF9BB0]"
+              className="text-alerta"
               onClick={() => window.confirm(`¿Borrar a ${titulo(c)} para siempre? No se puede deshacer y queda en el historial quién lo borró.`) && acc.correr(() => borrarCliente(c.id), onBorrado)}
             >
               <Trash2 aria-hidden className="h-4 w-4" /> Borrar
