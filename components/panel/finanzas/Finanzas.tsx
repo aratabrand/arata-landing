@@ -145,7 +145,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
                     <span className="flex items-center gap-2 text-white">
                       <span className="h-2.5 w-2.5 rounded-full" style={{ background: f.color }} />
                       {f.nombre}
-                      {esYo && <Pill tono="lima">Tú</Pill>}
+                      {esYo && <Pill>Tú</Pill>}
                     </span>
                     <span className="font-display font-bold text-white">{pesos(f.total)}</span>
                   </div>
@@ -313,7 +313,7 @@ function ProyeccionFin({ datos }: { datos: DatosFinanzas }) {
                 <span className="flex items-center gap-2 text-white">
                   <span className="h-2.5 w-2.5 rounded-full" style={{ background: colorPersona(i) }} />
                   {x.persona.nombre}
-                  {x.persona.id === datos.miPersonaId && <Pill tono="lima">Tú</Pill>}
+                  {x.persona.id === datos.miPersonaId && <Pill>Tú</Pill>}
                 </span>
                 <span className="text-right">
                   <span className="block font-display font-bold text-white">{pesos(x.total)}</span>

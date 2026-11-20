@@ -31,6 +31,7 @@
   --pn-alerta: 255 155 176;
   --pn-alerta-fuerte: 255 107 139;
   --pn-ambar: 255 199 107;
+  --pn-verde: 74 222 128; /* D-155: verde de semáforo (estados), distinto del lima de Arata */
   /* D-153: tarjetas del sistema (D-150): negras con humo blanco suave y borde gris */
   --pn-tarjeta: radial-gradient(70% 55% at 88% 108%, rgb(255 255 255 / 0.055), transparent 70%), linear-gradient(180deg, #0e0e10 0%, #060607 100%);
   --pn-tarjeta-borde: rgb(255 255 255 / 0.13);
@@ -38,10 +39,13 @@
   --pn-destacada: radial-gradient(38% 30% at 80% 84%, rgb(255 255 255 / 0.14), transparent 70%), radial-gradient(48% 36% at 96% 100%, rgb(255 255 255 / 0.1), transparent 70%), radial-gradient(34% 28% at 62% 98%, rgb(255 255 255 / 0.06), transparent 70%), linear-gradient(180deg, #111113 0%, #060607 100%);
   --pn-destacada-borde: rgb(255 255 255 / 0.42);
   --pn-pildora: linear-gradient(180deg, #151517 0%, #070708 100%);
-  /* D-154: en oscuro la píldora va en el verde de Arata (borde y texto lima) */
-  --pn-pildora-borde: rgb(182 255 0 / 0.4);
-  --pn-pildora-sombra: inset 0 1px 0 rgb(182 255 0 / 0.1);
-  --pn-pildora-texto: 182 255 0;
+  --pn-pildora-borde: rgb(255 255 255 / 0.24);
+  --pn-pildora-sombra: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --pn-pildora-texto: 180 174 203;
+  /* D-155: el verde de Arata (lima) solo en la píldora o pestaña ACTIVA */
+  --pn-activa: linear-gradient(180deg, rgb(182 255 0 / 0.12) 0%, rgb(182 255 0 / 0.04) 100%), #070708;
+  --pn-activa-borde: rgb(182 255 0 / 0.55);
+  --pn-activa-texto: 182 255 0;
   --pn-campo: #0b0b0e;
   color-scheme: dark;
 }
@@ -61,6 +65,7 @@
   --pn-alerta: 190 18 60;
   --pn-alerta-fuerte: 225 29 72;
   --pn-ambar: 161 98 7;
+  --pn-verde: 21 128 61;
   /* En claro: blancas con un humo gris muy suave (el mismo gesto, invertido) */
   --pn-tarjeta: radial-gradient(70% 55% at 88% 108%, rgb(3 1 11 / 0.035), transparent 70%), #ffffff;
   --pn-tarjeta-borde: rgb(3 1 11 / 0.1);
@@ -70,7 +75,11 @@
   --pn-pildora: linear-gradient(180deg, #ffffff 0%, #f3f3f6 100%);
   --pn-pildora-borde: rgb(3 1 11 / 0.16);
   --pn-pildora-sombra: 0 1px 1px rgb(3 1 11 / 0.04);
-  --pn-pildora-texto: 82 80 92; /* en claro sigue neutra: el lima no va como texto sobre blanco */
+  --pn-pildora-texto: 82 80 92;
+  /* En claro la activa va en morado (como el dato, D-151): el lima no va como texto sobre blanco */
+  --pn-activa: rgb(109 69 240 / 0.08);
+  --pn-activa-borde: rgb(109 69 240 / 0.5);
+  --pn-activa-texto: 109 69 240;
   --pn-campo: #ffffff;
   color-scheme: light;
 }
@@ -98,13 +107,18 @@
 .pn-root .v2-glass::before { display: none; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
-/* Píldora del sistema (D-150, D-153, D-154): en oscuro negra con borde y texto lima (verde de Arata);
-   en claro blanca con borde tinta y texto gris */
+/* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro).
+   Activa (filtro o pestaña elegida, D-155): verde de Arata en oscuro, morado en claro. */
 .pn-pildora {
   color: rgb(var(--pn-pildora-texto));
   background: var(--pn-pildora);
   border: 1px solid var(--pn-pildora-borde);
   box-shadow: var(--pn-pildora-sombra);
+}
+.pn-pildora-activa {
+  color: rgb(var(--pn-activa-texto));
+  background: var(--pn-activa);
+  border: 1px solid var(--pn-activa-borde);
 }
 
 /* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */

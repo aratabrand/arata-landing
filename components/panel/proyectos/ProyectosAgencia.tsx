@@ -86,7 +86,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
             type="button"
             aria-pressed={filtro === f.v}
             onClick={() => setFiltro(f.v)}
-            className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "pn-pildora hover:text-white")}
+            className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "pn-pildora-activa" : "pn-pildora hover:text-white")}
           >
             {f.l}
           </button>

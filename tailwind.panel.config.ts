@@ -41,6 +41,7 @@ const config: Config = {
         lime: "rgb(var(--pn-lima) / <alpha-value>)", // rellenos de dato (en claro, morado claro con texto ink, D-151)
         alerta: { DEFAULT: "rgb(var(--pn-alerta) / <alpha-value>)", fuerte: "rgb(var(--pn-alerta-fuerte) / <alpha-value>)" },
         ambar: "rgb(var(--pn-ambar) / <alpha-value>)",
+        verde: "rgb(var(--pn-verde) / <alpha-value>)", // semáforo (D-155)
       },
     },
   },

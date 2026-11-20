@@ -85,13 +85,21 @@ export function Delta({ valor, className }: { valor: number | null; className?: 
   );
 }
 
-/** Píldora de estado (clientes, prioridad, fase). */
-export function Pill({ children, tono = "neutro", className }: { children: ReactNode; tono?: "lima" | "morado" | "neutro" | "alerta"; className?: string }) {
+export type TonoPill = "verde" | "verdeFuerte" | "ambar" | "alerta" | "neutro" | "lima" | "morado";
+
+/** Píldora de estado (clientes, prioridad, fase). Semáforo (D-155): verde bien, ámbar atención,
+ *  alerta (rojo) mal; verdeFuerte = lo mejor (cliente que repite); neutro = píldora del sistema. El lima de Arata NO va en estados: solo en la
+ *  píldora o pestaña activa (`.pn-pildora-activa`). `lima` y `morado` se conservan como nombres viejos. */
+export function Pill({ children, tono = "neutro", className }: { children: ReactNode; tono?: TonoPill; className?: string }) {
+  const verde = "border-verde/35 bg-verde/10 text-verde";
   const tonos = {
-    lima: "border-lime/30 bg-lime/10 text-dato",
-    morado: "pn-pildora", // D-149: sin morado (el nombre se conserva); D-154: igual a la píldora del sistema
-    neutro: "pn-pildora", // D-153/D-154: píldora del sistema (en oscuro, verde de Arata; en claro, blanca)
-    alerta: "border-alerta-fuerte/30 bg-alerta-fuerte/10 text-alerta",
+    verde,
+    verdeFuerte: "border-verde/60 bg-verde/20 text-verde",
+    lima: verde, // D-155: antes lima; ahora verde de semáforo
+    ambar: "border-ambar/35 bg-ambar/10 text-ambar",
+    alerta: "border-alerta-fuerte/35 bg-alerta-fuerte/10 text-alerta",
+    morado: "pn-pildora", // D-149: sin morado (el nombre se conserva)
+    neutro: "pn-pildora", // D-153: píldora del sistema
   } as const;
   return (
     <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[0.72rem] font-semibold", tonos[tono], className)}>

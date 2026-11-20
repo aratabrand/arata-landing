@@ -23,9 +23,10 @@ import { cn } from "@/lib/utils";
 
 const ORIGENES = ["Instagram", "Google", "WhatsApp", "Referido", "Página", "Publicidad", "Evento", "Otro"] as const;
 const ESTADOS = [
-  { valor: "nuevo", label: "Nuevo", tono: "morado" },
-  { valor: "activo", label: "Activo", tono: "neutro" },
-  { valor: "recurrente", label: "Recurrente", tono: "lima" },
+  // D-155: semáforo. Ámbar = recién llega (hay que cuidarlo); verde = compra; verde fuerte = repite; rojo = dejó de comprar
+  { valor: "nuevo", label: "Nuevo", tono: "ambar" },
+  { valor: "activo", label: "Activo", tono: "verde" },
+  { valor: "recurrente", label: "Recurrente", tono: "verdeFuerte" },
   { valor: "inactivo", label: "Inactivo", tono: "alerta" },
 ] as const;
 const estadoP = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "En curso", t: "morado" }, cerrado: { l: "Cerrado", t: "lima" } } as const;
@@ -144,7 +145,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
                 type="button"
                 aria-pressed={filtro === f.v}
                 onClick={() => setFiltro(f.v)}
-                className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "border-brand bg-brand/20 text-white" : "pn-pildora hover:text-white")}
+                className={cn("h-9 rounded-full border px-3.5 text-xs font-semibold", filtro === f.v ? "pn-pildora-activa" : "pn-pildora hover:text-white")}
               >
                 {f.l}
               </button>
@@ -181,7 +182,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="truncate font-medium text-white">{titulo(c)}</span>
                         <Pill tono={e.tono}>{e.label}</Pill>
-                        {curso.length > 0 && <Pill tono="lima">Proyecto en curso</Pill>}
+                        {curso.length > 0 && <Pill>Proyecto en curso</Pill>}
                       </span>
                       <span className="mt-0.5 block truncate text-xs text-fog-dim">
                         {[c.empresa ? c.nombre : null, c.origen ? `llegó por ${c.origen}` : null, c.ciudad].filter(Boolean).join(" · ")}
@@ -257,7 +258,7 @@ function Ficha({ c, datos, puedeEditar, puedeBorrar, onBorrado }: { c: ClienteAg
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-2">
         <Pill tono={e.tono}>{e.label}</Pill>
-        {curso.length > 0 ? <Pill tono="lima">{curso.length === 1 ? "1 proyecto en curso" : `${curso.length} proyectos en curso`}</Pill> : <Pill>Sin proyecto en curso</Pill>}
+        {curso.length > 0 ? <Pill>{curso.length === 1 ? "1 proyecto en curso" : `${curso.length} proyectos en curso`}</Pill> : <Pill>Sin proyecto en curso</Pill>}
       </div>
 
       <dl className="grid grid-cols-3 gap-2">
