@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión (D-145, D-146 en vista previa) | 0.6 | 20 nov 2026 | Sergio |
+| En revisión (D-145 a D-147 en vista previa) | 0.7 | 20 nov 2026 | Sergio |
 
 > Esta versión registra la **dirección** que dio Sergio (D-025, D-026), la traducción de las referencias de 21st.dev (D-044, §9), la **implementación en código** (§10–§12) y el **estilo vigente desde el 19 nov 2026: el del panel aplicado al sitio** (D-141, D-142; §2 y §13). Se ve en vivo en `/sistema` (guía) y en aratasan.com. **El sitio y el panel comparten base visual**: si se cambia una pieza en uno, se revisa en el otro (§13).
 
@@ -57,6 +57,15 @@ Como todo es oscuro, la profundidad no sale del cambio de fondo sino de **capas 
 | `purple-deep` (`brand-ink`) | `#3B1D99` | Sin uso en el sitio desde D-146 | Texto (no se lee sobre oscuro) |
 | `brand-soft` | `#B9A4FF` | Sin uso en el sitio desde D-146: etiquetas, íconos y checks pasan a `fog` | Fondos |
 
+### Íconos y fondo continuo ✅ (D-147)
+
+| Pieza | Cómo va |
+|---|---|
+| Íconos decorativos | **Fuera** (Sergio: "se ven muy IA"). El Problema y "Todo lo que trae" llevan **número** (01, 02…) en vez de ícono; "Es para ti si…" lleva un punto; el adicional, el aviso de cookies y `/agendar` van sin ícono |
+| Íconos que cumplen una función | Flechas, abrir/cerrar, check, video y WhatsApp con **Phosphor** en trazo `light` (`@phosphor-icons/react`, versión SSR), en `components/v2/iconos.tsx`. **Lucide ya no se usa en el sitio** (el panel sí la sigue usando) |
+| Fondo continuo | Las líneas verticales y los haces van **una sola vez para toda la página** (`.v2-fondo` en `app/(v2)/layout.tsx`, fijo detrás del contenido; los lados se desvanecen con una capa del color del fondo, sin `mask-image`). Las secciones solo ponen su luz blanca suave (`GridBackground`, sin líneas) |
+| Grano | Ahora en un `<canvas>` que se pinta cuando el navegador está libre (`components/v2/Grano.tsx`). Antes era un SVG con filtro de ruido y retrasaba el primer pintado |
+
 ### Fondo premium ✅ (D-145)
 
 Sergio sintió el sitio "muy IA". Lo que más lo causaba: morado brillante sobre un negro con tinte morado, cuadrícula de fondo y cuadritos de ícono en todo. Cambios:
@@ -87,7 +96,7 @@ Es el estilo vigente. El 19 nov se probaron y se descartaron dos direcciones (co
 | Tarjeta (`.v2-card`) | **Transparente** (D-146): blanco al 2 %, borde blanco al 7 % y un filo de luz arriba. Antes, por capas sobre `#0F0C19` (tinte morado) |
 | Tarjeta destacada (`.v2-destacada`) | **Transparente y un poco más clara** (D-146): blanco al 4,5 % y borde blanco al 20 %. Paquete recomendado y precio de cada servicio. Antes, filo morado |
 | Garantías (`.v2-glass`) | Transparentes como `.v2-card`, borde blanco al 9 % (D-146) |
-| Cuadrito de ícono (`.v2-icono`) | Fondo blanco al 4 %, ícono **blanco al 78 %** (D-146; antes morado). En el Problema, "Es para ti si", "Todo lo que trae" y el adicional; las cifras del hero ya no llevan (D-145) |
+| Cuadrito de ícono (`.v2-icono`) | **Sin uso en el sitio desde D-147** (se quitaron los íconos decorativos) |
 | Botones | Los del panel (D-142): principal morado con texto blanco (`.v2-primario` = `.pn-primario`) y secundario oscuro con borde fino. La píldora con círculo de D-137 se quitó |
 | Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-142). Los checks de "Es para ti si" pasan a morado |
 
@@ -129,7 +138,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
-| Tarjetas del problema | Apiladas, tarjeta transparente + cuadrito de ícono (`.v2-icono`) + título + texto, resaltado que las recorre (D-066, D-141) | P1 |
+| Tarjetas del problema | Apiladas, tarjeta transparente + **número** (01–05, D-147) + título + texto, resaltado que las recorre (el número se pinta de lima) (D-066, D-141) | P1 |
 | Cifras del hero | 3 tarjetas **transparentes** (blanco al 2 %, borde 7 %), **sin íconos**, más grandes en escritorio (cifra 48 px, ancho hasta 1024 px) + cifra con contador + texto (D-145) | P1 |
 | Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada (`.v2-destacada`, transparente con borde blanco más visible, D-146), etiqueta "Recomendado" blanca con texto `ink` y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
 | Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: tarjeta transparente (`.v2-glass`, D-146) + ícono SVG animado en lima y blanco (`Assurances`, D-068) | P1 |
@@ -147,7 +156,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
 | Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula morada (D-142; antes lima) que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
-| Fondo de líneas | `components/ui/grid-background.tsx` (ref. 21st.dev): **solo líneas verticales** (D-145, sin cuadrícula), blancas al 5 %, una cada 80 px y centradas en la sección; franja y luz **blancas** muy suaves (D-146); bordes desvanecidos. Prop `haces`: luces finas que bajan por algunas líneas (hero y Cómo trabajamos), fuera de la columna del texto. Solo CSS, sin JS | P1 |
+| Fondo de líneas | **Continuo para toda la página** (`.v2-fondo`, D-147): líneas verticales blancas al 4,5 %, una cada 80 px y centradas, con haces de luz a los lados del texto; sin cuadrícula (D-145). `components/ui/grid-background.tsx` ahora solo pone la luz blanca suave de cada sección (con `lineas` vuelve a dibujar las líneas, solo para muestras) | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
 
@@ -275,6 +284,8 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Menú del celular: opciones de **56 px o más**, acción principal **abajo** (zona del pulgar), cierre con X/Escape/al tocar, foco dentro del panel | Fácil de usar con una mano (D-070) |
 | **Analítica (GTM/GA4) se carga al primer toque, scroll o tecla, o a los 7 s; de inmediato si hay un evento de conversión** | El contenedor con GA4 pesa ~178 KB; cargado al abrir, bajó el Inicio de 95 a 77–82 en celular. Medir siempre con los scripts de terceros permitidos: un entorno que los bloquea da números irreales (D-098) |
 | **Scroll horizontal: recortar solo el `<main>` en celular con `overflow-x: clip`** (no el `body`, no `hidden`) | Evita que una luz o una banda 3D (Safari no siempre recorta lo 3D) mueva la página de lado, y deja que una sección tenga su propio scroll horizontal (D-097) |
+| **Texturas (grano, ruido) en `<canvas>` pintado después de abrir, nunca un SVG con `feTurbulence` como fondo** | El filtro se rasteriza antes del primer pintado y retrasa el título (LCP) en celular (D-147) |
+| Fondos fijos de página completa **sin `mask-image`**: desvanecer con una capa del color del fondo | La máscara obliga a rasterizar otra capa del tamaño de la pantalla (D-147) |
 | Animación ligada al scroll: **un solo listener pasivo** que escribe una variable CSS (`--p`), activo solo mientras la sección se ve; lo demás es `calc()` en CSS | Sin listeners por elemento ni reflow (`ScrollPaint`, D-067) |
 
 ---
@@ -289,10 +300,11 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
 | D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | ✅ Vigente (en vista previa) |
 | D-145 (20 nov) | **Menos "look de IA"**: fondo negro `#020104`, sin cuadrícula (solo líneas verticales), haces de luz, grano, luces moradas más suaves, cifras del hero sin íconos | ✅ Vigente |
 
-**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **morado fuera de los botones** (D-146), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
+**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **morado fuera de los botones** (D-146), **íconos decorativos en tarjetas** (D-147), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
 
 **Sitio y panel comparten el botón principal; las tarjetas ya no son iguales** (desde D-146 las del sitio son transparentes y sin morado; las del panel siguen por capas con filo morado, D-136). Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
 

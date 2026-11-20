@@ -73,7 +73,8 @@ export function GridBackground({
     <div
       aria-hidden
       className={cn("pointer-events-none absolute inset-0 -z-10 overflow-hidden", className)}
-      style={{ ...style, maskImage: mask, WebkitMaskImage: mask }}
+      // La máscara solo hace falta con líneas: la luz sola ya se desvanece (y sin máscara se pinta más barato)
+      style={lineas || haces.length ? { ...style, maskImage: mask, WebkitMaskImage: mask } : style}
     >
       {haces.map((n, i) => (
         <span
