@@ -160,18 +160,6 @@
     background-position: 0 0, center top;
   }
 
-  /* Grano muy fino sobre toda la página (D-145). Imagen SVG en línea (sin red), fija y sin
-     animación: el navegador la pinta una vez. No recibe clics. */
-  .v2-grano {
-    /* canvas que pinta components/v2/Grano.tsx después de abrir la página (D-147) */
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 70;
-    pointer-events: none;
-    opacity: 0.045;
-  }
 
   /* Cuadrito con ícono (igual que .pn-icono del panel) */
   .v2-icono {

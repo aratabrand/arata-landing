@@ -258,7 +258,7 @@ export default function SistemaV2() {
               <li className="v2-card p-4">Solo se anima transform y opacity (GPU).</li>
               <li className="v2-card p-4">Siempre se respeta prefers-reduced-motion.</li>
               <li className="v2-card p-4">El h1 del hero no se anima: aparece en el primer pintado (mejor LCP).</li>
-              <li className="v2-card p-4">Luces de fondo suaves (gradiente radial sin filter:blur), grano fijo al 4,5 % y haces que bajan por las líneas.</li>
+              <li className="v2-card p-4">Luces blancas suaves (gradiente radial sin filter:blur) y haces que bajan por las líneas. Sin grano (D-148).</li>
             </ul>
           </Bloque>
         </Container>

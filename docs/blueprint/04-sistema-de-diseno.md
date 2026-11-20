@@ -64,7 +64,7 @@ Como todo es oscuro, la profundidad no sale del cambio de fondo sino de **capas 
 | Íconos decorativos | **Fuera** (Sergio: "se ven muy IA"). El Problema y "Todo lo que trae" llevan **número** (01, 02…) en vez de ícono; "Es para ti si…" lleva un punto; el adicional, el aviso de cookies y `/agendar` van sin ícono |
 | Íconos que cumplen una función | Flechas, abrir/cerrar, check, video y WhatsApp con **Phosphor** en trazo `light` (`@phosphor-icons/react`, versión SSR), en `components/v2/iconos.tsx`. **Lucide ya no se usa en el sitio** (el panel sí la sigue usando) |
 | Fondo continuo | Las líneas verticales y los haces van **una sola vez para toda la página** (`.v2-fondo` en `app/(v2)/layout.tsx`, fijo detrás del contenido; los lados se desvanecen con una capa del color del fondo, sin `mask-image`). Las secciones solo ponen su luz blanca suave (`GridBackground`, sin líneas) |
-| Grano | Ahora en un `<canvas>` que se pinta cuando el navegador está libre (`components/v2/Grano.tsx`). Antes era un SVG con filtro de ruido y retrasaba el primer pintado |
+| Grano | **Quitado** (D-148: Sergio no lo quiere, "efecto borroso"). La regla de velocidad de §12 queda por si se vuelve a usar una textura |
 
 ### Fondo premium ✅ (D-145)
 
@@ -75,7 +75,7 @@ Sergio sintió el sitio "muy IA". Lo que más lo causaba: morado brillante sobre
 | Fondo | `noche` `#020104` en toda la página (antes `ink` `#03010B`, con tinte morado) |
 | Cuadrícula | **Fuera.** Solo líneas verticales (`GridBackground`, también en el hero) |
 | Haces de luz | Luces finas que bajan por algunas líneas del hero y de Cómo trabajamos, lejos del texto. Solo `transform`; con movimiento reducido no salen |
-| Grano | Textura de grano fija al 4,5 % sobre toda la página (`.v2-grano`, SVG en línea, sin red ni animación) |
+| Grano | Se probó al 4,5 % y se quitó en D-148 |
 | Luces moradas | Más suaves: 0,17 / 0,06 (antes 0,28 / 0,12) |
 | Cifras del hero | Transparentes, sin íconos y más grandes en escritorio |
 
@@ -300,6 +300,7 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
 | D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
 | D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | ✅ Vigente (en vista previa) |
 | D-145 (20 nov) | **Menos "look de IA"**: fondo negro `#020104`, sin cuadrícula (solo líneas verticales), haces de luz, grano, luces moradas más suaves, cifras del hero sin íconos | ✅ Vigente |
