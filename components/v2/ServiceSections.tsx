@@ -179,7 +179,7 @@ export function IncludesSection({
                   <span
                     className={cn(
                       "v2-icono h-11 w-11",
-                      clave ? "text-lime" : "text-brand-soft"
+                      clave ? "text-lime" : "text-fog"
                     )}
                   >
                     <Icono aria-hidden className="h-5 w-5" />
@@ -283,7 +283,7 @@ export function CaseCard({
           />
         </HoverCapsule>
         <div className="flex flex-1 flex-col px-3 pb-3 pt-4">
-          <p className="text-xs font-semibold text-brand-soft">{proyecto.etiqueta}</p>
+          <p className="text-xs font-semibold text-fog">{proyecto.etiqueta}</p>
           <Titulo className="mt-1.5 font-display text-xl font-bold tracking-heading text-white">{proyecto.nombre}</Titulo>
           <p className="mt-1.5 flex-1 text-sm leading-relaxed text-fog">{frase ?? proyecto.frase}</p>
           <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-colors group-hover:text-lime">
@@ -445,7 +445,7 @@ export function PriceSection({
       <Container>
         <Reveal>
           <div className="relative mx-auto max-w-3xl v2-destacada rounded-card p-8 text-center sm:p-12">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">
               {paquete}
             </span>
             <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">
@@ -507,7 +507,7 @@ export function CustomSystemSection({
             <ul className="space-y-2">
               {items.map((it) => (
                 <li key={it.titulo} className="flex items-start gap-4 rounded-frame border border-white/6 bg-noche/60 p-4">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand-soft">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-fog">
                     <Check aria-hidden className="h-3.5 w-3.5" strokeWidth={2.5} />
                   </span>
                   <p className="text-fog">

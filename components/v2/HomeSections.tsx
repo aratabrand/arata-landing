@@ -101,7 +101,7 @@ export function ProblemSection({
                   {/* resaltado que recorre las tarjetas */}
                   <span aria-hidden className="v2-problem-hl pointer-events-none absolute inset-0 rounded-frame" />
                   <span className="v2-icono relative h-12 w-12">
-                    <Icono aria-hidden className="v2-problem-icon h-5 w-5 text-brand-soft" />
+                    <Icono aria-hidden className="v2-problem-icon h-5 w-5 text-fog" />
                   </span>
                   <span className="relative">
                     {item.titulo && <span className="block font-semibold text-white">{item.titulo}</span>}

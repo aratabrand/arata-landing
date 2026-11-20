@@ -21,13 +21,13 @@ export const metadata: Metadata = {
 
 const colores = [
   { token: "ink", hex: "#03010B", uso: "Único fondo de página", clase: "bg-noche border border-white/10" },
-  { token: "surface-1", hex: "#0A0714", uso: "Tarjetas", clase: "bg-surface-1 border border-white/10" },
-  { token: "surface-2", hex: "#110C20", uso: "Hover, botón secundario", clase: "bg-surface-2" },
-  { token: "surface-3", hex: "#18112D", uso: "Menús y modales", clase: "bg-surface-3" },
+  { token: "surface-1", hex: "#0B0B0D", uso: "Superficies sólidas (tarjetas: transparentes)", clase: "bg-surface-1 border border-white/10" },
+  { token: "surface-2", hex: "#121215", uso: "Hover, botón secundario", clase: "bg-surface-2" },
+  { token: "surface-3", hex: "#19191D", uso: "Menús y modales", clase: "bg-surface-3" },
   { token: "lime", hex: "#B6FF00", uso: "Datos: cifras clave, anillos, pasos", clase: "bg-lime" },
-  { token: "brand", hex: "#7D53FF", uso: "Botón principal, elegir, bordes destacados, gráficos", clase: "bg-brand" },
-  { token: "brand-soft", hex: "#B9A4FF", uso: "Texto morado sobre oscuro", clase: "bg-brand-soft" },
-  { token: "brand-ink", hex: "#3B1D99", uso: "Tintes de luces (no es texto)", clase: "bg-brand-ink" },
+  { token: "brand", hex: "#7D53FF", uso: "Solo botones (D-146)", clase: "bg-brand" },
+  { token: "brand-soft", hex: "#B9A4FF", uso: "Sin uso en el sitio (D-146)", clase: "bg-brand-soft" },
+  { token: "brand-ink", hex: "#3B1D99", uso: "Sin uso en el sitio (D-146)", clase: "bg-brand-ink" },
 ];
 
 const textos = [
@@ -39,7 +39,7 @@ const textos = [
 function Bloque({ id, titulo, children }: { id: string; titulo: string; children: ReactNode }) {
   return (
     <section aria-labelledby={id} className="border-t border-white/6 py-14">
-      <h2 id={id} className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-brand-soft">
+      <h2 id={id} className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog">
         {titulo}
       </h2>
       <div className="mt-6">{children}</div>
@@ -141,40 +141,40 @@ export default function SistemaV2() {
             <p className="mt-4 text-sm text-fog">Regla: un solo botón morado por vista (el CTA principal). El lima queda para los datos.</p>
           </Bloque>
 
-          <Bloque id="b-panel" titulo="Piezas del panel en el sitio (D-141, D-142)">
+          <Bloque id="b-panel" titulo="Tarjetas transparentes · morado solo en botones (D-146)">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="v2-card p-6">
                 <span className="v2-icono h-9 w-9">
                   <CalendarDays aria-hidden className="h-4 w-4" />
                 </span>
                 <p className="mt-4 font-display text-2xl font-bold text-white">5 días</p>
-                <p className="mt-1 text-sm text-fog">.v2-card + .v2-icono: tarjeta por capas y cuadrito de ícono.</p>
+                <p className="mt-1 text-sm text-fog">.v2-card + .v2-icono: tarjeta transparente y cuadrito con ícono blanco.</p>
               </div>
               <div className="v2-destacada rounded-card p-6">
-                <p className="text-xs font-semibold text-brand-soft">Destacada</p>
+                <p className="text-xs font-semibold text-fog">Destacada</p>
                 <p className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">Paquete recomendado</p>
-                <p className="mt-2 text-sm text-fog">.v2-destacada: filo morado arriba. Solo una o dos por página.</p>
+                <p className="mt-2 text-sm text-fog">.v2-destacada: un poco más clara y con borde blanco. Solo una o dos por página.</p>
               </div>
               <div className="v2-card p-6">
                 <p className="font-display text-3xl font-bold text-lime">90+</p>
                 <p className="mt-2 text-sm text-fog">Lima solo para datos: cifras, anillos, pasos. Nunca en botones.</p>
               </div>
             </div>
-            <p className="mt-4 text-sm text-fog">Son copias de .v2-card del panel, .pn-icono y .pn-primario del panel: si cambias una, cambia la otra (04-sistema-de-diseno.md §13).</p>
+            <p className="mt-4 text-sm text-fog">El botón principal es copia de .pn-primario del panel: si cambias uno, cambia el otro. Las tarjetas del sitio ya son distintas a las del panel (04-sistema-de-diseno.md §13).</p>
           </Bloque>
 
           <Bloque id="b-badges" titulo="Badges">
             <div className="flex flex-wrap gap-3">
               <Badge live>Tomamos 3 proyectos nuevos al mes</Badge>
               <Badge>Catálogo · Sistema</Badge>
-              <span className="rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">Recomendado</span>
+              <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">Recomendado</span>
             </div>
           </Bloque>
 
           <Bloque id="b-tarjetas" titulo="Tarjetas · base (24 px) y bento con vista previa enmarcada (16 px)">
             <div className="grid gap-4 md:grid-cols-3">
               <Spotlight className="p-6">
-                <p className="text-xs font-semibold text-brand-soft">Tarjeta base</p>
+                <p className="text-xs font-semibold text-fog">Tarjeta base</p>
                 <p className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">Pasa el mouse</p>
                 <p className="mt-2 text-sm text-fog">Superficie, borde de 1 px y luz morada que sigue el cursor.</p>
               </Spotlight>

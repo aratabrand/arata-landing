@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 // Fondo de líneas verticales (ref. 21st.dev "grid-background"), adaptado a Arata San (D-071, D-145):
 // - D-145: SOLO líneas verticales (Sergio no quiere cuadrícula). La variante "rejilla" ya no pinta
 //   cuadros: se dibuja igual que "lineas" (se acepta para no tocar cada sección).
-// - Líneas blancas muy tenues cada 80 px, centradas en la sección, una franja morada muy suave en el
-//   medio y una luz morada baja. Los bordes se desvanecen con una máscara.
+// - Líneas blancas muy tenues cada 80 px, centradas en la sección, una franja y una luz BLANCAS muy
+//   suaves (D-146; antes moradas). Los bordes se desvanecen con una máscara.
 // - `haces`: luces finas que bajan por algunas líneas (detalle premium). Solo transform; con
 //   movimiento reducido no se muestran. Cada número es cuántas líneas a la izquierda (−) o a la
 //   derecha (+) del centro va el haz.
@@ -20,9 +20,9 @@ export type GridBackgroundProps = {
   cell?: number;
   /** Opacidad de las líneas (0–1). @default 0.05 */
   line?: number;
-  /** Centro de la luz morada, en CSS (`x y`). @default "50% 55%" */
+  /** Centro de la luz blanca suave, en CSS (`x y`). @default "50% 55%" */
   orb?: string;
-  /** Intensidad de la luz morada (0–1). @default 0.12 */
+  /** Intensidad de la luz (0–1). @default 0.08 */
   glow?: number;
   /** Haces de luz que bajan por las líneas (posición relativa al centro, en líneas). */
   haces?: number[];
@@ -42,13 +42,14 @@ export function GridBackground({
 }: GridBackgroundProps) {
   const l = `rgba(255,255,255,${line})`;
   const paso = cell * 2; // una línea cada 80 px
-  const luz = `radial-gradient(circle at ${orb}, rgba(125,83,255,${glow}) 0%, rgba(59,29,153,${+(glow / 3).toFixed(3)}) 40%, transparent 70%)`;
+  // D-146: luz y franja BLANCAS muy suaves (antes moradas)
+  const luz = `radial-gradient(circle at ${orb}, rgba(255,255,255,${+(glow * 0.5).toFixed(3)}) 0%, rgba(255,255,255,${+(glow / 6).toFixed(3)}) 40%, transparent 70%)`;
 
   // Una línea de 1 px en el centro de cada franja de 80 px; las franjas se centran en la sección,
   // así siempre hay una línea justo en el medio y los haces caen exactamente sobre una línea.
   const style: CSSProperties = {
     backgroundImage: [
-      `linear-gradient(90deg, transparent 30%, rgba(125,83,255,${+(glow * 0.6).toFixed(3)}) 50%, transparent 70%)`,
+      `linear-gradient(90deg, transparent 30%, rgba(255,255,255,${+(glow * 0.25).toFixed(3)}) 50%, transparent 70%)`,
       `linear-gradient(90deg, transparent calc(50% - 0.5px), ${l} calc(50% - 0.5px), ${l} calc(50% + 0.5px), transparent calc(50% + 0.5px))`,
       luz,
     ].join(","),

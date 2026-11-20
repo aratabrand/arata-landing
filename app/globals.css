@@ -77,21 +77,22 @@
    ────────────────────────────────────────────────────────────────────── */
 @layer components {
   /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
-  /* D-141: misma tarjeta por capas del panel (D-136): un velo blanco muy suave arriba,
-     borde fino y un filo de luz arriba. Se separa del fondo sin luces de color. */
+  /* D-146: tarjeta TRANSPARENTE (antes por capas sobre #0F0C19, con tinte morado): blanco al 2 %,
+     borde fino y un filo de luz arriba. El morado queda solo para botones. */
   .v2-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)), #0f0c19;
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 24px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   /* Tarjeta destacada (paquete recomendado, precio): cuerpo igual con un filo morado arriba,
      como la primera cifra del panel. Sin desenfoque ni luz de fondo. */
   .v2-destacada {
-    background: linear-gradient(180deg, rgba(125, 83, 255, 0.12), rgba(125, 83, 255, 0.02) 70%), #0f0c19;
-    border: 1px solid rgba(125, 83, 255, 0.45);
-    box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.35);
+    /* D-146: transparente y un poco más clara que .v2-card, con borde blanco más visible (sin morado) */
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   /* Botón principal = .pn-primario del panel (D-142): morado de marca, texto blanco (4,6:1) */
@@ -121,7 +122,7 @@
     top: 0;
     width: 1px;
     height: 22%;
-    background: linear-gradient(to bottom, transparent, rgba(185, 164, 255, 0.35) 70%, rgba(255, 255, 255, 0.85));
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.25) 70%, rgba(255, 255, 255, 0.8));
     transform: translateY(-100%);
     animation: v2-haz 7.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
     animation-delay: var(--d, 0s);
@@ -154,7 +155,7 @@
     place-items: center;
     flex: none;
     border-radius: 10px;
-    color: #b9a4ff;
+    color: rgba(255, 255, 255, 0.78); /* D-146: sin morado */
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -162,7 +163,7 @@
 
   /* Vista previa enmarcada DENTRO de una tarjeta (ref. 21st.dev captura 01) */
   .v2-frame {
-    background: #110c20;
+    background: #0e0e11;
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     overflow: hidden;
@@ -183,7 +184,7 @@
     pointer-events: none;
     background: radial-gradient(
       420px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(125, 83, 255, 0.16),
+      rgba(255, 255, 255, 0.05),
       transparent 60%
     );
     opacity: 0;
@@ -222,11 +223,11 @@
     position: absolute;
     pointer-events: none;
     border-radius: 9999px;
-    /* D-145: más suave sobre el fondo negro (antes 0.28 / 0.12): que el morado acompañe, no domine */
+    /* D-146: luz BLANCA muy suave (antes morada): da profundidad sin el "look de IA" */
     background: radial-gradient(
       closest-side,
-      rgba(125, 83, 255, 0.17),
-      rgba(59, 29, 153, 0.06) 45%,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.022) 45%,
       transparent 100%
     );
   }
@@ -292,22 +293,22 @@
   20%, 100% { opacity: 0; }
 }
 @keyframes v2-problem-icon {
-  0% { color: #b9a4ff; }
+  0% { color: rgba(255, 255, 255, 0.78); }
   4%, 16% { color: #b6ff00; }
-  20%, 100% { color: #b9a4ff; }
+  20%, 100% { color: rgba(255, 255, 255, 0.78); }
 }
 
 /* Tarjetas glass de garantía, pago y mantenimiento (D-068).
    Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
 .v2-glass {
-  /* D-141: estilo del panel (D-136): sin vidrio ni luz de color en la esquina; filo morado arriba */
+  /* D-146: transparente como .v2-card (antes filo y velo morados) */
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid rgba(125, 83, 255, 0.28);
-  background: linear-gradient(180deg, rgba(125, 83, 255, 0.1), rgba(125, 83, 255, 0.02) 70%), #0f0c19;
-  box-shadow: inset 0 1px 0 rgba(185, 164, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .v2-draw {
   transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
@@ -692,12 +693,12 @@
   padding: calc(var(--w) * 0.034);
   border-radius: calc(var(--w) * 0.17);
   background: #0a0711;
-  /* canto morado (tono de marca) + borde exterior + sombra con luz morada */
+  /* canto gris (D-146; antes morado) + borde exterior + sombra neutra */
   box-shadow:
-    0 0 0 2px #5a43b0,
-    0 0 0 3.5px #241a4a,
+    0 0 0 2px #3a3a40,
+    0 0 0 3.5px #1c1c20,
     inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-    0 40px 90px -30px rgba(125, 83, 255, 0.45);
+    0 40px 90px -30px rgba(0, 0, 0, 0.7);
 }
 /* botones laterales: volumen (izq., 3 con box-shadow) y encendido (der.) */
 .cx-phone::before,
@@ -706,13 +707,13 @@
   position: absolute;
   width: 3px;
   border-radius: 2px;
-  background: #4a3797;
+  background: #2e2e33;
 }
 .cx-phone::before {
   left: -5.5px;
   top: 18%;
   height: 4%;
-  box-shadow: 0 calc(var(--w) * 0.12) 0 0 #4a3797, 0 calc(var(--w) * 0.12) 0 0 #4a3797;
+  box-shadow: 0 calc(var(--w) * 0.12) 0 0 #2e2e33, 0 calc(var(--w) * 0.12) 0 0 #2e2e33;
 }
 .cx-phone::after { right: -5.5px; top: 27%; height: 11%; }
 
@@ -828,7 +829,7 @@
   height: 44px;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #110c20;
+  background: #121215;
   color: #fff;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease);
 }
@@ -845,7 +846,7 @@
   transform: translate(-50%, -50%);
   border-radius: 9999px;
   background:
-    radial-gradient(closest-side, rgba(125, 83, 255, 0.22), transparent 70%),
+    radial-gradient(closest-side, rgba(255, 255, 255, 0.06), transparent 70%),
     radial-gradient(closest-side, transparent 64%, rgba(255, 255, 255, 0.06) 64.4%, transparent 65%),
     radial-gradient(closest-side, transparent 86%, rgba(255, 255, 255, 0.045) 86.3%, transparent 86.8%);
   pointer-events: none;

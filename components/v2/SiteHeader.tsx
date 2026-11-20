@@ -177,7 +177,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             aria-hidden
             data-selector=""
             className={cn(
-              "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_20px_-10px_rgba(125,83,255,0.55)] motion-reduce:transition-none",
+              "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] motion-reduce:transition-none",
               animar ? "transition-[transform,width,opacity] duration-300 ease-out" : "transition-opacity duration-200",
               sel ? "opacity-100" : "opacity-0"
             )}
@@ -307,7 +307,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,rgba(125,83,255,0.22),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.06),transparent_70%)]"
         />
         <nav aria-label="Menú del celular" className="relative flex-1 overflow-y-auto overscroll-contain px-4 pb-6 pt-[4.75rem]">
           <p className="v2-mnav-item px-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog-dim" style={{ ["--d" as string]: 0 }}>

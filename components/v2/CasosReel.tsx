@@ -284,7 +284,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
                 style={{ "--d": 0 } as CSSProperties}
               />
             )}
-            <p className="cx-i text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-brand-soft" style={{ "--d": 0 } as CSSProperties}>
+            <p className="cx-i text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog" style={{ "--d": 0 } as CSSProperties}>
               {c.logo ? c.lugar : `${c.nombre} · ${c.lugar}`}
             </p>
             <h3

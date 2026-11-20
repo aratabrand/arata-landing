@@ -202,7 +202,7 @@ export default async function Caso({ params }: Props) {
                 </p>
               </div>
               <div>
-                <p className="text-sm font-semibold text-brand-soft">{t.puntajes.celular}</p>
+                <p className="text-sm font-semibold text-fog">{t.puntajes.celular}</p>
                 <div className="mt-4 flex flex-wrap justify-around gap-6">
                   {(
                     [
@@ -221,7 +221,7 @@ export default async function Caso({ params }: Props) {
                       size={112}
                       stroke={9}
                       label={t.puntajes[k]}
-                      arcColor={val >= 90 ? "#B6FF00" : "#7D53FF"}
+                      arcColor={val >= 90 ? "#B6FF00" : "#A1A1AA"}
                     />
                   ))}
                 </div>

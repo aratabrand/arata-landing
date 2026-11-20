@@ -255,7 +255,7 @@ export default function BookingFlow() {
             />
             {menosInversion && inversion === menosInversion && (
               <div className="v2-step mt-5">
-                <p className="rounded-frame border border-brand/40 bg-brand/10 p-4 text-white">{c.pasos.inversion.notaMenos}</p>
+                <p className="rounded-frame border border-white/15 bg-white/[0.04] p-4 text-white">{c.pasos.inversion.notaMenos}</p>
                 <Siguiente onClick={siguiente}>{c.botones.siguiente}</Siguiente>
               </div>
             )}

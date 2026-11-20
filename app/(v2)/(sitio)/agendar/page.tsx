@@ -32,7 +32,7 @@ export default function Agendar() {
               <ol className="mt-4 space-y-3">
                 {c.lateral.pasos.map((p, i) => (
                   <li key={p} className="flex gap-3 text-sm leading-relaxed text-fog">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 font-display text-xs font-bold text-brand-soft">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.06] font-display text-xs font-bold text-fog">
                       {i + 1}
                     </span>
                     {p}

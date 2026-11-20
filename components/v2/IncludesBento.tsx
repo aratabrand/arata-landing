@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 // y con movimiento reducido se ve el estado final. CSS en globals.css (.ib-*).
 
 const L = "#B6FF00";
-const P = "#7D53FF";
-const S = "#B9A4FF";
+const P = "#D4D4D8"; // D-146: antes morado; el morado queda solo para botones
+const S = "#A1A1AA";
 const LINE = "rgba(255,255,255,0.12)";
 const FILL = "rgba(255,255,255,0.06)";
 const v = (i: number) => ({ ["--i" as string]: i }) as CSSProperties;
@@ -34,7 +34,7 @@ function Secciones() {
       <circle cx="38" cy="16" r="2.5" fill={LINE} />
       {filas.map((f, i) => (
         <g key={i} className="ib-rise" style={v(i)}>
-          <rect x="18" y={f.y} width="224" height={f.h} rx="4" fill={i === 0 ? "rgba(125,83,255,0.28)" : FILL} />
+          <rect x="18" y={f.y} width="224" height={f.h} rx="4" fill={i === 0 ? "rgba(255,255,255,0.126)" : FILL} />
           {i === 0 ? (
             <>
               <rect x="26" y={f.y + 7} width="90" height="5" rx="2.5" fill="rgba(255,255,255,0.7)" />
@@ -43,7 +43,7 @@ function Secciones() {
           ) : (
             <rect x="26" y={f.y + 4} width={60 + i * 18} height="4" rx="2" fill="rgba(255,255,255,0.22)" />
           )}
-          <circle cx="282" cy={f.y + f.h / 2} r="9" fill={i === 0 ? L : "rgba(125,83,255,0.25)"} />
+          <circle cx="282" cy={f.y + f.h / 2} r="9" fill={i === 0 ? L : "rgba(255,255,255,0.113)"} />
           <text
             x="282"
             y={f.y + f.h / 2 + 3.5}
@@ -75,13 +75,13 @@ function Celular() {
       <rect x="66" y="19" width="28" height="5" rx="2.5" fill={LINE} />
       <g clipPath="url(#ib-pantalla)">
         <g className="ib-scroll">
-          <rect x="44" y="36" width="72" height="44" rx="6" fill="rgba(125,83,255,0.3)" />
+          <rect x="44" y="36" width="72" height="44" rx="6" fill="rgba(255,255,255,0.135)" />
           <rect x="50" y="46" width="44" height="5" rx="2.5" fill="rgba(255,255,255,0.75)" />
           <rect x="50" y="56" width="30" height="5" rx="2.5" fill={L} />
           {[90, 126, 162, 198, 234, 270].map((y, k) => (
             <g key={y}>
               <rect x="44" y={y} width="72" height="28" rx="6" fill={FILL} />
-              <rect x="50" y={y + 7} width="18" height="14" rx="3" fill={k % 2 ? "rgba(185,164,255,0.35)" : "rgba(182,255,0,0.3)"} />
+              <rect x="50" y={y + 7} width="18" height="14" rx="3" fill={k % 2 ? "rgba(255,255,255,0.158)" : "rgba(182,255,0,0.3)"} />
               <rect x="74" y={y + 9} width="34" height="4" rx="2" fill="rgba(255,255,255,0.35)" />
               <rect x="74" y={y + 16} width="22" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
             </g>
@@ -129,7 +129,7 @@ function Velocidad() {
         <line x1="100" y1="110" x2="100" y2="54" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
         <circle cx="100" cy="54" r="3.5" fill={L} className="v2-beat" />
       </g>
-      <circle cx="100" cy="110" r="7" fill="#18112D" stroke="#FFFFFF" strokeWidth="2" />
+      <circle cx="100" cy="110" r="7" fill="#141417" stroke="#FFFFFF" strokeWidth="2" />
       <text x="100" y="144" textAnchor="middle" fontSize="26" fontWeight="800" fill={L} fontFamily="var(--font-display)" className="ib-fade" style={v(4)}>
         90+
       </text>
@@ -180,11 +180,11 @@ function Dominio() {
         <ellipse rx="13" ry="30" fill="none" stroke={LINE} />
         <line x1="-30" y1="0" x2="30" y2="0" stroke={LINE} />
         <path d="M-26 -14 H26 M-26 14 H26" stroke={LINE} />
-        <ellipse rx="44" ry="14" fill="none" stroke="rgba(125,83,255,0.35)" strokeDasharray="2 4" />
+        <ellipse rx="44" ry="14" fill="none" stroke="rgba(255,255,255,0.158)" strokeDasharray="2 4" />
         {/* punto que da la vuelta: tu página siempre en línea */}
         <circle r="3.5" fill={L} className="ib-orbit" />
       </g>
-      <rect x="8" y="12" width="150" height="26" rx="13" fill="#0A0714" stroke="rgba(255,255,255,0.16)" />
+      <rect x="8" y="12" width="150" height="26" rx="13" fill="#0B0B0D" stroke="rgba(255,255,255,0.16)" />
       <rect x="20" y="22" width="9" height="8" rx="2" fill={L} />
       <path d="M22 22 v-2.5 a2.5 2.5 0 0 1 5 0 V22" fill="none" stroke={L} strokeWidth="1.4" />
       <text x="36" y="29" fontSize="11" fill="#FFFFFF" fontFamily="var(--font-sans)" className="ib-fade" style={v(1)}>
@@ -278,7 +278,7 @@ function Entrega() {
         const x = 26 + k * 52;
         return (
           <g key={k}>
-            <circle cx={x} cy="40" r="14" fill="#110C20" stroke="rgba(255,255,255,0.16)" />
+            <circle cx={x} cy="40" r="14" fill="#111113" stroke="rgba(255,255,255,0.16)" />
             <circle cx={x} cy="40" r="14" fill={L} className="ib-day" style={v(k)} />
             <text x={x} y="44" textAnchor="middle" fontSize="11" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">
               {k + 1}
