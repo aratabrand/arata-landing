@@ -67,7 +67,7 @@ export default function Notificaciones({
                 >
                   <AlarmClock aria-hidden className={cn("h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-dato" : "text-fog")} />
                   <span className="min-w-0 flex-1 text-sm text-white">{a.texto}</span>
-                  <Pill tono={a.tipo === "tarde" ? "alerta" : a.tipo === "hoy" ? "lima" : "morado"}>{a.tipo === "tarde" ? "Va tarde" : a.tipo === "hoy" ? "Hoy" : "Por vencer"}</Pill>
+                  <Pill tono={a.tipo === "tarde" ? "alerta" : a.tipo === "hoy" ? "ambar" : "neutro"}>{a.tipo === "tarde" ? "Va tarde" : a.tipo === "hoy" ? "Hoy" : "Por vencer"}</Pill>
                 </Link>
               </li>
             ))}

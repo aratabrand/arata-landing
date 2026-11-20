@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-153) | 1.3 | 20 nov 2026 | Sergio |
+| Aprobado (D-145 a D-155) | 1.5 | 20 nov 2026 | Sergio |
 
 **Es la fuente única para todos los productos de Arata San.** Hoy se aplica a dos productos:
 
@@ -100,7 +100,7 @@ Ambas van auto-hospedadas con `next/font/local` (sin red). Los títulos van en u
 | **Tarjeta** | Negra con humo y borde gris (oscuro) / blanca con un humo de tinta casi invisible (claro), radio 20–24 px (D-150, D-153) | `.v2-card` | `.v2-card` del panel |
 | **Tarjeta destacada** | Más humo y borde más visible (42 % en oscuro, 32 % en claro), **sin morado** | `.v2-destacada` | `.v2-glass` del panel |
 | **Lista con números** | `01`, `02`… en Funnel Display en vez de íconos | Problema, "Todo lo que trae" | — |
-| **Píldora** (badge, etiqueta de sección, "Recomendado", filtros) | Negra con degradado sutil, **borde blanco al 24 %**, texto blanco (`.v2-pildora`, D-150); "en vivo" con punto lima que titila. La etiqueta de sección (`Eyebrow`) es una píldora. En el panel: estados neutros y filtros sin elegir (D-153); el filtro elegido va en morado porque actúa como botón | `Badge`, `Eyebrow`, `.v2-pildora` | `.pn-pildora`, `Pill tono="neutro"` |
+| **Píldora** (badge, etiqueta de sección, "Recomendado", filtros) | Negra con degradado sutil, **borde blanco al 24 %**, texto blanco (`.v2-pildora`, D-150); "en vivo" con punto lima que titila. La etiqueta de sección (`Eyebrow`) es una píldora. En el panel: estados neutros y filtros sin elegir (D-153); el filtro elegido va en morado porque actúa como botón. **Variante del panel (D-155):** la píldora o pestaña **activa** va en el verde de Arata (`.pn-pildora-activa`: borde lima 55 %, texto lima, tinte lima suave; en claro, morado), las demás grises. Los **estados** van en **semáforo**: ámbar (nuevo), verde (activo, a tiempo, cerrado), verde fuerte (recurrente), rojo (inactivo, tarde). El verde de semáforo (`#4ADE80`; en claro `#15803D`) no es el lima de Arata | `Badge`, `Eyebrow`, `.v2-pildora` | `.pn-pildora`, `.pn-pildora-activa`, `Pill` |
 | **Íconos de marca** | SVG propio en **grises metálicos con volumen** (capas, tienda, sistema), sin color. **Solo en algunas tarjetas** donde ayudan a distinguir opciones (hoy: paquetes de precio). Nunca en todas | `components/v2/IconosMarca.tsx` (paquetes de precio) | `components/panel/IconosMarca.tsx` (tarjetas de proyecto según el servicio, `iconoDeServicio()`, D-153) |
 | **Íconos** | **Phosphor** en trazo `light` (check en `regular`; play/pausa en `fill`). Solo los que cumplen una función: flechas, abrir y cerrar, menú, acciones, estados. **Nunca decorativos** | `components/v2/iconos.tsx` | `components/panel/iconos.tsx` |
 | Campo | 44 px, borde fino, foco morado con halo | `BookingFlow` | `.pn-input` |
@@ -169,6 +169,8 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 
 | Versión | Fecha | Qué |
 |---|---|---|
+| 1.5 | 20 nov 2026 | Panel: lima solo en la píldora o pestaña activa; estados en semáforo (D-155, reemplaza D-154) |
+| 1.4 | 20 nov 2026 | Variante del panel: en oscuro las píldoras van en el verde de Arata (D-154, reemplazada por D-155) |
 | 1.3 | 20 nov 2026 | El panel usa las mismas piezas del sitio: tarjetas con humo, píldoras negras con borde e íconos de marca en las tarjetas de proyecto; en claro, su versión blanca (D-153) |
 | 1.2 | 20 nov 2026 | En el modo claro del panel el dato va en morado, no en verde (D-151) |
 | 1.1 | 20 nov 2026 | Tarjetas negras con humo y borde gris, píldoras negras con borde, íconos SVG propios en grises solo en algunas tarjetas (D-150) |

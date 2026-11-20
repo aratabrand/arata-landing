@@ -5,17 +5,18 @@ import { Mail, MapPin, MessageCircle, Phone, Plus, RotateCcw, Search, Trash2, X 
 import type { Cliente, EstadoCliente, OrigenCliente } from "@/content/panel/tipos";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
 import { nuevoId, useGuardado } from "@/lib/panel/guardado";
-import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
+import { PanelHeader, PanelPage, Pill, Tarjeta, type TonoPill } from "./ui";
 import { cn } from "@/lib/utils";
 
 // Módulo 2 · Clientes (docs/panel-cliente/01-arquitectura.md §2.2)
 // Lista con búsqueda y filtro por estado, ficha con notas, alta de cliente y
 // acceso directo a WhatsApp. En celular la tabla se vuelve tarjetas.
 
-export const estados: { valor: EstadoCliente; label: string; tono: "lima" | "morado" | "neutro" | "alerta" }[] = [
-  { valor: "nuevo", label: "Nuevo", tono: "morado" },
-  { valor: "activo", label: "Activo", tono: "neutro" },
-  { valor: "recurrente", label: "Recurrente", tono: "lima" },
+export const estados: { valor: EstadoCliente; label: string; tono: TonoPill }[] = [
+  // D-155: semáforo. Ámbar = recién llega (hay que cuidarlo); verde = compra; verde fuerte = repite; rojo = dejó de comprar
+  { valor: "nuevo", label: "Nuevo", tono: "ambar" },
+  { valor: "activo", label: "Activo", tono: "verde" },
+  { valor: "recurrente", label: "Recurrente", tono: "verdeFuerte" },
   { valor: "inactivo", label: "Inactivo", tono: "alerta" },
 ];
 const origenes: OrigenCliente[] = ["Instagram", "Google", "WhatsApp", "Referido", "Página"];
@@ -109,7 +110,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
                   onClick={() => setFiltro(e.valor)}
                   className={cn(
                     "h-9 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-colors",
-                    filtro === e.valor ? "border-brand bg-brand/20 text-white" : "pn-pildora text-fog hover:text-white"
+                    filtro === e.valor ? "pn-pildora-activa" : "pn-pildora hover:text-white"
                   )}
                 >
                   {e.label} <span className="ml-1 text-fog-dim">{n}</span>

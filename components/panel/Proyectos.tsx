@@ -127,7 +127,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
               onClick={() => setFaseMovil(f.valor)}
               className={cn(
                 "flex h-10 shrink-0 items-center gap-2 rounded-full border px-4 text-xs font-semibold",
-                faseMovil === f.valor ? "border-white/20 bg-surface-3 text-white" : "border-white/8 text-fog"
+                faseMovil === f.valor ? "pn-pildora-activa" : "pn-pildora hover:text-white"
               )}
             >
               <span className="h-2 w-2 rounded-full" style={{ background: f.color }} />

@@ -22,7 +22,9 @@ El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia co
 | Zona de contenido | `canvas` | `#08080A` | `#FAFAFB` |
 | Tarjeta (`.v2-card`) | variables `--pn-tarjeta*` | **negra con humo** (D-153, igual al sitio): degradado `#0E0E10`→`#060607`, nube blanca suave, borde blanco 13 % | blanca con humo de tinta 3,5 % + borde tinta 10 % + sombra suave |
 | Tarjeta destacada (`.v2-glass`) | `--pn-destacada*` | más humo + borde blanco 42 % | blanca + borde tinta 32 % |
-| Píldora (`.pn-pildora`) | `--pn-pildora*` | negra con degradado + borde blanco 24 % (como `.v2-pildora`) | blanca + borde tinta 16 % |
+| Píldora (`.pn-pildora`) | `--pn-pildora*` | negra con degradado + borde blanco 24 %, texto gris (como `.v2-pildora`) | blanca + borde tinta 16 %, texto gris |
+| Píldora activa (`.pn-pildora-activa`) | `--pn-activa*` | **verde de Arata (D-155)**: tinte lima suave, borde lima 55 %, texto lima. Solo el filtro o la pestaña elegida | morado (como el dato, D-151) |
+| Semáforo (`verde`, `ambar`, `alerta`) | `--pn-verde`, `--pn-ambar`, `--pn-alerta*` | verde `#4ADE80` · ámbar `#FFC76B` · rojo `#FF9BB0` | verde `#15803D` · ámbar `#A16207` · rojo `#BE123C` |
 | Superficies sólidas | `surface-1/2/3` | `#0F0F12` · `#16161A` · `#1D1D22` | `#FFF` · `#F3F3F6` · `#FFF` |
 | Texto principal / secundario / notas | `white` / `fog` / `fog-dim` | `#FFF` / `#B4AECB` / `#8A84A8` | `#03010B` / `#52505C` / `#686572` |
 | **Datos** (sube, completado, nuevo) | `dato` (texto) · `lime` (relleno con texto ink) | `#B6FF00` | **morado** (D-151): texto `#6D45F0`, relleno `#9B7BFF` |
@@ -79,7 +81,7 @@ Tarjeta dividida de hasta 1040 px, **siempre en oscuro**: a la izquierda una **e
 | `PanelPage`, `PanelHeader` | `ui.tsx` | Contenedor y encabezado (h1 + bajada + acción) de cada módulo |
 | `Tarjeta` | `ui.tsx` | Caja base (`v2-card`), título, bajada y acción. La prop `icono` ya no pinta nada (D-149) |
 | `Delta` | `ui.tsx` | Variación vs. periodo anterior (lima ↑ / rosa ↓) |
-| `Pill` | `ui.tsx` | Estado en píldora: `lima`, `neutro` (= `.pn-pildora`, D-153), `alerta` (`morado` se ve neutro desde D-149). Los filtros sin elegir también son `.pn-pildora` |
+| `Pill` | `ui.tsx` | Estado en píldora con **semáforo (D-155)**: `verde`, `verdeFuerte`, `ambar`, `alerta` (rojo); `neutro`/`morado` = `.pn-pildora` (gris); `lima` quedó como alias de `verde`. Clientes: Nuevo ámbar, Activo verde, Recurrente verde fuerte, Inactivo rojo. Etiquetas que no son estado ("Tú", "Proyecto en curso") van en gris. Filtros y pestañas: `.pn-pildora` y la elegida `.pn-pildora-activa` (lima) |
 | `IconoMarca` | `IconosMarca.tsx` | Íconos SVG propios en grises (capas, tienda, sistema), copia de los del sitio. Solo en las tarjetas de proyecto de Arata, según el servicio (`iconoDeServicio()`); si el servicio no encaja, no se pinta nada (D-153) |
 | `Segmentado` | `Resumen.tsx` | Selector tipo iOS (periodo, métrica). `role="radiogroup"` |
 | `Hoja` | `Clientes.tsx` | Panel lateral en escritorio / hoja desde abajo en celular. Escape y clic afuera cierran, bloquea el scroll, devuelve el foco |

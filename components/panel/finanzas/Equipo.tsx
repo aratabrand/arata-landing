@@ -66,7 +66,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                   <div>
                     <p className="flex items-center gap-2 font-display text-base font-bold text-white">
                       {pe.nombre}
-                      {yo && <Pill tono="lima">Tú</Pill>}
+                      {yo && <Pill>Tú</Pill>}
                       {!pe.activo && <Pill>Inactivo</Pill>}
                     </p>
                     <p className="text-xs text-fog-dim">
