@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function V2Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-noche text-white [color-scheme:dark]">
-      {/* El body global es blanco (v1); en la v2 todo el fondo es negro (#020104, D-144), también al rebotar el scroll */}
+      {/* El body global es blanco (v1); en la v2 todo el fondo es negro (#020104, D-145), también al rebotar el scroll */}
       <style>{`html,body{background:#020104}`}</style>
-      {/* Grano muy fino sobre toda la página (D-144): quita el look "digital liso" sin pesar (SVG en línea) */}
+      {/* Grano muy fino sobre toda la página (D-145): quita el look "digital liso" sin pesar (SVG en línea) */}
       <div aria-hidden className="v2-grano" />
       {children}
     </div>

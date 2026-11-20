@@ -15,7 +15,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
   return (
     <section className="relative isolate overflow-hidden pt-28 sm:pt-32">
       <Glow className="left-1/2 top-[-18rem] h-[44rem] w-[64rem] -translate-x-1/2" />
-      {/* D-144: solo líneas verticales (sin cuadrícula) y haces de luz que bajan por algunas */}
+      {/* D-145: solo líneas verticales (sin cuadrícula) y haces de luz que bajan por algunas */}
       <GridBackground
         haces={[-7, -5, 5, 7]}
         mascara="radial-gradient(ellipse 75% 70% at 50% 0%, #000 35%, transparent 100%)"
@@ -79,7 +79,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
 
       {/* Pruebas rápidas, debajo de las capturas */}
       <Container className="relative pb-16 sm:pb-24">
-        {/* D-144: tarjetas más transparentes, sin íconos y más grandes en escritorio */}
+        {/* D-145: tarjetas más transparentes, sin íconos y más grandes en escritorio */}
         <dl className="mx-auto mt-2 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4 lg:max-w-5xl lg:gap-5">
           {hero.pruebas.map((p) => (
             <div

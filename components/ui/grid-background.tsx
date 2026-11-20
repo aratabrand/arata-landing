@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
-// Fondo de líneas verticales (ref. 21st.dev "grid-background"), adaptado a Arata San (D-071, D-144):
-// - D-144: SOLO líneas verticales (Sergio no quiere cuadrícula). La variante "rejilla" ya no pinta
+// Fondo de líneas verticales (ref. 21st.dev "grid-background"), adaptado a Arata San (D-071, D-145):
+// - D-145: SOLO líneas verticales (Sergio no quiere cuadrícula). La variante "rejilla" ya no pinta
 //   cuadros: se dibuja igual que "lineas" (se acepta para no tocar cada sección).
 // - Líneas blancas muy tenues cada 80 px, centradas en la sección, una franja morada muy suave en el
 //   medio y una luz morada baja. Los bordes se desvanecen con una máscara.

@@ -7,7 +7,7 @@ import type { EventoHistorial } from "@/lib/panel/historial";
 import { fechaCorta, numero, pesos } from "@/lib/panel/formato";
 import { borrarCliente, confirmarInteresado, guardarCliente, verHistorialCliente, type EntradaCliente } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import type { Resultado } from "@/app/(panel)/panel/(app)/finanzas/acciones";
-import { cuandoTexto, datosDeCliente, type Interesado } from "@/lib/panel/clientes/interesados";
+import { cuandoTexto, datosDeCliente, diasParaPlazo, type Interesado } from "@/lib/panel/clientes/interesados";
 import { mascaraCelular, mascaraNombre } from "@/lib/panel/mascaras";
 import { InputCelular, InputInstagram, InputUrl, SelectorLugar } from "./campos";
 import Historial from "./Historial";
@@ -47,7 +47,8 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
   // Pestañas Clientes | Interesados (D-133). "Confirmar" abre el formulario de cliente ya prellenado.
   const [vista, setVista] = useState<"clientes" | "interesados">(vistaInicial);
   const [confirmando, setConfirmando] = useState<Interesado | null>(null);
-  const pendientes = datos.interesados.filter((i) => i.estado === "agendada").length;
+  // Por atender: reuniones pendientes + los que están en espera y ya toca escribirles (D-144)
+  const pendientes = datos.interesados.filter((i) => i.estado === "agendada" || (i.estado === "espera" && i.esperaHasta && diasParaPlazo(i.esperaHasta, Date.parse(datos.ahora)) <= 0)).length;
   const nombreDeCliente = (id: string) => {
     const x = datos.clientes.find((c) => c.id === id);
     return x ? titulo(x) : null;
@@ -100,6 +101,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
         <Interesados
           interesados={datos.interesados}
           ahora={datos.ahora}
+          yo={datos.yo}
           nombreCliente={nombreDeCliente}
           puedeEditar={datos.puedeEditar}
           puedeBorrar={datos.puedeBorrar}

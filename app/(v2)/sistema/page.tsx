@@ -240,7 +240,7 @@ export default function SistemaV2() {
             />
           </Bloque>
 
-          <Bloque id="b-rejilla" titulo="Fondo de líneas verticales · sin cuadrícula (D-144)">
+          <Bloque id="b-rejilla" titulo="Fondo de líneas verticales · sin cuadrícula (D-145)">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="relative isolate flex h-56 items-end overflow-hidden rounded-card border border-white/8 p-5">
                 <GridBackground />

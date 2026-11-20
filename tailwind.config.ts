@@ -20,7 +20,7 @@ const config: Config = {
         },
         lime: "#B6FF00",       // acento
         ink: "#03010B",        // texto principal / superficie oscura
-        noche: "#020104",      // D-144: fondo del sitio v2 (negro casi neutro; el panel sigue en ink)
+        noche: "#020104",      // D-145: fondo del sitio v2 (negro casi neutro; el panel sigue en ink)
         paper: "#FFFFFF",
         muted: "#615C77",      // gris de apoyo derivado de la marca
         line: "#ECEAF3",       // hairlines sobre claro

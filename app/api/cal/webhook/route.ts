@@ -115,8 +115,8 @@ async function procesar(negocioId: string, a: Reserva) {
 
   if (a.accion === "cancelada") {
     const r = await db().query(
-      `update interesados set estado = 'cancelada', por_aceptar = false, actualizado = now()
-        where negocio_id = $1 and cal_uid = $2 and estado = 'agendada' returning id, nombre, reunion_inicio`,
+      `update interesados set estado = 'cancelada', por_aceptar = false, espera_hasta = null, actualizado = now()
+        where negocio_id = $1 and cal_uid = $2 and estado in ('agendada', 'espera') returning id, nombre, reunion_inicio`,
       [negocioId, a.uid]
     );
     if (r.rowCount) {
@@ -138,12 +138,12 @@ async function procesar(negocioId: string, a: Reserva) {
   if ((await db().query(`select 1 from interesados where negocio_id = $1 and cal_uid = $2`, [negocioId, a.uid])).rowCount) return; // ya procesada
   if (a.uidAnterior) {
     const antes = (
-      await db().query(`select id, nombre, reunion_inicio from interesados where negocio_id = $1 and cal_uid = $2 and estado in ('agendada', 'cancelada')`, [negocioId, a.uidAnterior])
+      await db().query(`select id, nombre, reunion_inicio from interesados where negocio_id = $1 and cal_uid = $2 and estado in ('agendada', 'espera', 'cancelada')`, [negocioId, a.uidAnterior])
     ).rows[0];
     if (antes) {
       await db().query(
         `update interesados set cal_uid = $2, cal_booking_id = coalesce($3, cal_booking_id), reunion_inicio = $4, reunion_fin = $5,
-                zona_horaria = coalesce($6, zona_horaria), enlace_llamada = $7, enlace_reserva = $8, estado = 'agendada', actualizado = now()
+                zona_horaria = coalesce($6, zona_horaria), enlace_llamada = $7, enlace_reserva = $8, estado = 'agendada', espera_hasta = null, actualizado = now()
           where id = $1`,
         [antes.id, a.uid, a.bookingId, a.inicio, a.fin, a.zona, a.enlaceLlamada, a.enlaceReserva]
       );

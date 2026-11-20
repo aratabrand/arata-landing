@@ -4,11 +4,12 @@ import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { hoyColombia, fechaBogota } from "@/lib/panel/fecha";
 import { alertasVencimiento } from "@/lib/panel/alertas";
+import { recordatorioEspera } from "@/lib/panel/clientes/interesados";
 import { avisarEquipo, pushActivo } from "@/lib/panel/push";
 import type { FinProyecto } from "@/lib/panel/finanzas/tipos";
 import type { FinTarea } from "@/lib/panel/finanzas/procesos";
 
-// Aviso diario de vencimientos (D-119). Lo llama Vercel Cron a las 8 a. m. de Bogotá
+// Aviso diario de vencimientos (D-119) y de interesados en espera (D-144). Lo llama Vercel Cron a las 8 a. m. de Bogotá
 // (13:00 UTC, vercel.json) con "Authorization: Bearer CRON_SECRET". Para cada proyecto:
 // 2 días antes, el día de entrega y cada mañana que vaya tarde. Nunca repite el mismo
 // aviso el mismo día (tabla avisos_enviados).
@@ -48,6 +49,24 @@ export async function GET(req: NextRequest) {
       avisos++;
       const titulo = a.tipo === "tarde" ? `⚠️ ${a.proyecto.nombre} va tarde` : a.tipo === "hoy" ? `📦 ${a.proyecto.nombre} se entrega hoy` : `⏰ ${a.proyecto.nombre} se entrega en 2 días`;
       const r = await avisarEquipo(n.id, { titulo, cuerpo: a.texto, url: `/panel/proyectos/${a.proyecto.id}`, etiqueta: `vence-${a.proyecto.id}` });
+      enviados += r.enviados;
+    }
+
+    // Interesados en espera (D-144): un día antes del plazo y el día del plazo
+    const espera = await db().query(
+      `select i.id, i.nombre, (i.espera_hasta - $2::date) as dias,
+              (select n.texto from interesado_notas n where n.interesado_id = i.id order by n.creado desc limit 1) as nota
+         from interesados i
+        where i.negocio_id = $1 and i.estado = 'espera' and i.espera_hasta between $2::date and $2::date + 1`,
+      [n.id, hoy]
+    );
+    for (const x of espera.rows) {
+      const rec = recordatorioEspera(x.nombre, Number(x.dias), x.nota);
+      if (!rec) continue;
+      const nuevo = await db().query(`insert into avisos_interesados (interesado_id, tipo, fecha) values ($1, $2, $3) on conflict do nothing`, [x.id, rec.tipo, hoy]);
+      if (!nuevo.rowCount) continue;
+      avisos++;
+      const r = await avisarEquipo(n.id, { titulo: rec.titulo, cuerpo: rec.cuerpo, url: "/panel/clientes?ver=interesados", etiqueta: `espera-${x.id}` });
       enviados += r.enviados;
     }
   }

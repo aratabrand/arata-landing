@@ -105,7 +105,7 @@
   .v2-primario:active { transform: translateY(1px); }
   .v2-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
 
-  /* Haz de luz que baja por una línea del fondo (D-144). Va dentro de <GridBackground haces>.
+  /* Haz de luz que baja por una línea del fondo (D-145). Va dentro de <GridBackground haces>.
      Solo transform; con movimiento reducido no se muestra. */
   .v2-haz {
     position: absolute;
@@ -136,7 +136,7 @@
     .v2-haz { display: none; }
   }
 
-  /* Grano muy fino sobre toda la página (D-144). Imagen SVG en línea (sin red), fija y sin
+  /* Grano muy fino sobre toda la página (D-145). Imagen SVG en línea (sin red), fija y sin
      animación: el navegador la pinta una vez. No recibe clics. */
   .v2-grano {
     position: fixed;
@@ -222,7 +222,7 @@
     position: absolute;
     pointer-events: none;
     border-radius: 9999px;
-    /* D-144: más suave sobre el fondo negro (antes 0.28 / 0.12): que el morado acompañe, no domine */
+    /* D-145: más suave sobre el fondo negro (antes 0.28 / 0.12): que el morado acompañe, no domine */
     background: radial-gradient(
       closest-side,
       rgba(125, 83, 255, 0.17),

@@ -56,6 +56,8 @@ export type DatosClientes = {
   interesados: Interesado[];
   /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
   ahora: string;
+  /** Nombre de quien está en sesión (firma el mensaje de seguimiento por WhatsApp, D-144). */
+  yo: string;
 };
 
 /** País con lista de ciudades (D-119): en los demás la ciudad queda bloqueada. */
@@ -81,7 +83,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [cl, pr, lugares, it] = await Promise.all([
+  const [cl, pr, lugares, it, notas, yo] = await Promise.all([
     db().query(
       `select c.id, c.nombre, c.empresa, c.telefono, c.pais, pa.nombre pais_nombre, c.ciudad_id, ci.nombre ciudad,
               c.sitio_web, c.instagram, c.estado, c.origen, c.origen_detalle, c.notas, c.creado
@@ -99,11 +101,19 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     cargarLugares(),
     db().query(
       `select id, nombre, correo, whatsapp, necesita, tipo, pagina_web, cuando, inversion, reunion_inicio, reunion_fin,
-              enlace_llamada, enlace_reserva, estado, por_aceptar, cliente_id, creado, cerrado_en
+              enlace_llamada, enlace_reserva, estado, por_aceptar, to_char(espera_hasta, 'YYYY-MM-DD') espera_hasta, cliente_id, creado, cerrado_en
          from interesados where negocio_id = $1 order by reunion_inicio desc limit 300`,
       [ctx.negocioId]
     ),
+    db().query(`select interesado_id, texto, quien, creado from interesado_notas where negocio_id = $1 order by creado desc limit 2000`, [ctx.negocioId]),
+    db().query(`select name from "user" where id = $1`, [ctx.usuarioId]),
   ]);
+  const notasDe = new Map<string, Interesado["notas"]>();
+  notas.rows.forEach((r) => {
+    const l = notasDe.get(r.interesado_id) ?? [];
+    l.push({ texto: r.texto, quien: r.quien, creado: r.creado.toISOString() });
+    notasDe.set(r.interesado_id, l);
+  });
   const porCliente = new Map<string, ProyectoDeCliente[]>();
   pr.rows.forEach((r) => {
     const l = porCliente.get(r.cliente_id) ?? [];
@@ -115,6 +125,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     puedeBorrar: ctx.esDueno,
     ...lugares,
     ahora: new Date().toISOString(),
+    yo: String(yo.rows[0]?.name ?? ""),
     interesados: it.rows.map(
       (r): Interesado => ({
         id: r.id,
@@ -132,6 +143,8 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
         enlaceReserva: r.enlace_reserva,
         estado: r.estado,
         porAceptar: Boolean(r.por_aceptar),
+        esperaHasta: r.espera_hasta ?? null,
+        notas: notasDe.get(r.id) ?? [],
         clienteId: r.cliente_id,
         creado: r.creado.toISOString(),
         cerradoEn: r.cerrado_en ? r.cerrado_en.toISOString() : null,
