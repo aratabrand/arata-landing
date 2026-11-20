@@ -25,7 +25,7 @@ export default function StickyBookBar({ cta = { texto: menu.cta, enlace: AGENDAR
     <div
       aria-hidden={!show}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-ink/85 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl transition-[transform,opacity,visibility] duration-300 lg:hidden",
+        "fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-noche/85 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl transition-[transform,opacity,visibility] duration-300 lg:hidden",
         show ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-full opacity-0"
       )}
     >

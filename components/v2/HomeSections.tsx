@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import { BarChart3, FileText, Hourglass, Images, MessageSquareWarning, PackageSearch, SearchX, type LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Container, SectionHeader } from "./primitives";
@@ -53,15 +52,6 @@ export function ProofStrip() {
   );
 }
 
-const ICONOS: Record<string, LucideIcon> = {
-  fotos: Images,
-  lenta: Hourglass,
-  pdf: FileText,
-  google: SearchX,
-  datos: PackageSearch,
-  pedidos: MessageSquareWarning,
-  ventas: BarChart3,
-};
 
 type ProblemaItem = { icono: string; titulo?: string; texto: string };
 
@@ -91,7 +81,6 @@ export function ProblemSection({
         <Reveal variant="right">
           <ul className="space-y-2 rounded-card border border-white/8 bg-surface-1/70 p-2 sm:p-3">
             {items.map((item, i) => {
-              const Icono = ICONOS[item.icono] ?? Images;
               return (
                 <li
                   key={item.texto}
@@ -100,8 +89,9 @@ export function ProblemSection({
                 >
                   {/* resaltado que recorre las tarjetas */}
                   <span aria-hidden className="v2-problem-hl pointer-events-none absolute inset-0 rounded-frame" />
-                  <span className="v2-icono relative h-12 w-12">
-                    <Icono aria-hidden className="v2-problem-icon h-5 w-5 text-brand-soft" />
+                  {/* D-147: número en vez de ícono (los íconos se veían "de IA") */}
+                  <span aria-hidden className="v2-problem-icon relative w-7 shrink-0 font-display text-sm font-bold tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="relative">
                     {item.titulo && <span className="block font-semibold text-white">{item.titulo}</span>}

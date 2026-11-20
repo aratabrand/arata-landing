@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./iconos";
 import { cn } from "@/lib/utils";
 
 // Botón v2 = el del panel (D-142, igual a .pn-primario de D-136). 04-sistema-de-diseno.md §5.
@@ -19,7 +19,7 @@ const base =
 const variants: Record<Variant, string> = {
   primary: "v2-primario",
   secondary: "border border-white/10 bg-surface-2 text-white hover:border-white/16 hover:bg-surface-3",
-  ghost: "text-white hover:text-brand-soft",
+  ghost: "text-white hover:text-fog",
 };
 
 const sizes: Record<Size, string> = {

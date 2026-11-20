@@ -3,7 +3,7 @@
 import Link from "next/link";
 import HoverCapsule from "./HoverCapsule";
 import { useEffect, useState, type ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./iconos";
 import { cn } from "@/lib/utils";
 
 // Parte interactiva del portafolio destacado (ref. 21st.dev captura 01).
@@ -78,7 +78,7 @@ export default function ShowcaseCarousel({ items, slides }: { items: SlideMeta[]
 
       <div className="flex flex-col gap-3 px-3 pb-3 pt-3 sm:flex-row sm:items-end sm:justify-between sm:px-4">
         <div aria-live="polite">
-          <p className="text-xs font-semibold text-brand-soft">{p.etiqueta}</p>
+          <p className="text-xs font-semibold text-fog">{p.etiqueta}</p>
           <h3 className="mt-1 font-display text-v2-h3 font-bold tracking-heading text-white">{p.nombre}</h3>
           <p className="mt-1 max-w-lg text-sm text-fog">{p.frase}</p>
         </div>

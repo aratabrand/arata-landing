@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "@/components/v2/iconos";
 import Ring from "@/components/Ring";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
@@ -181,13 +181,13 @@ export default async function Caso({ params }: Props) {
                 <p className="mt-4 text-fog">{t.puntajes.texto}</p>
                 <dl className="mt-8 grid grid-cols-2 gap-3">
                   {completo && (
-                    <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                    <div className="rounded-frame border border-white/8 bg-noche/50 p-4">
                       <dt className="text-xs text-fog-dim">{t.puntajes.abre}</dt>
                       <dd className="mt-1 font-display text-3xl font-extrabold tracking-heading text-lime">{p.puntajes.abreEnCelular}</dd>
                       <dd className="text-xs text-fog-dim">{t.puntajes.celular.toLowerCase()}</dd>
                     </div>
                   )}
-                  <div className="rounded-frame border border-white/8 bg-ink/50 p-4">
+                  <div className="rounded-frame border border-white/8 bg-noche/50 p-4">
                     <dt className="text-xs text-fog-dim">
                       {t.puntajes.rendimiento} · {t.puntajes.escritorio.toLowerCase()}
                     </dt>
@@ -202,7 +202,7 @@ export default async function Caso({ params }: Props) {
                 </p>
               </div>
               <div>
-                <p className="text-sm font-semibold text-brand-soft">{t.puntajes.celular}</p>
+                <p className="text-sm font-semibold text-fog">{t.puntajes.celular}</p>
                 <div className="mt-4 flex flex-wrap justify-around gap-6">
                   {(
                     [
@@ -221,7 +221,7 @@ export default async function Caso({ params }: Props) {
                       size={112}
                       stroke={9}
                       label={t.puntajes[k]}
-                      arcColor={val >= 90 ? "#B6FF00" : "#7D53FF"}
+                      arcColor={val >= 90 ? "#B6FF00" : "#A1A1AA"}
                     />
                   ))}
                 </div>

@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado y publicado (D-141, D-142) | 0.5 | 19 nov 2026 | Sergio |
+| En revisión (D-145 a D-147 en vista previa) | 0.7 | 20 nov 2026 | Sergio |
 
 > Esta versión registra la **dirección** que dio Sergio (D-025, D-026), la traducción de las referencias de 21st.dev (D-044, §9), la **implementación en código** (§10–§12) y el **estilo vigente desde el 19 nov 2026: el del panel aplicado al sitio** (D-141, D-142; §2 y §13). Se ve en vivo en `/sistema` (guía) y en aratasan.com. **El sitio y el panel comparten base visual**: si se cambia una pieza en uno, se revisa en el otro (§13).
 
@@ -12,10 +12,10 @@
 
 | Tema | v1 (landing actual) | v2 (sitio de agencia) |
 |---|---|---|
-| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro** `#03010B` |
+| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro**: `#020104` desde D-145 (antes `#03010B`) |
 | Colores de marca | Morado y lima como acentos | Igual: morado, lima y demás colores de marca **solo como acentos** sobre el oscuro |
 | Tipografía | Funnel Display + Plus Jakarta Sans | **Igual** |
-| Estilo de componentes | Píldora glass, bento, timeline | Referencia **21st.dev** para componentes, menú y animaciones; **tarjetas, botones e íconos iguales a los del panel** (D-141, D-142) |
+| Estilo de componentes | Píldora glass, bento, timeline | Referencia **21st.dev** para componentes, menú y animaciones; **botón principal igual al del panel** (D-142); **tarjetas transparentes y morado solo en botones** (D-146) |
 | Botón principal | Lima | **Morado de marca** con texto blanco (D-142); el lima queda para los datos |
 | Trabajos | No había portafolio | Video en loop tipo GIF dentro de mockups + animaciones premium |
 
@@ -29,15 +29,16 @@ Como todo es oscuro, la profundidad no sale del cambio de fondo sino de **capas 
 
 | Token | Valor | Uso |
 |---|---|---|
-| `ink` | `#03010B` | Único fondo de página |
-| `surface-1` | `#0A0714` | Tarjetas |
-| `surface-2` | `#110C20` | Tarjeta en hover, elementos elevados |
-| `surface-3` | `#18112D` | Menús desplegables, modales |
+| `noche` | `#020104` | **Único fondo de página** (D-145): negro casi neutro, para que el morado no se lea como "look de IA" |
+| `ink` | `#03010B` | Texto sobre lima y fondo del panel (el panel no cambió) |
+| `surface-1` | `#0B0B0D` | Superficies sólidas (las tarjetas son transparentes, D-146) |
+| `surface-2` | `#121215` | Hover, botón secundario, elementos elevados |
+| `surface-3` | `#19191D` | Menús desplegables, modales |
 | `border-subtle` | blanco al 6 % | Borde por defecto de tarjetas |
 | `border` | blanco al 10 % | Bordes de inputs y separadores |
 | `border-strong` | blanco al 16 % | Hover y foco |
 
-Las superficies tienen un leve tinte morado para que el oscuro se sienta de marca y no un gris cualquiera. Los valores son **[decidir]** al ver las referencias.
+**Desde D-146 las superficies son neutras** (sin tinte morado) y las tarjetas son **transparentes** (blanco al 2 %): el color de marca queda para los botones.
 
 ### Texto
 
@@ -52,28 +53,50 @@ Las superficies tienen un leve tinte morado para que el oscuro se sienta de marc
 | Token | Valor | Uso | No usar para |
 |---|---|---|---|
 | `lime` | `#B6FF00` | **Solo datos** (D-142): cifras clave, anillos, pasos del proceso, estados "en vivo", la línea destacada del título del hero | Botones, interruptores, opciones elegidas, grandes superficies |
-| `purple` | `#7D53FF` | **Botón principal** (`.v2-primario`, texto blanco 4,6:1), elegir (opciones del formulario, interruptores), filo de las tarjetas destacadas, luces de fondo, gráficos | Texto pequeño sobre oscuro (≈ 4.5:1, solo texto grande) |
-| `purple-deep` (`brand-ink`) | `#3B1D99` | Tintes de brillos y fondos de luz | Texto (no se lee sobre oscuro) |
-| `brand-soft` | `#B9A4FF` | Texto morado sobre oscuro: etiquetas, íconos de lista (≈9.7:1) | Fondos |
+| `purple` | `#7D53FF` | **Solo botones** (D-146): botón principal (`.v2-primario`, texto blanco 4,6:1) y lo que actúa como botón (opciones elegidas del formulario, interruptores de cookies, cápsula "Ver proyecto", sonido del video). Nunca en tarjetas, íconos, etiquetas, gráficos ni luces | Texto pequeño sobre oscuro (≈ 4.5:1, solo texto grande) |
+| `purple-deep` (`brand-ink`) | `#3B1D99` | Sin uso en el sitio desde D-146 | Texto (no se lee sobre oscuro) |
+| `brand-soft` | `#B9A4FF` | Sin uso en el sitio desde D-146: etiquetas, íconos y checks pasan a `fog` | Fondos |
 
-### Luces de fondo ✅ (D-044)
+### Íconos y fondo continuo ✅ (D-147)
 
-La referencia usa **luces radiales grandes y borrosas** detrás de las secciones (en 21st son azules). En Arata van en **morado**: `purple` / `purple-deep` con opacidad baja (10–25 %) y desenfoque grande.
+| Pieza | Cómo va |
+|---|---|
+| Íconos decorativos | **Fuera** (Sergio: "se ven muy IA"). El Problema y "Todo lo que trae" llevan **número** (01, 02…) en vez de ícono; "Es para ti si…" lleva un punto; el adicional, el aviso de cookies y `/agendar` van sin ícono |
+| Íconos que cumplen una función | Flechas, abrir/cerrar, check, video y WhatsApp con **Phosphor** en trazo `light` (`@phosphor-icons/react`, versión SSR), en `components/v2/iconos.tsx`. **Lucide ya no se usa en el sitio** (el panel sí la sigue usando) |
+| Fondo continuo | Las líneas verticales y los haces van **una sola vez para toda la página** (`.v2-fondo` en `app/(v2)/layout.tsx`, fijo detrás del contenido; los lados se desvanecen con una capa del color del fondo, sin `mask-image`). Las secciones solo ponen su luz blanca suave (`GridBackground`, sin líneas) |
+| Grano | **Quitado** (D-148: Sergio no lo quiere, "efecto borroso"). La regla de velocidad de §12 queda por si se vuelve a usar una textura |
+
+### Fondo premium ✅ (D-145)
+
+Sergio sintió el sitio "muy IA". Lo que más lo causaba: morado brillante sobre un negro con tinte morado, cuadrícula de fondo y cuadritos de ícono en todo. Cambios:
+
+| Pieza | Cómo va |
+|---|---|
+| Fondo | `noche` `#020104` en toda la página (antes `ink` `#03010B`, con tinte morado) |
+| Cuadrícula | **Fuera.** Solo líneas verticales (`GridBackground`, también en el hero) |
+| Haces de luz | Luces finas que bajan por algunas líneas del hero y de Cómo trabajamos, lejos del texto. Solo `transform`; con movimiento reducido no salen |
+| Grano | Se probó al 4,5 % y se quitó en D-148 |
+| Luces moradas | Más suaves: 0,17 / 0,06 (antes 0,28 / 0,12) |
+| Cifras del hero | Transparentes, sin íconos y más grandes en escritorio |
+
+### Luces de fondo ✅ (D-044 → **blancas desde D-146**)
+
+Luces radiales grandes y suaves detrás de algunas secciones. **Desde D-146 son blancas** (6,5 % en el centro, 2 % a la mitad), igual que la luz de la rejilla, los haces y la luz que sigue el cursor. Antes eran moradas y eran lo que más daba el "look de IA".
 
 - Son atmósfera y nunca llevan contenido encima que dependa de ellas para leerse.
 - Máximo 1–2 luces por pantalla.
 - La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") **sigue vigente para los slides de carruseles**; en el sitio v2 se permiten solo estas luces.
 
-### Estilo del panel aplicado al sitio ✅ (D-141)
+### Estilo del panel aplicado al sitio (D-141; tarjetas y colores ajustados en D-146)
 
 Es el estilo vigente. El 19 nov se probaron y se descartaron dos direcciones (color plano con bloques morados, D-137; tarjetas blancas, D-138; ver §13). Se volvió a la versión con luces y se le aplicó el estilo del panel (D-136, `docs/panel-cliente/03-sistema-de-diseno.md`):
 
 | Pieza | Cómo va |
 |---|---|
-| Tarjeta (`.v2-card`) | **Por capas**: velo blanco muy suave arriba (3,5 % → 1 %) sobre `#0F0C19`, borde blanco al 7 % y un filo de luz arriba. Lo usan también las cifras del hero, el Problema y "Es para ti si" |
-| Tarjeta destacada (`.v2-destacada`) | Igual, con **filo morado**: velo morado 12 % → 2 % y borde morado al 45 %. Paquete recomendado y precio de cada servicio (reemplaza el brillo `glow-purple`) |
-| Garantías (`.v2-glass`) | Como la cifra destacada del panel: sin vidrio ni luz en la esquina, borde morado al 28 % |
-| Cuadrito de ícono (`.v2-icono`) | Igual a `.pn-icono`: 10 px de radio, fondo blanco al 4 %, ícono `brand-soft`. En las cifras del hero (calendario, velocímetro, tienda), el Problema, "Es para ti si", "Todo lo que trae" y el adicional |
+| Tarjeta (`.v2-card`) | **Transparente** (D-146): blanco al 2 %, borde blanco al 7 % y un filo de luz arriba. Antes, por capas sobre `#0F0C19` (tinte morado) |
+| Tarjeta destacada (`.v2-destacada`) | **Transparente y un poco más clara** (D-146): blanco al 4,5 % y borde blanco al 20 %. Paquete recomendado y precio de cada servicio. Antes, filo morado |
+| Garantías (`.v2-glass`) | Transparentes como `.v2-card`, borde blanco al 9 % (D-146) |
+| Cuadrito de ícono (`.v2-icono`) | **Sin uso en el sitio desde D-147** (se quitaron los íconos decorativos) |
 | Botones | Los del panel (D-142): principal morado con texto blanco (`.v2-primario` = `.pn-primario`) y secundario oscuro con borde fino. La píldora con círculo de D-137 se quitó |
 | Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-142). Los checks de "Es para ti si" pasan a morado |
 
@@ -109,16 +132,16 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
 | Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
-| Tarjeta base | **Por capas** (`.v2-card`, D-141): velo blanco suave arriba, borde fino de 1 px, filo de luz y radio 24 px; luz morada que sigue el cursor en hover (`Spotlight`) | P1 |
+| Tarjeta base | **Transparente** (`.v2-card`, D-146): blanco al 2 %, borde fino de 1 px, filo de luz y radio 24 px; luz blanca suave que sigue el cursor en hover (`Spotlight`) | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
-| Tarjetas del problema | Apiladas, tarjeta por capas + cuadrito de ícono (`.v2-icono`) + título + texto, resaltado que las recorre (D-066, D-141) | P1 |
-| Cifras del hero | 3 tarjetas por capas con cuadrito de ícono arriba (calendario, velocímetro, tienda) + cifra con contador + texto (D-141) | P1 |
-| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada con filo morado (`.v2-destacada`, D-141), badge "Recomendado" y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
-| Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: como la cifra destacada del panel (`.v2-glass`: sin vidrio ni luz en la esquina, borde y velo morados suaves) + ícono SVG animado (`Assurances`, D-068, D-141) | P1 |
+| Tarjetas del problema | Apiladas, tarjeta transparente + **número** (01–05, D-147) + título + texto, resaltado que las recorre (el número se pinta de lima) (D-066, D-141) | P1 |
+| Cifras del hero | 3 tarjetas **transparentes** (blanco al 2 %, borde 7 %), **sin íconos**, más grandes en escritorio (cifra 48 px, ancho hasta 1024 px) + cifra con contador + texto (D-145) | P1 |
+| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada (`.v2-destacada`, transparente con borde blanco más visible, D-146), etiqueta "Recomendado" blanca con texto `ink` y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
+| Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: tarjeta transparente (`.v2-glass`, D-146) + ícono SVG animado en lima y blanco (`Assurances`, D-068) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
 | Bloque de caso | Problema → solución → resultado | P1 |
@@ -133,7 +156,7 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
 | Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula morada (D-142; antes lima) que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
-| Fondo de rejilla | `components/ui/grid-background.tsx` (ref. 21st.dev): líneas blancas al 5 %, celda de 40 px, luz morada suave y bordes desvanecidos. Variantes *rejilla* (Problema, Precios) y *líneas* (Cómo trabajamos). Solo CSS, sin JS. **Nunca en el hero** y nunca en dos secciones seguidas con la misma variante (D-071) | P1 |
+| Fondo de líneas | **Continuo para toda la página** (`.v2-fondo`, D-147): líneas verticales blancas al 4,5 %, una cada 80 px y centradas, con haces de luz a los lados del texto; sin cuadrícula (D-145). `components/ui/grid-background.tsx` ahora solo pone la luz blanca suave de cada sección (con `lineas` vuelve a dibujar las líneas, solo para muestras) | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
 
@@ -204,7 +227,7 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Pieza | Archivo | Qué hace |
 |---|---|---|
 | Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple`; opacidad `8` |
-| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (por capas), `.v2-destacada` (filo morado), `.v2-icono` (cuadrito de ícono), `.v2-primario` (botón principal), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 |
+| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (transparente), `.v2-destacada` (transparente, borde más claro), `.v2-icono` (cuadrito de ícono), `.v2-primario` (botón principal), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 |
 | Contenido | `content/inicio.ts`, `content/proyectos.ts` | Copy aprobado y portafolio. **Para cambiar un texto o sumar un proyecto, se edita aquí**, no en los componentes |
 | Botón | `components/v2/Button.tsx` | `primary` (morado, `.v2-primario`) · `secondary` (oscuro con borde) · `ghost`; `md` / `lg`; `arrow`; `external`. Para un `<button>` o enlace propio (formulario, portafolio): `clasesBoton()` y `FlechaBoton` |
 | Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader` |
@@ -261,6 +284,8 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Menú del celular: opciones de **56 px o más**, acción principal **abajo** (zona del pulgar), cierre con X/Escape/al tocar, foco dentro del panel | Fácil de usar con una mano (D-070) |
 | **Analítica (GTM/GA4) se carga al primer toque, scroll o tecla, o a los 7 s; de inmediato si hay un evento de conversión** | El contenedor con GA4 pesa ~178 KB; cargado al abrir, bajó el Inicio de 95 a 77–82 en celular. Medir siempre con los scripts de terceros permitidos: un entorno que los bloquea da números irreales (D-098) |
 | **Scroll horizontal: recortar solo el `<main>` en celular con `overflow-x: clip`** (no el `body`, no `hidden`) | Evita que una luz o una banda 3D (Safari no siempre recorta lo 3D) mueva la página de lado, y deja que una sección tenga su propio scroll horizontal (D-097) |
+| **Texturas (grano, ruido) en `<canvas>` pintado después de abrir, nunca un SVG con `feTurbulence` como fondo** | El filtro se rasteriza antes del primer pintado y retrasa el título (LCP) en celular (D-147) |
+| Fondos fijos de página completa **sin `mask-image`**: desvanecer con una capa del color del fondo | La máscara obliga a rasterizar otra capa del tamaño de la pantalla (D-147) |
 | Animación ligada al scroll: **un solo listener pasivo** que escribe una variable CSS (`--p`), activo solo mientras la sección se ve; lo demás es `calc()` en CSS | Sin listeners por elemento ni reflow (`ScrollPaint`, D-067) |
 
 ---
@@ -275,16 +300,20 @@ Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Serg
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
 | D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
 | D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
+| D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
+| D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
+| D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | ✅ Vigente (en vista previa) |
+| D-145 (20 nov) | **Menos "look de IA"**: fondo negro `#020104`, sin cuadrícula (solo líneas verticales), haces de luz, grano, luces moradas más suaves, cifras del hero sin íconos | ✅ Vigente |
 
-**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, tarjetas blancas sobre el oscuro, títulos en dos tonos y botones en píldora con círculo.
+**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **morado fuera de los botones** (D-146), **íconos decorativos en tarjetas** (D-147), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
 
-**Sitio y panel comparten base visual.** Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
+**Sitio y panel comparten el botón principal; las tarjetas ya no son iguales** (desde D-146 las del sitio son transparentes y sin morado; las del panel siguen por capas con filo morado, D-136). Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
 
 | Sitio (`app/globals.css`) | Panel (`styles/panel.src.css`) |
 |---|---|
-| `.v2-card` (por capas, fondo `#0F0C19`) | `.pn-root .v2-card` (fondo `#100D1A`) |
-| `.v2-destacada` | `.pn-root .v2-glass` (primera cifra) |
-| `.v2-icono` | `.pn-icono` |
-| `.v2-primario` | `.pn-primario` |
+| `.v2-primario` | `.pn-primario` (iguales: si cambia uno, cambia el otro) |
+| `.v2-card` (transparente) | `.pn-root .v2-card` (por capas, `#100D1A`) — distintas desde D-146 |
+| `.v2-destacada` (borde blanco) | `.pn-root .v2-glass` (filo morado) — distintas desde D-146 |
+| `.v2-icono` (ícono blanco) | `.pn-icono` (ícono morado claro) — distintas desde D-146 |
 
-Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio conserva las luces moradas de fondo, la rejilla y la línea lima del título del hero; el panel no tiene luces.
+Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio usa fondo `noche` `#020104`, tarjetas transparentes, luces blancas suaves, líneas verticales con haces, grano y la línea lima del título del hero (D-145, D-146); el panel sigue en `ink`, con sus tarjetas por capas y sin luces. Si Sergio quiere el panel igual, es una decisión aparte.

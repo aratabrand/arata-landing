@@ -20,15 +20,17 @@ const config: Config = {
         },
         lime: "#B6FF00",       // acento
         ink: "#03010B",        // texto principal / superficie oscura
+        noche: "#020104",      // D-145: fondo del sitio v2 (negro casi neutro; el panel sigue en ink)
         paper: "#FFFFFF",
         muted: "#615C77",      // gris de apoyo derivado de la marca
         line: "#ECEAF3",       // hairlines sobre claro
 
         // ── v2 (sitio de agencia, solo fondo oscuro) — docs/blueprint/04-sistema-de-diseno.md ──
         surface: {
-          1: "#0A0714", // tarjetas
-          2: "#110C20", // hover / elevado / botón secundario
-          3: "#18112D", // menús desplegables, modales
+          // D-146: neutras (sin tinte morado). El panel usa las suyas (tailwind.panel.config.ts)
+          1: "#0B0B0D", // tarjetas
+          2: "#121215", // hover / elevado / botón secundario
+          3: "#19191D", // menús desplegables, modales
         },
         fog: {
           DEFAULT: "#B4AECB", // texto secundario (≈9.8:1 sobre ink)

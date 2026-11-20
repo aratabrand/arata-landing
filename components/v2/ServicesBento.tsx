@@ -10,7 +10,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./iconos";
 import { onInView } from "@/lib/inview";
 import { servicios } from "@/content/inicio";
 
@@ -213,12 +213,12 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
         >
           <defs>
             <radialGradient id={glow} cx="320" cy="110" r="200" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#7D53FF" stopOpacity=".22" />
-              <stop offset="1" stopColor="#7D53FF" stopOpacity="0" />
+              <stop offset="0" stopColor="#FFFFFF" stopOpacity=".07" />
+              <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
             </radialGradient>
             <linearGradient id={rays} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#B9A4FF" stopOpacity=".28" />
-              <stop offset="1" stopColor="#B9A4FF" stopOpacity="0" />
+              <stop offset="0" stopColor="#FFFFFF" stopOpacity=".1" />
+              <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
             </linearGradient>
           </defs>
           <rect x="0" y="0" width="640" height="178" fill={`url(#${glow})`} />
@@ -257,9 +257,9 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
                   <g clipPath={`url(#${uid}avc${i})`}>
                     <Portrait index={i} size={22} uid={`${uid}f`} />
                   </g>
-                  <circle cx="11" cy="11" r="10.5" fill="none" stroke="#0A0714" strokeWidth="1.5" />
+                  <circle cx="11" cy="11" r="10.5" fill="none" stroke="#0B0B0D" strokeWidth="1.5" />
                 </svg>
-                <circle cx={m.x + 8} cy={m.y + 8} r="2.6" fill={i === 4 ? "#5E587A" : "#B6FF00"} stroke="#0A0714" className={i === 4 ? undefined : "ab-presence"} />
+                <circle cx={m.x + 8} cy={m.y + 8} r="2.6" fill={i === 4 ? "#5E587A" : "#B6FF00"} stroke="#0B0B0D" className={i === 4 ? undefined : "ab-presence"} />
                 <g className="ab-av-tip" transform={`translate(${m.x},${m.y - 18})`}>
                   <rect x={-m.name.length * 2.45 - 6} y="-9" width={m.name.length * 4.9 + 12} height="14" rx="3" fill="#B6FF00" />
                   <text x="0" y="1" textAnchor="middle" fontSize="7.5" fill="#03010B" fontFamily="var(--font-body)">
@@ -286,7 +286,7 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
 
           {/* Centro: tu catálogo */}
           <g transform="translate(262,88)">
-            <rect x="-4" y="-4" width="124" height="52" rx="9" fill="none" stroke="rgba(125,83,255,.55)" className={reduced ? undefined : "ab-glow"} />
+            <rect x="-4" y="-4" width="124" height="52" rx="9" fill="none" stroke="rgba(255,255,255,0.248)" className={reduced ? undefined : "ab-glow"} />
             <rect width="116" height="44" rx="7" className="ab-node" />
             <g transform="translate(12,12)">
               <Mark size={18} />
@@ -301,10 +301,10 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
             {[2, 1, 0].map((k) => (
               <g key={pedido - k} transform={`translate(${450 + k * 12},${40 - k * 10})`} opacity={1 - k * 0.25}>
                 <g className={`ab-sheet${k === 0 ? " ab-sheet-new" : ""}`}>
-                  <rect width="138" height="102" rx="5" fill="#110C20" stroke="var(--ab-line-strong)" />
+                  <rect width="138" height="102" rx="5" fill="#111113" stroke="var(--ab-line-strong)" />
                   {k === 0 && (
                     <>
-                      <text x="10" y="16" fontSize="7" fill="#B9A4FF" fontFamily="ui-monospace,monospace">
+                      <text x="10" y="16" fontSize="7" fill="#A1A1AA" fontFamily="ui-monospace,monospace">
                         {`PEDIDO #${pedido}`}
                       </text>
                       <g transform="translate(112,8)" fill="none" stroke="#B6FF00" strokeWidth="1.2" strokeLinecap="round">
@@ -336,7 +336,7 @@ function FlowCard({ uid, reduced, inView }: { uid: string; reduced: boolean; inV
             <p className="mt-2 text-sm leading-relaxed text-fog">{c.catalogo.texto}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-brand-soft">{c.sistema.etiqueta}</p>
+            <p className="text-xs font-semibold text-fog">{c.sistema.etiqueta}</p>
             <h3 className="mt-1.5 font-display text-v2-h3 font-bold tracking-heading text-white">{c.sistema.titulo}</h3>
             <p className="mt-2 text-sm leading-relaxed text-fog">{c.sistema.texto}</p>
           </div>
@@ -478,8 +478,8 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
         >
           <defs>
             <linearGradient id={fill} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#7D53FF" stopOpacity=".35" />
-              <stop offset="1" stopColor="#7D53FF" stopOpacity="0" />
+              <stop offset="0" stopColor="#FFFFFF" stopOpacity=".12" />
+              <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
             </linearGradient>
           </defs>
           <text x="14" y="10" fontSize="7" fill="#8A84A8" fontFamily="ui-monospace,monospace">
@@ -489,10 +489,10 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
             <line key={g} x1="14" x2={W - 14} y1={H * g} y2={H * g} stroke="var(--ab-line)" />
           ))}
           <path d={area} fill={`url(#${fill})`} />
-          <path d={line} fill="none" stroke="#B9A4FF" strokeWidth="1.6" pathLength={1} className="ab-line-draw" />
+          <path d={line} fill="none" stroke="#E4E4E7" strokeWidth="1.6" pathLength={1} className="ab-line-draw" />
           {hover >= 0 && <line x1={p[0]} x2={p[0]} y1="14" y2={H - 14} stroke="#FFFFFF" strokeOpacity=".3" />}
           {!reduced && hover < 0 && <circle cx={last[0]} cy={last[1]} r="7" fill="#B6FF00" opacity=".25" className="ab-glow" />}
-          <circle cx={p[0]} cy={p[1]} r="3.4" fill="#B6FF00" stroke="#0A0714" strokeWidth="1.5" />
+          <circle cx={p[0]} cy={p[1]} r="3.4" fill="#B6FF00" stroke="#0B0B0D" strokeWidth="1.5" />
           <g transform={`translate(${clamp(p[0], 40, W - 40)},${p[1] < 34 ? p[1] + 22 : p[1] - 12})`}>
             <rect x="-30" y="-11" width="60" height="15" rx="3" fill="#B6FF00" />
             <text x="0" y="-1" textAnchor="middle" fontSize="7.5" fill="#03010B" fontFamily="ui-monospace,monospace">
@@ -501,7 +501,7 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
           </g>
         </svg>
         <div className="mt-auto">
-          <p className="text-xs font-semibold text-brand-soft">{c.etiqueta}</p>
+          <p className="text-xs font-semibold text-fog">{c.etiqueta}</p>
           <h3 className="mt-1.5 font-display text-v2-h3 font-bold tracking-heading text-white">{c.titulo}</h3>
           <p className="mt-2 text-sm leading-relaxed text-fog">{c.texto}</p>
         </div>
@@ -540,14 +540,14 @@ const AB_CSS = `
 .ab-frame-hover:hover>.ab-c-tr{transform:translate(3px,-3px)}
 .ab-frame-hover:hover>.ab-c-bl{transform:translate(-3px,3px)}
 .ab-frame-hover:hover>.ab-c-br{transform:translate(3px,3px)}
-.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:linear-gradient(180deg,#110C20,#0A0714);border:1px solid var(--ab-line);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .35s}
-.ab-card:hover{border-color:var(--ab-line-strong);box-shadow:0 0 0 1px rgba(125,83,255,.25),0 24px 60px -30px rgba(125,83,255,.55)}
+.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:rgba(255,255,255,.02);border:1px solid var(--ab-line);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .35s}
+.ab-card:hover{border-color:var(--ab-line-strong);box-shadow:0 0 0 1px rgba(255,255,255,0.113),0 24px 60px -30px rgba(255,255,255,0.248)}
 .ab-diagram{width:100%;height:auto;overflow:visible}
 .ab-flow{stroke:var(--ab-line-strong);fill:none;stroke-width:1.2;transition:stroke .3s}
 .ab-flow-on{stroke:#B6FF00}
 .ab-dash{stroke-dasharray:3 4;animation:ab-dash 1.2s linear infinite}
 .ab-pkt{fill:#B6FF00}
-.ab-node{fill:#18112D;stroke:var(--ab-line-strong);transition:stroke .3s}
+.ab-node{fill:#141417;stroke:var(--ab-line-strong);transition:stroke .3s}
 .ab-av{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1);transform-box:fill-box;transform-origin:center}
 .ab-av:hover,.ab-av:focus-visible{transform:scale(1.18)}
 .ab-av-tip{opacity:0;transition:opacity .2s;pointer-events:none}

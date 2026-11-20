@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Cookie, X } from "lucide-react";
+import { X } from "@/components/v2/iconos";
 import { cookies as t } from "@/content/cookies";
 import {
   CLARITY_ACTIVO,
@@ -65,10 +65,7 @@ export default function CookieBanner() {
           style={{ animationDelay: `${retraso}s` }}
         >
           <div className="rounded-[22px] border border-white/10 bg-surface-1/95 p-5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl">
-            <div className="flex items-start gap-3">
-              <span aria-hidden className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand/20 text-brand-soft">
-                <Cookie className="h-4 w-4" />
-              </span>
+            <div>
               <div>
                 <h2 id="cookies-titulo" className="font-display text-base font-bold text-white">
                   {t.titulo}
@@ -87,7 +84,7 @@ export default function CookieBanner() {
                 <button
                   type="button"
                   onClick={() => dialogo.current?.showModal()}
-                  className="h-10 font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:text-brand-soft"
+                  className="h-10 font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:text-white"
                 >
                   {t.preferencias}
                 </button>
@@ -104,7 +101,7 @@ export default function CookieBanner() {
       <dialog
         ref={dialogo}
         aria-labelledby="cookies-pref-titulo"
-        className="as-cookies-dialogo m-auto w-[min(32rem,calc(100vw-1.5rem))] rounded-[24px] border border-white/10 bg-surface-1 p-0 text-white backdrop:bg-ink/70"
+        className="as-cookies-dialogo m-auto w-[min(32rem,calc(100vw-1.5rem))] rounded-[24px] border border-white/10 bg-surface-1 p-0 text-white backdrop:bg-noche/70"
         onClick={(e) => {
           // Tocar fuera de la tarjeta (el fondo) cierra sin cambiar nada
           if (e.target === e.currentTarget) dialogo.current?.close();
@@ -127,7 +124,7 @@ export default function CookieBanner() {
           <p className="mt-2 text-sm leading-relaxed text-fog">{t.prefIntro}</p>
 
           <ul className="mt-6 space-y-3">
-            <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
+            <li className="rounded-frame border border-white/8 bg-noche/50 p-4">
               <div className="flex items-center justify-between gap-4">
                 <h3 className="font-semibold">{t.necesarias.titulo}</h3>
                 <span className="shrink-0 rounded-full bg-white/8 px-2.5 py-1 text-xs font-semibold text-fog">{t.necesarias.estado}</span>
@@ -173,7 +170,7 @@ export function AbrirPreferenciasCookies({ className, children }: { className?: 
 /** Un permiso con su interruptor (apagado por defecto; la ley exige que no vengan marcados). */
 function Opcion({ id, titulo, texto, activo, onCambiar }: { id: string; titulo: string; texto: string; activo: boolean; onCambiar: () => void }) {
   return (
-    <li className="rounded-frame border border-white/8 bg-ink/50 p-4">
+    <li className="rounded-frame border border-white/8 bg-noche/50 p-4">
       <div className="flex items-center justify-between gap-4">
         <h3 id={id} className="font-semibold">
           {titulo}

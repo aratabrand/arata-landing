@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus } from "./iconos";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import { Container, Glow } from "./primitives";

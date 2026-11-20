@@ -39,7 +39,7 @@ export function Badge({
 /** Etiqueta pequeña en mayúsculas (eyebrow). */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className={cn("text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-brand-soft", className)}>
+    <p className={cn("text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog", className)}>
       {children}
     </p>
   );

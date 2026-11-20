@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown, ChevronUp, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Pause, Play, Volume2, VolumeX } from "./iconos";
 import { medir } from "@/lib/medir";
 import type { Testimonio } from "@/content/casos-exito";
 
@@ -284,7 +284,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
                 style={{ "--d": 0 } as CSSProperties}
               />
             )}
-            <p className="cx-i text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-brand-soft" style={{ "--d": 0 } as CSSProperties}>
+            <p className="cx-i text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog" style={{ "--d": 0 } as CSSProperties}>
               {c.logo ? c.lugar : `${c.nombre} · ${c.lugar}`}
             </p>
             <h3

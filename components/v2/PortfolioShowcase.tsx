@@ -36,7 +36,7 @@ export default function PortfolioShowcase() {
           {/* Dato útil en vez de decoración (CLAUDE.md §3): velocidad real */}
           <Spotlight as="article" className="flex flex-col justify-between gap-8 p-6">
             <div>
-              <p className="text-xs font-semibold text-brand-soft">{velocidad.fuente}</p>
+              <p className="text-xs font-semibold text-fog">{velocidad.fuente}</p>
               <h3 className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">{velocidad.titulo}</h3>
             </div>
             <div className="flex items-center justify-around gap-4">

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, ChevronDown, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ChevronRight } from "./iconos";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
 import ProjectPreview from "./ProjectPreview";
@@ -151,9 +151,9 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
         mobile
-          ? "border-b border-white/6 bg-ink"
+          ? "border-b border-white/6 bg-noche"
           : scrolled
-            ? "border-b border-white/6 bg-ink/80 backdrop-blur-xl"
+            ? "border-b border-white/6 bg-noche/80 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
       )}
     >
@@ -177,7 +177,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             aria-hidden
             data-selector=""
             className={cn(
-              "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_6px_20px_-10px_rgba(125,83,255,0.55)] motion-reduce:transition-none",
+              "pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full border border-white/[0.12] bg-white/[0.09] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] motion-reduce:transition-none",
               animar ? "transition-[transform,width,opacity] duration-300 ease-out" : "transition-opacity duration-200",
               sel ? "opacity-100" : "opacity-0"
             )}
@@ -303,11 +303,11 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
         aria-label="Menú"
         // React 18 no tipa `inert`: cerrado, el panel no recibe foco ni toques
         {...((mobile ? {} : { inert: "true" }) as Record<string, string>)}
-        className={cn("v2-mnav fixed inset-0 z-[45] flex flex-col bg-ink lg:hidden", mobile && "is-open")}
+        className={cn("v2-mnav fixed inset-0 z-[45] flex flex-col bg-noche lg:hidden", mobile && "is-open")}
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,rgba(125,83,255,0.22),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.06),transparent_70%)]"
         />
         <nav aria-label="Menú del celular" className="relative flex-1 overflow-y-auto overscroll-contain px-4 pb-6 pt-[4.75rem]">
           <p className="v2-mnav-item px-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-fog-dim" style={{ ["--d" as string]: 0 }}>
@@ -352,7 +352,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
 
         {/* Acción principal siempre a mano, en la zona del pulgar */}
         <div
-          className="v2-mnav-item relative border-t border-white/8 bg-ink px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4"
+          className="v2-mnav-item relative border-t border-white/8 bg-noche px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4"
           style={{ ["--d" as string]: 5 }}
         >
           <Button href={cta.enlace} external={ctaExterno} size="lg" arrow className="w-full" onClick={closeAll}>

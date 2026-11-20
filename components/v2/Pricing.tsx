@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check } from "./iconos";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
@@ -21,7 +21,7 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       )}
     >
       {rec && (
-        <span className="absolute -top-3 left-6 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
+        <span className="absolute -top-3 left-6 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">
           Recomendado
         </span>
       )}
@@ -38,7 +38,7 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       <ul className="mt-6 space-y-3 border-t border-white/8 pt-6">
         {paquete.incluye.map((item) => (
           <li key={item} className="flex gap-3 text-sm text-fog">
-            <Check aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" />
+            <Check aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-fog" />
             <span>{item}</span>
           </li>
         ))}
@@ -84,7 +84,7 @@ function GaugeIcon() {
         <line x1="50" y1="52" x2="50" y2="22" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" />
         <circle cx="50" cy="22" r="2.4" fill="#B6FF00" className="v2-beat" />
       </g>
-      <circle cx="50" cy="52" r="4.5" fill="#18112D" stroke="#FFFFFF" strokeWidth="1.6" />
+      <circle cx="50" cy="52" r="4.5" fill="#141417" stroke="#FFFFFF" strokeWidth="1.6" />
     </svg>
   );
 }
@@ -115,7 +115,7 @@ function SplitRingIcon() {
         cy="50"
         r="36"
         fill="none"
-        stroke="#7D53FF"
+        stroke="rgba(255,255,255,0.55)"
         strokeWidth="8"
         strokeLinecap="round"
         pathLength={100}
@@ -135,7 +135,7 @@ function MaintenanceIcon() {
   // Anillo que marca 15 % + borde punteado que gira despacio (mantenimiento continuo).
   return (
     <svg viewBox="0 0 100 100" className="h-20 w-20" aria-hidden>
-      <circle className="v2-spin" cx="50" cy="50" r="46" fill="none" stroke="rgba(185,164,255,0.45)" strokeWidth="1.4" strokeDasharray="2 6" strokeLinecap="round" />
+      <circle className="v2-spin" cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.203)" strokeWidth="1.4" strokeDasharray="2 6" strokeLinecap="round" />
       <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
       <circle
         className="v2-draw"
@@ -161,8 +161,8 @@ function MaintenanceIcon() {
 
 const ICONOS_GLASS = {
   velocidad: { Icon: GaugeIcon, glow: "rgba(182,255,0,0.13)" },
-  pago: { Icon: SplitRingIcon, glow: "rgba(125,83,255,0.4)" },
-  mantenimiento: { Icon: MaintenanceIcon, glow: "rgba(185,164,255,0.3)" },
+  pago: { Icon: SplitRingIcon, glow: "rgba(255,255,255,0.18)" },
+  mantenimiento: { Icon: MaintenanceIcon, glow: "rgba(255,255,255,0.135)" },
 } as const;
 
 /** Tarjetas de garantía, pago y mantenimiento (D-068; estilo del panel desde D-141). */

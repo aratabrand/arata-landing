@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type PointerEvent, type ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "./iconos";
 import { cn } from "@/lib/utils";
 
 // Cápsula lima "Ver proyecto" que sigue al mouse sobre la vista previa de un proyecto (D-085).

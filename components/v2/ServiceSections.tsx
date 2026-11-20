@@ -1,22 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Boxes,
-  CalendarCheck,
-  Check,
-  Gauge,
-  Globe,
-  GraduationCap,
-  LayoutDashboard,
-  LayoutTemplate,
-  MessageCircle,
-  RefreshCw,
-  Search,
-  ShoppingCart,
-  Smartphone,
-  SlidersHorizontal,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, Check } from "./iconos";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
@@ -118,9 +101,7 @@ export function ForWhoSection({ titulo, items }: { titulo: string; items: string
           {items.map((t, i) => (
             <Reveal as="li" key={t} delay={i * 70} className="h-full">
               <div className="v2-card flex h-full gap-4 !rounded-frame p-5">
-                <span className="v2-icono h-9 w-9">
-                  <Check aria-hidden className="h-4 w-4" strokeWidth={2.5} />
-                </span>
+                <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/60" />
                 <p className="leading-relaxed text-white">{t}</p>
               </div>
             </Reveal>
@@ -133,20 +114,6 @@ export function ForWhoSection({ titulo, items }: { titulo: string; items: string
 
 /* ── Qué incluye (grilla de valor apilado) ───────────────────────────── */
 
-const ICONOS: Record<string, LucideIcon> = {
-  secciones: LayoutTemplate,
-  celular: Smartphone,
-  velocidad: Gauge,
-  google: Search,
-  dominio: Globe,
-  ajustes: RefreshCw,
-  capacitacion: GraduationCap,
-  entrega: CalendarCheck,
-  carrito: ShoppingCart,
-  whatsapp: MessageCircle,
-  panel: LayoutDashboard,
-  inventario: Boxes,
-};
 
 export function IncludesSection({
   id,
@@ -169,22 +136,17 @@ export function IncludesSection({
         {/* 8 ítems → 4 columnas; 10 → 5 (sin filas a medias) */}
         <ul className={cn("mt-10 grid gap-3 sm:grid-cols-2", items.length % 5 === 0 ? "lg:grid-cols-5" : "lg:grid-cols-4")}>
           {items.map((it, i) => {
-            const Icono = ICONOS[it.icono] ?? Check;
             const clave = it.icono === "velocidad";
             return (
               <Reveal as="li" key={it.titulo} delay={(i % 4) * 70} className="h-full">
                 <Spotlight
                   className={cn("h-full p-5", clave && "border-lime/30")}
                 >
-                  <span
-                    className={cn(
-                      "v2-icono h-11 w-11",
-                      clave ? "text-lime" : "text-brand-soft"
-                    )}
-                  >
-                    <Icono aria-hidden className="h-5 w-5" />
+                  {/* D-147: número en vez de ícono */}
+                  <span aria-hidden className={cn("font-display text-sm font-bold tabular-nums", clave ? "text-lime" : "text-fog-dim")}>
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-4 font-display text-lg font-bold tracking-heading text-white">{it.titulo}</h3>
+                  <h3 className="mt-3 font-display text-lg font-bold tracking-heading text-white">{it.titulo}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-fog">{it.texto}</p>
                 </Spotlight>
               </Reveal>
@@ -237,9 +199,6 @@ export function AddonCallout({ etiqueta, titulo, texto }: { etiqueta: string; ti
             className="v2-glass flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8"
             style={{ ["--glow" as string]: "rgba(125,83,255,0.35)" }}
           >
-            <span className="v2-icono h-14 w-14 !rounded-frame">
-              <SlidersHorizontal aria-hidden className="h-6 w-6" />
-            </span>
             <div className="flex-1">
               <Eyebrow>{etiqueta}</Eyebrow>
               <h2 id="adicional" className="mt-2 font-display text-v2-h3 font-bold tracking-heading text-white">
@@ -283,7 +242,7 @@ export function CaseCard({
           />
         </HoverCapsule>
         <div className="flex flex-1 flex-col px-3 pb-3 pt-4">
-          <p className="text-xs font-semibold text-brand-soft">{proyecto.etiqueta}</p>
+          <p className="text-xs font-semibold text-fog">{proyecto.etiqueta}</p>
           <Titulo className="mt-1.5 font-display text-xl font-bold tracking-heading text-white">{proyecto.nombre}</Titulo>
           <p className="mt-1.5 flex-1 text-sm leading-relaxed text-fog">{frase ?? proyecto.frase}</p>
           <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-colors group-hover:text-lime">
@@ -353,7 +312,7 @@ export function NeedsSection({
               {items.map((it, i) => (
                 <li
                   key={it.titulo}
-                  className="nd-row flex items-center gap-4 rounded-frame border border-white/6 bg-ink/60 p-4"
+                  className="nd-row flex items-center gap-4 rounded-frame border border-white/6 bg-noche/60 p-4"
                   style={{ ["--d" as string]: `${0.5 + i * 0.8}s` }}
                 >
                   <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-white/20">
@@ -445,7 +404,7 @@ export function PriceSection({
       <Container>
         <Reveal>
           <div className="relative mx-auto max-w-3xl v2-destacada rounded-card p-8 text-center sm:p-12">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">
               {paquete}
             </span>
             <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">
@@ -506,10 +465,8 @@ export function CustomSystemSection({
           <Reveal variant="right">
             <ul className="space-y-2">
               {items.map((it) => (
-                <li key={it.titulo} className="flex items-start gap-4 rounded-frame border border-white/6 bg-ink/60 p-4">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand-soft">
-                    <Check aria-hidden className="h-3.5 w-3.5" strokeWidth={2.5} />
-                  </span>
+                <li key={it.titulo} className="flex items-start gap-4 rounded-frame border border-white/6 bg-noche/60 p-4">
+                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-fog" />
                   <p className="text-fog">
                     <span className="font-semibold text-white">{it.titulo}</span>
                     {it.texto && `: ${it.texto}`}

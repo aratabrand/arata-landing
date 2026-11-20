@@ -10,10 +10,17 @@ export const metadata: Metadata = {
 
 export default function V2Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-ink text-white [color-scheme:dark]">
-      {/* El body global es blanco (v1); en la v2 todo el fondo es ink, también al rebotar el scroll */}
-      <style>{`html,body{background:#03010B}`}</style>
-      {children}
+    <div className="min-h-screen bg-noche text-white [color-scheme:dark]">
+      {/* El body global es blanco (v1); en la v2 todo el fondo es negro (#020104, D-145), también al rebotar el scroll */}
+      <style>{`html,body{background:#020104}`}</style>
+      {/* Fondo continuo de toda la página (D-147): líneas verticales cada 80 px y haces de luz
+          que bajan por algunas, lejos de la columna del texto. Fijo: no se repinta al bajar. */}
+      <div aria-hidden className="v2-fondo">
+        {[-7, -5, 5, 7].map((n, i) => (
+          <span key={n} className="v2-haz" style={{ left: `calc(50% + ${n * 80}px - 0.5px)`, ["--d" as string]: `${i * 2.3}s` } as React.CSSProperties} />
+        ))}
+      </div>
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }
