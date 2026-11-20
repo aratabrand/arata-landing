@@ -9,7 +9,7 @@ import { avisarEquipo, pushActivo } from "@/lib/panel/push";
 import type { FinProyecto } from "@/lib/panel/finanzas/tipos";
 import type { FinTarea } from "@/lib/panel/finanzas/procesos";
 
-// Aviso diario de vencimientos (D-119) y de interesados en espera (D-141). Lo llama Vercel Cron a las 8 a. m. de Bogotá
+// Aviso diario de vencimientos (D-119) y de interesados en espera (D-144). Lo llama Vercel Cron a las 8 a. m. de Bogotá
 // (13:00 UTC, vercel.json) con "Authorization: Bearer CRON_SECRET". Para cada proyecto:
 // 2 días antes, el día de entrega y cada mañana que vaya tarde. Nunca repite el mismo
 // aviso el mismo día (tabla avisos_enviados).
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
       enviados += r.enviados;
     }
 
-    // Interesados en espera (D-141): un día antes del plazo y el día del plazo
+    // Interesados en espera (D-144): un día antes del plazo y el día del plazo
     const espera = await db().query(
       `select i.id, i.nombre, (i.espera_hasta - $2::date) as dias,
               (select n.texto from interesado_notas n where n.interesado_id = i.id order by n.creado desc limit 1) as nota

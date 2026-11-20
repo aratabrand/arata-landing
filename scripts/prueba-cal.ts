@@ -87,7 +87,7 @@ ok(sinInvitado.accion === "creada" && sinInvitado.nombre === "Sin nombre" && sin
 const mala = leerAviso(base({}, { attendees: [{ name: "A".repeat(500), email: "no-es-correo", timeZone: "x".repeat(200) }] }));
 ok(mala.accion === "creada" && mala.nombre.length === 120 && mala.correo === null && (mala.zona?.length ?? 0) <= 60, "textos largos o correo malo: se acotan");
 
-// ── En espera (D-141) ──
+// ── En espera (D-144) ──
 // 19 nov 2026, 9:00 p. m. en Bogotá = 20 nov 02:00 UTC: el "hoy" debe ser 19 nov (Bogotá), no 20 (UTC)
 const noche = Date.parse("2026-11-20T02:00:00Z");
 ok(plazoDesde(7, noche) === "2026-11-26" && plazoDesde(1, noche) === "2026-11-20", "plazo: se cuenta desde hoy en Bogotá (de noche no salta un día)");

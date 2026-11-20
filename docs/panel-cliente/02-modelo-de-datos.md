@@ -187,7 +187,7 @@ create policy "miembros leen y escriben sus clientes" on clientes
 | Tabla | Qué guarda |
 |---|---|
 | `interesados` | Una fila por reserva de Cal.com (`cal_uid` único): nombre, correo, WhatsApp, qué necesita, tipo, página, cuándo empezar, inversión, hora de la reunión, enlace de la llamada y de la reserva. `estado`: `agendada` → `confirmada` (con `cliente_id`) · `cancelada` (Cal.com) · `descartada` ("No avanzó"). `por_aceptar` = pidió la reunión y falta aceptarla en Cal.com; estado `rechazada` = se rechazó allá (D-134, `014_interesados_por_aceptar.sql`). Solo la agencia puede tenerla (trigger `exigir_agencia`). El historial acepta la entidad `interesado` |
-| `interesados.espera_hasta`, estado `espera` | En espera (D-141, `015_interesados_espera.sql`): quedó en confirmar; plazo de 1 día a 1 semana |
+| `interesados.espera_hasta`, estado `espera` | En espera (D-144, `015_interesados_espera.sql`): quedó en confirmar; plazo de 1 día a 1 semana |
 | `interesado_notas` | Notas del seguimiento: texto (500), quién y cuándo. No se editan; pasan al cliente al confirmar |
 | `avisos_interesados` | Recordatorio ya enviado por interesado, tipo (`manana`, `hoy`) y día: no se repite |
 

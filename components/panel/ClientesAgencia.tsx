@@ -47,7 +47,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
   // Pestañas Clientes | Interesados (D-133). "Confirmar" abre el formulario de cliente ya prellenado.
   const [vista, setVista] = useState<"clientes" | "interesados">(vistaInicial);
   const [confirmando, setConfirmando] = useState<Interesado | null>(null);
-  // Por atender: reuniones pendientes + los que están en espera y ya toca escribirles (D-141)
+  // Por atender: reuniones pendientes + los que están en espera y ya toca escribirles (D-144)
   const pendientes = datos.interesados.filter((i) => i.estado === "agendada" || (i.estado === "espera" && i.esperaHasta && diasParaPlazo(i.esperaHasta, Date.parse(datos.ahora)) <= 0)).length;
   const nombreDeCliente = (id: string) => {
     const x = datos.clientes.find((c) => c.id === id);

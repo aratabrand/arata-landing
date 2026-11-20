@@ -2,15 +2,17 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| En revisión | 0.2 | 19 nov 2026 | Sergio |
+| Aprobado | 0.3 | 19 nov 2026 | Sergio |
 
 El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-diseno.md`, tokens en `tailwind.config.ts`). Aquí solo va lo propio del panel.
+
+> **Desde el 19 nov 2026 el sitio usa el estilo de este panel** (D-141, D-142): tarjeta por capas, filo morado en lo destacado, cuadrito de ícono y botón principal morado. Las piezas están **copiadas** en `app/globals.css` (`.v2-card`, `.v2-destacada`, `.v2-icono`, `.v2-primario`) porque el CSS del panel se compila aparte (D-135). Si se cambia una aquí, se cambia también allá (tabla en `04-sistema-de-diseno.md` §13). Se probó llevar el diseño plano de la web al panel (D-139) y se revirtió (D-140).
 
 ---
 
 ## 1. Color (D-136: más sobrio, con superficies en capas)
 
-> El panel tiene sus propias superficies (en `tailwind.panel.config.ts`), un paso más claras y menos saturadas que las del sitio, para que las tarjetas se separen del fondo. El sitio no cambia.
+> El panel tiene sus propias superficies (en `tailwind.panel.config.ts`), un paso más claras y menos saturadas que las del sitio, para que las tarjetas se separen del fondo. El sitio usa la misma tarjeta por capas sobre `#0F0C19` (D-141).
 
 | Capa | Token / clase | Valor |
 |---|---|---|

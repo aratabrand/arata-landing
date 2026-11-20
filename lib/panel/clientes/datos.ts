@@ -56,7 +56,7 @@ export type DatosClientes = {
   interesados: Interesado[];
   /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
   ahora: string;
-  /** Nombre de quien está en sesión (firma el mensaje de seguimiento por WhatsApp, D-141). */
+  /** Nombre de quien está en sesión (firma el mensaje de seguimiento por WhatsApp, D-144). */
   yo: string;
 };
 

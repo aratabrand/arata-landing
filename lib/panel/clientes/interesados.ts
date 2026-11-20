@@ -25,7 +25,7 @@ export type Interesado = {
   estado: EstadoInteresado;
   /** Pidió la reunión y todavía no se acepta en Cal.com (confirmación manual, D-134). */
   porAceptar: boolean;
-  /** En espera (D-141): hasta qué día esperamos (YYYY-MM-DD, Bogotá). */
+  /** En espera (D-144): hasta qué día esperamos (YYYY-MM-DD, Bogotá). */
   esperaHasta: string | null;
   /** Notas del seguimiento, la más reciente primero. */
   notas: NotaInteresado[];
@@ -116,7 +116,7 @@ export function datosDeCliente(i: Interesado) {
   };
 }
 
-/* ── En espera (D-141) ─────────────────────────────────────────────────── */
+/* ── En espera (D-144) ─────────────────────────────────────────────────── */
 
 /** Cuánto tiempo pidió que esperáramos. Máximo una semana (decisión de Sergio). */
 export const PLAZOS = [

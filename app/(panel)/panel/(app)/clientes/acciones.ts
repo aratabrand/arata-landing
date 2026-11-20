@@ -240,7 +240,7 @@ export async function confirmarInteresado(entrada: { interesadoId: string; clien
   }
 }
 
-/* ── En espera (D-141) ─────────────────────────────────────────────────── */
+/* ── En espera (D-144) ─────────────────────────────────────────────────── */
 
 async function nuevaNota(ctx: { negocioId: string; usuarioId: string }, interesadoId: string, texto: string) {
   const quien = String((await db().query(`select name from "user" where id = $1`, [ctx.usuarioId])).rows[0]?.name ?? "Alguien").slice(0, 80);

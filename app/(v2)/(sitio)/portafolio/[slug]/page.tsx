@@ -7,7 +7,7 @@ import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import { StepsSection } from "@/components/v2/HomeSections";
-import { Container, Eyebrow } from "@/components/v2/primitives";
+import { Container, Eyebrow, Glow } from "@/components/v2/primitives";
 import { clasesBoton } from "@/components/v2/Button";
 import ProjectPreview from "@/components/v2/ProjectPreview";
 import { cn } from "@/lib/utils";
@@ -73,6 +73,7 @@ export default async function Caso({ params }: Props) {
       />
       {/* Hero del caso */}
       <section className="relative overflow-hidden pb-12 pt-28 sm:pb-16 sm:pt-32">
+        <Glow className="left-1/2 top-[-18rem] h-[40rem] w-[60rem] -translate-x-1/2" />
         <Container className="relative">
           {/* Volver: flecha visible (no todos usan la miga de pan) */}
           <Link

@@ -29,7 +29,7 @@ export default function Interesados({
   interesados: Interesado[];
   /** Hora del servidor (ISO): evita que la primera pintura difiera de la del navegador. */
   ahora: string;
-  /** Quien está en sesión: firma el mensaje de seguimiento (D-141). */
+  /** Quien está en sesión: firma el mensaje de seguimiento (D-144). */
   yo: string;
   /** Nombre visible de un cliente por su id (para "Ya es cliente: …"). */
   nombreCliente: (id: string) => string | null;
@@ -72,7 +72,7 @@ export default function Interesados({
       porConfirmar: pend.filter((i) => momentoDe(i, ahoraMs) === "pasada").sort((a, b) => dif(b, a)),
       // Las que vienen, la más cercana primero
       proximas: pend.filter((i) => momentoDe(i, ahoraMs) !== "pasada").sort(dif),
-      // Quedaron en confirmar (D-141): el plazo más cercano primero
+      // Quedaron en confirmar (D-144): el plazo más cercano primero
       enEspera: interesados.filter((i) => i.estado === "espera").sort((a, b) => (a.esperaHasta ?? "").localeCompare(b.esperaHasta ?? "")),
       cerradas: interesados.filter((i) => i.estado !== "agendada" && i.estado !== "espera").sort((a, b) => Date.parse(b.cerradoEn ?? b.inicio) - Date.parse(a.cerradoEn ?? a.inicio)),
     };
@@ -215,7 +215,7 @@ function Fila({
   const ahoraEs = pendiente && m === "ahora";
   const cliente = i.clienteId ? nombreCliente(i.clienteId) : null;
   const wa = i.whatsapp ? `https://wa.me/${i.whatsapp}?text=${encodeURIComponent(`Hola ${i.nombre.split(" ")[0]}, `)}` : null;
-  // En espera (D-141)
+  // En espera (D-144)
   const enEspera = i.estado === "espera";
   const dPlazo = enEspera && i.esperaHasta ? diasParaPlazo(i.esperaHasta, ahoraMs) : null;
   const toca = dPlazo !== null && dPlazo <= 0;

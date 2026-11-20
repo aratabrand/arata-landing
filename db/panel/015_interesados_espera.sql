@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════
--- Panel de Arata San · 015 · Interesados "En espera" (D-141)
+-- Panel de Arata San · 015 · Interesados "En espera" (D-144)
 -- Después de la reunión, el cliente dice "te confirmo": se pone en espera con una nota y un plazo
 -- (máximo una semana). El aviso de las 8 a. m. recuerda escribirle un día antes y el día del plazo.
 -- ════════════════════════════════════════════════════════════════════

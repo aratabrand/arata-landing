@@ -736,10 +736,10 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | 1 | **¿Qué necesitas?** | Una página nueva · Un catálogo o tienda · Un sistema a medida · Una auditoría gratis de mi página |
 | 1b | *(solo auditoría)* **¿Cuál es tu página?** | Campo: `tunegocio.com` |
 | 2 | **¿Para cuándo lo necesitas?** | Ya · Este mes · En 1 a 3 meses · Solo estoy averiguando |
-| 3 | **¿Cuánto tienes pensado invertir?** *(no aparece en auditoría)* | Menos de 400 USD · 400 a 800 USD · 800 a 2.000 USD · Más de 2.000 USD |
+| 3 | **¿Cuánto tienes pensado invertir?** *(no aparece en auditoría; las opciones dependen del paso 1, D-143)* | **Página:** 400 a 800 USD · 800 a 2.000 USD · Más de 2.000 USD<br>**Catálogo o tienda:** Menos de 800 USD · 800 a 1.500 USD · 1.500 a 3.000 USD · Más de 3.000 USD<br>**Sistema a medida:** 1.000 a 3.000 USD · 3.000 a 6.000 USD · Más de 6.000 USD |
 | 4 | **Tus datos** | Tu nombre · Tu WhatsApp · Tu correo |
 
-- **Si elige "Menos de 400 USD":** *Puedes pagar por partes: 50 % para arrancar y 50 % al entregar.* (D-041)
+- **Si elige "Menos de 800 USD" (solo catálogo):** *Puedes pagar por partes: 50 % para arrancar y 50 % al entregar.* (D-041, D-143). Página ya no tiene "Menos de 400 USD" (D-143)
 - **Autorización (obligatoria):** ☐ *Autorizo a Arata San a usar mis datos para contactarme sobre mi solicitud, según la [Política de tratamiento de datos](/privacidad).*
 - **Botón:** **Elegir hora** → calendario de Cal.com
 - **Botón de volver:** Atrás
