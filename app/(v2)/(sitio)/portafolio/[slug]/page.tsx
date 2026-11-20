@@ -127,7 +127,7 @@ export default async function Caso({ params }: Props) {
 
           <div className="v2-card mt-6 p-2 shadow-2xl">
             <div className="v2-frame aspect-[16/10]">
-              <ProjectPreview proyecto={p} priority sizes="(min-width: 1200px) 1150px, 100vw" />
+              <ProjectPreview proyecto={p} priority sizes="(min-width: 1200px) 1150px, calc(100vw - 3.25rem)" />
             </div>
           </div>
         </Container>

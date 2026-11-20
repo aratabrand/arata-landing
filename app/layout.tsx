@@ -9,8 +9,8 @@ import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
 
 // Fuentes de marca auto-hospedadas (sin dependencias de red en runtime).
-// D-156: una sola fuente VARIABLE por familia (antes 7 archivos, 87 KB → 2 archivos, 33 KB),
-// recortada a los caracteres del español (latín básico + latín-1 + comillas, rayas, €, flechas)
+// D-156/D-158: una sola fuente VARIABLE por familia (antes 7 archivos, 87 KB → 2 archivos, 25 KB),
+// recortada a los caracteres del español (latín básico, vocales con tilde, ñ, ü, ¿ ¡, comillas, rayas, €)
 // y al rango de pesos que se usa. Menos archivos = cadena de carga más corta (Lighthouse:
 // "Árbol de dependencias de red"). Cómo regenerarlas: docs/blueprint/04-sistema-de-diseno.md §12.
 const display = localFont({
@@ -23,9 +23,8 @@ const body = localFont({
   src: [{ path: "./fonts/plus-jakarta-sans-wght-400-700.woff2", weight: "400 700", style: "normal" }],
   variable: "--font-body",
   display: "swap",
-  // Solo se precarga la fuente de títulos (el h1 es el LCP). El cuerpo entra con
-  // swap sin competir por ancho de banda en el primer pintado.
-  preload: false,
+  // D-158: también se precarga. Es un solo archivo de 14 KB (antes 4) y el subtítulo del hero
+  // la usa: precargada sale de la cadena "documento → CSS → fuente" que marcaba PageSpeed.
 });
 
 // Metadatos por defecto del sitio (v2, lanzado — D-091). Cada página v2 arma los
