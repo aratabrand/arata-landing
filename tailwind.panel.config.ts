@@ -24,7 +24,7 @@ const config: Config = {
       ...base.theme?.extend,
       // D-149: colores que cambian con el tema (oscuro/claro) como variables de styles/panel.src.css.
       // `white` también: en claro, text-white / bg-white/5 / border-white/10 pasan a tinta.
-      // Fijos: brand (botones), lime (fondos con texto ink), ink, y `blanco` (texto sobre morado).
+      // Fijos: brand (botones), ink y `blanco` (texto sobre morado). `lime` cambia en claro a morado (D-151).
       colors: {
         ...colores,
         white: "rgb(var(--pn-fg) / <alpha-value>)",
@@ -37,7 +37,8 @@ const config: Config = {
           2: "rgb(var(--pn-s2) / <alpha-value>)",
           3: "rgb(var(--pn-s3) / <alpha-value>)",
         },
-        dato: "rgb(var(--pn-dato) / <alpha-value>)", // lima de las cifras (en claro, verde oscuro legible)
+        dato: "rgb(var(--pn-dato) / <alpha-value>)", // lima de las cifras (en claro, morado legible, D-151)
+        lime: "rgb(var(--pn-lima) / <alpha-value>)", // rellenos de dato (en claro, morado claro con texto ink, D-151)
         alerta: { DEFAULT: "rgb(var(--pn-alerta) / <alpha-value>)", fuerte: "rgb(var(--pn-alerta-fuerte) / <alpha-value>)" },
         ambar: "rgb(var(--pn-ambar) / <alpha-value>)",
       },

@@ -27,6 +27,7 @@
   --pn-s2: 22 22 26;
   --pn-s3: 29 29 34;
   --pn-dato: 182 255 0;
+  --pn-lima: 182 255 0;
   --pn-alerta: 255 155 176;
   --pn-alerta-fuerte: 255 107 139;
   --pn-ambar: 255 199 107;
@@ -47,7 +48,10 @@
   --pn-s1: 255 255 255;
   --pn-s2: 243 243 246;
   --pn-s3: 255 255 255;
-  --pn-dato: 77 124 15;
+  /* D-151: en claro el dato va en MORADO (no verde): texto #6D45F0 (5,6:1 sobre blanco) y
+     rellenos #9B7BFF (con texto ink encima, 6,4:1) */
+  --pn-dato: 109 69 240;
+  --pn-lima: 155 123 255;
   --pn-alerta: 190 18 60;
   --pn-alerta-fuerte: 225 29 72;
   --pn-ambar: 161 98 7;

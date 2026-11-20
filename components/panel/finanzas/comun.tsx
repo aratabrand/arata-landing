@@ -169,6 +169,6 @@ export function nombreDe(id: string, personas: Persona[]) {
 /** Color fijo por persona (para barras y puntos). */
 // D-149: sin morado; colores claros que se leen con texto ink y como puntos en los dos temas
 export const colorPersona = (i: number) => ["#A1A1AA", "#5B8CFF", "#FFC76B", "#2DD4BF", "#F9A8D4"][i % 5];
-export const COLOR_EMPRESA = "#B6FF00";
+export const COLOR_EMPRESA = "rgb(var(--pn-lima))"; // lima en oscuro, morado claro en el modo claro (D-151)
 
 
