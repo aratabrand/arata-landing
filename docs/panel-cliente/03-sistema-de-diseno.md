@@ -14,7 +14,7 @@ El panel usa **el mismo sistema v2 del sitio** (`docs/blueprint/04-sistema-de-di
 
 > **La fuente es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema único de Arata San). Aquí solo va cómo se aplica en el panel.
 
-El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia con el interruptor **"Modo claro / Modo oscuro"** del menú de la cuenta. Se guarda un año en la cookie `pn-tema`, y el servidor pone el tema en `data-tema` de `.pn-root`, así que no hay destello al abrir (`lib/panel/tema.ts`, `app/(panel)/panel/layout.tsx`). **El acceso (login y doble factor) va siempre en oscuro.**
+El panel tiene **dos temas**: **oscuro** (por defecto) y **claro**. Se cambia con el **interruptor de sol y luna** de la barra de arriba, **al lado de la campana** (D-152; `components/panel/InterruptorTema.tsx`, `role="switch"`, perilla que se desliza con `transform`). Se guarda un año en la cookie `pn-tema`, y el servidor pone el tema en `data-tema` de `.pn-root`, así que no hay destello al abrir (`lib/panel/tema.ts`, `app/(panel)/panel/layout.tsx`). **El acceso (login y doble factor) va siempre en oscuro.**
 
 | Capa | Token | Oscuro | Claro |
 |---|---|---|---|
@@ -52,9 +52,9 @@ Reglas:
 
 **Escritorio (≥ 1024 px):** barra lateral fija de 248 px a la izquierda y el contenido en una zona más clara (`canvas`) con las esquinas de 28 px y 12 px de aire alrededor.
 
-- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, **modo claro / oscuro** (D-149), salir).
+- **Barra lateral:** logo · grupo **Menú** (Resumen, Clientes, Proyectos, Finanzas solo agencia) · grupo **General** (Configuración: Ajustes del sitio, Equipo y Notificaciones) · **tarjeta de la cuenta** abajo (inicial, nombre, correo; abre hacia arriba: ver mi página, escribirle a Arata San —solo clientes—, salir).
 - **Selector que se desliza** detrás de la opción activa (solo `transform`, respeta movimiento reducido) con una marca morada al borde izquierdo.
-- **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y la campana a la derecha. El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
+- **Barra superior del contenido** (pegajosa): negocio + "Panel" a la izquierda y, a la derecha, el **interruptor de modo claro/oscuro** y la campana (D-152). El vidrio de la barra va en una capa de fondo aparte: si la barra tuviera `backdrop-filter`, la ventana de notificaciones (`position: fixed` en celular) quedaría atrapada en ella.
 
 **Celular:** barra arriba (logo, campana, cuenta) + 5 pestañas abajo; la activa lleva una raya morada arriba (es navegación: cuenta como botón).
 

@@ -1,4 +1,5 @@
-// Tema del panel (D-149): oscuro por defecto; claro con el interruptor del menú de la cuenta.
+// Tema del panel (D-149): oscuro por defecto; claro con el interruptor de la barra de arriba,
+// al lado de la campana (components/panel/InterruptorTema.tsx, D-152).
 // Se guarda en una cookie (no en localStorage) para que el servidor pinte el tema correcto desde
 // el primer cuadro, sin destello. La cookie no es de seguimiento: es una preferencia necesaria.
 export type Tema = "oscuro" | "claro";

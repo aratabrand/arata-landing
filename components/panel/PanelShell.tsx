@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Moon, Settings, SquareKanban, Sun, Users, Wallet } from "./iconos";
-import { aplicarTema, type Tema } from "@/lib/panel/tema";
+import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "./iconos";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
 import { RUTA_ENTRAR } from "@/lib/panel/config";
 import { authCliente } from "@/lib/panel/auth-cliente";
 import NotificacionesVentana from "./NotificacionesVentana";
+import InterruptorTema from "./InterruptorTema";
 
 async function salir() {
   await authCliente.signOut();
@@ -94,6 +94,8 @@ export default function PanelShell({
                   <span className="text-fog-dim">· Panel</span>
                 </p>
                 <div className="flex shrink-0 items-center gap-2">
+                  {/* D-152: modo claro / oscuro al lado de la campana */}
+                  <InterruptorTema />
                   {conNotif && <NotificacionesVentana sinLeer={sinLeer} demo={!conSesion} />}
                   <div className="lg:hidden">
                     <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante="circulo" />
@@ -215,18 +217,8 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
 // ── Cuenta: nombre, ver la página, soporte (clientes) y salir ──
 function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negocio; usuario?: { nombre: string; correo?: string } | null; conSesion: boolean; variante: "tarjeta" | "circulo" }) {
   const [abierto, setAbierto] = useState(false);
-  const [tema, setTema] = useState<Tema>("oscuro");
   const ref = useRef<HTMLDivElement | null>(null);
   const path = usePathname();
-  // El tema real lo pone el servidor en .pn-root (cookie pn-tema, D-149)
-  useEffect(() => {
-    setTema(document.querySelector<HTMLElement>(".pn-root")?.dataset.tema === "claro" ? "claro" : "oscuro");
-  }, []);
-  const cambiarTema = () => {
-    const nuevo: Tema = tema === "claro" ? "oscuro" : "claro";
-    aplicarTema(nuevo);
-    setTema(nuevo);
-  };
   const nombre = usuario?.nombre || negocio.contacto || negocio.nombre;
   const inicial = nombre.trim().charAt(0).toUpperCase() || "A";
   const soporte = "https://wa.me/573134011189?text=" + encodeURIComponent(`Hola Arata San, soy ${negocio.contacto} de ${negocio.nombre}. Necesito ayuda con mi panel.`);
@@ -290,19 +282,7 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
               <MessageCircle aria-hidden className="h-4 w-4 text-fog" /> Escribirle a Arata San
             </a>
           )}
-          {/* D-149: modo claro / oscuro (oscuro por defecto) */}
-          <button
-            role="menuitemcheckbox"
-            aria-checked={tema === "claro"}
-            type="button"
-            onClick={cambiarTema}
-            className="flex h-10 w-full items-center justify-between gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white"
-          >
-            <span className="flex items-center gap-2">
-              {tema === "claro" ? <Moon aria-hidden className="h-4 w-4" /> : <Sun aria-hidden className="h-4 w-4" />}
-              {tema === "claro" ? "Modo oscuro" : "Modo claro"}
-            </span>
-          </button>
+          {/* El modo claro / oscuro está en la barra de arriba, al lado de la campana (D-152) */}
           {conSesion && (
             <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <LogOut aria-hidden className="h-4 w-4" /> Salir
