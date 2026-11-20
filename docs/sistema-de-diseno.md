@@ -148,6 +148,7 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 - Fondos fijos de página completa **sin `mask-image`**: se desvanecen con una capa del color del fondo.
 - Imágenes grandes que se mueven: en `<canvas>`, porque así no cuentan para el LCP.
 - Íconos: la versión SSR de Phosphor, importada por nombre.
+- Imágenes: `sizes` con el ancho real (restando márgenes) y carruseles que montan solo la imagen que se ve (D-157).
 - Fuentes: **una variable por familia**, recortada al español y al rango de pesos que se usa (D-156). Nunca un archivo por peso.
 - Meta: PageSpeed móvil ≥ 90 en la URL publicada. El resto de reglas está en [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) §12.
 
