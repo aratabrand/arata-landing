@@ -28,7 +28,8 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       )}
       {paquete.icono && <IconoMarca icono={paquete.icono} className="mb-4 h-9 w-9" />}
       <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
-      <p className="mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display text-white">
+      {/* D-162: el precio en lima solo si es un número ("Desde 400 USD"); "Lo cotizamos contigo" va en blanco */}
+      <p className={`mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display ${/\d/.test(paquete.precio) ? "text-lime" : "text-white"}`}>
         {paquete.precio}
       </p>
       {paquete.nota && <p className="mt-2 text-sm text-fog-dim">{paquete.nota}</p>}

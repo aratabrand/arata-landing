@@ -35,7 +35,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
   return (
     <PanelPage>
       <PanelHeader
-        titulo={<>Hola, {nombre}</>}
+        titulo={<>Hola, <span className="pn-cifra">{nombre}</span></>}
         bajada={<>Así le fue a Arata San en {textoPeriodo}, comparado con el periodo anterior.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />
@@ -58,7 +58,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
             <div className="flex items-center gap-3">
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
             </div>
-            <p className="mt-4 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
+            <p className="mt-4 font-display text-[clamp(1.4rem,2.6vw,2rem)] font-bold leading-none tracking-heading pn-cifra">{k.v}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {k.d !== undefined && <Delta valor={k.d} />}
               <span className={cn("text-xs", k.alerta ? "text-alerta" : "text-fog-dim")}>{k.n}</span>

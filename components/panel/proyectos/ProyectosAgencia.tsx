@@ -70,7 +70,7 @@ export default function ProyectosAgencia({ datos, hoy }: { datos: DatosFinanzas;
         ].map((x) => (
           <div key={x.k} className="v2-card p-4 sm:p-5">
             <p className="text-xs text-fog">{x.k}</p>
-            <p className={cn("mt-2 font-display text-[clamp(1.4rem,2.6vw,1.9rem)] font-bold leading-none", x.alerta ? "text-alerta" : "text-white")}>{x.v}</p>
+            <p className={cn("mt-2 font-display text-[clamp(1.4rem,2.6vw,1.9rem)] font-bold leading-none", x.alerta ? "text-alerta" : "pn-cifra")}>{x.v}</p>
           </div>
         ))}
       </div>

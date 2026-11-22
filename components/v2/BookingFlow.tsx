@@ -176,7 +176,7 @@ export default function BookingFlow() {
           <button
             type="button"
             onClick={atras}
-            className="-mr-2 inline-flex h-10 items-center gap-1.5 rounded-btn px-2 text-sm font-medium text-fog transition-colors hover:text-white"
+            className="-mr-2 inline-flex h-10 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-fog transition-colors hover:text-white"
           >
             <ArrowLeft aria-hidden className="h-4 w-4" />
             {c.botones.atras}
@@ -394,7 +394,7 @@ export default function BookingFlow() {
             <button
               type="button"
               onClick={atras}
-              className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-btn text-sm font-medium text-fog transition-colors hover:text-white"
+              className="mt-4 inline-flex h-10 items-center gap-1.5 rounded-full text-sm font-medium text-fog transition-colors hover:text-white"
             >
               <ArrowLeft aria-hidden className="h-4 w-4" />
               {c.botones.atras}
@@ -500,7 +500,7 @@ function Campo({
         aria-invalid={!!error}
         aria-describedby={error ? errId : undefined}
         className={cn(
-          "mt-2 block h-12 w-full rounded-btn border bg-noche px-4 text-base text-white placeholder:text-fog-dim/70 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/30",
+          "mt-2 block h-12 w-full rounded-xl border bg-noche px-4 text-base text-white placeholder:text-fog-dim/70 outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/30",
           error ? "border-[#FF6B8A]/70" : "border-white/10"
         )}
       />

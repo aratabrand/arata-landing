@@ -82,7 +82,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                 )}
               </div>
               <p className="mt-4 text-xs text-fog">Ganado en total</p>
-              <p className="font-display text-[1.75rem] font-bold leading-tight tracking-heading text-white">{pesos(t.total)}</p>
+              <p className="font-display text-[1.75rem] font-bold leading-tight tracking-heading pn-cifra">{pesos(t.total)}</p>
               <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
                 <div className="rounded-frame border border-white/6 bg-surface-2/60 p-2.5">
                   <dt className="text-[0.7rem] text-fog-dim">Este mes</dt>

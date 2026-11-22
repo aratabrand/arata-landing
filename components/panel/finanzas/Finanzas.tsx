@@ -128,7 +128,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
             <div className="flex items-center gap-3">
               <p className="text-xs font-medium text-fog sm:text-sm">{k.k}</p>
             </div>
-            <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,1.85rem)] font-bold leading-none tracking-heading text-white">{k.v}</p>
+            <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,1.85rem)] font-bold leading-none tracking-heading pn-cifra">{k.v}</p>
             <p className="mt-2 text-xs text-fog-dim">{k.n}</p>
           </article>
         ))}
@@ -217,7 +217,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
                 <p className="text-sm text-fog">Con los días que se trabajan por proyecto a la empresa no le queda nada. Revisa los días o el valor del día.</p>
               ) : (
                 <>
-                  <p className="font-display text-3xl font-bold leading-none text-white">
+                  <p className="font-display text-3xl font-bold leading-none pn-cifra">
                     {eq.equilibrio} {eq.equilibrio === 1 ? "proyecto" : "proyectos"} <span className="text-base font-semibold text-fog">al mes</span>
                   </p>
                   <p className="mt-2 text-sm text-fog">

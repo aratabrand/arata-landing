@@ -414,7 +414,7 @@ function ConnectionsCard({ reduced }: { reduced: boolean }) {
                 y={t.y + (t.y < 75 ? -21 : 28)}
                 textAnchor="middle"
                 fontSize="8"
-                fill="#B4AECB"
+                fill="#B8B8BE"
                 fontFamily="var(--font-body)"
                 opacity={on === i ? 1 : 0}
                 style={{ transition: "opacity .25s" }}
@@ -423,7 +423,7 @@ function ConnectionsCard({ reduced }: { reduced: boolean }) {
               </text>
             </g>
           ))}
-          <text x="150" y="112" textAnchor="middle" fontSize="7" fill="#8A84A8" fontFamily="ui-monospace,monospace">
+          <text x="150" y="112" textAnchor="middle" fontSize="7" fill="#8E8E96" fontFamily="ui-monospace,monospace">
             {on >= 0 ? `conectando · ${c.conexiones[on].toLowerCase()}` : "4 conectados"}
           </text>
         </svg>
@@ -482,7 +482,7 @@ function DataCard({ uid, reduced }: { uid: string; reduced: boolean }) {
               <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
             </linearGradient>
           </defs>
-          <text x="14" y="10" fontSize="7" fill="#8A84A8" fontFamily="ui-monospace,monospace">
+          <text x="14" y="10" fontSize="7" fill="#8E8E96" fontFamily="ui-monospace,monospace">
             EJEMPLO · VENTAS POR SEMANA
           </text>
           {[0.3, 0.55, 0.8].map((g) => (

@@ -136,7 +136,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
   return (
     <PanelPage>
       <PanelHeader
-        titulo={<>Hola, {negocio.contacto}</>}
+        titulo={<>Hola, <span className="pn-cifra">{negocio.contacto}</span></>}
         bajada={<>Así le fue a {negocio.nombre} en los últimos {periodo} días, comparado con los {periodo} días anteriores.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />
@@ -148,7 +148,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
             <div className="flex items-center gap-3">
               <p className="text-xs font-medium text-fog sm:text-sm">{k.label}</p>
             </div>
-            <p className="mt-4 font-display text-[clamp(1.5rem,2.6vw,2rem)] font-bold leading-none tracking-heading text-white">{k.valor}</p>
+            <p className="mt-4 font-display text-[clamp(1.5rem,2.6vw,2rem)] font-bold leading-none tracking-heading pn-cifra">{k.valor}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <Delta valor={k.delta} />
               <span className="text-xs text-fog-dim">{k.nota}</span>

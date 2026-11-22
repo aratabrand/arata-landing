@@ -19,8 +19,8 @@
 .pn-root,
 [data-tema="oscuro"] {
   --pn-fg: 255 255 255;
-  --pn-fog: 180 174 203;
-  --pn-fog-dim: 138 132 168;
+  --pn-fog: 184 184 190; /* D-162: gris neutro (antes con tinte lila, se veía morado) */
+  --pn-fog-dim: 142 142 150;
   --pn-noche: 2 1 4;
   --pn-canvas: 8 8 10;
   --pn-s1: 15 15 18;
@@ -41,13 +41,14 @@
   --pn-pildora: linear-gradient(180deg, #151517 0%, #070708 100%);
   --pn-pildora-borde: rgb(255 255 255 / 0.24);
   --pn-pildora-sombra: inset 0 1px 0 rgb(255 255 255 / 0.08);
-  --pn-pildora-texto: 180 174 203;
+  --pn-pildora-texto: 184 184 190;
   /* D-155: el verde de Arata (lima) solo en la píldora o pestaña ACTIVA */
   --pn-activa: linear-gradient(180deg, rgb(182 255 0 / 0.12) 0%, rgb(182 255 0 / 0.04) 100%), #070708;
   --pn-activa-borde: rgb(182 255 0 / 0.55);
   --pn-activa-texto: 182 255 0;
   --pn-campo: #0b0b0e;
   --pn-serie: 255 255 255; /* barras, líneas y anillos: blanco en oscuro */
+  --pn-cifra: 182 255 0; /* D-162: cifras grandes y el nombre del saludo en lima */
   color-scheme: dark;
 }
 [data-tema="claro"] {
@@ -89,6 +90,7 @@
   --pn-campo: #ffffff;
   /* D-159: en claro las barras, líneas y anillos van en el MORADO de marca, nunca en negro */
   --pn-serie: 125 83 255;
+  --pn-cifra: 3 1 11; /* en claro, tinta (el lima no se lee sobre blanco) */
   color-scheme: light;
 }
 
@@ -165,6 +167,9 @@
   background: var(--pn-activa);
   border: 1px solid var(--pn-activa-borde);
 }
+
+/* Cifras grandes y nombre del saludo (D-162): lima en oscuro, tinta en claro */
+.pn-cifra { color: rgb(var(--pn-cifra)); }
 
 /* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */
 .pn-primario {

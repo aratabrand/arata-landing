@@ -78,7 +78,7 @@ export default async function Caso({ params }: Props) {
           {/* Volver: flecha visible (no todos usan la miga de pan) */}
           <Link
             href="/portafolio"
-            className="group -ml-1 inline-flex h-11 items-center gap-2 rounded-btn pl-1 pr-3 text-sm font-medium text-fog transition-colors hover:text-white"
+            className="group -ml-1 inline-flex h-11 items-center gap-2 rounded-full pl-1 pr-3 text-sm font-medium text-fog transition-colors hover:text-white"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-surface-1 transition-colors group-hover:border-white/20">
               <ArrowLeft aria-hidden className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />

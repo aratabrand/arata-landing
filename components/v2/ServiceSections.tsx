@@ -176,7 +176,7 @@ export function PriceBar({
   return (
     <div className="mt-6 flex flex-col gap-5 v2-destacada rounded-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
       <div>
-        <p className="font-display text-[2rem] font-extrabold leading-none tracking-display text-white">
+        <p className="font-display text-[2rem] font-extrabold leading-none tracking-display text-lime">
           {precio} <span className="font-sans text-base font-normal tracking-normal text-fog">· {nota}</span>
         </p>
         <p className="mt-2 text-sm text-fog">{pago}</p>
@@ -407,7 +407,7 @@ export function PriceSection({
             <span className="v2-pildora absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold">
               {paquete}
             </span>
-            <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-white">
+            <h2 id="precio" className="font-display text-[clamp(2.4rem,8vw,4rem)] font-extrabold leading-none tracking-display text-lime">
               {precio}
             </h2>
             <p className="mx-auto mt-4 max-w-md text-fog">{pago}</p>

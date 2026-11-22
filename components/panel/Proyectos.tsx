@@ -81,14 +81,14 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
       <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1fr_1fr_1.4fr]">
         <div className="v2-card p-4 sm:p-5">
           <p className="text-xs text-fog">Avance de todas las tareas</p>
-          <p className="mt-2 font-display text-[1.75rem] font-bold leading-none text-white">{resumen.pct} %</p>
+          <p className="mt-2 font-display text-[1.75rem] font-bold leading-none pn-cifra">{resumen.pct} %</p>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/6">
             <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-serie")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
           </div>
         </div>
         <div className="v2-card p-4 sm:p-5">
           <p className="text-xs text-fog">Proyectos en curso</p>
-          <p className="mt-2 font-display text-[1.75rem] font-bold leading-none text-white">{resumen.activos}</p>
+          <p className="mt-2 font-display text-[1.75rem] font-bold leading-none pn-cifra">{resumen.activos}</p>
           <div className="mt-3 flex gap-1" aria-hidden>
             {fases.map((f) => (
               <span key={f.valor} className="h-2 flex-1 rounded-full" style={{ background: f.color, opacity: lista.some((p) => p.fase === f.valor) ? 1 : 0.15 }} />

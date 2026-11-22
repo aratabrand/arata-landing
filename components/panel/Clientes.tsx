@@ -81,7 +81,7 @@ export default function Clientes({ iniciales, hoy }: { iniciales: Cliente[]; hoy
         ].map((s) => (
           <div key={s.k} className="v2-card p-4 sm:p-5">
             <p className="text-xs text-fog">{s.k}</p>
-            <p className="mt-2 font-display text-[clamp(1.3rem,2.4vw,1.75rem)] font-bold leading-none text-white">{s.v}</p>
+            <p className="mt-2 font-display text-[clamp(1.3rem,2.4vw,1.75rem)] font-bold leading-none pn-cifra">{s.v}</p>
           </div>
         ))}
       </div>

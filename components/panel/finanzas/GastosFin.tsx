@@ -29,7 +29,7 @@ export default function GastosFin({ datos, hoy }: { datos: DatosFinanzas; hoy: s
         ].map((x) => (
           <div key={x.k} className="v2-card p-4 sm:p-5">
             <p className="text-xs text-fog">{x.k}</p>
-            <p className="mt-2 font-display text-[clamp(1.3rem,2.4vw,1.7rem)] font-bold leading-none text-white">{pesos(x.v)}</p>
+            <p className="mt-2 font-display text-[clamp(1.3rem,2.4vw,1.7rem)] font-bold leading-none pn-cifra">{pesos(x.v)}</p>
           </div>
         ))}
       </div>

@@ -471,7 +471,7 @@
 .is-visible .nd-check { stroke-dashoffset: 0; transition-delay: calc(var(--d) + 0.15s); }
 .is-visible .nd-chip { opacity: 1; transform: none; transition-delay: calc(var(--d) + 0.2s); }
 
-.nd-nota { color: rgba(180, 174, 203, 0.55); transition: color 0.4s ease; }
+.nd-nota { color: rgba(184, 184, 190, 0.55); transition: color 0.4s ease; }
 .is-visible .nd-nota { color: #FFFFFF; transition-delay: var(--d); }
 .nd-plazo { transition: border-color 0.4s ease, background-color 0.4s ease; }
 .is-visible .nd-plazo { border-color: rgba(182, 255, 0, 0.3); background-color: rgba(182, 255, 0, 0.04); transition-delay: var(--d); }

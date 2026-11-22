@@ -330,7 +330,7 @@ export function Anillo({
         <circle cx={dot[0]} cy={dot[1]} r={grosor * 0.32} fill={FONDO} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className="font-display text-[1.75rem] font-bold leading-none text-white">{centro}</span>
+        <span className="font-display text-[1.75rem] font-bold leading-none pn-cifra">{centro}</span>
         {bajada && <span className="mt-1 max-w-[80%] text-[0.7rem] leading-tight text-fog-dim">{bajada}</span>}
       </div>
     </div>

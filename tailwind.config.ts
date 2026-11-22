@@ -33,8 +33,8 @@ const config: Config = {
           3: "#19191D", // menús desplegables, modales
         },
         fog: {
-          DEFAULT: "#B4AECB", // texto secundario (≈9.8:1 sobre ink)
-          dim: "#8A84A8",     // etiquetas y notas (≈5.9:1, AA)
+          DEFAULT: "#B8B8BE", // texto secundario, gris neutro (D-162; antes lila #B4AECB) ≈10:1 sobre ink
+          dim: "#8E8E96",     // etiquetas y notas, gris neutro (D-162; antes #8A84A8) ≈6:1, AA
         },
       },
       fontFamily: {

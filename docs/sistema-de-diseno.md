@@ -56,7 +56,7 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 | Tarjeta | **negra con humo** (D-150): degradado `#0E0E10` → `#060607`, una nube blanca muy suave abajo a la derecha (5,5 %), borde blanco al 13 % y filo de luz arriba | `.v2-card` en el sitio y en el panel (D-153; en el panel por la variable `--pn-tarjeta`) |
 | Tarjeta destacada | negra con **más humo** (varias nubes blancas abajo, hasta 14 %) y **borde blanco al 42 %** (D-150) | `.v2-destacada` en el sitio, `.pn-root .v2-glass` en el panel (D-153): lo que queremos que elijan o mirar primero. Una o dos por vista |
 | `surface-1/2/3` | `#0B0B0D` · `#121215` · `#19191D` (sitio); `#0F0F12` · `#16161A` · `#1D1D22` (panel) | Superficies sólidas: menús, ventanas, botón secundario |
-| Texto | `white` `#FFFFFF` · `fog` `#B4AECB` · `fog-dim` `#8A84A8` | Títulos · párrafos · notas (20:1 · 9,8:1 · 5,9:1) |
+| Texto | `white` `#FFFFFF` · `fog` `#B8B8BE` · `fog-dim` `#8E8E96` (grises neutros, D-162; antes con tinte lila) | Títulos · párrafos · notas (20:1 · 10:1 · 6:1) |
 | Alerta / ámbar | `#FF9BB0` · `#FFC76B` | Solo malas noticias / "en revisión" |
 
 ### 2.3 Tema claro (panel, D-149; grises cálidos y acentos lima desde D-159)

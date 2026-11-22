@@ -88,12 +88,7 @@ export default function PanelShell({
                 <Link href="/panel" aria-label="Inicio del panel" className="shrink-0 lg:hidden">
                   <Logo className="h-4 w-auto" />
                 </Link>
-                <p className="hidden items-center gap-2.5 text-sm text-fog lg:flex">
-                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
-                  <span className="font-medium text-white">{negocio.nombre}</span>
-                  <span className="text-fog-dim">· Panel</span>
-                </p>
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="ml-auto flex shrink-0 items-center gap-2">
                   {/* D-152: modo claro / oscuro al lado de la campana */}
                   <InterruptorTema />
                   {conNotif && <NotificacionesVentana sinLeer={sinLeer} demo={!conSesion} />}

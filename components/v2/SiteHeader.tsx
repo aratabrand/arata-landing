@@ -269,7 +269,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             ref={toggleRef}
             type="button"
             className={cn(
-              "v2-burger -mr-2 inline-flex h-11 w-11 items-center justify-center rounded-btn text-white transition-colors active:bg-surface-2 lg:hidden",
+              "v2-burger -mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors active:bg-surface-2 lg:hidden",
               mobile && "is-open"
             )}
             aria-label={mobile ? "Cerrar menú" : "Abrir menú"}

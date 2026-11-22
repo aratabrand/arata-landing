@@ -31,8 +31,8 @@ const colores = [
 
 const textos = [
   { token: "white", hex: "#FFFFFF", ratio: "20:1", uso: "Títulos y texto principal", clase: "text-white" },
-  { token: "fog", hex: "#B4AECB", ratio: "≈9.8:1", uso: "Párrafos", clase: "text-fog" },
-  { token: "fog-dim", hex: "#8A84A8", ratio: "≈5.9:1", uso: "Etiquetas y notas", clase: "text-fog-dim" },
+  { token: "fog", hex: "#B8B8BE", ratio: "≈10:1", uso: "Párrafos", clase: "text-fog" },
+  { token: "fog-dim", hex: "#8E8E96", ratio: "≈6:1", uso: "Etiquetas y notas", clase: "text-fog-dim" },
 ];
 
 function Bloque({ id, titulo, children }: { id: string; titulo: string; children: ReactNode }) {

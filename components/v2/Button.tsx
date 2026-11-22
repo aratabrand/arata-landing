@@ -7,14 +7,14 @@ import { cn } from "@/lib/utils";
 // - primary:   morado de marca con texto blanco (4,6:1), filo de luz arriba (.v2-primario). Uno por vista.
 // - secondary: superficie oscura con borde fino.
 // - ghost:     texto con flecha ("Ver todo →").
-// Radio 10 px (rounded-btn). El lima ya no va en botones: queda para los datos.
+// Píldora (rounded-full), igual que el panel (D-161, D-162). El lima no va en botones: queda para los datos.
 // Alto mínimo 44 px (área táctil).
 
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-btn font-semibold whitespace-nowrap transition-colors duration-200";
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-colors duration-200";
 
 const variants: Record<Variant, string> = {
   primary: "v2-primario",
