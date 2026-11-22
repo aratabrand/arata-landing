@@ -184,9 +184,9 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
                   }}
                   href={href}
                   aria-current={on ? "page" : undefined}
-                  className={cn("pn-nav-item group relative z-10 flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors", on ? "pn-nav-on text-white" : "text-fog hover:bg-white/[0.035] hover:text-white")}
+                  className={cn("group relative z-10 flex h-10 items-center gap-3 rounded-full px-3.5 text-sm font-medium transition-colors", on ? "pn-nav-on text-white" : "text-fog hover:bg-white/[0.04] hover:text-white")}
                 >
-                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-fog" : "text-fog-dim group-hover:text-fog")} />
+                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-[#B6FF00]" : "text-fog-dim group-hover:text-fog")} />
                   {label}
                 </Link>
               </li>
@@ -198,15 +198,14 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
 
   return (
     <nav ref={caja} aria-label="Panel" className="relative mt-9 min-h-0 flex-1 space-y-7">
-      {/* Selector: fondo suave + marca morada al borde. Solo se mueve con transform */}
+      {/* Selector (D-159): píldora completa que se desliza (solo transform). Mismo componente en los dos
+          modos: en oscuro, blanco suave; en claro, negra. El ícono de la opción elegida va en lima */}
       {sel && (
         <span
           aria-hidden
-          className="pn-selector pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+          className="pn-selector pointer-events-none absolute left-0 top-0 w-full rounded-full border border-white/[0.1] bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
           style={{ height: sel.h, transform: `translateY(${sel.y}px)` }}
-        >
-          <span className="pn-selector-marca absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand" />
-        </span>
+        />
       )}
       {grupo("Menú", principal)}
       {grupo("General", general)}

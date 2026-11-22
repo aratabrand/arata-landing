@@ -116,21 +116,18 @@
 [data-tema="claro"] .v2-glass .text-fog-dim { color: rgb(3 1 11 / 0.62); }
 [data-tema="claro"] .v2-glass .pn-pildora { background: rgb(255 255 255 / 0.6); border-color: rgb(3 1 11 / 0.08); }
 
-/* ── Modo claro (D-159, referencia de Sergio): menú con la opción elegida en píldora NEGRA con el
-   ícono en lima, un brillo lima suave al pie de la barra lateral y botón principal lima ── */
+/* ── Modo claro (D-159, referencia de Sergio): la opción elegida del menú es la MISMA píldora que en
+   oscuro (forma en PanelShell), aquí negra con texto blanco; brillo lima suave al pie de la barra
+   lateral y botón principal lima ── */
 [data-tema="claro"] .pn-lateral {
   background: radial-gradient(90% 28% at 10% 100%, rgb(182 255 0 / 0.22), transparent 70%);
 }
 [data-tema="claro"] .pn-selector {
   background: #03010b;
   border-color: transparent;
-  border-radius: 9999px;
   box-shadow: 0 8px 18px -10px rgb(3 1 11 / 0.55);
 }
-[data-tema="claro"] .pn-selector-marca { display: none; }
-[data-tema="claro"] .pn-nav-item { border-radius: 9999px; }
 [data-tema="claro"] .pn-nav-on { color: #fff; }
-[data-tema="claro"] .pn-nav-on svg { color: #b6ff00; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
 /* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro).

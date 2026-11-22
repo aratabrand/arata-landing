@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { X } from "@/components/v2/iconos";
 import { cookies as t } from "@/content/cookies";
 import {
@@ -22,6 +23,14 @@ import { cn } from "@/lib/utils";
 // - Se reabre desde el footer ("Preferencias de cookies") con el evento EVENTO_ABRIR.
 
 export default function CookieBanner() {
+  // El panel no mide visitas (D-116): en panel.aratasan.com el aviso ni se monta (PANEL_SOLO), y aquí
+  // tampoco sale cuando el panel corre junto al sitio (desarrollo), donde tomaba los colores del panel.
+  const ruta = usePathname();
+  if (ruta?.startsWith("/panel")) return null;
+  return <Aviso />;
+}
+
+function Aviso() {
   const [visible, setVisible] = useState(false);
   const [medicion, setMedicion] = useState(false);
   const [navegacion, setNavegacion] = useState(false);
@@ -64,7 +73,8 @@ export default function CookieBanner() {
           className="as-cookies fixed inset-x-3 bottom-3 z-[60] sm:inset-x-auto sm:bottom-5 sm:left-5 sm:max-w-[25rem]"
           style={{ animationDelay: `${retraso}s` }}
         >
-          <div className="rounded-[22px] border border-white/10 bg-surface-1/95 p-5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+          {/* Fondo sólido: al 95 % con desenfoque se veían los botones de la portada a través del aviso */}
+          <div className="rounded-[22px] border border-white/10 bg-surface-1 p-5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
             <div>
               <div>
                 <h2 id="cookies-titulo" className="font-display text-base font-bold text-white">
