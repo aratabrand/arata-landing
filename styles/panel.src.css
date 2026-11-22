@@ -47,6 +47,7 @@
   --pn-activa-borde: rgb(182 255 0 / 0.55);
   --pn-activa-texto: 182 255 0;
   --pn-campo: #0b0b0e;
+  --pn-serie: 255 255 255; /* barras, líneas y anillos: blanco en oscuro */
   color-scheme: dark;
 }
 [data-tema="claro"] {
@@ -86,6 +87,8 @@
   --pn-activa-borde: rgb(120 170 0 / 0.45);
   --pn-activa-texto: 3 1 11;
   --pn-campo: #ffffff;
+  /* D-159: en claro las barras, líneas y anillos van en el MORADO de marca, nunca en negro */
+  --pn-serie: 125 83 255;
   color-scheme: light;
 }
 
@@ -128,6 +131,14 @@
   box-shadow: 0 8px 18px -10px rgb(3 1 11 / 0.55);
 }
 [data-tema="claro"] .pn-nav-on { color: #fff; }
+/* Interruptor de tema, campana y cuenta: negros con texto blanco en claro (D-159) */
+[data-tema="claro"] .pn-negro { background: #03010b; border-color: transparent; color: #fff; }
+[data-tema="claro"] .pn-negro:hover { background: #1c1830; }
+[data-tema="claro"] .pn-negro .text-white,
+[data-tema="claro"] .pn-negro .text-fog { color: #fff; }
+[data-tema="claro"] .pn-negro .text-fog-dim { color: rgb(255 255 255 / 0.6); }
+[data-tema="claro"] .pn-negro .pn-perilla { background: rgb(255 255 255 / 0.16); border-color: rgb(255 255 255 / 0.22); }
+[data-tema="claro"] .pn-negro .pn-avatar { background: rgb(255 255 255 / 0.14); color: #fff; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
 /* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro).

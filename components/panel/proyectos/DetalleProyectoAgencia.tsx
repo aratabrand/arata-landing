@@ -79,7 +79,7 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
                   <span
                     className={cn(
                       "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold",
-                      e.completa ? "border-lime bg-lime text-ink" : on ? "border-white bg-white text-noche" : "border-white/12 text-fog-dim",
+                      e.completa ? "border-lime bg-lime text-ink" : on ? "border-serie bg-serie text-noche" : "border-white/12 text-fog-dim",
                       e.total === 0 && "opacity-40"
                     )}
                   >

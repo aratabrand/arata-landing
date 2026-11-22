@@ -153,7 +153,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
               <Delta valor={k.delta} />
               <span className="text-xs text-fog-dim">{k.nota}</span>
             </div>
-            <Sparkline valores={k.spark} className="mt-4" color="rgb(var(--pn-fg) / 0.7)" />
+            <Sparkline valores={k.spark} className="mt-4" color="rgb(var(--pn-serie) / 0.7)" />
           </article>
         ))}
       </div>

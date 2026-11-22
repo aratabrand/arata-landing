@@ -31,13 +31,13 @@ export default function InterruptorTema() {
       aria-label="Modo claro"
       title={claro ? "Pasar a modo oscuro" : "Pasar a modo claro"}
       onClick={cambiar}
-      className="relative flex h-10 w-[4.5rem] shrink-0 items-center rounded-full border border-white/[0.09] bg-white/[0.035] p-1 text-fog transition-colors hover:border-white/20 lg:h-11 lg:w-20"
+      className="pn-negro relative flex h-10 w-[4.5rem] shrink-0 items-center rounded-full border border-white/[0.09] bg-white/[0.035] p-1 text-fog transition-colors hover:border-white/20 lg:h-11 lg:w-20"
     >
       {/* perilla que se desliza detrás del modo activo */}
       <span
         aria-hidden
         className={cn(
-          "absolute left-1 top-1 h-8 w-8 rounded-full border border-white/15 bg-white/10 transition-transform duration-200 motion-reduce:transition-none lg:h-9 lg:w-9",
+          "pn-perilla absolute left-1 top-1 h-8 w-8 rounded-full border border-white/15 bg-white/10 transition-transform duration-200 motion-reduce:transition-none lg:h-9 lg:w-9",
           claro ? "translate-x-[2rem] lg:translate-x-[2.25rem]" : "translate-x-0"
         )}
       />

@@ -171,7 +171,7 @@ function ResumenFin({ datos, hoy, irA }: { datos: DatosFinanzas; hoy: string; ir
               max={todo.reserva || 1}
               centro={pesosCorto(Math.max(0, todo.fondos))}
               bajada="en fondos"
-              color={todo.fondos >= todo.reserva ? "rgb(var(--pn-dato))" : "rgb(var(--pn-fg))"}
+              color={todo.fondos >= todo.reserva ? "rgb(var(--pn-dato))" : "rgb(var(--pn-serie))"}
             />
             <p className="text-sm text-fog">
               {todo.fondos >= todo.reserva ? (

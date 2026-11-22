@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 // transform y el trazo del SVG) y quedan quietos con movimiento reducido.
 
 // D-149: colores del tema (variables de styles/panel.src.css): sin morado en gráficos; lima solo para el dato
-const MORADO = "rgb(var(--pn-fg))"; // la serie va en blanco (tinta en claro); se conserva el nombre
+const MORADO = "rgb(var(--pn-serie))"; // la serie: blanco en oscuro, morado de marca en claro (D-159)
 const LIMA = "rgb(var(--pn-dato))";
 const TENUE = "rgb(var(--pn-fog-dim))";
 const FONDO = "rgb(var(--pn-canvas))";
@@ -359,7 +359,7 @@ export function Embudo({ pasos }: { pasos: { nombre: string; valor: number; form
                 className={cn("pn-barra h-full origin-left rounded-btn", visto && "is-visible")}
                 style={{
                   width: `${Math.max(6, (p.valor / max) * 100)}%`,
-                  background: i === pasos.length - 1 ? LIMA : `rgb(var(--pn-fg) / ${0.9 - i * 0.2})`,
+                  background: i === pasos.length - 1 ? LIMA : `rgb(var(--pn-serie) / ${0.9 - i * 0.2})`,
                   transitionDelay: `${i * 150}ms`,
                 }}
               />

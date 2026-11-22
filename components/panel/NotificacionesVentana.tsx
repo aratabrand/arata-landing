@@ -67,7 +67,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
         aria-haspopup="dialog"
         aria-label={sinLeer > 0 ? `Notificaciones: ${sinLeer} sin ver` : "Notificaciones"}
         className={cn(
-          "relative flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-xl transition-colors lg:h-11 lg:w-11",
+          "pn-negro relative flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-xl transition-colors lg:h-11 lg:w-11",
           abierta ? "border-white/20 bg-white/[0.09] text-white" : "border-white/[0.09] bg-white/[0.035] text-fog hover:border-white/20 hover:text-white"
         )}
       >

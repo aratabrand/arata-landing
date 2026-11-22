@@ -37,6 +37,7 @@ const config: Config = {
           2: "rgb(var(--pn-s2) / <alpha-value>)",
           3: "rgb(var(--pn-s3) / <alpha-value>)",
         },
+        serie: "rgb(var(--pn-serie) / <alpha-value>)", // D-159: barras y líneas (blanco / morado en claro)
         dato: "rgb(var(--pn-dato) / <alpha-value>)", // lima de las cifras (en claro, morado legible, D-151)
         lime: "rgb(var(--pn-lima) / <alpha-value>)", // rellenos de dato (en claro, morado claro con texto ink, D-151)
         alerta: { DEFAULT: "rgb(var(--pn-alerta) / <alpha-value>)", fuerte: "rgb(var(--pn-alerta-fuerte) / <alpha-value>)" },

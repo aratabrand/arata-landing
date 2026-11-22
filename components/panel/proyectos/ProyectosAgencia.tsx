@@ -153,7 +153,7 @@ function TarjetaProyecto({ p, a, vence, datos }: { p: FinProyecto; a: ReturnType
             <span
               className={cn(
                 "block h-1.5 rounded-full",
-                e.total === 0 ? "bg-white/5" : e.completa ? "bg-lime" : i === actual ? "bg-white" : "bg-white/12"
+                e.total === 0 ? "bg-white/5" : e.completa ? "bg-lime" : i === actual ? "bg-serie" : "bg-white/12"
               )}
             />
             <span className={cn("mt-1 block truncate text-[0.62rem]", i === actual && !a.entregado ? "text-white" : "text-fog-dim")}>{e.label}</span>

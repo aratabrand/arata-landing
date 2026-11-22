@@ -244,7 +244,7 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
           aria-expanded={abierto}
           aria-haspopup="menu"
           aria-label={`Cuenta de ${nombre}`}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] font-display text-sm font-bold text-white transition-colors hover:border-white/20"
+          className="pn-negro flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] font-display text-sm font-bold text-white transition-colors hover:border-white/20"
         >
           {inicial}
         </button>
@@ -255,9 +255,9 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
           aria-expanded={abierto}
           aria-haspopup="menu"
           aria-label={`Cuenta de ${nombre}`}
-          className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-2.5 text-left transition-colors hover:border-white/[0.12] hover:bg-white/[0.055]"
+          className="pn-negro flex w-full items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-2.5 text-left transition-colors hover:border-white/[0.12] hover:bg-white/[0.055]"
         >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.08] font-display text-sm font-bold text-fog">{inicial}</span>
+          <span className="pn-avatar grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.08] font-display text-sm font-bold text-fog">{inicial}</span>
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-semibold text-white">{nombre}</span>
             <span className="block truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</span>

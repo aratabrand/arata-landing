@@ -18,7 +18,7 @@ export const fases: { valor: FaseProyecto; label: string; color: string }[] = [
   // D-149: colores del tema, sin morado (gris → blanco por avance, ámbar en revisión, lima entregado)
   { valor: "por-hacer", label: "Por hacer", color: "rgb(var(--pn-fog-dim))" },
   { valor: "diseno", label: "En diseño", color: "rgb(var(--pn-fog))" },
-  { valor: "construccion", label: "En construcción", color: "rgb(var(--pn-fg))" },
+  { valor: "construccion", label: "En construcción", color: "rgb(var(--pn-serie))" },
   { valor: "revision", label: "En revisión", color: "rgb(var(--pn-ambar))" },
   { valor: "entregado", label: "Entregado", color: "rgb(var(--pn-dato))" },
 ];
@@ -83,7 +83,7 @@ export default function Proyectos({ iniciales, hoy }: { iniciales: Proyecto[]; h
           <p className="text-xs text-fog">Avance de todas las tareas</p>
           <p className="mt-2 font-display text-[1.75rem] font-bold leading-none text-white">{resumen.pct} %</p>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/6">
-            <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-white")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
+            <div className={cn("h-full origin-left rounded-full transition-transform duration-700", resumen.pct >= 100 ? "bg-lime" : "bg-serie")} style={{ transform: `scaleX(${resumen.pct / 100})` }} />
           </div>
         </div>
         <div className="v2-card p-4 sm:p-5">
