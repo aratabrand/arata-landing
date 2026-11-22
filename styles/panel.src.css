@@ -142,6 +142,23 @@
 .pn-root .pn-negro .text-fog { color: #fff; }
 .pn-root .pn-negro .text-fog-dim { color: rgb(255 255 255 / 0.6); }
 .pn-root .pn-negro .pn-avatar { background: rgb(255 255 255 / 0.14); color: #fff; }
+/* D-167: en OSCURO la opción elegida del menú y la cuenta van en el LIMA de las pestañas
+   (igual que .pn-pildora-activa), con texto e íconos en tinta. En claro siguen negras (arriba). */
+[data-tema="oscuro"] .pn-selector {
+  background: linear-gradient(180deg, #ccff3d 0%, #b6ff00 100%);
+  border-color: #b6ff00;
+  box-shadow: 0 8px 18px -12px rgb(182 255 0 / 0.5);
+}
+[data-tema="oscuro"] .pn-nav-on,
+[data-tema="oscuro"] .pn-nav-on svg { color: #03010b; }
+[data-tema="oscuro"] .pn-nav-on .pn-contador { background: #03010b; color: #b6ff00; }
+[data-tema="oscuro"] .pn-negro { background: linear-gradient(180deg, #ccff3d 0%, #b6ff00 100%); border-color: #b6ff00; color: #03010b; }
+[data-tema="oscuro"] .pn-negro:hover { background: #c4ff2e; }
+[data-tema="oscuro"] .pn-negro .text-white,
+[data-tema="oscuro"] .pn-negro .text-fog,
+[data-tema="oscuro"] .pn-negro svg { color: #03010b; }
+[data-tema="oscuro"] .pn-negro .text-fog-dim { color: rgb(3 1 11 / 0.68); }
+[data-tema="oscuro"] .pn-negro .pn-avatar { background: rgb(3 1 11 / 0.12); color: #03010b; }
 
 /* Contraste en claro (D-159): los bordes finos pensados para oscuro (blanco al 6–10 %) se quedaban
    casi invisibles sobre blanco; en claro pasan a tinta al 14–18 % */
@@ -198,6 +215,15 @@
 .pn-aviso { background: #03010b; color: rgb(255 255 255 / 0.82); border: 1px solid rgb(255 255 255 / 0.1); }
 .pn-aviso strong, .pn-aviso a, .pn-aviso .text-white { color: #fff; }
 .pn-aviso a { text-decoration-color: rgb(255 255 255 / 0.5); }
+/* D-168: en OSCURO los avisos van al revés: fondo blanco con letras negras (en claro siguen negros) */
+[data-tema="oscuro"] .pn-aviso { background: #ffffff; color: rgb(3 1 11 / 0.78); border-color: #ffffff; }
+[data-tema="oscuro"] .pn-aviso strong,
+[data-tema="oscuro"] .pn-aviso a,
+[data-tema="oscuro"] .pn-aviso .text-white,
+[data-tema="oscuro"] .pn-aviso svg { color: #03010b; }
+[data-tema="oscuro"] .pn-aviso .text-fog,
+[data-tema="oscuro"] .pn-aviso .text-fog-dim { color: rgb(3 1 11 / 0.7); }
+[data-tema="oscuro"] .pn-aviso a { text-decoration-color: rgb(3 1 11 / 0.45); }
 
 /* Cifras grandes y nombre del saludo (D-162): lima en oscuro, tinta en claro */
 .pn-cifra { color: rgb(var(--pn-cifra)); }
