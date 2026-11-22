@@ -16,7 +16,7 @@ export const seoInicio = {
 };
 
 export const hero = {
-  badge: "Tomamos 3 proyectos nuevos al mes",
+  badge: "Tomamos 4 proyectos nuevos al mes",
   titulo: "Tu página lista en 5 días.",
   tituloSigue: "Hecha para vender desde el celular.",
   subtitulo:
@@ -146,7 +146,7 @@ export type Paquete = {
   boton: string;
   recomendado?: boolean;
   /** Ícono SVG propio del paquete (D-150, components/v2/IconosMarca.tsx). */
-  icono?: "capas" | "tienda" | "sistema";
+  icono?: "capas" | "tienda" | "sistema" | "edificio";
 };
 
 export const precios = {
@@ -168,6 +168,21 @@ export const precios = {
       ],
       adicional:
         "Adicional: panel para editar tu página y ver las métricas de tu negocio (se cotiza aparte).",
+      boton: "Agenda tu reunión",
+    },
+    {
+      // D-169: sitio corporativo con panel básico
+      nombre: "Sitio Corporativo con Panel",
+      icono: "edificio",
+      precio: "Desde 750 USD",
+      incluye: [
+        "Inicio y Sobre nosotros",
+        "Una página por cada servicio",
+        "Blog básico para publicar noticias y artículos",
+        "Panel básico para cambiar textos y subir entradas al blog",
+        "Diseño hecho primero para el celular",
+        "Velocidad de 90 o más en Google, garantizada",
+      ],
       boton: "Agenda tu reunión",
     },
     {
@@ -251,7 +266,7 @@ export const faq = {
       r: "Sí. Por ejemplo, hicimos la landing de Boost Your Menu, en New Jersey.",
     },
     {
-      p: "¿Por qué solo 3 proyectos al mes?",
+      p: "¿Por qué solo 4 proyectos al mes?",
       r: "Porque así cumplimos los 5 días sin bajar la calidad.",
     },
     {
@@ -266,7 +281,7 @@ export const faq = {
 };
 
 export const ctaFinal = {
-  titulo: "Este mes tomamos 3 proyectos nuevos.",
+  titulo: "Este mes tomamos 4 proyectos nuevos.",
   texto: "Agenda tu reunión y separa tu cupo. En 30 minutos sabes qué necesitas y cuánto cuesta.",
   boton: "Agendar reunión",
   nota: "30 minutos, sin costo",

@@ -161,7 +161,7 @@ export default function SistemaV2() {
 
           <Bloque id="b-badges" titulo="Badges">
             <div className="flex flex-wrap gap-3">
-              <Badge live>Tomamos 3 proyectos nuevos al mes</Badge>
+              <Badge live>Tomamos 4 proyectos nuevos al mes</Badge>
               <Badge>Catálogo · Sistema</Badge>
               <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">Recomendado</span>
             </div>

@@ -197,7 +197,7 @@ export default function PricingSection() {
       <GridBackground orb="50% 38%" />
       <Container>
         <SectionHeader id="precios-titulo" title={precios.titulo} />
-        <div className="mt-12 grid gap-5 lg:grid-cols-3 lg:items-stretch">
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 sm:items-stretch xl:grid-cols-4">
           {precios.paquetes.map((p, i) => (
             <Reveal key={p.nombre} delay={i * 80} className="h-full">
               <PricingCard paquete={p} />

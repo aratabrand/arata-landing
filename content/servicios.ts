@@ -89,6 +89,7 @@ export const paginasWeb = {
       { p: "¿Qué son las 5 secciones?", r: "Son las partes de tu página: por ejemplo, inicio, qué ofreces, trabajos o productos, preguntas y contacto. Las definimos contigo en la reunión." },
       { p: "¿Tengo que escribir los textos?", r: "Sí. Tú nos mandas los textos de tu negocio y nosotros los organizamos en el diseño para que se lean fácil." },
       { p: "¿Y si necesito más de 5 secciones?", r: "Se puede. Te damos el precio en la propuesta." },
+      { p: "¿Tienen sitios para empresas, con varias páginas y blog?", r: "Sí: el Sitio Corporativo con Panel, desde 750 USD. Trae inicio, sobre nosotros, una página por cada servicio, blog básico y un panel básico para cambiar textos y publicar en el blog, hecho primero para el celular y con velocidad garantizada." },
       { p: "¿Qué es el panel adicional?", r: "Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Lo cotizamos según las funciones que necesites." },
       { p: "¿Puedo pagar por partes?", r: "Sí: 50 % para arrancar y 50 % cuando te entregamos." },
       { p: "¿Incluye dominio y hosting?", r: "Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento." },
@@ -97,7 +98,7 @@ export const paginasWeb = {
   },
   cta: {
     titulo: "Tu página puede estar publicada en 5 días hábiles.",
-    texto: "Este mes tomamos 3 proyectos nuevos. Agenda y separa tu cupo.",
+    texto: "Este mes tomamos 4 proyectos nuevos. Agenda y separa tu cupo.",
     boton: "Agendar reunión",
     nota: "30 minutos, sin costo",
     href: "/agendar?tipo=pagina",
@@ -197,7 +198,7 @@ export const catalogos = {
   },
   cta: {
     titulo: "Ordena tu negocio este mes.",
-    texto: "Tomamos 3 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.",
+    texto: "Tomamos 4 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.",
     boton: "Agendar reunión",
     nota: "30 minutos, sin costo",
     href: "/agendar?tipo=catalogo",
