@@ -59,18 +59,21 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 | Texto | `white` `#FFFFFF` · `fog` `#B4AECB` · `fog-dim` `#8A84A8` | Títulos · párrafos · notas (20:1 · 9,8:1 · 5,9:1) |
 | Alerta / ámbar | `#FF9BB0` · `#FFC76B` | Solo malas noticias / "en revisión" |
 
-### 2.3 Tema claro (panel, D-149)
+### 2.3 Tema claro (panel, D-149; grises cálidos y acentos lima desde D-159)
 
 | Token | Valor | Uso |
 |---|---|---|
-| `noche` | `#F2F2F5` | Marco y barra lateral |
-| `canvas` | `#FAFAFB` | Zona de contenido |
+| `noche` | `#ECEDE7` (D-159, gris cálido; antes `#F2F2F5`) | Marco y barra lateral, con un brillo lima suave al pie |
+| `canvas` | `#F5F5F1` (D-159; antes `#FAFAFB`) | Zona de contenido |
+| `surface-2` / píldoras | `#EFEFE9` sólido, sin borde marcado | Chips, estados neutros, filtros sin elegir |
 | Tarjeta | blanca + borde tinta al 8 % + sombra muy suave | Se separa del fondo sin bloques de color |
-| Tarjeta destacada | blanca + borde tinta al 22 % | |
+| Tarjeta destacada | **Degradado lima** (`#E3FF8A` → `#C8F53A` → `#A8E33A`) con brillo blanco, texto `ink` (D-159). Una por vista: la cifra principal | Los grises de adentro se oscurecen para leerse sobre el lima |
+| Opción elegida del menú | **Píldora negra** (`ink`) con texto blanco y el ícono en lima (D-159) | |
+| Píldora activa (filtros, 7/30/90 días, pestañas) | **Relleno lima** con texto `ink` (D-159; antes morado) | |
 | Texto | `ink` `#03010B` · `#52505C` · `#686572` | 20:1 · 7,8:1 · 5,6:1 sobre blanco |
 | Dato | **Morado** (D-151, decisión de Sergio: no verde) | Texto `#6D45F0` (5,6:1 sobre blanco); rellenos (barras, etiquetas) `#9B7BFF` con texto `ink` encima (6,4:1). El lima `#B6FF00` no se lee sobre blanco. En claro el morado marca botones **y** datos; los distingue la forma (un botón es un botón) |
 | Alerta / ámbar | `#BE123C` · `#A16207` | |
-| Botón principal | Igual que en oscuro: morado con texto blanco | |
+| Botón principal | **Lima con texto `ink`** (17:1) en claro (D-159); en oscuro sigue morado con texto blanco | |
 
 **Cómo lo hace el código:** los colores que cambian con el tema son variables CSS (canales RGB) que lee la configuración de Tailwind del panel. Así `text-white`, `bg-white/5` y `border-white/10` se vuelven tinta en claro sin tocar cada componente.
 

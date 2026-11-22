@@ -68,7 +68,7 @@ export default function PanelShell({
   return (
     <div className="min-h-screen">
       {/* ── Barra lateral (escritorio) ── */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col px-4 pb-4 pt-7 lg:flex">
+      <aside className="pn-lateral fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col px-4 pb-4 pt-7 lg:flex">
         <Link href="/panel" aria-label="Inicio del panel" className="px-3">
           <Logo className="h-[18px] w-auto" />
         </Link>
@@ -184,7 +184,7 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
                   }}
                   href={href}
                   aria-current={on ? "page" : undefined}
-                  className={cn("group relative z-10 flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors", on ? "text-white" : "text-fog hover:bg-white/[0.035] hover:text-white")}
+                  className={cn("pn-nav-item group relative z-10 flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors", on ? "pn-nav-on text-white" : "text-fog hover:bg-white/[0.035] hover:text-white")}
                 >
                   <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-fog" : "text-fog-dim group-hover:text-fog")} />
                   {label}
@@ -202,10 +202,10 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
       {sel && (
         <span
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
+          className="pn-selector pointer-events-none absolute left-0 top-0 w-full rounded-xl border border-white/[0.07] bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
           style={{ height: sel.h, transform: `translateY(${sel.y}px)` }}
         >
-          <span className="absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand" />
+          <span className="pn-selector-marca absolute -left-4 bottom-2.5 top-2.5 w-[3px] rounded-r-full bg-brand" />
         </span>
       )}
       {grupo("Menú", principal)}
