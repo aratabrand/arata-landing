@@ -24,7 +24,7 @@ import { Pill, Tarjeta, type TonoPill } from "./ui";
 import { BotonPrincipal, BotonSecundario, Campo, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
-// Prospectos (D-171): negocios que encontró Sellbird y todavía no han agendado.
+// Prospectos (D-173): negocios que encontró Sellbird y todavía no han agendado.
 // Prospectos → Interesados (agendan por Cal.com) → Clientes. Solo datos que el negocio publicó.
 
 const TONO_PRIORIDAD: Record<Prioridad, TonoPill> = { alta: "verde", media: "ambar", baja: "neutro" };

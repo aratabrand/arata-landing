@@ -1,4 +1,4 @@
-// Prospectos (D-171): negocios que Sellbird encontró y todavía no han agendado.
+// Prospectos (D-173): negocios que Sellbird encontró y todavía no han agendado.
 // Tipos y funciones puras: las usan la pantalla, las acciones del servidor y el importador
 // (scripts/panel-importar-prospectos.ts). Sin base de datos: este archivo viaja al navegador.
 

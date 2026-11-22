@@ -1,4 +1,4 @@
-// Prueba de la clasificación de prospectos (D-171). Correr:  npx -y tsx scripts/prueba-prospectos.ts
+// Prueba de la clasificación de prospectos (D-173). Correr:  npx -y tsx scripts/prueba-prospectos.ts
 import { clasificar, paginaDe, prioridadDe, puntuar, rubroDe, telefonoTexto, tipoTelefonoDe, titularDe } from "../lib/panel/clientes/prospectos";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 

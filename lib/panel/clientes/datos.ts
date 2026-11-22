@@ -55,7 +55,7 @@ export type DatosClientes = {
   ciudades: Ciudad[];
   /** Personas que agendaron reunión por Cal.com (D-133). */
   interesados: Interesado[];
-  /** Negocios que encontró Sellbird y todavía no agendan (D-171). */
+  /** Negocios que encontró Sellbird y todavía no agendan (D-173). */
   prospectos: Prospecto[];
   /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
   ahora: string;

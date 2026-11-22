@@ -1,4 +1,4 @@
-// Importa a Clientes → Prospectos los negocios que encontró Sellbird (D-171).
+// Importa a Clientes → Prospectos los negocios que encontró Sellbird (D-173).
 //
 // Uso:
 //   npx -y tsx scripts/panel-importar-prospectos.ts prospectos.csv            (escribe en la base de .env.local)

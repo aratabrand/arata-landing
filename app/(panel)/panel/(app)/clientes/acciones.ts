@@ -354,7 +354,7 @@ export async function borrarInteresado(id: string): Promise<Resultado> {
 }
 
 
-// ── Prospectos que encontró Sellbird (D-171) ────────────────────────
+// ── Prospectos que encontró Sellbird (D-173) ────────────────────────
 // Todos los miembros los ven; Sergio y Andrés cambian estado, titular y notas; solo Sergio borra.
 
 /** Cambia el estado, el titular (tras revisarlo en el RUES) o las notas. Si cambia el titular, se recalcula la prioridad. */

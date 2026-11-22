@@ -48,7 +48,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
   const [origen, setOrigen] = useState<string>("");
   const [abierto, setAbierto] = useState<string | null>(null);
   const [creando, setCreando] = useState(false);
-  // Pestañas Prospectos | Interesados | Clientes (D-133, D-171): el camino de un negocio hasta comprar.
+  // Pestañas Prospectos | Interesados | Clientes (D-133, D-173): el camino de un negocio hasta comprar.
   // "Confirmar" en Interesados abre el formulario de cliente ya prellenado.
   const [vista, setVista] = useState<Vista>(vistaInicial);
   const [confirmando, setConfirmando] = useState<Interesado | null>(null);
