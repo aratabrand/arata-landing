@@ -3,7 +3,7 @@ import { ArrowRight, Check } from "./iconos";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { Button } from "./Button";
-import { Badge, Container, Eyebrow, Glow, SectionHeader } from "./primitives";
+import { Badge, Container, Eyebrow, Glow, SectionHeader, Acento } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import Spotlight from "./Spotlight";
 import HoverCapsule from "./HoverCapsule";
@@ -450,7 +450,7 @@ export function CustomSystemSection({
           <Reveal>
             <Eyebrow>{etiqueta}</Eyebrow>
             <h2 id="sistema" className="mt-3 font-display text-v2-h2 font-bold tracking-heading text-white">
-              {titulo}
+              <Acento texto={titulo} />
             </h2>
             <p className="mt-4 text-v2-lead text-fog">{intro}</p>
             <p className="mt-8 text-fog">

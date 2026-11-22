@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
-import { Container, SectionHeader } from "./primitives";
+import { Container, SectionHeader, Acento } from "./primitives";
 import ScrollPaint from "./ScrollPaint";
 import ServicesBento from "./ServicesBento";
 import { pasos, problema, prueba, servicios } from "@/content/inicio";
@@ -73,7 +73,7 @@ export function ProblemSection({
       <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
         <Reveal>
           <h2 id={id} className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {titulo}
+            <Acento texto={titulo} />
           </h2>
           {cierre && <p className="mt-4 max-w-md text-v2-lead text-fog">{cierre}</p>}
         </Reveal>

@@ -181,3 +181,7 @@ Las piezas que existen en los dos productos están **copiadas, no compartidas**:
 | 1.2 | 20 nov 2026 | En el modo claro del panel el dato va en morado, no en verde (D-151) |
 | 1.1 | 20 nov 2026 | Tarjetas negras con humo y borde gris, píldoras negras con borde, íconos SVG propios en grises solo en algunas tarjetas (D-150) |
 | 1.0 | 20 nov 2026 | Sistema único para el sitio y el panel: fondo `#020104`, tarjetas transparentes, morado solo en botones, lima solo en datos, sin íconos decorativos, Phosphor, líneas verticales con haces (sitio), modo claro del panel (D-145 a D-149) |
+
+## Estilo Kept (D-164)
+
+Un solo estilo por componente, igual en el sitio y el panel y en oscuro y claro: botón principal **lima con texto tinta** (negro dentro de una tarjeta lima); opción elegida **lima sólido**; tarjeta destacada en **degradado lima** con texto tinta; menú elegido **negro con borde** e ícono lima; gráficas en **morado**; avisos negros con letras blancas; la última palabra de los títulos en **cursiva con serifa** (Instrument Serif Italic, `font-acento`). Solo cambian por modo los fondos, textos y bordes, para que se lean. Detalle y vistas previas en el artefacto «Arata San».

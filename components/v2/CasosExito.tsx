@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import CasosReel, { type CasoReel } from "./CasosReel";
-import { Container, Eyebrow, Glow } from "./primitives";
+import { Container, Eyebrow, Glow, Acento } from "./primitives";
 import Reveal from "@/components/Reveal";
 import { casosExito, casosVisibles, datosDelCaso } from "@/content/casos-exito";
 import { proyectos } from "@/content/proyectos";
@@ -46,7 +46,7 @@ export default function CasosExito({
         <Reveal className="max-w-2xl">
           <Eyebrow>{casosExito.eyebrow}</Eyebrow>
           <h2 id={`${id}-titulo`} className="mt-3 font-display text-v2-h2 font-bold tracking-heading text-white">
-            {casosExito.titulo}
+            <Acento texto={casosExito.titulo} />
           </h2>
           <p className="mt-3 max-w-xl text-v2-lead text-fog">{casosExito.texto}</p>
         </Reveal>

@@ -79,10 +79,9 @@
   /* Tarjeta base: superficie + borde fino de 1px + radio 24px */
   /* D-150: tarjeta negra con un "humo" blanco muy suave abajo a la derecha, borde gris fino y un
      filo de luz arriba (referencia de Sergio). Sin color: el morado queda solo para botones. */
+  /* Tarjeta (D-164, estilo Kept): LISA, sin humo, igual que la del panel. Borde blanco al 13 % y filo de luz arriba */
   .v2-card {
-    background:
-      radial-gradient(70% 55% at 88% 108%, rgba(255, 255, 255, 0.055), transparent 70%),
-      linear-gradient(180deg, #0e0e10 0%, #060607 100%);
+    background: #0f0f12;
     border: 1px solid rgba(255, 255, 255, 0.13);
     border-radius: 24px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -90,18 +89,23 @@
 
   /* Tarjeta destacada (paquete recomendado, precio): cuerpo igual con un filo morado arriba,
      como la primera cifra del panel. Sin desenfoque ni luz de fondo. */
+  /* Destacada (paquete recomendado, precio de cada servicio): DEGRADADO LIMA con brillo blanco y texto
+     tinta (D-164, referencia Kept), igual que la destacada del panel. Una o dos por página. */
   .v2-destacada {
-    /* D-150: como .v2-card pero con más humo blanco (varias nubes suaves abajo) y borde más claro.
-       Solo gradientes, sin filter:blur (barato de pintar). */
     background:
-      radial-gradient(38% 30% at 80% 84%, rgba(255, 255, 255, 0.14), transparent 70%),
-      radial-gradient(48% 36% at 96% 100%, rgba(255, 255, 255, 0.1), transparent 70%),
-      radial-gradient(34% 28% at 62% 98%, rgba(255, 255, 255, 0.06), transparent 70%),
-      radial-gradient(60% 40% at 20% 0%, rgba(255, 255, 255, 0.035), transparent 70%),
-      linear-gradient(180deg, #111113 0%, #060607 100%);
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      radial-gradient(70% 60% at 92% 100%, rgba(255, 255, 255, 0.5), transparent 65%),
+      radial-gradient(60% 70% at 0% 0%, rgba(255, 255, 255, 0.3), transparent 60%),
+      linear-gradient(135deg, #e3ff8a 0%, #c8f53a 48%, #a8e33a 100%);
+    border: 1px solid rgba(120, 170, 0, 0.45);
+    color: #03010b;
+    box-shadow: 0 18px 40px -24px rgba(182, 255, 0, 0.5);
   }
+  .v2-destacada .text-white, .v2-destacada .text-lime { color: #03010b; }
+  .v2-destacada .text-fog { color: rgba(3, 1, 11, 0.72); }
+  .v2-destacada .text-fog-dim { color: rgba(3, 1, 11, 0.62); }
+  .v2-destacada .v2-primario { background: #03010b; color: #fff; box-shadow: none; }
+  .v2-destacada .v2-primario:hover { filter: none; background: #1c1830; }
+  .v2-destacada svg { color: #03010b; }
 
   /* Píldora (D-150): etiquetas como "Recomendado", "Casos de éxito", filtros. Negra, borde gris claro. */
   .v2-pildora {
@@ -115,14 +119,16 @@
     color: #fff;
   }
 
-  /* Botón principal = .pn-primario del panel (D-142): morado de marca, texto blanco (4,6:1) */
+  /* Botón principal = .pn-primario del panel (D-164, referencia Kept): LIMA con texto tinta (17:1).
+     Igual en el sitio y en el panel, en oscuro y en claro. Dentro de la tarjeta destacada (lima) va negro. */
   .v2-primario {
-    background: linear-gradient(180deg, #7d53ff, #6d45f0);
-    color: #fff;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(125, 83, 255, 0.8);
+    background: linear-gradient(180deg, #ccff3d, #b6ff00);
+    color: #03010b;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(182, 255, 0, 0.55);
     transition: filter 0.2s, transform 0.15s;
   }
-  .v2-primario:hover { filter: brightness(1.1); }
+  .v2-primario:hover { filter: brightness(0.95); }
+  .v2-primario:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   .v2-primario:active { transform: translateY(1px); }
   .v2-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
 
@@ -352,15 +358,13 @@
 /* Tarjetas glass de garantía, pago y mantenimiento (D-068).
    Los SVG se dibujan al entrar en vista (clase .is-visible que pone <Reveal>). */
 .v2-glass {
-  /* D-150: misma tarjeta negra con humo de .v2-card (garantías, adicional) */
+  /* D-164: misma tarjeta LISA de .v2-card (garantías, adicional) */
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  background:
-    radial-gradient(70% 60% at 85% 110%, rgba(255, 255, 255, 0.06), transparent 70%),
-    linear-gradient(180deg, #0e0e10 0%, #060607 100%);
+  background: #0f0f12;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .v2-draw {

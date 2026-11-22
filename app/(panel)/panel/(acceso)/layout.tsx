@@ -22,7 +22,7 @@ export default function AccesoLayout({ children }: { children: React.ReactNode }
         <section className="flex flex-col justify-center px-6 py-10 sm:px-12 lg:px-14">
           <div className="mx-auto w-full max-w-[360px]">
             <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-fog">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#B6FF00]" />
               Panel privado
             </p>
             {children}

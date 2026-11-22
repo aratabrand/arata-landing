@@ -191,7 +191,7 @@ function Opcion({ id, titulo, texto, activo, onCambiar }: { id: string; titulo: 
           aria-checked={activo}
           aria-labelledby={id}
           onClick={onCambiar}
-          className={cn("relative h-7 w-12 shrink-0 rounded-full border transition-colors", activo ? "border-brand bg-brand" : "border-white/20 bg-surface-3")}
+          className={cn("relative h-7 w-12 shrink-0 rounded-full border transition-colors", activo ? "border-lime bg-lime" : "border-white/20 bg-surface-3")}
         >
           <span
             aria-hidden

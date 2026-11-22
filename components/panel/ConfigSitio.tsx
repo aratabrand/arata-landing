@@ -193,7 +193,7 @@ function EditorSitio({
                 aria-checked={borrador.anuncio.activo}
                 aria-label="Mostrar franja de anuncio"
                 onClick={() => set("anuncio", { ...borrador.anuncio, activo: !borrador.anuncio.activo })}
-                className={cn("relative h-7 w-12 rounded-full border transition-colors", borrador.anuncio.activo ? "border-brand bg-brand" : "border-white/15 bg-surface-2")}
+                className={cn("relative h-7 w-12 rounded-full border transition-colors", borrador.anuncio.activo ? "border-[#B6FF00] bg-[#B6FF00]" : "border-white/15 bg-surface-2")}
               >
                 <span className={cn("absolute left-0 top-0.5 h-5 w-5 rounded-full transition-transform", borrador.anuncio.activo ? "translate-x-[22px] bg-noche" : "translate-x-0.5 bg-fog")} />
               </button>

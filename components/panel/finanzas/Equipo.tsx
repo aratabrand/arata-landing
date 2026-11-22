@@ -176,11 +176,11 @@ function FormPersona({ p, onListo }: { p?: Persona; onListo: () => void }) {
         <input name="area" defaultValue={p?.area} maxLength={60} autoComplete="off" placeholder="Diseño, Comercial, Tecnología…" className="pn-input" />
       </Campo>
       <div className="flex flex-wrap gap-2">
-        <BotonSecundario type="button" aria-pressed={esSocio} onClick={() => setEsSocio((v) => !v)} className={cn(esSocio && "border-brand bg-brand/20")}>
+        <BotonSecundario type="button" aria-pressed={esSocio} onClick={() => setEsSocio((v) => !v)} className={cn(esSocio && "pn-pildora-activa")}>
           {esSocio ? "✓ Es socio" : "No es socio"}
         </BotonSecundario>
         {p && (
-          <BotonSecundario type="button" aria-pressed={activo} onClick={() => setActivo((v) => !v)} className={cn(activo && "border-brand bg-brand/20")}>
+          <BotonSecundario type="button" aria-pressed={activo} onClick={() => setActivo((v) => !v)} className={cn(activo && "pn-pildora-activa")}>
             {activo ? "✓ Activo" : "Inactivo"}
           </BotonSecundario>
         )}

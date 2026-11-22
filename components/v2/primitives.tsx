@@ -50,6 +50,24 @@ export function Glow({ className, style }: { className?: string; style?: CSSProp
   return <div aria-hidden className={cn("v2-glow", className)} style={style} />;
 }
 
+/**
+ * D-164 (referencia Kept): la ÚLTIMA palabra del título en cursiva con serifa (Instrument Serif).
+ * Automático y sin cambiar el texto: "Lo que te cuesta, sin *sorpresas*". Si el título no es texto, va igual.
+ * El panel tiene su propia copia (components/panel/ui.tsx): el panel no importa piezas del sitio (D-115).
+ */
+export function Acento({ texto }: { texto: ReactNode }) {
+  if (typeof texto !== "string") return <>{texto}</>;
+  const t = texto.trim();
+  const i = t.lastIndexOf(" ");
+  if (i < 0) return <>{t}</>;
+  return (
+    <>
+      {t.slice(0, i + 1)}
+      <em className="font-acento font-normal italic tracking-normal">{t.slice(i + 1)}</em>
+    </>
+  );
+}
+
 /** Encabezado de sección: título grande a la izquierda + subtítulo + acción a la derecha (ref. captura 01). */
 export function SectionHeader({
   title,
@@ -68,7 +86,7 @@ export function SectionHeader({
     <div className={cn("flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="max-w-2xl">
         <h2 id={id} className="font-display text-v2-h2 font-bold tracking-heading text-white">
-          {title}
+          <Acento texto={title} />
         </h2>
         {subtitle && <p className="mt-3 max-w-xl text-v2-lead text-fog">{subtitle}</p>}
       </div>

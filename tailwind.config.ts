@@ -40,6 +40,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
         body: ["var(--font-body)", "system-ui", "sans-serif"],
+        acento: ["var(--font-acento)", "Georgia", "serif"], // D-164: una palabra en cursiva con serifa
       },
       opacity: {
         6: "0.06",

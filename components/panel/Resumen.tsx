@@ -136,7 +136,7 @@ export default function Resumen({ datos }: { datos: DatosPanel }) {
   return (
     <PanelPage>
       <PanelHeader
-        titulo={<>Hola, <span className="pn-cifra">{negocio.contacto}</span></>}
+        titulo={<>Hola, <span className="pn-cifra font-acento font-normal italic tracking-normal">{negocio.contacto}</span></>}
         bajada={<>Así le fue a {negocio.nombre} en los últimos {periodo} días, comparado con los {periodo} días anteriores.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />

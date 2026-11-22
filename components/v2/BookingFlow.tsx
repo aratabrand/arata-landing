@@ -457,7 +457,7 @@ function Opciones({
             onClick={() => onElegir(o.valor)}
             className={cn(
               "flex min-h-[3.75rem] items-center justify-between gap-3 rounded-frame border px-4 py-3 text-left font-medium transition-[background-color,border-color,transform] active:scale-[0.98]",
-              on ? "border-brand bg-brand/10 text-white" : "border-white/10 bg-noche/50 text-white hover:border-white/20 hover:bg-surface-2"
+              on ? "border-lime bg-lime/10 text-white" : "border-white/10 bg-noche/50 text-white hover:border-white/20 hover:bg-surface-2"
             )}
           >
             {o.label}
@@ -465,7 +465,7 @@ function Opciones({
               aria-hidden
               className={cn(
                 "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors",
-                on ? "border-brand bg-brand text-white" : "border-white/20"
+                on ? "border-lime bg-lime text-ink" : "border-white/20"
               )}
             >
               {on && <Check className="h-3.5 w-3.5" strokeWidth={3} />}

@@ -73,7 +73,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
       >
         <Bell aria-hidden className="h-[18px] w-[18px]" />
         {sinLeer > 0 && (
-          <span aria-hidden className="absolute -right-0.5 -top-0.5 min-w-[1.15rem] rounded-full bg-lime px-1 text-center text-[0.62rem] font-bold leading-[1.15rem] text-ink ring-2 ring-ink">
+          <span aria-hidden className="absolute -right-0.5 -top-0.5 min-w-[1.15rem] rounded-full bg-[#B6FF00] px-1 text-center text-[0.62rem] font-bold leading-[1.15rem] text-[#03010B] ring-2 ring-ink">
             {contador}
           </span>
         )}

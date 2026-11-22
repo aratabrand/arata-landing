@@ -19,6 +19,14 @@ const display = localFont({
   display: "swap",
 });
 
+// D-164: cursiva con serifa para UNA palabra de los títulos (referencia Kept). Instrument Serif
+// Italic (OFL), recortada a los caracteres del español: 17 KB.
+const acento = localFont({
+  src: [{ path: "./fonts/instrument-serif-italic.woff2", weight: "400", style: "italic" }],
+  variable: "--font-acento",
+  display: "swap",
+});
+
 const body = localFont({
   src: [{ path: "./fonts/plus-jakarta-sans-wght-400-700.woff2", weight: "400 700", style: "normal" }],
   variable: "--font-body",
@@ -117,7 +125,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es-CO" className={`${display.variable} ${body.variable}`}>
+    <html lang="es-CO" className={`${display.variable} ${body.variable} ${acento.variable}`}>
       {/* suppressHydrationWarning: extensiones del navegador (Grammarly, traductores…)
           agregan atributos al <body> antes de que cargue React. Solo ignora atributos
           del <body>, no su contenido. */}

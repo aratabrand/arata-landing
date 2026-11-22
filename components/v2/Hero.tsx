@@ -24,7 +24,7 @@ export default function Hero({ textos = textosBase.portada }: { textos?: TextosS
         </div>
 
         <h1 className="mx-auto mt-6 max-w-6xl font-display text-v2-hero font-extrabold tracking-display text-white">
-          {textos.titulo}{textos.tituloSigue && <> <span className="text-lime lg:block">{textos.tituloSigue}</span></>}
+          {textos.titulo}{textos.tituloSigue && <> <span className="font-acento font-normal italic tracking-normal text-lime lg:block">{textos.tituloSigue}</span></>}
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl animate-fade-up text-v2-lead text-fog [animation-delay:80ms]">

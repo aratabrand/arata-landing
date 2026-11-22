@@ -128,7 +128,7 @@ export default function PanelShell({
                   aria-current={on ? "page" : undefined}
                   className={cn("relative flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
-                  {on && <span aria-hidden className="absolute top-0 h-0.5 w-8 rounded-full bg-brand" />}
+                  {on && <span aria-hidden className="absolute top-0 h-0.5 w-8 rounded-full bg-[#B6FF00]" />}
                   <span className="relative">
                     <Icon aria-hidden className={cn("h-5 w-5", on && "text-fog")} />
                     {(contadores[href] ?? 0) > 0 && <span aria-hidden className="absolute -right-2 -top-1.5 h-2 w-2 rounded-full bg-[#B6FF00] ring-2 ring-noche" />}

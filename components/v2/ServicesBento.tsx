@@ -540,7 +540,7 @@ const AB_CSS = `
 .ab-frame-hover:hover>.ab-c-tr{transform:translate(3px,-3px)}
 .ab-frame-hover:hover>.ab-c-bl{transform:translate(-3px,3px)}
 .ab-frame-hover:hover>.ab-c-br{transform:translate(3px,3px)}
-.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:radial-gradient(70% 55% at 88% 108%,rgba(255,255,255,.055),transparent 70%),linear-gradient(180deg,#0e0e10,#060607);border:1px solid rgba(255,255,255,.13);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .35s}
+.ab-card{flex:1;display:flex;flex-direction:column;gap:14px;padding:clamp(14px,2vw,22px);background:#0f0f12;border:1px solid rgba(255,255,255,.13);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .35s}
 .ab-card:hover{border-color:var(--ab-line-strong);box-shadow:0 0 0 1px rgba(255,255,255,0.113),0 24px 60px -30px rgba(255,255,255,0.248)}
 .ab-diagram{width:100%;height:auto;overflow:visible}
 .ab-flow{stroke:var(--ab-line-strong);fill:none;stroke-width:1.2;transition:stroke .3s}

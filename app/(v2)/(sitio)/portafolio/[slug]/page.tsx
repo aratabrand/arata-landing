@@ -7,7 +7,7 @@ import Reveal from "@/components/Reveal";
 import { GridBackground } from "@/components/ui/grid-background";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import { StepsSection } from "@/components/v2/HomeSections";
-import { Container, Eyebrow, Glow } from "@/components/v2/primitives";
+import { Container, Eyebrow, Glow, Acento } from "@/components/v2/primitives";
 import { clasesBoton } from "@/components/v2/Button";
 import ProjectPreview from "@/components/v2/ProjectPreview";
 import { cn } from "@/lib/utils";
@@ -176,7 +176,7 @@ export default async function Caso({ params }: Props) {
             <div className="grid gap-8 rounded-[28px] border border-white/8 bg-surface-1 p-6 sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-12">
               <div>
                 <h2 id="puntajes" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-                  {t.puntajes.titulo}
+                  <Acento texto={t.puntajes.titulo} />
                 </h2>
                 <p className="mt-4 text-fog">{t.puntajes.texto}</p>
                 <dl className="mt-8 grid grid-cols-2 gap-3">

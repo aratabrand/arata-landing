@@ -35,7 +35,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
   return (
     <PanelPage>
       <PanelHeader
-        titulo={<>Hola, <span className="pn-cifra">{nombre}</span></>}
+        titulo={<>Hola, <span className="pn-cifra font-acento font-normal italic tracking-normal">{nombre}</span></>}
         bajada={<>Así le fue a Arata San en {textoPeriodo}, comparado con el periodo anterior.</>}
         accion={<Segmentado etiqueta="Periodo" opciones={periodos} valor={periodo} onChange={setPeriodo} />}
       />

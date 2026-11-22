@@ -33,7 +33,7 @@
   --pn-ambar: 255 199 107;
   --pn-verde: 74 222 128; /* D-155: verde de semáforo (estados), distinto del lima de Arata */
   /* D-153: tarjetas del sistema (D-150): negras con humo blanco suave y borde gris */
-  --pn-tarjeta: radial-gradient(70% 55% at 88% 108%, rgb(255 255 255 / 0.055), transparent 70%), linear-gradient(180deg, #0e0e10 0%, #060607 100%);
+  --pn-tarjeta: #0f0f12; /* D-164: tarjeta lisa, como en claro (sin humo): un solo estilo */
   --pn-tarjeta-borde: rgb(255 255 255 / 0.13);
   --pn-tarjeta-sombra: inset 0 1px 0 rgb(255 255 255 / 0.06);
   --pn-destacada: radial-gradient(38% 30% at 80% 84%, rgb(255 255 255 / 0.14), transparent 70%), radial-gradient(48% 36% at 96% 100%, rgb(255 255 255 / 0.1), transparent 70%), radial-gradient(34% 28% at 62% 98%, rgb(255 255 255 / 0.06), transparent 70%), linear-gradient(180deg, #111113 0%, #060607 100%);
@@ -47,7 +47,7 @@
   --pn-activa-borde: rgb(182 255 0 / 0.55);
   --pn-activa-texto: 182 255 0;
   --pn-campo: #0b0b0e;
-  --pn-serie: 255 255 255; /* barras, líneas y anillos: blanco en oscuro */
+  --pn-serie: 125 83 255; /* D-164: barras, líneas y anillos en morado de marca, igual en los dos modos */
   --pn-cifra: 182 255 0; /* D-162: cifras grandes y el nombre del saludo en lima */
   color-scheme: dark;
 }
@@ -103,38 +103,45 @@
   border-radius: 20px;
   box-shadow: var(--pn-tarjeta-sombra);
 }
-/* Tarjeta destacada (la primera cifra): un poco más clara y con borde más visible. Sin morado */
+/* ── UN SOLO ESTILO POR COMPONENTE en oscuro y en claro (D-164, referencia Kept) ──────────────── */
+/* Tarjeta destacada (la cifra principal): DEGRADADO LIMA con brillo blanco y texto tinta, en los dos modos */
 .pn-root .v2-glass {
   isolation: auto;
   overflow: visible;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-radius: 20px;
-  border: 1px solid var(--pn-destacada-borde);
-  background: var(--pn-destacada);
-  box-shadow: var(--pn-tarjeta-sombra);
+  border: 1px solid rgb(120 170 0 / 0.45);
+  background: radial-gradient(70% 60% at 92% 100%, rgb(255 255 255 / 0.55), transparent 65%), radial-gradient(60% 70% at 0% 0%, rgb(255 255 255 / 0.35), transparent 60%), linear-gradient(135deg, #e3ff8a 0%, #c8f53a 48%, #a8e33a 100%);
+  box-shadow: 0 1px 2px rgb(3 1 11 / 0.05), 0 14px 32px -20px rgb(110 160 0 / 0.55);
 }
 .pn-root .v2-glass::before { display: none; }
-[data-tema="claro"] .v2-glass { box-shadow: 0 1px 2px rgb(3 1 11 / 0.05), 0 14px 32px -20px rgb(110 160 0 / 0.55); }
-/* Sobre el lima, los grises se oscurecen para leerse bien */
-[data-tema="claro"] .v2-glass .text-fog { color: rgb(3 1 11 / 0.72); }
-[data-tema="claro"] .v2-glass .text-fog-dim { color: rgb(3 1 11 / 0.62); }
-[data-tema="claro"] .v2-glass .pn-pildora { background: rgb(255 255 255 / 0.6); border-color: rgb(3 1 11 / 0.08); }
+/* Sobre el lima todo se lee en tinta */
+.pn-root .v2-glass .text-white, .pn-root .v2-glass .pn-cifra, .pn-root .v2-glass .text-dato { color: #03010b; }
+.pn-root .v2-glass .text-fog { color: rgb(3 1 11 / 0.72); }
+.pn-root .v2-glass .text-fog-dim { color: rgb(3 1 11 / 0.62); }
+.pn-root .v2-glass .pn-pildora { background: rgb(255 255 255 / 0.6); border-color: rgb(3 1 11 / 0.1); color: #03010b; }
+.pn-root .v2-glass .bg-lime\/10 { background: rgb(3 1 11 / 0.08); }
+.pn-root .v2-glass .pn-trazo { stroke: rgb(3 1 11 / 0.7); }
+.pn-root .v2-glass .bg-surface-2\/60 { background: rgb(255 255 255 / 0.45); }
 
-/* ── Modo claro (D-159, referencia de Sergio): la opción elegida del menú es la MISMA píldora que en
-   oscuro (forma en PanelShell), aquí negra con texto blanco; brillo lima suave al pie de la barra
-   lateral y botón principal lima ── */
-[data-tema="claro"] .pn-lateral {
-  background: radial-gradient(90% 28% at 10% 100%, rgb(182 255 0 / 0.22), transparent 70%);
-}
-[data-tema="claro"] .pn-selector {
+/* Barra lateral: brillo lima suave al pie, en los dos modos */
+.pn-lateral { background: radial-gradient(90% 28% at 10% 100%, rgb(182 255 0 / 0.16), transparent 70%); }
+/* Opción elegida del menú: píldora NEGRA con borde, texto blanco e ícono lima, en los dos modos */
+.pn-root .pn-selector {
   background: #03010b;
-  border-color: transparent;
+  border-color: rgb(255 255 255 / 0.14);
   box-shadow: 0 8px 18px -10px rgb(3 1 11 / 0.55);
 }
-[data-tema="claro"] .pn-nav-on { color: #fff; }
-/* Dentro de la píldora activa morada, los contadores ("Todos 10") van en blanco suave, no en gris */
-[data-tema="claro"] .pn-pildora-activa span { color: rgb(255 255 255 / 0.8); }
+.pn-root .pn-nav-on { color: #fff; }
+/* La cuenta: negra con texto blanco, en los dos modos */
+.pn-root .pn-negro { background: #03010b; border-color: rgb(255 255 255 / 0.14); color: #fff; }
+.pn-root .pn-negro:hover { background: #1c1830; }
+.pn-root .pn-negro .text-white,
+.pn-root .pn-negro .text-fog { color: #fff; }
+.pn-root .pn-negro .text-fog-dim { color: rgb(255 255 255 / 0.6); }
+.pn-root .pn-negro .pn-avatar { background: rgb(255 255 255 / 0.14); color: #fff; }
+
 /* Contraste en claro (D-159): los bordes finos pensados para oscuro (blanco al 6–10 %) se quedaban
    casi invisibles sobre blanco; en claro pasan a tinta al 14–18 % */
 [data-tema="claro"] .border-white\/6,
@@ -145,13 +152,6 @@
 [data-tema="claro"] .border-white\/\[0\.09\] { border-color: rgb(3 1 11 / 0.14); }
 [data-tema="claro"] .border-white\/10,
 [data-tema="claro"] .border-white\/12 { border-color: rgb(3 1 11 / 0.18); }
-/* La cuenta (abajo a la izquierda y el círculo en el celular): negra con texto blanco en claro (D-159) */
-[data-tema="claro"] .pn-negro { background: #03010b; border-color: transparent; color: #fff; }
-[data-tema="claro"] .pn-negro:hover { background: #1c1830; }
-[data-tema="claro"] .pn-negro .text-white,
-[data-tema="claro"] .pn-negro .text-fog { color: #fff; }
-[data-tema="claro"] .pn-negro .text-fog-dim { color: rgb(255 255 255 / 0.6); }
-[data-tema="claro"] .pn-negro .pn-avatar { background: rgb(255 255 255 / 0.14); color: #fff; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
 /* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro).
@@ -162,10 +162,12 @@
   border: 1px solid var(--pn-pildora-borde);
   box-shadow: var(--pn-pildora-sombra);
 }
+/* Píldora o pestaña elegida (D-164): LIMA sólido con texto tinta, en los dos modos */
+.pn-pildora-activa span { color: rgb(3 1 11 / 0.65); }
 .pn-pildora-activa {
-  color: rgb(var(--pn-activa-texto));
-  background: var(--pn-activa);
-  border: 1px solid var(--pn-activa-borde);
+  color: #03010b;
+  background: linear-gradient(180deg, #ccff3d 0%, #b6ff00 100%);
+  border: 1px solid #b6ff00;
 }
 
 /* Avisos (D-163): negros con letras blancas en los dos modos ("Todavía no hay datos", "panel de
@@ -177,19 +179,18 @@
 /* Cifras grandes y nombre del saludo (D-162): lima en oscuro, tinta en claro */
 .pn-cifra { color: rgb(var(--pn-cifra)); }
 
-/* Botón principal: morado de marca, texto blanco (4,6:1). Uno por vista. */
+/* Botón principal (D-164, referencia Kept): LIMA con texto tinta (17:1), igual que el del sitio
+   (.v2-primario), en los dos modos. Uno por vista. */
 .pn-primario {
-  background: linear-gradient(180deg, #7d53ff, #6d45f0);
-  color: #fff;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 24px -14px rgba(125, 83, 255, 0.8);
+  background: linear-gradient(180deg, #ccff3d, #b6ff00);
+  color: #03010b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.25), 0 10px 22px -14px rgba(182, 255, 0, 0.55);
   transition: filter 0.2s, transform 0.15s;
 }
-.pn-primario:hover { filter: brightness(1.1); }
+.pn-primario:hover { filter: brightness(0.95); }
 .pn-primario:active { transform: translateY(1px); }
 .pn-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
-.pn-primario:focus-visible { outline: 2px solid #7d53ff; outline-offset: 2px; }
-/* Los botones son MORADOS en los dos modos (Sergio, D-159). En claro, sin el brillo morado de abajo */
-[data-tema="claro"] .pn-primario { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), 0 1px 2px rgb(3 1 11 / 0.12); }
+.pn-primario:focus-visible { outline: 2px solid rgb(var(--pn-fg)); outline-offset: 2px; }
 
 /* Cuadrito con ícono: SIN USO desde D-149 (los íconos decorativos se quitaron, como en el sitio, D-147) */
 

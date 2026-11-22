@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plus } from "./iconos";
 import Logo from "@/components/Logo";
 import { Button } from "./Button";
-import { Container, Glow } from "./primitives";
+import { Container, Glow, Acento } from "./primitives";
 import ProjectPreview from "./ProjectPreview";
 import { AbrirPreferenciasCookies } from "@/components/CookieBanner";
 import { cookies } from "@/content/cookies";
@@ -24,7 +24,7 @@ export function FaqSection({
       <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <h2 id="faq" className="font-display text-v2-h2 font-bold tracking-heading text-white">
-            {titulo}
+            <Acento texto={titulo} />
           </h2>
           {subtitulo && <p className="mt-4 max-w-sm text-fog">{subtitulo}</p>}
         </div>
@@ -72,7 +72,7 @@ export function CtaCard({ cta = ctaFinal, antes }: { cta?: Cta; antes?: React.Re
 
           {antes}
           <h2 id="cta-final" className="mx-auto max-w-3xl font-display text-v2-h2 font-bold tracking-heading text-white">
-            {cta.titulo}
+            <Acento texto={cta.titulo} />
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-v2-lead text-fog">{cta.texto}</p>
           <div className="mt-9 flex justify-center">
