@@ -89,7 +89,7 @@ export const paginasWeb = {
       { p: "¿Qué son las 5 secciones?", r: "Son las partes de tu página: por ejemplo, inicio, qué ofreces, trabajos o productos, preguntas y contacto. Las definimos contigo en la reunión." },
       { p: "¿Tengo que escribir los textos?", r: "Sí. Tú nos mandas los textos de tu negocio y nosotros los organizamos en el diseño para que se lean fácil." },
       { p: "¿Y si necesito más de 5 secciones?", r: "Se puede. Te damos el precio en la propuesta." },
-      { p: "¿Tienen sitios para empresas, con varias páginas y blog?", r: "Sí: el Sitio Corporativo con Panel, desde 750 USD. Trae inicio, sobre nosotros, una página por cada servicio, blog básico y un panel básico para cambiar textos y publicar en el blog, hecho primero para el celular y con velocidad garantizada." },
+      { p: "¿Tienen sitios para empresas, con varias páginas y blog?", r: "Sí: el Sitio Corporativo con Panel, desde 700 USD. Trae inicio, sobre nosotros, una página por cada servicio, blog básico y un panel básico para cambiar textos y publicar en el blog. Además, todo lo de la página: hecho primero para el celular, velocidad garantizada, lista para Google y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación." },
       { p: "¿Qué es el panel adicional?", r: "Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Lo cotizamos según las funciones que necesites." },
       { p: "¿Puedo pagar por partes?", r: "Sí: 50 % para arrancar y 50 % cuando te entregamos." },
       { p: "¿Incluye dominio y hosting?", r: "Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento." },

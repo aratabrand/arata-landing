@@ -31,11 +31,11 @@ export const llmsV2 = `# Arata San
 
 > Agencia en Bogotá, Colombia, que diseña páginas, catálogos y sistemas para negocios que quieren clientes por internet. Páginas listas en 5 días hábiles desde 400 USD y tiendas por WhatsApp desde 800 USD, diseñadas primero para el celular y con garantía de velocidad: 90 o más en la medición de Google (PageSpeed), o se siguen ajustando gratis.
 
-El objetivo del sitio es agendar una reunión de 30 minutos, sin costo, en la que el negocio sale con el paquete y el precio para su caso. En 48 horas llega la propuesta. Se puede pagar por partes: 50 % para arrancar y 50 % al entregar. Arata San toma 4 proyectos nuevos al mes.
+El objetivo del sitio es agendar una reunión de 30 minutos, sin costo, en la que el negocio sale con el paquete y el precio para su caso. En 48 horas llega la propuesta. Se puede pagar por partes: 50 % para arrancar y 50 % al entregar. Arata San toma 4 proyectos nuevos al mes, uno por semana.
 
 ## Servicios
 
-- [Páginas que venden](https://www.aratasan.com/paginas-web): "Página Lista en 5 Días", desde 400 USD. Incluye 5 secciones, diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación. Adicional: panel para editar la página y ver métricas (se cotiza). "Sitio Corporativo con Panel", desde 750 USD: inicio, sobre nosotros, una página por cada servicio, blog básico, panel básico para cambiar textos y publicar en el blog, diseño primero para el celular y velocidad garantizada.
+- [Páginas que venden](https://www.aratasan.com/paginas-web): "Página Lista en 5 Días", desde 400 USD. Incluye 5 secciones, diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación. Adicional: panel para editar la página y ver métricas (se cotiza). "Sitio Corporativo con Panel", desde 700 USD: inicio, sobre nosotros, una página por cada servicio, blog básico y panel básico para cambiar textos y publicar en el blog, más todo lo de la página: diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación.
 - [Catálogos y sistemas a medida](https://www.aratasan.com/catalogos-y-sistemas): "Tienda por WhatsApp en 5 Días", desde 800 USD: catálogo con carrito, panel, inventario y pedido directo al WhatsApp del negocio (sin pago en línea). "Tu Negocio en Orden": sistemas a medida como reservas, menú digital o registro de clientes (CRM), cotizados.
 - Mantenimiento opcional: 15 % del valor del proyecto al mes.
 

@@ -34,7 +34,8 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       </p>
       {paquete.nota && <p className="mt-2 text-sm text-fog-dim">{paquete.nota}</p>}
 
-      <Button href={AGENDAR} variant={rec ? "primary" : "secondary"} className="mt-6 w-full">
+      {/* D-175: todas las tarjetas del mismo color, con el botón principal lima */}
+      <Button href={AGENDAR} variant="primary" className="mt-6 w-full">
         {paquete.boton}
       </Button>
 
@@ -51,10 +52,10 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
   );
 }
 
-/** Paquete cotizado como banner horizontal (D-169): nombre y precio, lo que incluye y el botón. */
+/** Paquete cotizado como banner horizontal (D-175): nombre y precio, lo que incluye y el botón. */
 export function PricingBanner({ paquete }: { paquete: Paquete }) {
   return (
-    <article className="v2-card flex flex-col gap-6 rounded-card p-6 sm:p-7 lg:flex-row lg:items-center lg:gap-10">
+    <article className="v2-destacada flex flex-col gap-6 rounded-card p-6 sm:p-7 lg:flex-row lg:items-center lg:gap-10">
       <div className="flex items-center gap-4 lg:w-[28%] lg:shrink-0">
         {paquete.icono && <IconoMarca icono={paquete.icono} className="h-10 w-10 shrink-0" />}
         <div>
@@ -63,7 +64,7 @@ export function PricingBanner({ paquete }: { paquete: Paquete }) {
         </div>
       </div>
       {/* Lo primero que incluye va como frase; el resto, en una fila de checks */}
-      <div className="flex-1 border-t border-white/8 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+      <div className="flex-1 border-t border-[#03010b]/15 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
         <p className="text-fog">{paquete.incluye[0]}.</p>
         <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
           {paquete.incluye.slice(1).map((item) => (
@@ -74,7 +75,8 @@ export function PricingBanner({ paquete }: { paquete: Paquete }) {
           ))}
         </ul>
       </div>
-      <Button href={AGENDAR} variant="secondary" className="w-full shrink-0 lg:w-auto">
+      {/* Banner lima (D-175): el botón principal va negro dentro de la tarjeta lima */}
+      <Button href={AGENDAR} variant="primary" className="w-full shrink-0 lg:w-auto">
         {paquete.boton}
       </Button>
     </article>
@@ -237,7 +239,7 @@ export default function PricingSection() {
             ))}
         </div>
 
-        {/* D-169: el paquete cotizado va como banner del ancho de las 3 columnas */}
+        {/* D-175: el paquete cotizado va como banner del ancho de las 3 columnas */}
         {precios.paquetes
           .filter((p) => p.banner)
           .map((p) => (

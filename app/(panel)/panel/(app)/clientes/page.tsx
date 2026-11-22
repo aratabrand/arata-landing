@@ -9,8 +9,9 @@ export const metadata: Metadata = { title: "Clientes" };
 // Arata San con sesión: clientes reales desde Neon (D-110). Si no, el ejemplo.
 export default async function PanelClientesPage({ searchParams }: { searchParams: Promise<{ ver?: string }> }) {
   const real = await cargarClientesAgencia();
-  // El aviso de "nuevo interesado" abre /panel/clientes?ver=interesados
-  if (real) return <ClientesAgencia datos={real} vistaInicial={(await searchParams).ver === "interesados" ? "interesados" : "clientes"} />;
+  // El aviso de "nuevo interesado" abre /panel/clientes?ver=interesados; los cambios de prospectos, ?ver=prospectos
+  const ver = (await searchParams).ver;
+  if (real) return <ClientesAgencia datos={real} vistaInicial={ver === "interesados" || ver === "prospectos" ? ver : "clientes"} />;
   const { clientes, hoy } = obtenerPanel();
   return <Clientes iniciales={clientes} hoy={hoy} />;
 }

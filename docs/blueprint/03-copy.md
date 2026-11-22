@@ -171,17 +171,21 @@
 >
 > **[Agenda tu reunión]**
 
-**Tarjeta nueva — Sitio Corporativo con Panel** (D-169, va de segunda, entre la página y la tienda; "Tu Negocio en Orden" pasa a banner debajo de las 3 tarjetas)
-- Desde 750 USD
+**Tarjeta nueva — Sitio Corporativo con Panel** (D-175, va de segunda, entre la página y la tienda; "Tu Negocio en Orden" pasa a banner debajo de las 3 tarjetas)
+- Desde 700 USD
 - Inicio y Sobre nosotros
 - Una página por cada servicio
 - Blog básico para publicar noticias y artículos
 - Panel básico para cambiar textos y subir entradas al blog
 - Diseño hecho primero para el celular
 - Velocidad de 90 o más en Google, garantizada
+- Lista para que te encuentren en Google, Google Business y la IA
+- Dominio y hosting el primer año
+- 2 rondas de ajustes
+- Capacitación para que lo manejes tú
 - Botón: Agenda tu reunión
 
-**Tarjeta 2 — Tienda por WhatsApp en 5 Días** ⭐ *(resaltada: es la que más casos reales tiene)*
+**Tarjeta 2 — Tienda por WhatsApp en 5 Días** *(D-175: ya no va resaltada ni con «Recomendado»; las 3 tarjetas van iguales con botón lima, y el banner de «Tu Negocio en Orden» va en lima)*
 
 > **Desde 800 USD** · *el precio depende del tamaño de tu tienda*
 >
@@ -242,7 +246,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Qué significa la garantía de velocidad? | Medimos tu página en celular con la herramienta de Google (PageSpeed). Si no saca 90 o más, la seguimos ajustando sin costo hasta que lo logre. |
 | ¿Qué pasa después de la entrega? | Te enseñamos a usar todo. Si quieres que sigamos cuidando tu página, tienes el mantenimiento opcional: 15 % del valor del proyecto al mes. |
 | ¿Trabajan con negocios fuera de Colombia? | Sí. Por ejemplo, hicimos la landing de Boost Your Menu, en New Jersey. |
-| ¿Por qué solo 4 proyectos al mes? | Porque así cumplimos los 5 días sin bajar la calidad. |
+| ¿Por qué solo 4 proyectos al mes? | Porque tomamos uno por semana y así cumplimos los 5 días sin bajar la calidad. |
 | ¿Puedo pagar por partes? | Sí. Pagas el 50 % para arrancar y el otro 50 % cuando te entregamos. |
 | ¿La reunión tiene costo? | No. Son 30 minutos y sales con el paquete y el precio para tu caso. |
 
@@ -426,7 +430,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 > # Tu página puede estar publicada en 5 días hábiles.
 >
-> Este mes tomamos 3 proyectos nuevos. Agenda y separa tu cupo.
+> Este mes tomamos 4 proyectos nuevos. Agenda y separa tu cupo.
 >
 > **[Agendar reunión]**
 

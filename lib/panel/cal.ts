@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { CODIGO } from "./clientes/prospectos";
 
 // Avisos (webhook) de Cal.com → interesados del panel (D-133). Funciones puras: sin base de datos,
 // para poder probarlas (scripts/prueba-cal.ts). Cal.com firma el cuerpo con HMAC-SHA256 y un
@@ -80,6 +81,8 @@ export type Notas = {
   inversion: string | null;
   whatsapp: string | null;
   autorizacion: string | null;
+  /** Código del prospecto si agendó desde el mensaje de WhatsApp (D-174): línea "Referencia: 8f3a1c…". */
+  referencia: string | null;
 };
 
 /** Lee las líneas "Etiqueta: valor" que arma BookingFlow (content/agendar.ts). Lo que no esté, queda en null. */
@@ -105,6 +108,7 @@ export function leerNotas(notas: unknown, evento?: string | null): Notas {
     inversion: campo(/^\s*Inversi[oó]n\s*:\s*(.+)$/i),
     whatsapp: whatsappLimpio(campo(/^\s*WhatsApp\s*:\s*(.+)$/i)),
     autorizacion: campo(/^\s*Autorizaci[oó]n de datos\s*:\s*(.+)$/i),
+    referencia: ((v) => (v && CODIGO.test(v.toLowerCase()) ? v.toLowerCase() : null))(campo(/^\s*Referencia\s*:\s*(.+)$/i)),
   };
 }
 
@@ -128,6 +132,8 @@ export type Aviso =
       cuando: string | null;
       inversion: string | null;
       autorizacion: string | null;
+      /** Código del prospecto que agendó desde el mensaje de WhatsApp (D-174). */
+      referencia: string | null;
       evento: string | null;
       inicio: string; // ISO UTC
       fin: string | null;
@@ -194,6 +200,7 @@ export function leerAviso(cuerpo: unknown): Aviso {
     cuando: notas.cuando,
     inversion: notas.inversion,
     autorizacion: notas.autorizacion,
+    referencia: notas.referencia,
     evento,
     inicio,
     fin: iso(p.endTime),

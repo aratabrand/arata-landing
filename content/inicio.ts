@@ -145,7 +145,7 @@ export type Paquete = {
   adicional?: string;
   boton: string;
   recomendado?: boolean;
-  /** D-169: el paquete cotizado no va como tarjeta sino como banner debajo de las 3 columnas. */
+  /** D-175: el paquete cotizado no va como tarjeta sino como banner debajo de las 3 columnas. */
   banner?: boolean;
   /** Ícono SVG propio del paquete (D-150, components/v2/IconosMarca.tsx). */
   icono?: "capas" | "tienda" | "sistema" | "edificio";
@@ -173,10 +173,10 @@ export const precios = {
       boton: "Agenda tu reunión",
     },
     {
-      // D-169: sitio corporativo con panel básico
+      // D-175: sitio corporativo con panel básico
       nombre: "Sitio Corporativo con Panel",
       icono: "edificio",
-      precio: "Desde 750 USD",
+      precio: "Desde 700 USD",
       incluye: [
         "Inicio y Sobre nosotros",
         "Una página por cada servicio",
@@ -184,6 +184,10 @@ export const precios = {
         "Panel básico para cambiar textos y subir entradas al blog",
         "Diseño hecho primero para el celular",
         "Velocidad de 90 o más en Google, garantizada",
+        "Lista para que te encuentren en Google, Google Business y la IA",
+        "Dominio y hosting el primer año",
+        "2 rondas de ajustes",
+        "Capacitación para que lo manejes tú",
       ],
       boton: "Agenda tu reunión",
     },
@@ -205,7 +209,6 @@ export const precios = {
         "Entrega en 5 días hábiles",
       ],
       boton: "Agenda tu reunión",
-      recomendado: true,
     },
     {
       nombre: "Tu Negocio en Orden",
@@ -270,7 +273,7 @@ export const faq = {
     },
     {
       p: "¿Por qué solo 4 proyectos al mes?",
-      r: "Porque así cumplimos los 5 días sin bajar la calidad.",
+      r: "Porque tomamos uno por semana y así cumplimos los 5 días sin bajar la calidad.",
     },
     {
       p: "¿Puedo pagar por partes?",

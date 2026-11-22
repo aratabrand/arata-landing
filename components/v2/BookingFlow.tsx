@@ -63,6 +63,8 @@ export default function BookingFlow() {
   const router = useRouter();
   const params = useSearchParams();
   const inicial = params.get("tipo") as TipoAgenda | null;
+  // Llegó desde el mensaje de WhatsApp a un prospecto (D-174): el código viaja en las notas de la cita
+  const referencia = (params.get("p") ?? "").toLowerCase();
 
   const [tipo, setTipo] = useState<TipoAgenda | null>(inicial && TIPOS.includes(inicial) ? inicial : null);
   const [cuando, setCuando] = useState<string | null>(null);
@@ -161,6 +163,7 @@ export default function BookingFlow() {
     `WhatsApp: ${datos.whatsapp.trim()}`,
     // Constancia de la autorización (Ley 1581: hay que poder probarla, D-099)
     datos.autoriza ? `Autorización de datos: sí, ${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })} (hora de Bogotá)` : null,
+    /^[0-9a-f]{10}$/.test(referencia) ? `Referencia: ${referencia}` : null,
   ]
     .filter(Boolean)
     .join("\n");
