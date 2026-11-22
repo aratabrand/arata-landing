@@ -266,7 +266,7 @@ function EtapaPasos({
                   aria-label={`Quitar paso: ${t.texto}`}
                   disabled={acc.pendiente}
                   onClick={() => window.confirm(`¿Quitar "${t.texto}"?`) && acc.correr(() => borrarPaso(t.id))}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white"
                 >
                   <Trash2 aria-hidden className="h-4 w-4" />
                 </button>

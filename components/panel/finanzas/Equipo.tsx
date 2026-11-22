@@ -76,7 +76,7 @@ export default function Equipo({ datos, hoy }: { datos: DatosFinanzas; hoy: stri
                   </div>
                 </div>
                 {datos.esDueno && (
-                  <button type="button" aria-label={`Editar ${pe.nombre}`} onClick={() => setEditando(pe)} className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white">
+                  <button type="button" aria-label={`Editar ${pe.nombre}`} onClick={() => setEditando(pe)} className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-white">
                     <Pencil aria-hidden className="h-4 w-4" />
                   </button>
                 )}

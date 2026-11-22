@@ -111,7 +111,7 @@ function GastosFijos({ datos }: { datos: DatosFinanzas }) {
                     aria-label={`Quitar ${g.concepto}`}
                     disabled={acc.pendiente}
                     onClick={() => window.confirm(`¿Quitar "${g.concepto}"?`) && acc.correr(() => borrarGastoFijo(g.id))}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-btn text-fog-dim hover:text-white"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white"
                   >
                     <Trash2 aria-hidden className="h-4 w-4" />
                   </button>

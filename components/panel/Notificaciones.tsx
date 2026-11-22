@@ -287,7 +287,7 @@ function AvisosDispositivo({ push, demo }: { push: { activo: boolean; clave: str
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
             {estado === "apagado" ? (
-              <button type="button" onClick={activar} disabled={acc.pendiente} className="inline-flex h-11 items-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-50">
+              <button type="button" onClick={activar} disabled={acc.pendiente} className="inline-flex h-11 items-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold disabled:opacity-50">
                 <BellRing aria-hidden className="h-4 w-4" /> {acc.pendiente ? "Activando…" : "Activar avisos aquí"}
               </button>
             ) : (

@@ -17,7 +17,7 @@ export default function Entrar({ activo }: { activo: boolean }) {
       <div>
         <h1 className="font-display text-[1.9rem] font-bold leading-tight tracking-heading text-white">Acceso en preparación</h1>
         <p className="mt-3 text-sm text-fog">El inicio de sesión todavía no está conectado. Mientras tanto puedes ver el panel con datos de ejemplo.</p>
-        <Link href="/panel" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-btn pn-primario text-sm font-semibold">
+        <Link href="/panel" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full pn-primario text-sm font-semibold">
           Ver el panel de ejemplo
         </Link>
       </div>
@@ -64,7 +64,7 @@ export default function Entrar({ activo }: { activo: boolean }) {
       <button
         type="submit"
         disabled={enviando}
-        className="h-11 w-full rounded-btn pn-primario text-sm font-semibold disabled:opacity-60"
+        className="h-11 w-full rounded-full pn-primario text-sm font-semibold disabled:opacity-60"
       >
         {enviando ? "Entrando…" : "Continuar"}
       </button>

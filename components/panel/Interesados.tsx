@@ -380,7 +380,7 @@ function Fila({
             </Campo>
           )}
           <div className="flex flex-col gap-2 sm:flex-row">
-            <button type="submit" disabled={acc.pendiente} className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-50">
+            <button type="submit" disabled={acc.pendiente} className="inline-flex h-11 items-center justify-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold disabled:opacity-50">
               {acc.pendiente ? "Guardando…" : formulario === "espera" ? (enEspera ? "Guardar el plazo" : "Poner en espera") : "Guardar nota"}
             </button>
             <BotonSecundario type="button" disabled={acc.pendiente} onClick={() => setFormulario(null)} className="h-11">
@@ -408,7 +408,7 @@ function Fila({
             href={CAL_POR_ACEPTAR}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold sm:w-auto"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold sm:w-auto"
           >
             <Check aria-hidden className="h-4 w-4" /> Aceptar o rechazar en Cal.com
             <ExternalLink aria-hidden className="h-3.5 w-3.5 opacity-60" />
@@ -420,7 +420,7 @@ function Fila({
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold sm:w-auto",
+              "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold sm:w-auto",
               ahoraEs ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
             )}
           >
@@ -435,7 +435,7 @@ function Fila({
               onClick={() => onConfirmar(i)}
               disabled={acc.pendiente}
               className={cn(
-                "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold disabled:opacity-50 sm:w-auto",
+                "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold disabled:opacity-50 sm:w-auto",
                 m === "pasada" ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
               )}
             >
@@ -457,7 +457,7 @@ function Fila({
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "inline-flex h-11 items-center justify-center gap-2 rounded-btn px-5 text-sm font-semibold sm:w-auto",
+              "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold sm:w-auto",
               toca ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
             )}
           >
@@ -501,7 +501,7 @@ function Fila({
             aria-label={`Borrar a ${i.nombre} de interesados`}
             disabled={acc.pendiente}
             onClick={() => window.confirm(`¿Borrar a ${i.nombre} de la lista de interesados?${i.clienteId ? " El cliente que se creó desde aquí no se borra." : ""} Queda en el historial.`) && acc.correr(() => borrarInteresado(i.id))}
-            className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-alerta sm:ml-auto"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-alerta sm:ml-auto"
           >
             <Trash2 aria-hidden className="h-4 w-4" />
           </button>

@@ -49,7 +49,7 @@ export default function Finanzas({ datos, hoy }: { datos: DatosFinanzas; hoy: st
       <AvisoAcceso demo={datos.demo} puedeEditar={datos.puedeEditar} />
 
       <div className="-mx-4 overflow-x-auto px-4 pb-1">
-        <div role="tablist" aria-label="Secciones de finanzas" className="inline-flex gap-1 rounded-btn border border-white/8 bg-surface-1 p-1">
+        <div role="tablist" aria-label="Secciones de finanzas" className="inline-flex gap-1 rounded-full border border-white/8 bg-surface-1 p-1">
           {vistas.map((v) => (
             <button
               key={v.valor}
@@ -58,7 +58,7 @@ export default function Finanzas({ datos, hoy }: { datos: DatosFinanzas; hoy: st
               aria-selected={vista === v.valor}
               onClick={() => setVista(v.valor)}
               className={cn(
-                "h-9 whitespace-nowrap rounded-[7px] border px-3.5 text-sm font-semibold transition-colors",
+                "h-9 whitespace-nowrap rounded-full border px-3.5 text-sm font-semibold transition-colors",
                 vista === v.valor ? "pn-pildora-activa" : "border-transparent text-fog-dim hover:text-white"
               )}
             >

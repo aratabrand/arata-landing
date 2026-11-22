@@ -272,18 +272,18 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
             <p className="truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</p>
           </div>
           <div className="my-1 h-px bg-white/[0.06]" />
-          <a role="menuitem" href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-between rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+          <a role="menuitem" href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-between rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
             Ver mi página <ArrowUpRight aria-hidden className="h-4 w-4" />
           </a>
           {/* En el panel de la propia agencia no tiene sentido escribirse a sí mismos */}
           {negocio.tipo !== "agencia" && (
-            <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+            <a role="menuitem" href={soporte} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center gap-2 rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <MessageCircle aria-hidden className="h-4 w-4 text-fog" /> Escribirle a Arata San
             </a>
           )}
           {/* El modo claro / oscuro está en la barra de arriba, al lado de la campana (D-152) */}
           {conSesion && (
-            <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-btn px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
+            <button role="menuitem" type="button" onClick={salir} className="flex h-10 w-full items-center gap-2 rounded-full px-3 text-sm text-fog hover:bg-white/[0.05] hover:text-white">
               <LogOut aria-hidden className="h-4 w-4" /> Salir
             </button>
           )}

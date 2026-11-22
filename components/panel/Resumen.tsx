@@ -49,7 +49,7 @@ export function Segmentado<T extends string | number>({
   etiqueta: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={etiqueta} className="inline-flex rounded-btn border border-white/8 bg-surface-1 p-1">
+    <div role="radiogroup" aria-label={etiqueta} className="inline-flex rounded-full border border-white/8 bg-surface-1 p-1">
       {opciones.map((o) => (
         <button
           key={String(o.valor)}
@@ -58,7 +58,7 @@ export function Segmentado<T extends string | number>({
           aria-checked={valor === o.valor}
           onClick={() => onChange(o.valor)}
           className={cn(
-            "h-9 rounded-[7px] border px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
+            "h-9 rounded-full border px-3 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
             // D-155: la opción activa va en el verde de Arata (en claro, morado)
             valor === o.valor ? "pn-pildora-activa" : "border-transparent text-fog-dim hover:text-white"
           )}

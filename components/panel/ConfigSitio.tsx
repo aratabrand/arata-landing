@@ -110,7 +110,7 @@ function EditorSitio({
         volver={{ href: "/panel/configuracion", texto: "Configuración" }}
         bajada="Cambia los textos y botones de tu página. Mira cómo queda a la derecha antes de guardar."
         accion={
-          <a href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center rounded-btn border border-white/10 bg-surface-2 px-5 text-sm font-semibold text-white hover:bg-surface-3">
+          <a href={negocio.sitio} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center rounded-full border border-white/10 bg-surface-2 px-5 text-sm font-semibold text-white hover:bg-surface-3">
             Ver mi página
           </a>
         }
@@ -139,7 +139,7 @@ function EditorSitio({
                   type="button"
                   disabled={!remoto.puedePublicar || pub.pendiente || hayErrores}
                   onClick={() => pub.correr(() => publicarSitio(), () => setPublicando(true))}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-30"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full pn-primario px-5 text-sm font-semibold disabled:opacity-30"
                 >
                   <Send aria-hidden className="h-4 w-4" />
                   {pub.pendiente ? "Publicando…" : `Publicar en ${dominioDe(negocio.sitio)}`}
@@ -218,7 +218,7 @@ function EditorSitio({
               !remoto && <button
                 type="button"
                 onClick={() => set("botones", [...borrador.botones, { id: nuevoId("b"), ubicacion: "Portada · extra", texto: "", enlace: `https://wa.me/${negocio.whatsapp}`, estilo: "secundario" }])}
-                className="inline-flex h-9 items-center gap-1.5 rounded-btn border border-white/10 px-3 text-xs font-semibold text-white hover:border-white/20"
+                className="inline-flex h-9 items-center gap-1.5 rounded-full border border-white/10 px-3 text-xs font-semibold text-white hover:border-white/20"
               >
                 <Plus aria-hidden className="h-3.5 w-3.5" /> Agregar
               </button>
@@ -233,7 +233,7 @@ function EditorSitio({
                       type="button"
                       onClick={() => set("botones", borrador.botones.filter((x) => x.id !== b.id))}
                       aria-label={`Quitar botón ${b.texto || b.ubicacion}`}
-                      className="flex h-9 w-9 items-center justify-center rounded-btn text-fog-dim hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-fog-dim hover:text-white"
                     >
                       <Trash2 aria-hidden className="h-4 w-4" />
                     </button>}
@@ -265,7 +265,7 @@ function EditorSitio({
           <Tarjeta
             titulo="Vista previa"
             accion={
-              <div className="inline-flex rounded-btn border border-white/8 bg-surface-2 p-1" role="radiogroup" aria-label="Vista previa">
+              <div className="inline-flex rounded-full border border-white/8 bg-surface-2 p-1" role="radiogroup" aria-label="Vista previa">
                 {([
                   { v: "celular", icon: Smartphone, l: "Celular" },
                   { v: "google", icon: Monitor, l: "Google" },
@@ -276,7 +276,7 @@ function EditorSitio({
                     role="radio"
                     aria-checked={vista === o.v}
                     onClick={() => setVista(o.v)}
-                    className={cn("inline-flex h-8 items-center gap-1.5 rounded-[7px] px-3 text-xs font-semibold", vista === o.v ? "bg-surface-3 text-white" : "text-fog-dim")}
+                    className={cn("inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold", vista === o.v ? "bg-surface-3 text-white" : "text-fog-dim")}
                   >
                     <o.icon aria-hidden className="h-3.5 w-3.5" /> {o.l}
                   </button>
@@ -322,7 +322,7 @@ function EditorSitio({
                           <span
                             key={b.id}
                             className={cn(
-                              "flex h-10 items-center justify-center rounded-btn text-[0.78rem] font-semibold",
+                              "flex h-10 items-center justify-center rounded-full text-[0.78rem] font-semibold",
                               b.estilo === "principal" ? "bg-lime text-ink" : "border border-white/12 bg-surface-2 text-white"
                             )}
                           >
@@ -362,7 +362,7 @@ function EditorSitio({
               type="button"
               disabled={!sucio}
               onClick={() => setBorrador(guardado)}
-              className="h-11 flex-1 rounded-btn border border-white/10 px-4 text-sm font-semibold text-white disabled:opacity-30 sm:flex-none"
+              className="h-11 flex-1 rounded-full border border-white/10 px-4 text-sm font-semibold text-white disabled:opacity-30 sm:flex-none"
             >
               Descartar
             </button>
@@ -370,7 +370,7 @@ function EditorSitio({
               type="button"
               disabled={!sucio || hayErrores || !edita || acc.pendiente}
               onClick={guardar}
-              className="h-11 flex-1 rounded-btn pn-primario px-5 text-sm font-semibold disabled:opacity-30 sm:flex-none"
+              className="h-11 flex-1 rounded-full pn-primario px-5 text-sm font-semibold disabled:opacity-30 sm:flex-none"
             >
               {acc.pendiente ? "Guardando…" : "Guardar cambios"}
             </button>

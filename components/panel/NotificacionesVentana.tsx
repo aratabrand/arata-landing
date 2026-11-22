@@ -97,7 +97,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
             <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-4 py-3">
               <p className="font-display text-base font-bold text-white">Notificaciones</p>
               <div className="flex items-center gap-1">
-                <Link href="/panel/notificaciones" className="rounded-btn px-2.5 py-1.5 text-xs font-semibold text-fog hover:text-white">
+                <Link href="/panel/notificaciones" className="rounded-full px-2.5 py-1.5 text-xs font-semibold text-fog hover:text-white">
                   Ver todas
                 </Link>
                 <button type="button" onClick={() => setAbierta(false)} aria-label="Cerrar" className="flex h-8 w-8 items-center justify-center rounded-full text-fog-dim hover:text-white">
