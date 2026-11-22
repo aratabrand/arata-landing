@@ -101,7 +101,7 @@ export const agendar = {
     ],
     garantiaFuerte: "Garantía de velocidad",
     garantia: "si tu página no saca 90 o más en celular, la seguimos ajustando gratis.",
-    cupos: "Tomamos 3 proyectos nuevos al mes.",
+    cupos: "Tomamos 4 proyectos nuevos al mes.",
   },
 };
 

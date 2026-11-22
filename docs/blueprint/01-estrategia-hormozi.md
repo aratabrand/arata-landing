@@ -36,7 +36,7 @@
 | | **Sistema a medida** — *Tu Negocio en Orden* | ✅ Reservas, menús digitales, CRM… | Según alcance | ✅ Según tamaño (se cotiza en la reunión) |
 | **Mantenimiento** | Mensualidad | ✅ Soporte y mantenimiento | Mensual | ✅ **15 % del valor del proyecto** (Landing desde 60 USD/mes · Catálogo desde 120 USD/mes) |
 
-- **Cupos:** ✅ **3 proyectos nuevos al mes** (D-023).
+- **Cupos:** ✅ **4 proyectos nuevos al mes, uno por semana** (D-172; antes 3, D-023).
 - **Pago:** ✅ **50 % al iniciar y 50 % al entregar** (D-040).
 - **Propuesta:** ✅ en **48 horas** después de la reunión (D-039).
 - **También incluyen (Landing y Catálogo):** ✅ dominio y hosting el primer año (D-045) y 2 rondas de ajustes (D-046).
@@ -156,7 +156,7 @@ La plantilla de la auditoría ya existe: es el diagnóstico orgánico que se hiz
 
 | Potenciador | Cómo se usa | Regla |
 |---|---|---|
-| Escasez | ✅ *"Tomamos 3 proyectos nuevos al mes"* | Es verdad (D-023) |
+| Escasez | ✅ *"Tomamos 4 proyectos nuevos al mes"* | Es verdad (D-172) |
 | Urgencia | ◻ *"Cupos de [mes]: quedan X"* | Solo si se actualiza de verdad cada mes |
 | Prueba | 4 casos reales; testimonios cuando lleguen | Nunca inventados |
 | Garantía | Velocidad 90+ (§6) | Junto al precio |

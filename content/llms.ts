@@ -31,7 +31,7 @@ export const llmsV2 = `# Arata San
 
 > Agencia en Bogotá, Colombia, que diseña páginas, catálogos y sistemas para negocios que quieren clientes por internet. Páginas listas en 5 días hábiles desde 400 USD y tiendas por WhatsApp desde 800 USD, diseñadas primero para el celular y con garantía de velocidad: 90 o más en la medición de Google (PageSpeed), o se siguen ajustando gratis.
 
-El objetivo del sitio es agendar una reunión de 30 minutos, sin costo, en la que el negocio sale con el paquete y el precio para su caso. En 48 horas llega la propuesta. Se puede pagar por partes: 50 % para arrancar y 50 % al entregar. Arata San toma 3 proyectos nuevos al mes.
+El objetivo del sitio es agendar una reunión de 30 minutos, sin costo, en la que el negocio sale con el paquete y el precio para su caso. En 48 horas llega la propuesta. Se puede pagar por partes: 50 % para arrancar y 50 % al entregar. Arata San toma 4 proyectos nuevos al mes, uno por semana.
 
 ## Servicios
 

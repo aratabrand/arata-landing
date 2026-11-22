@@ -66,14 +66,20 @@ async function procesar(negocioId: string, a: Reserva) {
   // Confirmación manual en Cal.com (D-134): llega la solicitud y queda "por aceptar"
   if (a.accion === "solicitada") {
     const r = await insertar(negocioId, a, true);
-    if (r.rowCount) await avisarNueva(negocioId, r.rows[0].id, a, true);
+    if (r.rowCount) {
+      await vincularProspecto(negocioId, r.rows[0].id, a);
+      await avisarNueva(negocioId, r.rows[0].id, a, true);
+    }
     return;
   }
 
   if (a.accion === "creada") {
     const r = await insertar(negocioId, a);
     // Si ya estaba (Cal.com reintentó), no se avisa otra vez
-    if (r.rowCount) return avisarNueva(negocioId, r.rows[0].id, a, false);
+    if (r.rowCount) {
+      await vincularProspecto(negocioId, r.rows[0].id, a);
+      return avisarNueva(negocioId, r.rows[0].id, a, false);
+    }
     // Ya estaba como solicitud: se aceptó en Cal.com. Ahora sí trae el enlace de la llamada.
     const acep = await db().query(
       `update interesados set por_aceptar = false, enlace_llamada = coalesce($3, enlace_llamada), reunion_inicio = $4, reunion_fin = coalesce($5, reunion_fin), actualizado = now()
@@ -179,4 +185,32 @@ async function avisarNueva(negocioId: string, id: string, a: Reserva, porAceptar
     importante: true,
     cuerpoAviso: [a.necesita, cuandoTexto(a.inicio), a.inversion].filter(Boolean).join(" · "),
   });
+}
+
+/**
+ * Agendó desde el mensaje de WhatsApp a un prospecto (D-174): la cita trae "Referencia: <código>".
+ * Se une el interesado con su prospecto y el prospecto pasa a "Agendó" (un «No contactar» no se toca).
+ * Si falla, no se pierde la reserva: el interesado ya quedó guardado.
+ */
+async function vincularProspecto(negocioId: string, interesadoId: string, a: Reserva) {
+  if (!a.referencia) return;
+  try {
+    const r = await db().query(
+      `update prospectos set interesado_id = $3, estado = case when estado = 'no_contactar' then estado else 'agendo' end, actualizado = now()
+        where negocio_id = $1 and replace(id::text, '-', '') like $2 || '%'
+          and (select count(*) from prospectos where negocio_id = $1 and replace(id::text, '-', '') like $2 || '%') = 1
+        returning id, nombre`,
+      [negocioId, a.referencia, interesadoId]
+    );
+    if (r.rowCount)
+      await registrarSistema(negocioId, "Cal.com", {
+        accion: "editar",
+        entidad: "prospecto",
+        entidadId: r.rows[0].id,
+        titulo: `${r.rows[0].nombre} agendó desde el mensaje de WhatsApp`,
+        cambios: [{ campo: "Estado", antes: "", despues: "Agendó" }],
+      });
+  } catch (e) {
+    console.error("[cal] no se pudo unir con el prospecto:", e instanceof Error ? e.message : e);
+  }
 }

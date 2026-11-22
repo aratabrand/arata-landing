@@ -6,24 +6,30 @@ Contexto maestro del proyecto para Claude Code. Lee este archivo antes de trabaj
 
 ## 1. Qué es Arata San
 
-Agencia digital en Bogotá, Colombia (`@arata.san.web`). Construimos **ecosistemas de venta** para comerciantes y pymes colombianas: página + agente de WhatsApp con IA + automatización del negocio.
+Agencia digital en Bogotá, Colombia (`@arata.san.web`, sitio `aratasan.com`). Diseñamos **páginas, catálogos y sistemas** para negocios que quieren clientes por internet: hechos primero para el celular, rápidos y fáciles de encontrar en Google y en la IA. Objetivo del sitio: **agendar una reunión** (`/agendar`, Cal.com).
 
-El producto core se vende como paquete:
-- **Landing / sitio** (captación)
-- **Agente de WhatsApp con IA** (atención y venta)
-- **Automatización / sistematización** (operación)
+**Ya no se vende el paquete "página + agente de WhatsApp con IA + automatización"** (v1). El chatbot con IA y la automatización dejaron de ser servicios públicos; Sara ya no se usa (D-169). La oferta vigente sale de `docs/blueprint/00-plan-maestro.md` §2 y `content/servicios.ts`:
 
-Modelo de cobro: **montaje (pago único) + mensualidad (recurrente)**.
+| Servicio | Paquete | Precio | Entrega |
+|---|---|---|---|
+| Páginas que venden | **Página Lista en 5 Días** (5 secciones, dominio y hosting el primer año, 2 rondas de ajustes, capacitación) | Desde 400 USD | 5 días hábiles |
+| Catálogos y sistemas a medida | **Tienda por WhatsApp en 5 Días** (catálogo con carrito, pedido ordenado al WhatsApp, panel, inventario) | Desde 800 USD | 5 días hábiles |
+| Catálogos y sistemas a medida | **Tu Negocio en Orden** (reservas, menú digital, registro de clientes/CRM) | Se cotiza | Según el sistema |
+
+- **Garantía de velocidad:** 90 o más en PageSpeed móvil o se sigue ajustando gratis.
+- **Pago:** 50 % para arrancar y 50 % al entregar. **Mantenimiento opcional:** 15 % del valor del proyecto al mes (D-022). **Cupos:** 4 proyectos nuevos al mes, uno por semana (D-172).
+- **Adicional:** panel para editar la página y ver métricas (se cotiza aparte, D-034).
+- Portafolio real: Danrodedm, Boost Your Menu, Arata Print y Caravana (`docs/portafolio.md`).
 
 ### Equipo
 
 | Persona | Rol |
 |---|---|
-| Sergio | Estrategia digital, landing pages, Meta Ads, UX, contenido, diseño de producto (Figma). Aprueba copy y decisiones de marca. |
+| Sergio | Estrategia digital, landing pages, Meta Ads, UX, contenido, diseño de producto (Figma) y **programación** (sitio, panel y builds en Claude Code, desde nov 2026). Aprueba copy y decisiones de marca. |
 | Andrés | Líder comercial, relación con clientes, sourcing de producto. |
-| Santiago | Líder técnico: flujos n8n, arquitectura de agentes IA, builds en Claude Code. |
+| Santiago | Automatización: flujos n8n y conexiones entre herramientas. |
 
-Flujo típico: Sergio define a nivel de sistema/diseño (tokens Figma, marca) → Santiago implementa.
+Flujo típico: Sergio define el sistema/diseño (tokens Figma, marca) y lo construye con Claude Code; Santiago automatiza (n8n).
 
 ---
 
@@ -75,16 +81,20 @@ Principios de copy:
 
 ## 4. Stack técnico
 
+Se suman herramientas; no se deja ninguna. Cada proyecto usa la que mejor le sirve.
+
 | Área | Herramienta |
 |---|---|
+| Páginas web de clientes (Página Lista en 5 Días) | **Astro** (D-171) |
 | Sitios multi-cliente | WordPress + Elementor |
 | Proyectos individuales | Framer (incluye hosting/dominio) |
+| Sitio y panel de Arata San | Next.js + TypeScript + Tailwind, en Vercel |
 | E-commerce | Shopify Basic + Wompi |
-| Automatización | n8n |
+| Base de datos | **Supabase** (clientes) · **Neon** + Better Auth (solo el panel de Arata, D-108) |
+| Agenda | Cal.com (webhook firmado al panel, D-133) |
+| Automatización | n8n (Santiago) |
 | IA | OpenAI |
-| Base de datos | Supabase |
-| Ads & tracking | Meta Ads + Meta Pixel (instalado con plugin WPCode en el header de WordPress) |
-| Logística dropshipping | Dropi |
+| Ads & tracking | Meta Ads + Meta Pixel (en WordPress, con el plugin WPCode en el header); GA4 + Search Console con permiso de cookies (D-130) |
 
 ---
 
@@ -114,18 +124,15 @@ Series ya construidas: "7 Cifras de IA para tu negocio" y "Plantilla vs Profesio
 
 ---
 
-## 6. Agente de WhatsApp "Sara"
+## 6. Agente de WhatsApp "Sara" (ya no se usa)
 
-Arquitectura:
-- Base en **n8n + OpenAI (GPT-4o-mini)**.
-- Integrado con **Meta WhatsApp Business Cloud API**.
-- Memoria de conversación vía **Google Sheets / Supabase**.
-- **Transcripción de audio** con Whisper.
-- **Envío nativo de fotos** vía Meta media upload API.
+**Sara se dejó de usar (D-169, nov 2026).** No contar con ella en ningún flujo nuevo: el WhatsApp de Arata lo contesta una persona. Lo que hagan otros documentos con Sara (panel, plan maestro) es historia.
 
 ---
 
 ## 7. Apps en desarrollo (MVPs)
+
+> **Por confirmar:** Mesa y Dental no aparecen en el blueprint v2. Hoy reservas, menú digital y CRM se venden dentro de *Tu Negocio en Orden*.
 
 | App | Descripción | Estado |
 |---|---|---|
@@ -147,7 +154,9 @@ Progresión: **sistema Figma → build Claude Code**.
 
 ---
 
-## 9. Landing page — sistema de diseño (MVP en Next.js)
+## 9. Landing page — sistema de diseño (MVP en Next.js) · v1, reemplazada
+
+> **Historia (v1).** La alternancia blanco/oscuro, "sin precios" y el CTA único a WhatsApp ya no aplican: manda la §11 (v2) y `docs/sistema-de-diseno.md`.
 
 Landing propia de la agencia (le vende a comerciantes/pymes de Colombia). MVP en **Next.js 14 + TypeScript + Tailwind**; más adelante se reconstruye en Framer.
 
@@ -251,6 +260,7 @@ Panel **primero para Arata San** y después **solo para clientes de página web 
 - **Mi sitio publica (D-117):** Guardar = borrador (`config_sitio.datos`); Publicar = `config_sitio.publicado` + Deploy Hook (`SITIO_DEPLOY_HOOK`, solo en el panel). El sitio lee `panel.aratasan.com/api/sitio` **al construirse** (`lib/sitio-textos.ts`) y sigue estático; si el panel no responde, la construcción falla (o `SITIO_SIN_PANEL=1`). En el panel de la agencia no va "Escribirle a Arata San".
 - **Historial y avisos (D-119):** toda acción del servidor llama `registrar()` (`lib/panel/historial.ts`): quién, qué, cuándo, antes → después; `importante: true` además manda aviso al celular (`lib/panel/push.ts`, Web Push con VAPID). Borrar proyectos y clientes: solo `dueno` (proyecto: alerta + escribir el nombre). Notificaciones en `/panel/notificaciones` (alertas de entrega `lib/panel/alertas.ts` + historial). Aviso diario 8 a. m.: `app/api/avisos/diario` con `CRON_SECRET` (`vercel.json`). Clientes: nombre + celular, país y ciudad desde tablas (`paises`, `ciudades`; ciudad solo Colombia). Formularios con máscaras (`lib/panel/mascaras.ts`, `components/panel/campos.tsx`) y `*` / "Opcional". Pruebas: `scripts/prueba-alertas.ts`, `scripts/prueba-mascaras.ts`.
 - **Interesados desde Cal.com (D-133):** quien agenda en `/agendar` llega por webhook firmado (`app/api/cal/webhook`, `CAL_WEBHOOK_SECRET` solo en el panel, `lib/panel/cal.ts`) a la tabla `interesados`, al historial como "Cal.com" y como aviso al celular de todos (`registrarSistema`). Clientes → pestaña **Interesados**: entrar a la llamada, "Confirmar y pasar a cliente" (abre el formulario lleno; `confirmarInteresado`) o "No avanzó". Con confirmación manual en Cal.com (D-134), la solicitud queda **Por aceptar en Cal.com** (`por_aceptar`) hasta aceptarla o rechazarla allá. **En espera (D-144):** «Poner en espera» con nota + plazo (1 día a 1 semana, `PLAZOS`), recordatorio al celular un día antes y el día del plazo (en `app/api/avisos/diario`, tabla `avisos_interesados`), notas en `interesado_notas` y botón «Escribirle por WhatsApp» con el mensaje de `mensajeSeguimiento()`. Confirman Sergio y Andrés; borra solo Sergio. Código del navegador importa de `lib/panel/clientes/interesados.ts`, nunca de `lib/panel/cal.ts` (usa `node:crypto`). Prueba: `npx -y tsx scripts/prueba-cal.ts`. Guía en `docs/panel-cliente/05-acceso-y-seguridad.md` §3e.
+- **Prospectos (D-173):** pestaña de Clientes (orden **Prospectos · Interesados · Clientes**) con los negocios que encontró **Sellbird** (Google Maps vía Scavio). Tabla `prospectos` (migración `db/panel/016_prospectos.sql`), clasificación pura en `lib/panel/clientes/prospectos.ts` (rubro, servicio sugerido, página, titular **empresa / persona natural / por verificar**, prioridad por puntos: sin página propia +3, reseñas +1/+2, calificación ≥ 4,3 +1, empresa con NIT +1; alta ≥ 5, media ≥ 3). Perfil de cada negocio con el porqué de su prioridad y enlace al RUES; Sergio y Andrés cambian estado, titular y notas (`guardarProspecto`, recalcula la prioridad), solo Sergio borra. **«No contactar» es para siempre** (Ley 1581): solo Sergio lo quita. Importar: `npx -y tsx scripts/panel-importar-prospectos.ts archivo.csv` (o `--sql`); reimportar no pisa estado, notas ni titular editado. Prueba: `npx -y tsx scripts/prueba-prospectos.ts`. Solo datos que el negocio publicó. **Botón «Escribirle por WhatsApp» (D-174):** mensaje **versión B (usted)** de `mensajeProspecto()`, firmado por quien está en sesión, con saludo según la hora de Bogotá, de dónde salió el número y «responda NO»; solo a celulares (`whatsappDe`), nunca a «No contactar» ni «No le interesa». Al tocarlo pasa a «Contactado» (`marcarContactado`). El enlace `aratasan.com/agendar?tipo=…&p=<código de 10>` hace que `BookingFlow` agregue `Referencia:` a las notas de Cal.com y el webhook une el interesado con su prospecto, que pasa solo a «Agendó» (`vincularProspecto`). Si ya tiene página, el mensaje ofrece la auditoría gratis.
 - **Reglas de producción (D-116):** `BETTER_AUTH_SECRET` igual donde se use la misma base (cifra el doble factor); fechas siempre en Bogotá con `lib/panel/fecha.ts` (la base está en `America/Bogota`, el servidor en UTC); el panel no carga Google Analytics.
 - Datos: n8n (GA4, Instagram, ventas) llena métricas. Panel siempre `noindex` y bloqueado en `robots.txt`.
 - Palabras del panel: "clientes que compran" (no "conversión"), "visitas", "visualizaciones", "portada", "botón" (glosario en `docs/panel-cliente/03-sistema-de-diseno.md` §7).

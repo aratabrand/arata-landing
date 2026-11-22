@@ -97,7 +97,7 @@ export const paginasWeb = {
   },
   cta: {
     titulo: "Tu página puede estar publicada en 5 días hábiles.",
-    texto: "Este mes tomamos 3 proyectos nuevos. Agenda y separa tu cupo.",
+    texto: "Este mes tomamos 4 proyectos nuevos. Agenda y separa tu cupo.",
     boton: "Agendar reunión",
     nota: "30 minutos, sin costo",
     href: "/agendar?tipo=pagina",
@@ -197,7 +197,7 @@ export const catalogos = {
   },
   cta: {
     titulo: "Ordena tu negocio este mes.",
-    texto: "Tomamos 3 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.",
+    texto: "Tomamos 4 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.",
     boton: "Agendar reunión",
     nota: "30 minutos, sin costo",
     href: "/agendar?tipo=catalogo",
