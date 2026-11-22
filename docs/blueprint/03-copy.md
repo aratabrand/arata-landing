@@ -171,7 +171,7 @@
 >
 > **[Agenda tu reunión]**
 
-**Tarjeta nueva — Sitio Corporativo con Panel** (D-169, va de segunda, entre la página y la tienda)
+**Tarjeta nueva — Sitio Corporativo con Panel** (D-169, va de segunda, entre la página y la tienda; "Tu Negocio en Orden" pasa a banner debajo de las 3 tarjetas)
 - Desde 750 USD
 - Inicio y Sobre nosotros
 - Una página por cada servicio

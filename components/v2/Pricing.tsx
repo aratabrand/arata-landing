@@ -51,6 +51,36 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
   );
 }
 
+/** Paquete cotizado como banner horizontal (D-169): nombre y precio, lo que incluye y el botón. */
+export function PricingBanner({ paquete }: { paquete: Paquete }) {
+  return (
+    <article className="v2-card flex flex-col gap-6 rounded-card p-6 sm:p-7 lg:flex-row lg:items-center lg:gap-10">
+      <div className="flex items-center gap-4 lg:w-[28%] lg:shrink-0">
+        {paquete.icono && <IconoMarca icono={paquete.icono} className="h-10 w-10 shrink-0" />}
+        <div>
+          <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
+          <p className="mt-1 font-display text-2xl font-extrabold leading-tight tracking-display text-white">{paquete.precio}</p>
+        </div>
+      </div>
+      {/* Lo primero que incluye va como frase; el resto, en una fila de checks */}
+      <div className="flex-1 border-t border-white/8 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+        <p className="text-fog">{paquete.incluye[0]}.</p>
+        <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+          {paquete.incluye.slice(1).map((item) => (
+            <li key={item} className="flex items-center gap-2 text-sm text-fog">
+              <Check aria-hidden className="h-4 w-4 shrink-0 text-fog" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Button href={AGENDAR} variant="secondary" className="w-full shrink-0 lg:w-auto">
+        {paquete.boton}
+      </Button>
+    </article>
+  );
+}
+
 /* Íconos SVG animados de las tarjetas de garantía (se dibujan con .is-visible de <Reveal>) */
 
 function GaugeIcon() {
@@ -197,13 +227,24 @@ export default function PricingSection() {
       <GridBackground orb="50% 38%" />
       <Container>
         <SectionHeader id="precios-titulo" title={precios.titulo} />
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 sm:items-stretch xl:grid-cols-4">
-          {precios.paquetes.map((p, i) => (
-            <Reveal key={p.nombre} delay={i * 80} className="h-full">
-              <PricingCard paquete={p} />
+        <div className="mt-12 grid gap-5 lg:grid-cols-3 lg:items-stretch">
+          {precios.paquetes
+            .filter((p) => !p.banner)
+            .map((p, i) => (
+              <Reveal key={p.nombre} delay={i * 80} className="h-full">
+                <PricingCard paquete={p} />
+              </Reveal>
+            ))}
+        </div>
+
+        {/* D-169: el paquete cotizado va como banner del ancho de las 3 columnas */}
+        {precios.paquetes
+          .filter((p) => p.banner)
+          .map((p) => (
+            <Reveal key={p.nombre} className="mt-5">
+              <PricingBanner paquete={p} />
             </Reveal>
           ))}
-        </div>
 
         <Assurances className="mt-8" />
 
