@@ -26,7 +26,12 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
           Recomendado
         </span>
       )}
-      {paquete.icono && <IconoMarca icono={paquete.icono} className="mb-4 h-9 w-9" />}
+      {/* D-176: el ícono va dentro de un círculo lima para que se vea más */}
+      {paquete.icono && (
+        <span className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-lime shadow-[0_0_24px_-6px_rgba(182,255,0,0.55)]">
+          <IconoMarca icono={paquete.icono} className="h-8 w-8" />
+        </span>
+      )}
       <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
       {/* D-162: el precio en lima solo si es un número ("Desde 400 USD"); "Lo cotizamos contigo" va en blanco */}
       <p className={`mt-5 font-display text-[2.4rem] font-extrabold leading-none tracking-display ${/\d/.test(paquete.precio) ? "text-lime" : "text-white"}`}>
@@ -57,7 +62,12 @@ export function PricingBanner({ paquete }: { paquete: Paquete }) {
   return (
     <article className="v2-destacada flex flex-col gap-6 rounded-card p-6 sm:p-7 lg:flex-row lg:items-center lg:gap-10">
       <div className="flex items-center gap-4 lg:w-[28%] lg:shrink-0">
-        {paquete.icono && <IconoMarca icono={paquete.icono} className="h-10 w-10 shrink-0" />}
+        {/* Dentro del banner lima, el círculo va en negro para que se distinga */}
+        {paquete.icono && (
+          <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#03010b]">
+            <IconoMarca icono={paquete.icono} className="h-8 w-8" />
+          </span>
+        )}
         <div>
           <h3 className="font-display text-xl font-bold tracking-heading text-white">{paquete.nombre}</h3>
           <p className="mt-1 font-display text-2xl font-extrabold leading-tight tracking-display text-white">{paquete.precio}</p>

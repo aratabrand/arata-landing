@@ -941,3 +941,31 @@ Solo aparece cuando hay ID de Clarity (`lib/clarity.mjs`). Textos en `content/co
 - [x] Auditoría con mínimo 48 h de anticipación (D-054)
 - [ ] ◻ RUT y dirección del responsable (D-055)
 - [ ] ◻ Límite de productos del catálogo de 800 USD (Sergio lo pasa después)
+
+
+---
+
+## Sitios y páginas — bloque del Sitio Corporativo con Panel (D-176)
+
+La página `/paginas-web` se llama ahora **"Sitios y páginas"** (menú, footer, tarjeta de servicios del Inicio, título de la página, migas). Después del precio de la página de 5 secciones va el bloque del sitio corporativo, con los mismos componentes:
+
+**Intro (llamado):** *Sitio Corporativo con Panel · desde 700 USD* — **¿Tu empresa necesita más que una página?** Un sitio con inicio, sobre nosotros, una página por cada servicio, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.
+
+**El sitio corporativo es para ti si…**
+- Tienes varios servicios y cada uno necesita su propia página.
+- Quieres contar quiénes son, su historia y su equipo.
+- Quieres publicar noticias o artículos para que te encuentren en Google.
+- Quieres cambiar textos y publicar en el blog sin depender de nadie.
+
+**Todo lo que trae tu sitio corporativo** (bento con ilustraciones; nuevas: mapa del sitio, blog y panel)
+- Inicio, Sobre nosotros y tus servicios — Una página por cada servicio, para explicar bien cada uno y que Google los encuentre.
+- Hecho primero para el celular — Porque es donde te van a ver tus clientes.
+- Velocidad garantizada — 90 o más en la medición de Google. Si no lo logra, lo seguimos ajustando gratis.
+- Blog básico — Para publicar noticias y artículos de tu empresa.
+- Panel básico — Cambias textos y subes entradas al blog tú mismo.
+- Listo para Google y la IA — Configuración para Google, tu perfil de Google Business y para que la IA encuentre tu sitio.
+- Dominio y hosting — El primer año va por nuestra cuenta.
+- 2 rondas de ajustes — Para que quede como lo quieres.
+- Capacitación — Te enseñamos a manejar el sitio y el panel.
+
+**Precio:** Sitio Corporativo con Panel · **Desde 700 USD** · paga por partes · [Agenda tu reunión gratis]

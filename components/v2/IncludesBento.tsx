@@ -303,7 +303,85 @@ function Entrega() {
   );
 }
 
+/* Sitio corporativo (D-176) · Mapa del sitio: inicio arriba y una página por cada servicio */
+function Paginas() {
+  const hijos = [
+    { x: 14, t: "Nosotros" },
+    { x: 90, t: "Servicio 1" },
+    { x: 166, t: "Servicio 2" },
+    { x: 242, t: "Blog" },
+  ];
+  return (
+    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
+      <g className="ib-rise" style={v(0)}>
+        <rect x="112" y="8" width="96" height="30" rx="8" fill="rgba(182,255,0,0.12)" stroke={L} strokeOpacity="0.7" />
+        <text x="160" y="27" textAnchor="middle" fontSize="11" fontWeight="800" fill={L} fontFamily="var(--font-display)">
+          Inicio
+        </text>
+      </g>
+      <path d="M160 38 V56 M52 56 H280 M52 56 V70 M128 56 V70 M204 56 V70 M280 56 V70" fill="none" stroke={LINE} strokeDasharray="2 3" />
+      {hijos.map((h, i) => (
+        <g key={h.t} className="ib-rise" style={v(i + 1)}>
+          <rect x={h.x} y="70" width="76" height="50" rx="8" fill={FILL} stroke={LINE} />
+          <rect x={h.x + 9} y="80" width="34" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+          <rect x={h.x + 9} y="90" width="56" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
+          <rect x={h.x + 9} y="98" width="44" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
+          <text x={h.x + 38} y="116" textAnchor="middle" fontSize="8" fill={S} fontFamily="var(--font-sans)">
+            {h.t}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* Sitio corporativo (D-176) · Blog básico: entradas que se van publicando */
+function Blog() {
+  return (
+    <svg viewBox="0 0 220 120" className="h-full w-full" aria-hidden>
+      {[0, 1, 2].map((i) => (
+        <g key={i} className="ib-rise" style={v(i)}>
+          <rect x={10 + i * 70} y="14" width="62" height="92" rx="8" fill={FILL} stroke={i === 0 ? L : LINE} strokeOpacity={i === 0 ? 0.6 : 1} />
+          <rect x={16 + i * 70} y="20" width="50" height="30" rx="5" fill={i === 0 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
+          <rect x={16 + i * 70} y="58" width="40" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+          <rect x={16 + i * 70} y="68" width="48" height="3.5" rx="1.75" fill="rgba(255,255,255,0.2)" />
+          <rect x={16 + i * 70} y="76" width="36" height="3.5" rx="1.75" fill="rgba(255,255,255,0.2)" />
+          <rect x={16 + i * 70} y="90" width="22" height="8" rx="4" fill={i === 0 ? L : "rgba(255,255,255,0.12)"} />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* Sitio corporativo (D-176) · Panel básico: cambias un texto y publicas */
+function Panel() {
+  return (
+    <svg viewBox="0 0 220 120" className="h-full w-full" aria-hidden>
+      <rect x="10" y="8" width="200" height="104" rx="10" fill="rgba(255,255,255,0.02)" stroke={LINE} />
+      <rect x="10" y="8" width="44" height="104" rx="10" fill="rgba(255,255,255,0.04)" />
+      {[24, 38, 52].map((y, i) => (
+        <rect key={y} x="20" y={y} width="24" height="5" rx="2.5" fill={i === 0 ? L : "rgba(255,255,255,0.2)"} />
+      ))}
+      <text x="66" y="28" fontSize="8" fill={S} fontFamily="var(--font-sans)">Título de la portada</text>
+      <rect x="64" y="34" width="134" height="20" rx="6" fill="#0B0B0D" stroke="rgba(255,255,255,0.16)" />
+      <rect x="72" y="41" width="70" height="6" rx="3" fill="rgba(255,255,255,0.55)" className="ib-type" />
+      <rect x="144" y="39" width="1.6" height="10" fill="#FFFFFF" className="ib-caret" />
+      <text x="66" y="70" fontSize="8" fill={S} fontFamily="var(--font-sans)">Nueva entrada del blog</text>
+      <rect x="64" y="76" width="134" height="6" rx="3" fill="rgba(255,255,255,0.12)" />
+      <g className="ib-pop" style={v(3)}>
+        <rect x="140" y="90" width="58" height="16" rx="8" fill={L} />
+        <text x="169" y="101" textAnchor="middle" fontSize="8" fontWeight="800" fill="#03010B" fontFamily="var(--font-display)">
+          Publicar
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 const ILUSTRACION: Record<string, () => ReactNode> = {
+  paginas: Paginas,
+  blog: Blog,
+  panel: Panel,
   secciones: Secciones,
   celular: Celular,
   velocidad: Velocidad,
@@ -317,6 +395,9 @@ const ILUSTRACION: Record<string, () => ReactNode> = {
 // Posición en la grilla de 4 columnas × 3 filas (escritorio). En celular, una columna.
 const CELDA: Record<string, { clase: string; alto: string }> = {
   secciones: { clase: "lg:col-span-2", alto: "h-36" },
+  paginas: { clase: "lg:col-span-2", alto: "h-36" },
+  blog: { clase: "", alto: "h-28" },
+  panel: { clase: "", alto: "h-28" },
   celular: { clase: "lg:row-span-2", alto: "h-56 lg:h-72" },
   velocidad: { clase: "lg:row-span-2", alto: "h-44 lg:h-60" },
   google: { clase: "", alto: "h-28" },
