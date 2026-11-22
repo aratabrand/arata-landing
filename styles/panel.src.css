@@ -79,8 +79,9 @@
   --pn-destacada: radial-gradient(70% 60% at 92% 100%, rgb(255 255 255 / 0.55), transparent 65%), radial-gradient(60% 70% at 0% 0%, rgb(255 255 255 / 0.35), transparent 60%), linear-gradient(135deg, #e3ff8a 0%, #c8f53a 48%, #a8e33a 100%);
   --pn-destacada-borde: rgb(120 170 0 / 0.35);
   /* Píldoras: gris cálido sólido, sin borde marcado (como los chips de la referencia) */
-  --pn-pildora: #efefe9;
-  --pn-pildora-borde: rgb(3 1 11 / 0.12);
+  /* D-165: píldoras BLANCAS con borde en claro (como los chips de la referencia), no grises */
+  --pn-pildora: #ffffff;
+  --pn-pildora-borde: rgb(3 1 11 / 0.13);
   --pn-pildora-sombra: none;
   --pn-pildora-texto: 82 80 92;
   /* D-159: la activa actúa como botón → MORADO sólido con texto blanco (4,6:1) */
@@ -169,6 +170,28 @@
   background: linear-gradient(180deg, #ccff3d 0%, #b6ff00 100%);
   border: 1px solid #b6ff00;
 }
+
+/* Botón secundario (D-165): superficie con borde fino, igual en los dos modos (blanco en claro,
+   gris oscuro en oscuro). Reemplaza el gris "surface-2" que se veía apagado en claro */
+.pn-secundario {
+  background: rgb(var(--pn-s3));
+  border: 1px solid var(--pn-tarjeta-borde);
+  color: rgb(var(--pn-fg));
+  box-shadow: var(--pn-pildora-sombra);
+}
+.pn-secundario:hover { border-color: rgb(var(--pn-fg) / 0.28); }
+
+/* Recuadro interno (D-165): formularios dentro de una tarjeta (poner en espera, cierre del proyecto,
+   quién trabajó) y filas de avisos. Superficie 2 suave con borde fino, igual en los dos modos */
+.pn-interno { background: rgb(var(--pn-s2) / 0.6); border: 1px solid var(--pn-tarjeta-borde); }
+
+/* Cita / seguimiento (D-165, como "Where Kept heard it" de la referencia): tinte lima suave con borde
+   lima, igual en los dos modos; la nota va en cursiva con serifa */
+.pn-cita {
+  background: rgb(182 255 0 / 0.09);
+  border: 1px solid rgb(182 255 0 / 0.38);
+}
+[data-tema="claro"] .pn-cita { background: rgb(182 255 0 / 0.16); border-color: rgb(120 170 0 / 0.35); }
 
 /* Avisos (D-163): negros con letras blancas en los dos modos ("Todavía no hay datos", "panel de
    ejemplo", "Puedes ver todo…"). Los enlaces de adentro también en blanco, subrayados */

@@ -168,7 +168,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
           <button
             type="button"
             onClick={() => navigator.clipboard?.writeText(paso.codigos.join("\n")).catch(() => {})}
-            className="h-11 w-full rounded-full border border-white/10 bg-surface-2 text-sm font-semibold text-white hover:bg-surface-3"
+            className="h-11 w-full rounded-full pn-secundario text-sm font-semibold text-white hover:bg-surface-3"
           >
             Copiar códigos
           </button>

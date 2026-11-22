@@ -120,7 +120,7 @@ export function SelectorLugar({
         </label>
       </div>
       {agregando && (
-        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+        <div className="space-y-2 rounded-frame pn-interno p-3">
           <p className="text-xs font-semibold text-fog">Ciudad nueva de Colombia (queda en la lista para todos)</p>
           <div className="grid grid-cols-2 gap-2">
             <input placeholder="Ciudad *" aria-label="Nombre de la ciudad" maxLength={60} value={nueva.nombre} onChange={(e) => setNueva({ ...nueva, nombre: e.target.value.replace(/[^\p{L} .'-]/gu, "") })} className="pn-input" />

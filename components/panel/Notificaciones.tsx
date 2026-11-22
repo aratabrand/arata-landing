@@ -62,10 +62,10 @@ export default function Notificaciones({
                   href={`/panel/proyectos/${a.id}`}
                   className={cn(
                     "flex items-center gap-3 rounded-frame border p-3 hover:border-white/20",
-                    a.tipo === "tarde" ? "border-alerta/40 bg-alerta/5" : a.tipo === "hoy" ? "border-lime/40 bg-lime/5" : "border-white/8 bg-surface-2/50"
+                    a.tipo === "tarde" ? "border-alerta/40 bg-alerta/5" : a.tipo === "hoy" ? "border-ambar/40 bg-ambar/5" : "pn-interno"
                   )}
                 >
-                  <AlarmClock aria-hidden className={cn("h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-dato" : "text-fog")} />
+                  <AlarmClock aria-hidden className={cn("h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-ambar" : "text-fog")} />
                   <span className="min-w-0 flex-1 text-sm text-white">{a.texto}</span>
                   <Pill tono={a.tipo === "tarde" ? "alerta" : a.tipo === "hoy" ? "ambar" : "neutro"}>{a.tipo === "tarde" ? "Va tarde" : a.tipo === "hoy" ? "Hoy" : "Por vencer"}</Pill>
                 </Link>

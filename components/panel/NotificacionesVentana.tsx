@@ -125,7 +125,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                               href={`/panel/proyectos/${a.id}`}
                               className={cn(
                                 "flex items-start gap-2.5 rounded-frame border px-3 py-2.5 text-sm text-white hover:border-white/20",
-                                a.tipo === "tarde" ? "border-alerta/35 bg-alerta/[0.06]" : a.tipo === "hoy" ? "border-lime/35 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]"
+                                a.tipo === "tarde" ? "border-alerta/35 bg-alerta/[0.06]" : a.tipo === "hoy" ? "border-ambar/40 bg-ambar/[0.06]" : "pn-interno"
                               )}
                             >
                               <AlarmClock aria-hidden className={cn("mt-0.5 h-4 w-4 shrink-0", a.tipo === "tarde" ? "text-alerta" : a.tipo === "hoy" ? "text-dato" : "text-fog")} />

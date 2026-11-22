@@ -293,7 +293,7 @@ function QuienTrabajo({
   };
 
   return (
-    <section className="space-y-3 rounded-frame border border-white/15 bg-white/[0.03] p-3 sm:p-4">
+    <section className="space-y-3 rounded-frame pn-interno p-3 sm:p-4">
       <div>
         <h3 className="text-sm font-semibold text-white">¿Quién trabajó?</h3>
         <p className="text-xs text-fog-dim">Persona, área y días (1 día = 8 h, a {pesos(r.tarifaDia)}). Se pagan antes de repartir por partes iguales.</p>
@@ -756,7 +756,7 @@ function SelectorCliente({ datos, valor, onCambio }: { datos: DatosFinanzas; val
         </select>
       </Campo>
       {creando && (
-        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+        <div className="space-y-2 rounded-frame pn-interno p-3">
           <p className="text-xs font-semibold text-fog">Cliente nuevo (queda guardado en Clientes)</p>
           <div className="grid grid-cols-2 gap-2">
             <Campo etiqueta="Nombre de la persona *">
@@ -826,7 +826,7 @@ function SelectorServicio({ datos, valor, onCambio }: { datos: DatosFinanzas; va
         </select>
       </Campo>
       {creando && (
-        <div className="space-y-2 rounded-frame border border-white/15 bg-white/[0.03] p-3">
+        <div className="space-y-2 rounded-frame pn-interno p-3">
           <p className="text-xs font-semibold text-fog">Servicio nuevo (queda en la lista para todos los proyectos)</p>
           <div className="grid grid-cols-[1.4fr_1fr] gap-2">
             <Campo etiqueta="Nombre del servicio *">

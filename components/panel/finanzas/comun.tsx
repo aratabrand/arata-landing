@@ -153,7 +153,7 @@ export function BotonSecundario({ children, className, ...p }: React.ButtonHTMLA
   return (
     <button
       {...p}
-      className={cn("inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-white/10 bg-surface-2 px-3.5 text-sm font-semibold text-white hover:border-white/20 disabled:opacity-40", className)}
+      className={cn("inline-flex h-10 items-center justify-center gap-1.5 rounded-full pn-secundario px-3.5 text-sm font-semibold text-white hover:border-white/20 disabled:opacity-40", className)}
     >
       {children}
     </button>

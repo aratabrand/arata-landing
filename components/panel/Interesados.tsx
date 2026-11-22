@@ -82,7 +82,7 @@ export default function Interesados({
 
   if (interesados.length === 0) {
     return (
-      <div className="rounded-card border border-white/[0.08] bg-white/[0.03] px-5 py-12 text-center">
+      <div className="v2-card px-5 py-12 text-center">
         <CalendarClock aria-hidden className="mx-auto h-8 w-8 text-fog" />
         <p className="mt-3 font-display text-lg font-bold text-white">Todavía nadie ha agendado</p>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-fog">
@@ -133,7 +133,7 @@ export default function Interesados({
       </Grupo>
 
       {cerradas.length > 0 && (
-        <details className="group rounded-card border border-white/[0.06] bg-white/[0.02] px-4 py-3 sm:px-5">
+        <details className="v2-card group px-4 py-3 sm:px-5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-fog hover:text-white">
             <span>
               Cerradas <span className="ml-1 font-normal text-fog-dim">({cerradas.length})</span>
@@ -160,9 +160,9 @@ function Grupo({ titulo, detalle, cantidad, alerta, children }: { titulo: string
       {/* Título de sección como en la referencia Kept (D-163): punto + título + número en píldora */}
       <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
         <h2 className="flex items-center gap-2.5 font-display text-lg font-bold tracking-heading text-white">
-          <span aria-hidden className={cn("h-2 w-2 rounded-full", alerta ? "bg-alerta" : "bg-dato")} />
+          <span aria-hidden className={cn("h-2 w-2 rounded-full", alerta ? "bg-ambar" : "bg-dato")} />
           {titulo}
-          <span className={cn("rounded-full border px-2 font-body text-xs font-semibold leading-5", alerta ? "border-alerta/35 bg-alerta/10 text-alerta" : "pn-pildora")}>{cantidad}</span>
+          <span className={cn("rounded-full border px-2 font-body text-xs font-semibold leading-5", alerta ? "border-ambar/40 bg-ambar/10 text-ambar" : "pn-pildora")}>{cantidad}</span>
         </h2>
         {detalle && <p className="text-sm text-fog">{detalle}</p>}
       </div>
@@ -171,20 +171,20 @@ function Grupo({ titulo, detalle, cantidad, alerta, children }: { titulo: string
   );
 }
 
-const pastilla = (i: Interesado, m: Momento, ahoraMs: number): { texto: string; tono: "lima" | "morado" | "neutro" | "alerta" } => {
+const pastilla = (i: Interesado, m: Momento, ahoraMs: number): { texto: string; tono: "lima" | "morado" | "neutro" | "alerta" | "ambar" } => {
   if (i.estado === "confirmada") return { texto: "Ya es cliente", tono: "lima" };
   if (i.estado === "cancelada") return { texto: "Canceló", tono: "alerta" };
   if (i.estado === "descartada") return { texto: "No avanzó", tono: "neutro" };
   if (i.estado === "rechazada") return { texto: "Rechazada en Cal.com", tono: "neutro" };
-  if (i.porAceptar) return { texto: "Por aceptar en Cal.com", tono: "alerta" };
+  if (i.porAceptar) return { texto: "Por aceptar en Cal.com", tono: "ambar" };
   if (i.estado === "espera" && i.esperaHasta) {
     const d = diasParaPlazo(i.esperaHasta, ahoraMs);
     if (d < 0) return { texto: `Se pasó el plazo hace ${-d} ${d === -1 ? "día" : "días"}`, tono: "alerta" };
-    if (d === 0) return { texto: "Hoy toca escribirle", tono: "alerta" };
-    if (d === 1) return { texto: "Mañana se cumple el plazo", tono: "morado" };
-    return { texto: `En espera hasta el ${fechaNota(i.esperaHasta)}`, tono: "morado" };
+    if (d === 0) return { texto: "Hoy toca escribirle", tono: "ambar" };
+    if (d === 1) return { texto: "Mañana se cumple el plazo", tono: "ambar" };
+    return { texto: `En espera hasta el ${fechaNota(i.esperaHasta)}`, tono: "ambar" };
   }
-  if (m === "pasada") return { texto: "Por confirmar", tono: "alerta" };
+  if (m === "pasada") return { texto: "Por confirmar", tono: "ambar" };
   if (m === "ahora") return { texto: "Es ahora", tono: "lima" };
   if (m === "pronto") return { texto: `Hoy · ${relativo(i.inicio, ahoraMs)}`, tono: "morado" };
   return { texto: relativo(i.inicio, ahoraMs), tono: "neutro" };
@@ -247,9 +247,10 @@ function Fila({
   const fechaPlazo = dias ? plazoDesde(Number(dias), ahoraMs) : null;
 
   return (
-    <li className={cn("rounded-card border p-4 sm:p-5", (m === "pasada" && pendiente) || toca ? "border-alerta/30 bg-alerta/[0.04]" : ahoraEs ? "border-lime/40 bg-lime/[0.05]" : "border-white/[0.08] bg-white/[0.03]")}>
+    // D-165: tarjeta lisa como las demás (blanca en claro, negra en oscuro); el estado va en el borde
+    <li className={cn("v2-card p-4 sm:p-5", dPlazo !== null && dPlazo < 0 ? "!border-alerta/45" : (m === "pasada" && pendiente) || toca ? "!border-ambar/50" : ahoraEs ? "!border-[#B6FF00]/60" : "")}>
       <div className="flex flex-wrap items-start gap-3">
-        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
+        <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-[#03010B] font-display text-sm font-bold text-[#B6FF00]">
           {inicial(i.nombre)}
         </span>
         <div className="min-w-0 flex-1 basis-56">
@@ -314,7 +315,7 @@ function Fila({
 
       {/* Seguimiento: notas de quien habló con la persona (la más reciente arriba) */}
       {i.notas.length > 0 && (
-        <div className="mt-4 rounded-frame border border-white/[0.07] bg-surface-2/50 p-3 sm:p-4">
+        <div className="pn-cita mt-4 rounded-frame p-3 sm:p-4">
           <p className="flex items-center gap-2 text-xs font-semibold text-fog">
             <NotebookPen aria-hidden className="h-3.5 w-3.5 text-fog" /> Seguimiento
             {enEspera && i.esperaHasta && <span className="font-normal text-fog-dim">· plazo: {fechaNota(i.esperaHasta)}</span>}
@@ -322,7 +323,7 @@ function Fila({
           <ul className="mt-2 space-y-2">
             {notas.map((n, k) => (
               <li key={k} className="text-sm">
-                <p className="text-white">{n.texto}</p>
+                <p className="font-acento text-[1.05rem] italic leading-snug text-white">“{n.texto}”</p>
                 <p className="text-xs text-fog-dim">
                   {n.quien} · {fechaNota(n.creado)}
                 </p>
@@ -347,7 +348,7 @@ function Fila({
       {/* Poner en espera o agregar una nota */}
       {formulario && (
         <form
-          className="mt-4 space-y-3 rounded-frame border border-white/15 bg-white/[0.03] p-3 sm:p-4"
+          className="mt-4 space-y-3 rounded-frame pn-interno p-3 sm:p-4"
           onSubmit={(e) => {
             e.preventDefault();
             guardar();
@@ -424,7 +425,7 @@ function Fila({
             rel="noopener noreferrer"
             className={cn(
               "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold sm:w-auto",
-              ahoraEs ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+              ahoraEs ? "pn-primario" : "pn-secundario text-white hover:border-white/20"
             )}
           >
             <Video aria-hidden className="h-4 w-4" /> {ahoraEs ? "Entrar ahora" : i.enlaceLlamada ? "Entrar a la llamada" : "Abrir la reserva en Cal"}
@@ -439,7 +440,7 @@ function Fila({
               disabled={acc.pendiente}
               className={cn(
                 "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold disabled:opacity-50 sm:w-auto",
-                m === "pasada" ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+                m === "pasada" ? "pn-primario" : "pn-secundario text-white hover:border-white/20"
               )}
             >
               <Check aria-hidden className="h-4 w-4" /> Confirmar y pasar a cliente
@@ -461,7 +462,7 @@ function Fila({
             rel="noopener noreferrer"
             className={cn(
               "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold sm:w-auto",
-              toca ? "pn-primario" : "border border-white/10 bg-surface-2 text-white hover:border-white/20"
+              toca ? "pn-primario" : "pn-secundario text-white hover:border-white/20"
             )}
           >
             <seguimiento.icono aria-hidden className="h-4 w-4" /> {seguimiento.texto}

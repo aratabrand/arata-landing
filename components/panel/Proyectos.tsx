@@ -383,7 +383,7 @@ function DetalleProyecto({ p, onChange, onDelete }: { p: Proyecto; onChange: (c:
         <form onSubmit={agregar} className="mt-2 flex gap-2">
           <label className="sr-only" htmlFor="nueva-tarea">Nueva tarea</label>
           <input id="nueva-tarea" value={nueva} onChange={(e) => setNueva(e.target.value)} placeholder="Agregar una tarea" maxLength={120} className="pn-input" />
-          <button type="submit" className="h-11 shrink-0 rounded-full border border-white/10 bg-surface-2 px-4 text-sm font-semibold text-white hover:border-white/20">
+          <button type="submit" className="h-11 shrink-0 rounded-full pn-secundario px-4 text-sm font-semibold text-white hover:border-white/20">
             Agregar
           </button>
         </form>
