@@ -215,6 +215,15 @@
 .pn-aviso { background: #03010b; color: rgb(255 255 255 / 0.82); border: 1px solid rgb(255 255 255 / 0.1); }
 .pn-aviso strong, .pn-aviso a, .pn-aviso .text-white { color: #fff; }
 .pn-aviso a { text-decoration-color: rgb(255 255 255 / 0.5); }
+/* D-168: en OSCURO los avisos van al revés: fondo blanco con letras negras (en claro siguen negros) */
+[data-tema="oscuro"] .pn-aviso { background: #ffffff; color: rgb(3 1 11 / 0.78); border-color: #ffffff; }
+[data-tema="oscuro"] .pn-aviso strong,
+[data-tema="oscuro"] .pn-aviso a,
+[data-tema="oscuro"] .pn-aviso .text-white,
+[data-tema="oscuro"] .pn-aviso svg { color: #03010b; }
+[data-tema="oscuro"] .pn-aviso .text-fog,
+[data-tema="oscuro"] .pn-aviso .text-fog-dim { color: rgb(3 1 11 / 0.7); }
+[data-tema="oscuro"] .pn-aviso a { text-decoration-color: rgb(3 1 11 / 0.45); }
 
 /* Cifras grandes y nombre del saludo (D-162): lima en oscuro, tinta en claro */
 .pn-cifra { color: rgb(var(--pn-cifra)); }
