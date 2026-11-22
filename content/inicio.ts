@@ -58,11 +58,11 @@ export const servicios = {
   titulo: "Dos formas de ayudarte",
   items: [
     {
-      titulo: "Páginas que venden",
+      titulo: "Sitios y páginas",
       texto:
-        "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar.",
-      etiqueta: "Página Lista en 5 Días · desde 400 USD",
-      boton: "Ver páginas",
+        "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar. O un sitio corporativo con blog y panel.",
+      etiqueta: "Página desde 400 USD · Sitio corporativo desde 700 USD",
+      boton: "Ver sitios y páginas",
       href: "/paginas-web",
     },
     {
@@ -92,10 +92,10 @@ export const servicios = {
     },
     paginas: {
       etiqueta: "Página Lista en 5 Días · desde 400 USD",
-      titulo: "Páginas que venden",
+      titulo: "Sitios y páginas",
       texto:
         "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar.",
-      boton: "Ver páginas",
+      boton: "Ver sitios y páginas",
       href: "/paginas-web",
       conexiones: ["Google", "Google Business", "IA", "WhatsApp"],
     },
@@ -299,7 +299,7 @@ export const footer = {
     {
       titulo: "Servicios",
       links: [
-        { label: "Páginas que venden", href: "/paginas-web" },
+        { label: "Sitios y páginas", href: "/paginas-web" },
         { label: "Catálogos y sistemas", href: "/catalogos-y-sistemas" },
         { label: "Precios", href: PRECIOS },
       ],
@@ -330,8 +330,8 @@ export const footer = {
 export const menu = {
   servicios: [
     {
-      titulo: "Páginas que venden",
-      texto: "Tu página lista en 5 días, desde 400 USD.",
+      titulo: "Sitios y páginas",
+      texto: "Página desde 400 USD y sitio corporativo desde 700 USD.",
       href: "/paginas-web",
     },
     {

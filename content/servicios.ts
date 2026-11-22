@@ -5,10 +5,10 @@ import { precios } from "./inicio";
 
 export type Incluye = { icono: string; titulo: string; texto: string };
 
-/* ── Páginas que venden — /paginas-web ─────────────────────────────────── */
+/* ── Sitios y páginas — /paginas-web (antes "Páginas que venden", D-176) ── */
 export const paginasWeb = {
   meta: {
-    title: "Páginas que venden · Lista en 5 días desde 400 USD · Arata San",
+    title: "Sitios y páginas · Página lista en 5 días desde 400 USD · Arata San",
     description:
       "Una página diseñada primero para el celular, rápida y lista para Google. Lista en 5 días hábiles, desde 400 USD, con garantía de velocidad.",
   },
@@ -95,6 +95,45 @@ export const paginasWeb = {
       { p: "¿Incluye dominio y hosting?", r: "Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento." },
       { p: "¿Cuántos cambios puedo pedir?", r: "Dos rondas de ajustes dentro de los 5 días." },
     ],
+  },
+  // D-176: sitio corporativo con panel, con los mismos componentes que la página de 5 secciones
+  corporativo: {
+    intro: {
+      etiqueta: "Sitio Corporativo con Panel · desde 700 USD",
+      titulo: "¿Tu empresa necesita más que una página?",
+      texto:
+        "Un sitio con inicio, sobre nosotros, una página por cada servicio, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.",
+    },
+    paraQuien: {
+      titulo: "El sitio corporativo es para ti si…",
+      items: [
+        "Tienes varios servicios y cada uno necesita su propia página.",
+        "Quieres contar quiénes son, su historia y su equipo.",
+        "Quieres publicar noticias o artículos para que te encuentren en Google.",
+        "Quieres cambiar textos y publicar en el blog sin depender de nadie.",
+      ],
+    },
+    incluye: {
+      titulo: "Todo lo que trae tu sitio corporativo",
+      items: [
+        { icono: "paginas", titulo: "Inicio, Sobre nosotros y tus servicios", texto: "Una página por cada servicio, para explicar bien cada uno y que Google los encuentre." },
+        { icono: "celular", titulo: "Hecho primero para el celular", texto: "Porque es donde te van a ver tus clientes." },
+        { icono: "velocidad", titulo: "Velocidad garantizada", texto: "90 o más en la medición de Google. Si no lo logra, lo seguimos ajustando gratis." },
+        { icono: "blog", titulo: "Blog básico", texto: "Para publicar noticias y artículos de tu empresa." },
+        { icono: "panel", titulo: "Panel básico", texto: "Cambias textos y subes entradas al blog tú mismo." },
+        { icono: "google", titulo: "Listo para Google y la IA", texto: "Configuración para Google, tu perfil de Google Business y para que la IA encuentre tu sitio." },
+        { icono: "dominio", titulo: "Dominio y hosting", texto: "El primer año va por nuestra cuenta." },
+        { icono: "ajustes", titulo: "2 rondas de ajustes", texto: "Para que quede como lo quieres." },
+        { icono: "capacitacion", titulo: "Capacitación", texto: "Te enseñamos a manejar el sitio y el panel." },
+      ] satisfies Incluye[],
+    },
+    precio: {
+      paquete: "Sitio Corporativo con Panel",
+      precio: "Desde 700 USD",
+      pago: precios.pago,
+      boton: "Agenda tu reunión gratis",
+      tipo: "pagina",
+    },
   },
   cta: {
     titulo: "Tu página puede estar publicada en 5 días hábiles.",

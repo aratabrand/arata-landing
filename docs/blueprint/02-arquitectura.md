@@ -16,7 +16,7 @@ Base: estrategia aprobada en [`01-estrategia-hormozi.md`](01-estrategia-hormozi.
 
 | Escritorio | Celular |
 |---|---|
-| Logo · **Servicios ▾** (mega menú: Páginas que venden · Catálogos y sistemas · Portafolio, con vista previa) · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
+| Logo · **Servicios ▾** (mega menú: Sitios y páginas · Catálogos y sistemas · Portafolio, con vista previa; D-176) · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
 
 - "Precios" lleva a la sección de paquetes del inicio (`/#precios`).
 - El botón **Agendar reunión** siempre está visible y es el único con color lima.
@@ -69,7 +69,7 @@ Cualquier CTA ──► /agendar
 | 1 | **Hero** | Entender la oferta en 5 segundos | Badge de cupos, título (resultado + plazo), subtítulo, CTA principal y secundario, 3 pruebas rápidas | Badge · Botón · Mockup con video |
 | 2 | **Prueba** | Confianza inmediata | Nombres de los 4 proyectos | Franja de logos |
 | 3 | **Problema** | Que la persona se reconozca | 4–5 dolores reales | Lista con íconos |
-| 4 | **Servicios** | Elegir camino | 2 tarjetas: Páginas que venden · Catálogos y sistemas | Tarjeta de servicio |
+| 4 | **Servicios** | Elegir camino | 2 tarjetas: Sitios y páginas (D-176) · Catálogos y sistemas | Tarjeta de servicio |
 | 5 | **Portafolio destacado** | Probar que sabemos hacerlo | 4 casos con video | Tarjeta de proyecto |
 | 6 | **Cómo trabajamos** | Bajar el miedo al proceso | 5 pasos hasta la entrega en 5 días hábiles | Pasos del proceso |
 | 7 | **Precios** (`#precios`) | Filtrar y anclar valor | 3 paquetes + mantenimiento opcional + garantía | Tarjeta de paquete · Sello de garantía |

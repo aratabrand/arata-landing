@@ -42,7 +42,10 @@ export function PricingCard({ paquete }: { paquete: Paquete }) {
       <ul className="mt-6 space-y-3 border-t border-white/8 pt-6">
         {paquete.incluye.map((item) => (
           <li key={item} className="flex gap-3 text-sm text-fog">
-            <Check aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-fog" />
+            {/* D-176: el chulo va dentro de un círculo lima para que se vea más */}
+            <span aria-hidden className="mt-px grid h-[1.125rem] w-[1.125rem] shrink-0 place-items-center rounded-full bg-lime">
+              <Check weight="bold" className="h-2.5 w-2.5 text-[#03010b]" />
+            </span>
             <span>{item}</span>
           </li>
         ))}
@@ -69,7 +72,10 @@ export function PricingBanner({ paquete }: { paquete: Paquete }) {
         <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
           {paquete.incluye.slice(1).map((item) => (
             <li key={item} className="flex items-center gap-2 text-sm text-fog">
-              <Check aria-hidden className="h-4 w-4 shrink-0 text-fog" />
+              {/* Dentro del banner lima, el círculo va negro con el chulo lima */}
+              <span aria-hidden className="grid h-[1.125rem] w-[1.125rem] shrink-0 place-items-center rounded-full bg-[#03010b]">
+                <Check weight="bold" className="h-2.5 w-2.5" style={{ color: "#B6FF00" }} />
+              </span>
               <span>{item}</span>
             </li>
           ))}

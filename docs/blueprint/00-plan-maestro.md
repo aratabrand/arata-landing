@@ -23,7 +23,7 @@ Convertir la landing actual (un solo servicio de chatbot y automatización, CTA 
 
 | # | Servicio | Para quién | Paquetes (ver `01-estrategia` §1) |
 |---|---|---|---|
-| 1 | **Páginas que venden** (landing pages y sitios web) | Negocios que necesitan que les lleguen clientes por internet | Landing desde 400 USD · 5 días hábiles |
+| 1 | **Sitios y páginas** (antes "Páginas que venden", D-176: landing pages y sitios corporativos) | Negocios que necesitan que les lleguen clientes por internet | Landing desde 400 USD · 5 días hábiles · Sitio corporativo con panel desde 700 USD (D-175) |
 | 2 | **Catálogos y sistemas a medida** *(antes "apps", D-027)* | Negocios que venden por WhatsApp o manejan pedidos, reservas, inventario o clientes a mano | Catálogo desde 800 USD · 5 días hábiles · Sistema a medida cotizado |
 
 Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 4 proyectos nuevos al mes, uno por semana (D-172; antes 3, D-023).
@@ -54,7 +54,7 @@ Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 4 proyectos n
 | Ruta | Página | Trabajo de la página |
 |---|---|---|
 | `/` | Inicio | Entender la oferta en 5 segundos y llevar a agendar. Incluye la sección del equipo (D-016) |
-| `/paginas-web` | Páginas que venden | Oferta completa de la *Página Lista en 5 Días* (D-037) |
+| `/paginas-web` | Sitios y páginas (D-176) | Oferta completa de la *Página Lista en 5 Días* (D-037) y, debajo, la del *Sitio Corporativo con Panel* (D-176) |
 | `/catalogos-y-sistemas` | Catálogos y sistemas a medida | Oferta de la *Tienda por WhatsApp en 5 Días* y de *Tu Negocio en Orden* (D-037) |
 | `/portafolio` | Portafolio | Mostrar los trabajos, filtrados por tipo |
 | `/portafolio/[proyecto]` | Caso de estudio | Problema → solución → resultado de cada proyecto |
