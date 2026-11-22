@@ -210,8 +210,8 @@ export default function SistemaV2() {
 
           <Bloque id="b-precio" titulo="Precio · tarjeta recomendada y normal">
             <div className="grid gap-5 lg:grid-cols-2">
-              <PricingCard paquete={precios.paquetes[1]} />
               <PricingCard paquete={precios.paquetes[0]} />
+              <PricingCard paquete={precios.paquetes[1]} />
             </div>
             <Assurances className="mt-5" />
           </Bloque>

@@ -35,7 +35,7 @@ El objetivo del sitio es agendar una reunión de 30 minutos, sin costo, en la qu
 
 ## Servicios
 
-- [Páginas que venden](https://www.aratasan.com/paginas-web): "Página Lista en 5 Días", desde 400 USD. Incluye 5 secciones, diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación. Adicional: panel para editar la página y ver métricas (se cotiza).
+- [Páginas que venden](https://www.aratasan.com/paginas-web): "Página Lista en 5 Días", desde 400 USD. Incluye 5 secciones, diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación. Adicional: panel para editar la página y ver métricas (se cotiza). "Sitio Corporativo con Panel", desde 700 USD: inicio, sobre nosotros, una página por cada servicio, blog básico y panel básico para cambiar textos y publicar en el blog, más todo lo de la página: diseño primero para el celular, velocidad garantizada, configuración para Google, Google Business y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación.
 - [Catálogos y sistemas a medida](https://www.aratasan.com/catalogos-y-sistemas): "Tienda por WhatsApp en 5 Días", desde 800 USD: catálogo con carrito, panel, inventario y pedido directo al WhatsApp del negocio (sin pago en línea). "Tu Negocio en Orden": sistemas a medida como reservas, menú digital o registro de clientes (CRM), cotizados.
 - Mantenimiento opcional: 15 % del valor del proyecto al mes.
 

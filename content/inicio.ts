@@ -145,8 +145,10 @@ export type Paquete = {
   adicional?: string;
   boton: string;
   recomendado?: boolean;
+  /** D-175: el paquete cotizado no va como tarjeta sino como banner debajo de las 3 columnas. */
+  banner?: boolean;
   /** Ícono SVG propio del paquete (D-150, components/v2/IconosMarca.tsx). */
-  icono?: "capas" | "tienda" | "sistema";
+  icono?: "capas" | "tienda" | "sistema" | "edificio";
 };
 
 export const precios = {
@@ -171,6 +173,25 @@ export const precios = {
       boton: "Agenda tu reunión",
     },
     {
+      // D-175: sitio corporativo con panel básico
+      nombre: "Sitio Corporativo con Panel",
+      icono: "edificio",
+      precio: "Desde 700 USD",
+      incluye: [
+        "Inicio y Sobre nosotros",
+        "Una página por cada servicio",
+        "Blog básico para publicar noticias y artículos",
+        "Panel básico para cambiar textos y subir entradas al blog",
+        "Diseño hecho primero para el celular",
+        "Velocidad de 90 o más en Google, garantizada",
+        "Lista para que te encuentren en Google, Google Business y la IA",
+        "Dominio y hosting el primer año",
+        "2 rondas de ajustes",
+        "Capacitación para que lo manejes tú",
+      ],
+      boton: "Agenda tu reunión",
+    },
+    {
       nombre: "Tienda por WhatsApp en 5 Días",
       icono: "tienda",
       precio: "Desde 800 USD",
@@ -188,12 +209,12 @@ export const precios = {
         "Entrega en 5 días hábiles",
       ],
       boton: "Agenda tu reunión",
-      recomendado: true,
     },
     {
       nombre: "Tu Negocio en Orden",
       icono: "sistema",
       precio: "Lo cotizamos contigo",
+      banner: true,
       incluye: [
         "Sistema de reservas, menú digital, registro de clientes (CRM) o lo que tu negocio necesite",
         "Diseñado a la medida de cómo trabajas",

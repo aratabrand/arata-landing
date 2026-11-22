@@ -171,7 +171,21 @@
 >
 > **[Agenda tu reunión]**
 
-**Tarjeta 2 — Tienda por WhatsApp en 5 Días** ⭐ *(resaltada: es la que más casos reales tiene)*
+**Tarjeta nueva — Sitio Corporativo con Panel** (D-175, va de segunda, entre la página y la tienda; "Tu Negocio en Orden" pasa a banner debajo de las 3 tarjetas)
+- Desde 700 USD
+- Inicio y Sobre nosotros
+- Una página por cada servicio
+- Blog básico para publicar noticias y artículos
+- Panel básico para cambiar textos y subir entradas al blog
+- Diseño hecho primero para el celular
+- Velocidad de 90 o más en Google, garantizada
+- Lista para que te encuentren en Google, Google Business y la IA
+- Dominio y hosting el primer año
+- 2 rondas de ajustes
+- Capacitación para que lo manejes tú
+- Botón: Agenda tu reunión
+
+**Tarjeta 2 — Tienda por WhatsApp en 5 Días** *(D-175: ya no va resaltada ni con «Recomendado»; las 3 tarjetas van iguales con botón lima, y el banner de «Tu Negocio en Orden» va en lima)*
 
 > **Desde 800 USD** · *el precio depende del tamaño de tu tienda*
 >

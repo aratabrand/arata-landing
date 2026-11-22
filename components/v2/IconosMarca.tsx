@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 // (Phosphor, components/v2/iconos.tsx) y no se ponen en todas las tarjetas: solo donde ayudan a
 // distinguir una opción de otra. 0 KB de imagen y sin JavaScript.
 
-export type IconoMarca = "capas" | "tienda" | "sistema";
+export type IconoMarca = "capas" | "tienda" | "sistema" | "edificio";
 
 function Degradados({ id }: { id: string }) {
   return (
@@ -73,7 +73,23 @@ function Sistema({ id }: { id: string }) {
   );
 }
 
-const DIBUJOS = { capas: Capas, tienda: Tienda, sistema: Sistema };
+/** Edificio con ventanas: el sitio de una empresa (varias páginas, blog y panel). */
+function Edificio({ id }: { id: string }) {
+  const ventanas = [10.5, 15, 19.5].flatMap((y) => [
+    <path key={`i${y}`} d={`M8 ${y} L10.5 ${y + 1.25} L10.5 ${y + 3.25} L8 ${y + 2} Z`} fill="#2A2A2F" opacity="0.75" />,
+    <path key={`d${y}`} d={`M21.5 ${y + 1.25} L24 ${y} L24 ${y + 2} L21.5 ${y + 3.25} Z`} fill="#16161A" opacity="0.8" />,
+  ]);
+  return (
+    <>
+      <path d="M16 3 L26 8 L16 13 L6 8 Z" fill={`url(#${id}-a)`} {...filo} />
+      <path d="M6 8 L16 13 L16 29 L6 24 Z" fill={`url(#${id}-b)`} {...filo} />
+      <path d="M26 8 L16 13 L16 29 L26 24 Z" fill={`url(#${id}-c)`} {...filo} />
+      {ventanas}
+    </>
+  );
+}
+
+const DIBUJOS = { capas: Capas, tienda: Tienda, sistema: Sistema, edificio: Edificio };
 
 export function IconoMarca({ icono, className }: { icono: IconoMarca; className?: string }) {
   const Dibujo = DIBUJOS[icono];
