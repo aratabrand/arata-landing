@@ -173,8 +173,9 @@
 
 **Tarjeta nueva — Sitio Corporativo con Panel** (D-175, va de segunda, entre la página y la tienda; "Tu Negocio en Orden" pasa a banner debajo de las 3 tarjetas)
 - Desde 700 USD
-- Inicio y Sobre nosotros
+- Inicio, Sobre nosotros y Contacto
 - Una página por cada servicio
+- Burbuja de WhatsApp o formulario de contacto
 - Blog básico para publicar noticias y artículos
 - Panel básico para cambiar textos y subir entradas al blog
 - Diseño hecho primero para el celular
@@ -949,7 +950,7 @@ Solo aparece cuando hay ID de Clarity (`lib/clarity.mjs`). Textos en `content/co
 
 La página `/paginas-web` se llama ahora **"Sitios y páginas"** (menú, footer, tarjeta de servicios del Inicio, título de la página, migas). Después del precio de la página de 5 secciones va el bloque del sitio corporativo, con los mismos componentes:
 
-**Intro (llamado):** *Sitio Corporativo con Panel · desde 700 USD* — **¿Tu empresa necesita más que una página?** Un sitio con inicio, sobre nosotros, una página por cada servicio, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.
+**Intro (llamado):** *Sitio Corporativo con Panel · desde 700 USD* — **¿Tu empresa necesita más que una página?** Un sitio con inicio, sobre nosotros, una página por cada servicio, contacto con burbuja de WhatsApp o formulario, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.
 
 **El sitio corporativo es para ti si…**
 - Tienes varios servicios y cada uno necesita su propia página.
@@ -958,7 +959,7 @@ La página `/paginas-web` se llama ahora **"Sitios y páginas"** (menú, footer,
 - Quieres cambiar textos y publicar en el blog sin depender de nadie.
 
 **Todo lo que trae tu sitio corporativo** (bento con ilustraciones; nuevas: mapa del sitio, blog y panel)
-- Inicio, Sobre nosotros y tus servicios — Una página por cada servicio, para explicar bien cada uno y que Google los encuentre.
+- Inicio, Sobre nosotros, servicios y contacto — Una página por cada servicio, para explicar bien cada uno y que Google los encuentre, y una página de contacto.
 - Hecho primero para el celular — Porque es donde te van a ver tus clientes.
 - Velocidad garantizada — 90 o más en la medición de Google. Si no lo logra, lo seguimos ajustando gratis.
 - Blog básico — Para publicar noticias y artículos de tu empresa.
@@ -967,5 +968,6 @@ La página `/paginas-web` se llama ahora **"Sitios y páginas"** (menú, footer,
 - Dominio y hosting — El primer año va por nuestra cuenta.
 - 2 rondas de ajustes — Para que quede como lo quieres.
 - Capacitación — Te enseñamos a manejar el sitio y el panel.
+- Burbuja de WhatsApp o formulario — Quien visita tu sitio te escribe al WhatsApp con un toque, o te deja sus datos en un formulario. (D-177)
 
 **Precio:** Sitio Corporativo con Panel · **Desde 700 USD** · paga por partes · [Agenda tu reunión gratis]

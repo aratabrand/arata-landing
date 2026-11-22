@@ -306,10 +306,11 @@ function Entrega() {
 /* Sitio corporativo (D-176) · Mapa del sitio: inicio arriba y una página por cada servicio */
 function Paginas() {
   const hijos = [
-    { x: 14, t: "Nosotros" },
-    { x: 90, t: "Servicio 1" },
-    { x: 166, t: "Servicio 2" },
-    { x: 242, t: "Blog" },
+    { x: 4, t: "Nosotros" },
+    { x: 67, t: "Servicio 1" },
+    { x: 130, t: "Servicio 2" },
+    { x: 193, t: "Blog" },
+    { x: 256, t: "Contacto" },
   ];
   return (
     <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
@@ -319,14 +320,14 @@ function Paginas() {
           Inicio
         </text>
       </g>
-      <path d="M160 38 V56 M52 56 H280 M52 56 V70 M128 56 V70 M204 56 V70 M280 56 V70" fill="none" stroke={LINE} strokeDasharray="2 3" />
+      <path d="M160 38 V56 M34 56 H286 M34 56 V70 M97 56 V70 M160 56 V70 M223 56 V70 M286 56 V70" fill="none" stroke={LINE} strokeDasharray="2 3" />
       {hijos.map((h, i) => (
         <g key={h.t} className="ib-rise" style={v(i + 1)}>
-          <rect x={h.x} y="70" width="76" height="50" rx="8" fill={FILL} stroke={LINE} />
-          <rect x={h.x + 9} y="80" width="34" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
-          <rect x={h.x + 9} y="90" width="56" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
-          <rect x={h.x + 9} y="98" width="44" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
-          <text x={h.x + 38} y="116" textAnchor="middle" fontSize="8" fill={S} fontFamily="var(--font-sans)">
+          <rect x={h.x} y="70" width="60" height="50" rx="8" fill={FILL} stroke={LINE} />
+          <rect x={h.x + 8} y="80" width="28" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+          <rect x={h.x + 8} y="90" width="44" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
+          <rect x={h.x + 8} y="98" width="34" height="4" rx="2" fill="rgba(255,255,255,0.18)" />
+          <text x={h.x + 30} y="116" textAnchor="middle" fontSize="7.5" fill={S} fontFamily="var(--font-sans)">
             {h.t}
           </text>
         </g>
@@ -378,7 +379,41 @@ function Panel() {
   );
 }
 
+/* Sitio corporativo (D-177) · Burbuja de WhatsApp o formulario de contacto */
+function Contacto() {
+  return (
+    <svg viewBox="0 0 520 96" className="h-full w-full" aria-hidden>
+      {/* formulario */}
+      <rect x="20" y="10" width="240" height="76" rx="10" fill="rgba(255,255,255,0.02)" stroke={LINE} />
+      {[18, 38].map((y, i) => (
+        <g key={y} className="ib-rise" style={v(i)}>
+          <rect x="32" y={y} width="150" height="14" rx="5" fill="#0B0B0D" stroke="rgba(255,255,255,0.16)" />
+          <rect x="40" y={y + 5} width={i === 0 ? 54 : 80} height="4" rx="2" fill="rgba(255,255,255,0.45)" />
+        </g>
+      ))}
+      <g className="ib-pop" style={v(2)}>
+        <rect x="32" y="60" width="70" height="16" rx="8" fill={L} />
+        <text x="67" y="71" textAnchor="middle" fontSize="8" fontWeight="800" fill="#03010B" fontFamily="var(--font-display)">
+          Enviar
+        </text>
+      </g>
+      <line x1="290" y1="18" x2="290" y2="78" stroke={LINE} strokeDasharray="2 4" />
+      {/* burbuja de WhatsApp */}
+      <g className="ib-rise" style={v(3)}>
+        <rect x="320" y="22" width="132" height="34" rx="12" fill={FILL} stroke={LINE} />
+        <rect x="332" y="32" width="90" height="5" rx="2.5" fill="rgba(255,255,255,0.55)" />
+        <rect x="332" y="42" width="60" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+      </g>
+      <g className="ib-pulse">
+        <circle cx="478" cy="62" r="20" fill={L} />
+        <path d="M468 72 l2.6-7.2 a10 10 0 1 1 4.2 4.1 z" fill="none" stroke="#03010B" strokeWidth="2" strokeLinejoin="round" />
+      </g>
+    </svg>
+  );
+}
+
 const ILUSTRACION: Record<string, () => ReactNode> = {
+  contacto: Contacto,
   paginas: Paginas,
   blog: Blog,
   panel: Panel,
@@ -398,6 +433,7 @@ const CELDA: Record<string, { clase: string; alto: string }> = {
   paginas: { clase: "lg:col-span-2", alto: "h-36" },
   blog: { clase: "", alto: "h-28" },
   panel: { clase: "", alto: "h-28" },
+  contacto: { clase: "sm:col-span-2 lg:col-span-4", alto: "h-24" },
   celular: { clase: "lg:row-span-2", alto: "h-56 lg:h-72" },
   velocidad: { clase: "lg:row-span-2", alto: "h-44 lg:h-60" },
   google: { clase: "", alto: "h-28" },

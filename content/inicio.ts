@@ -178,8 +178,9 @@ export const precios = {
       icono: "edificio",
       precio: "Desde 700 USD",
       incluye: [
-        "Inicio y Sobre nosotros",
+        "Inicio, Sobre nosotros y Contacto",
         "Una página por cada servicio",
+        "Burbuja de WhatsApp o formulario de contacto",
         "Blog básico para publicar noticias y artículos",
         "Panel básico para cambiar textos y subir entradas al blog",
         "Diseño hecho primero para el celular",
