@@ -192,7 +192,7 @@ function MenuLateral({ principal, general, path, contadores }: { principal: read
                   {label}
                   {/* Contador (D-163): píldora lima con número en tinta, como la referencia */}
                   {(contadores[href] ?? 0) > 0 && (
-                    <span className="ml-auto min-w-[1.5rem] rounded-full bg-[#B6FF00] px-1.5 text-center text-[0.7rem] font-bold leading-5 text-[#03010B]">
+                    <span className="pn-contador ml-auto min-w-[1.5rem] rounded-full bg-[#B6FF00] px-1.5 text-center text-[0.7rem] font-bold leading-5 text-[#03010B]">
                       <span className="sr-only">Por atender: </span>
                       {contadores[href]}
                     </span>
