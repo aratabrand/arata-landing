@@ -168,6 +168,12 @@
   border: 1px solid var(--pn-activa-borde);
 }
 
+/* Avisos (D-163): negros con letras blancas en los dos modos ("Todavía no hay datos", "panel de
+   ejemplo", "Puedes ver todo…"). Los enlaces de adentro también en blanco, subrayados */
+.pn-aviso { background: #03010b; color: rgb(255 255 255 / 0.82); border: 1px solid rgb(255 255 255 / 0.1); }
+.pn-aviso strong, .pn-aviso a, .pn-aviso .text-white { color: #fff; }
+.pn-aviso a { text-decoration-color: rgb(255 255 255 / 0.5); }
+
 /* Cifras grandes y nombre del saludo (D-162): lima en oscuro, tinta en claro */
 .pn-cifra { color: rgb(var(--pn-cifra)); }
 

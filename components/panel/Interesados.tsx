@@ -157,9 +157,12 @@ export default function Interesados({
 function Grupo({ titulo, detalle, cantidad, alerta, children }: { titulo: string; detalle?: string; cantidad: number; alerta?: boolean; children: React.ReactNode }) {
   return (
     <section>
-      <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h2 className={cn("font-display text-lg font-bold tracking-heading", alerta ? "text-alerta" : "text-white")}>
-          {titulo} <span className="ml-1 text-sm font-normal text-fog-dim">{cantidad}</span>
+      {/* Título de sección como en la referencia Kept (D-163): punto + título + número en píldora */}
+      <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <h2 className="flex items-center gap-2.5 font-display text-lg font-bold tracking-heading text-white">
+          <span aria-hidden className={cn("h-2 w-2 rounded-full", alerta ? "bg-alerta" : "bg-dato")} />
+          {titulo}
+          <span className={cn("rounded-full border px-2 font-body text-xs font-semibold leading-5", alerta ? "border-alerta/35 bg-alerta/10 text-alerta" : "pn-pildora")}>{cantidad}</span>
         </h2>
         {detalle && <p className="text-sm text-fog">{detalle}</p>}
       </div>

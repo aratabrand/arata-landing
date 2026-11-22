@@ -49,7 +49,11 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
   const [vista, setVista] = useState<"clientes" | "interesados">(vistaInicial);
   const [confirmando, setConfirmando] = useState<Interesado | null>(null);
   // Por atender: reuniones pendientes + los que están en espera y ya toca escribirles (D-144)
-  const pendientes = datos.interesados.filter((i) => i.estado === "agendada" || (i.estado === "espera" && i.esperaHasta && diasParaPlazo(i.esperaHasta, Date.parse(datos.ahora)) <= 0)).length;
+  // Mismo criterio que el contador del menú (D-163): por aceptar, reunión que ya pasó sin cerrar, o en espera con el plazo cumplido
+  const ahoraMs = Date.parse(datos.ahora);
+  const pendientes = datos.interesados.filter(
+    (i) => (i.estado === "agendada" && (i.porAceptar || Date.parse(i.inicio) < ahoraMs)) || (i.estado === "espera" && i.esperaHasta && diasParaPlazo(i.esperaHasta, ahoraMs) <= 0)
+  ).length;
   const nombreDeCliente = (id: string) => {
     const x = datos.clientes.find((c) => c.id === id);
     return x ? titulo(x) : null;

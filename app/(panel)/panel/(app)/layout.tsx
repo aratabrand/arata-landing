@@ -5,6 +5,7 @@ import { RUTA_DOBLE_FACTOR, RUTA_ENTRAR, panelActivo } from "@/lib/panel/config"
 import { estadoSesion } from "@/lib/panel/sesion";
 import { contextoAgencia, negocioAgencia } from "@/lib/panel/finanzas/datos";
 import { contarSinLeer } from "@/lib/panel/notificaciones";
+import { db } from "@/lib/panel/db";
 
 // Barrera real del panel: sesión válida en la base + doble factor activo.
 // Finanzas y Equipo solo aparecen para miembros de la agencia (Arata San), nunca
@@ -15,6 +16,7 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
   let sinFranja = ["/panel/finanzas", "/panel/equipo"];
   let { negocio } = obtenerPanel();
   let sinLeer = 0;
+  const contadores: Record<string, number> = {};
   let usuario: { nombre: string; correo?: string } | null = null;
   if (panelActivo) {
     const s = await estadoSesion();
@@ -32,10 +34,20 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
       // Contador de Notificaciones (D-119). Si falla, el panel sigue sin contador.
       const n = await contarSinLeer(ctx!.negocioId, ctx!.usuarioId).catch(() => null);
       sinLeer = n ? n.cambios + n.alertas : 0;
+      // Contador de Clientes en el menú (D-163): reuniones por atender + los en espera a los que ya toca escribir
+      const pa = await db()
+        .query(
+          `select count(*)::int n from interesados
+            where negocio_id = $1 and (estado = 'agendada' and (por_aceptar or reunion_inicio < now())
+                                       or estado = 'espera' and espera_hasta <= current_date)`,
+          [ctx!.negocioId]
+        )
+        .catch(() => null);
+      if (pa?.rows[0]?.n) contadores["/panel/clientes"] = pa.rows[0].n;
     }
   }
   return (
-    <PanelShell negocio={negocio} usuario={usuario} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer}>
+    <PanelShell negocio={negocio} usuario={usuario} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer} contadores={contadores}>
       {children}
     </PanelShell>
   );

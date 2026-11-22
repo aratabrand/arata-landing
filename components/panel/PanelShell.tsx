@@ -43,6 +43,7 @@ export default function PanelShell({
   conFinanzas = false,
   sinFranja = ["/panel/finanzas", "/panel/equipo"],
   sinLeer = 0,
+  contadores = {},
   children,
 }: {
   negocio: Negocio;
@@ -54,6 +55,8 @@ export default function PanelShell({
   sinFranja?: string[];
   /** Cambios de otros sin ver + proyectos por vencer o tarde (D-119). */
   sinLeer?: number;
+  /** Número junto a una opción del menú (D-163, como la referencia Kept): ruta → cantidad por atender. */
+  contadores?: Record<string, number>;
   children: ReactNode;
 }) {
   const path = usePathname() ?? "/panel";
@@ -70,9 +73,9 @@ export default function PanelShell({
       {/* ── Barra lateral (escritorio) ── */}
       <aside className="pn-lateral fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col px-4 pb-4 pt-7 lg:flex">
         <Link href="/panel" aria-label="Inicio del panel" className="px-3">
-          <Logo className="h-[18px] w-auto" />
+          <Logo className="h-6 w-auto" />
         </Link>
-        <MenuLateral principal={principal} general={general} path={path} />
+        <MenuLateral principal={principal} general={general} path={path} contadores={contadores} />
         <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante="tarjeta" />
       </aside>
 
@@ -86,7 +89,7 @@ export default function PanelShell({
               <div aria-hidden className="absolute inset-0 -z-10 border-b border-white/[0.05] bg-canvas/80 backdrop-blur-xl lg:rounded-t-[28px]" />
               <div className="relative mx-auto flex h-14 w-full max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:h-16 lg:px-10">
                 <Link href="/panel" aria-label="Inicio del panel" className="shrink-0 lg:hidden">
-                  <Logo className="h-4 w-auto" />
+                  <Logo className="h-5 w-auto" />
                 </Link>
                 <div className="ml-auto flex shrink-0 items-center gap-2">
                   {/* D-152: modo claro / oscuro al lado de la campana */}
@@ -100,8 +103,8 @@ export default function PanelShell({
             </header>
 
             {conFranja && (
-              <div className="border-b border-white/10 bg-white/[0.04] px-4 py-2 text-center text-xs text-fog">
-                Estás viendo un <strong className="font-semibold text-white">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
+              <div className="pn-aviso px-4 py-2 text-center text-xs">
+                Estás viendo un <strong className="font-semibold">panel de ejemplo</strong> con datos ficticios. Los cambios se guardan solo en este navegador.
               </div>
             )}
 
@@ -126,8 +129,12 @@ export default function PanelShell({
                   className={cn("relative flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
                   {on && <span aria-hidden className="absolute top-0 h-0.5 w-8 rounded-full bg-brand" />}
-                  <Icon aria-hidden className={cn("h-5 w-5", on && "text-fog")} />
+                  <span className="relative">
+                    <Icon aria-hidden className={cn("h-5 w-5", on && "text-fog")} />
+                    {(contadores[href] ?? 0) > 0 && <span aria-hidden className="absolute -right-2 -top-1.5 h-2 w-2 rounded-full bg-[#B6FF00] ring-2 ring-noche" />}
+                  </span>
                   {label}
+                  {(contadores[href] ?? 0) > 0 && <span className="sr-only">, {contadores[href]} por atender</span>}
                 </Link>
               </li>
             );
@@ -141,7 +148,7 @@ export default function PanelShell({
 // ── Menú lateral con selector que se desliza (solo escritorio) ──
 type Opcion = (typeof navPanel)[number];
 
-function MenuLateral({ principal, general, path }: { principal: readonly Opcion[]; general: readonly Opcion[]; path: string }) {
+function MenuLateral({ principal, general, path, contadores }: { principal: readonly Opcion[]; general: readonly Opcion[]; path: string; contadores: Record<string, number> }) {
   const caja = useRef<HTMLElement | null>(null);
   const items = useRef<Record<string, HTMLAnchorElement | null>>({});
   const [sel, setSel] = useState<{ y: number; h: number } | null>(null);
@@ -183,6 +190,13 @@ function MenuLateral({ principal, general, path }: { principal: readonly Opcion[
                 >
                   <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-[#B6FF00]" : "text-fog-dim group-hover:text-fog")} />
                   {label}
+                  {/* Contador (D-163): píldora lima con número en tinta, como la referencia */}
+                  {(contadores[href] ?? 0) > 0 && (
+                    <span className="ml-auto min-w-[1.5rem] rounded-full bg-[#B6FF00] px-1.5 text-center text-[0.7rem] font-bold leading-5 text-[#03010B]">
+                      <span className="sr-only">Por atender: </span>
+                      {contadores[href]}
+                    </span>
+                  )}
                 </Link>
               </li>
             );

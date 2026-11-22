@@ -12,7 +12,7 @@ export default function AccesoLayout({ children }: { children: React.ReactNode }
         <div className="relative min-h-[176px] lg:min-h-0">
           <EscenaAcceso />
           <Link href="/" aria-label="Arata San, ir al sitio" className="absolute left-6 top-6 z-10 lg:left-9 lg:top-9">
-            <Logo className="h-[17px] w-auto" />
+            <Logo className="h-6 w-auto" />
           </Link>
           <p className="absolute inset-x-9 bottom-9 z-10 hidden max-w-[17rem] text-sm leading-relaxed text-fog lg:block">
             Ventas, clientes y proyectos de tu negocio en un solo lugar.

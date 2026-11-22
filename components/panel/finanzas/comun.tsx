@@ -43,14 +43,14 @@ export function MensajeError({ error }: { error: string }) {
 export function AvisoAcceso({ demo, puedeEditar, texto }: { demo: boolean; puedeEditar: boolean; texto?: string }) {
   if (demo)
     return (
-      <div className="rounded-frame border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-fog">
-        Estás viendo <strong className="text-white">finanzas de ejemplo</strong> con números ficticios. Con el panel conectado verás los datos reales de Arata San.
+      <div className="pn-aviso rounded-frame px-4 py-3 text-sm">
+        Estás viendo <strong>finanzas de ejemplo</strong> con números ficticios. Con el panel conectado verás los datos reales de Arata San.
       </div>
     );
   if (puedeEditar) return null;
   return (
-    <div className="flex items-center gap-2 rounded-frame border border-white/8 bg-surface-1 px-4 py-3 text-sm text-fog">
-      <Lock aria-hidden className="h-4 w-4 text-fog" />
+    <div className="pn-aviso flex items-center gap-2 rounded-frame px-4 py-3 text-sm">
+      <Lock aria-hidden className="h-4 w-4" />
       {texto ?? "Puedes ver todo. Sergio y Andrés cambian los números; el valor del día, solo Sergio."}
     </div>
   );

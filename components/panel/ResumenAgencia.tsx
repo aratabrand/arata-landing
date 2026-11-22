@@ -41,7 +41,7 @@ export default function ResumenAgencia({ datos, clientes, hoy, nombre }: { datos
       />
 
       {vacio && (
-        <div className="rounded-frame border border-white/12 bg-white/[0.04] px-4 py-3 text-sm text-fog">
+        <div className="pn-aviso rounded-frame px-4 py-3 text-sm">
           Todavía no hay datos. Agrega tus <Link href="/panel/clientes" className="font-semibold text-white underline">clientes</Link> y tus{" "}
           <Link href="/panel/proyectos" className="font-semibold text-white underline">proyectos</Link>, y este resumen se llena solo.
         </div>
