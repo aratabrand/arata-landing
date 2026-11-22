@@ -3,6 +3,7 @@ import { fechaBogota } from "../fecha";
 import { panelActivo } from "../config";
 import { contextoAgencia } from "../finanzas/datos";
 import type { Interesado } from "./interesados";
+import type { Prospecto } from "./prospectos";
 
 // Clientes de Arata San (solo servidor, D-110): datos de cada cliente, de dónde
 // vino y sus proyectos (servicio, estado, valor) desde Finanzas.
@@ -54,6 +55,8 @@ export type DatosClientes = {
   ciudades: Ciudad[];
   /** Personas que agendaron reunión por Cal.com (D-133). */
   interesados: Interesado[];
+  /** Negocios que encontró Sellbird y todavía no agendan (D-171). */
+  prospectos: Prospecto[];
   /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
   ahora: string;
   /** Nombre de quien está en sesión (firma el mensaje de seguimiento por WhatsApp, D-144). */
@@ -83,7 +86,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [cl, pr, lugares, it, notas, yo] = await Promise.all([
+  const [cl, pr, lugares, it, notas, yo, ps] = await Promise.all([
     db().query(
       `select c.id, c.nombre, c.empresa, c.telefono, c.pais, pa.nombre pais_nombre, c.ciudad_id, ci.nombre ciudad,
               c.sitio_web, c.instagram, c.estado, c.origen, c.origen_detalle, c.notas, c.creado
@@ -107,6 +110,13 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     ),
     db().query(`select interesado_id, texto, quien, creado from interesado_notas where negocio_id = $1 order by creado desc limit 2000`, [ctx.negocioId]),
     db().query(`select name from "user" where id = $1`, [ctx.usuarioId]),
+    db().query(
+      `select id, nombre, rubro, categoria, servicio, pagina, sitio_web, telefono, tipo_telefono, ciudad, enlace_maps, resenas,
+              calificacion, titular, prioridad, puntos, estado, notas, interesado_id, creado
+         from prospectos where negocio_id = $1
+        order by puntos desc, resenas desc, lower(nombre) limit 3000`,
+      [ctx.negocioId]
+    ),
   ]);
   const notasDe = new Map<string, Interesado["notas"]>();
   notas.rows.forEach((r) => {
@@ -126,6 +136,30 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     ...lugares,
     ahora: new Date().toISOString(),
     yo: String(yo.rows[0]?.name ?? ""),
+    prospectos: ps.rows.map(
+      (r): Prospecto => ({
+        id: r.id,
+        nombre: r.nombre,
+        rubro: r.rubro,
+        categoria: r.categoria,
+        servicio: r.servicio,
+        pagina: r.pagina,
+        sitioWeb: r.sitio_web,
+        telefono: r.telefono,
+        tipoTelefono: r.tipo_telefono,
+        ciudad: r.ciudad,
+        enlaceMaps: r.enlace_maps,
+        resenas: Number(r.resenas),
+        calificacion: r.calificacion === null ? null : Number(r.calificacion),
+        titular: r.titular,
+        prioridad: r.prioridad,
+        puntos: Number(r.puntos),
+        estado: r.estado,
+        notas: r.notas,
+        interesadoId: r.interesado_id,
+        creado: r.creado.toISOString(),
+      })
+    ),
     interesados: it.rows.map(
       (r): Interesado => ({
         id: r.id,

@@ -7,6 +7,7 @@ import { contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { estadosCliente, origenesCliente } from "@/lib/panel/clientes/datos";
 import { celularValido } from "@/lib/panel/mascaras";
 import { fechaNota, plazoValido } from "@/lib/panel/clientes/interesados";
+import { ESTADOS_PROSPECTO, PRIORIDADES, TITULARES, puntuar, type EstadoProspecto, type Titular } from "@/lib/panel/clientes/prospectos";
 import type { Resultado } from "../finanzas/acciones";
 import { diferencias, historialDe, registrar, type EventoHistorial } from "@/lib/panel/historial";
 
@@ -346,6 +347,67 @@ export async function borrarInteresado(id: string): Promise<Resultado> {
     await registrar(ctx, { accion: "borrar", entidad: "interesado", entidadId: i.id, titulo: `Borró al interesado ${i.nombre}`, importante: true });
     revalidatePath("/panel/clientes");
     revalidatePath("/panel/notificaciones");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo borrar.");
+  }
+}
+
+
+// ── Prospectos que encontró Sellbird (D-171) ────────────────────────
+// Todos los miembros los ven; Sergio y Andrés cambian estado, titular y notas; solo Sergio borra.
+
+/** Cambia el estado, el titular (tras revisarlo en el RUES) o las notas. Si cambia el titular, se recalcula la prioridad. */
+export async function guardarProspecto(entrada: { id: string; estado: string; titular: string; notas: string }): Promise<Resultado> {
+  try {
+    if (!panelActivo) return NO("El panel está en modo ejemplo: los cambios no se guardan.");
+    const ctx = await contextoAgencia();
+    if (!ctx) return NO("Tu sesión terminó. Vuelve a entrar.");
+    if (!ctx.editaFinanzas) return NO("Solo Sergio y Andrés pueden cambiar los prospectos.");
+    if (!/^[0-9a-f-]{36}$/i.test(entrada.id)) return NO("Prospecto no válido.");
+    if (!(entrada.estado in ESTADOS_PROSPECTO)) return NO("Elige un estado de la lista.");
+    if (!(entrada.titular in TITULARES)) return NO("Elige si es empresa o persona natural.");
+    const notas = limpio(entrada.notas, 2000);
+    const p = (
+      await db().query(`select id, nombre, estado, titular, notas, pagina, resenas, calificacion, prioridad from prospectos where id = $1 and negocio_id = $2`, [entrada.id, ctx.negocioId])
+    ).rows[0];
+    if (!p) return NO("Ese prospecto no existe.");
+    // «No contactar» es para siempre (Ley 1581): solo Sergio lo puede quitar
+    if (p.estado === "no_contactar" && entrada.estado !== "no_contactar" && !ctx.esDueno) return NO("Pidió que no le escribamos: solo Sergio puede cambiar ese estado.");
+    const estado = entrada.estado as EstadoProspecto;
+    const titular = entrada.titular as Titular;
+    const { puntos, prioridad } = puntuar({ pagina: p.pagina, resenas: Number(p.resenas), calificacion: p.calificacion === null ? null : Number(p.calificacion), titular });
+    await db().query(
+      `update prospectos set estado = $3, titular = $4, notas = $5, puntos = $6, prioridad = $7, actualizado = now(),
+              contactado_en = case when $3 <> 'nuevo' and contactado_en is null then now() else contactado_en end
+        where id = $1 and negocio_id = $2`,
+      [p.id, ctx.negocioId, estado, titular, notas, puntos, prioridad]
+    );
+    const cambios = diferencias(
+      { estado: ESTADOS_PROSPECTO[p.estado as EstadoProspecto], titular: TITULARES[p.titular as Titular], prioridad: PRIORIDADES[p.prioridad as keyof typeof PRIORIDADES], notas: p.notas },
+      { estado: ESTADOS_PROSPECTO[estado], titular: TITULARES[titular], prioridad: PRIORIDADES[prioridad], notas },
+      { estado: "Estado", titular: "Titular", prioridad: "Prioridad", notas: "Notas" }
+    );
+    if (cambios.length) await registrar(ctx, { accion: "editar", entidad: "prospecto", entidadId: p.id, titulo: `Actualizó el prospecto ${p.nombre}`, cambios });
+    revalidatePath("/panel/clientes");
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo guardar el prospecto.");
+  }
+}
+
+/** Quita un prospecto que no aplica (cerró, está repetido, no es del rubro). Solo Sergio. */
+export async function borrarProspecto(id: string): Promise<Resultado> {
+  try {
+    if (!panelActivo) return NO("El panel está en modo ejemplo.");
+    const ctx = await contextoAgencia();
+    if (!ctx) return NO("Tu sesión terminó. Vuelve a entrar.");
+    if (!ctx.esDueno) return NO("Solo Sergio puede borrar prospectos.");
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return NO("Prospecto no válido.");
+    const r = await db().query(`delete from prospectos where id = $1 and negocio_id = $2 returning nombre`, [id, ctx.negocioId]);
+    if (!r.rowCount) return NO("Ese prospecto no existe.");
+    await registrar(ctx, { accion: "borrar", entidad: "prospecto", entidadId: id, titulo: `Borró el prospecto ${r.rows[0].nombre}` });
+    revalidatePath("/panel/clientes");
     return SI;
   } catch (e) {
     return NO(e instanceof Error ? e.message : "No se pudo borrar.");

@@ -14,6 +14,7 @@ import Historial from "./Historial";
 import { Hoja } from "./Clientes";
 import { Segmentado } from "./Resumen";
 import Interesados from "./Interesados";
+import Prospectos from "./Prospectos";
 import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { AvisoAcceso, BotonPrincipal, BotonSecundario, Campo, LeyendaObligatorios, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
@@ -39,14 +40,17 @@ const wa = (c: ClienteAgencia) => `https://wa.me/${c.pais === "CO" ? "57" + c.te
 
 type Filtro = "todos" | "en-curso" | "origen";
 
-export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { datos: DatosClientes; vistaInicial?: "clientes" | "interesados" }) {
+type Vista = "prospectos" | "interesados" | "clientes";
+
+export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { datos: DatosClientes; vistaInicial?: Vista }) {
   const [q, setQ] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [origen, setOrigen] = useState<string>("");
   const [abierto, setAbierto] = useState<string | null>(null);
   const [creando, setCreando] = useState(false);
-  // Pestañas Clientes | Interesados (D-133). "Confirmar" abre el formulario de cliente ya prellenado.
-  const [vista, setVista] = useState<"clientes" | "interesados">(vistaInicial);
+  // Pestañas Prospectos | Interesados | Clientes (D-133, D-171): el camino de un negocio hasta comprar.
+  // "Confirmar" en Interesados abre el formulario de cliente ya prellenado.
+  const [vista, setVista] = useState<Vista>(vistaInicial);
   const [confirmando, setConfirmando] = useState<Interesado | null>(null);
   // Por atender: reuniones pendientes + los que están en espera y ya toca escribirles (D-144)
   // Mismo criterio que el contador del menú (D-163): por aceptar, reunión que ya pasó sin cerrar, o en espera con el plazo cumplido
@@ -81,9 +85,13 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
     <PanelPage>
       <PanelHeader
         titulo="Clientes"
-        bajada="Quién te ha comprado, de dónde llegó, qué servicios ha pedido y con quién tienes un proyecto en curso."
+        bajada={
+          vista === "prospectos"
+            ? "Negocios que encontramos en Google Maps y todavía no han agendado, ordenados por prioridad."
+            : "Quién te ha comprado, de dónde llegó, qué servicios ha pedido y con quién tienes un proyecto en curso."
+        }
         accion={
-          datos.puedeEditar ? (
+          datos.puedeEditar && vista !== "prospectos" ? (
             <BotonPrincipal type="button" onClick={() => setCreando(true)} className="inline-flex items-center gap-2">
               <Plus aria-hidden className="h-4 w-4" /> Agregar cliente
             </BotonPrincipal>
@@ -95,14 +103,17 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
       <Segmentado
         etiqueta="Ver"
         opciones={[
-          { valor: "clientes" as const, label: `Clientes (${datos.clientes.length})` },
+          { valor: "prospectos" as const, label: `Prospectos (${datos.prospectos.length})` },
           { valor: "interesados" as const, label: pendientes > 0 ? `Interesados · ${pendientes} por atender` : "Interesados" },
+          { valor: "clientes" as const, label: `Clientes (${datos.clientes.length})` },
         ]}
         valor={vista}
         onChange={setVista}
       />
 
-      {vista === "interesados" ? (
+      {vista === "prospectos" ? (
+        <Prospectos prospectos={datos.prospectos} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} />
+      ) : vista === "interesados" ? (
         <Interesados
           interesados={datos.interesados}
           ahora={datos.ahora}
