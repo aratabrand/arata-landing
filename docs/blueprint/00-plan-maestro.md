@@ -33,7 +33,7 @@ Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 3 proyectos n
 ### Qué sale del sitio
 
 - Chatbot con IA y automatización **dejan de ser servicios públicos**. Pueden aparecer como funcionalidad dentro de una app, pero no se venden por separado en el sitio. *(Consecuencia de D-002; por confirmar.)*
-- El agente "Sara" sigue siendo herramienta interna (puede responder el WhatsApp y confirmar citas), no se ofrece como producto.
+- ~~El agente "Sara" sigue siendo herramienta interna~~ **Sara ya no se usa (D-167).** El WhatsApp de Arata lo contesta una persona.
 
 ---
 

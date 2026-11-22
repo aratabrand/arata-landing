@@ -21,9 +21,10 @@ Modelo de cobro: **montaje (pago único) + mensualidad (recurrente)**.
 |---|---|
 | Sergio | Estrategia digital, landing pages, Meta Ads, UX, contenido, diseño de producto (Figma). Aprueba copy y decisiones de marca. |
 | Andrés | Líder comercial, relación con clientes, sourcing de producto. |
-| Santiago | Líder técnico: flujos n8n, arquitectura de agentes IA, builds en Claude Code. |
+| Santiago | Automatización: flujos n8n y conexiones entre herramientas. |
+| Nuevo técnico (nombre por confirmar) | Programación: sitio, panel y builds en Claude Code (desde nov 2026). |
 
-Flujo típico: Sergio define a nivel de sistema/diseño (tokens Figma, marca) → Santiago implementa.
+Flujo típico: Sergio define a nivel de sistema/diseño (tokens Figma, marca) → el técnico de programación construye; Santiago automatiza.
 
 ---
 
@@ -114,14 +115,9 @@ Series ya construidas: "7 Cifras de IA para tu negocio" y "Plantilla vs Profesio
 
 ---
 
-## 6. Agente de WhatsApp "Sara"
+## 6. Agente de WhatsApp "Sara" (ya no se usa)
 
-Arquitectura:
-- Base en **n8n + OpenAI (GPT-4o-mini)**.
-- Integrado con **Meta WhatsApp Business Cloud API**.
-- Memoria de conversación vía **Google Sheets / Supabase**.
-- **Transcripción de audio** con Whisper.
-- **Envío nativo de fotos** vía Meta media upload API.
+**Sara se dejó de usar (D-167, nov 2026).** No contar con ella en ningún flujo nuevo: el WhatsApp de Arata lo contesta una persona. Lo que hagan otros documentos con Sara (panel, plan maestro) es historia.
 
 ---
 
