@@ -6,14 +6,20 @@ Contexto maestro del proyecto para Claude Code. Lee este archivo antes de trabaj
 
 ## 1. Qué es Arata San
 
-Agencia digital en Bogotá, Colombia (`@arata.san.web`). Construimos **ecosistemas de venta** para comerciantes y pymes colombianas: página + agente de WhatsApp con IA + automatización del negocio.
+Agencia digital en Bogotá, Colombia (`@arata.san.web`, sitio `aratasan.com`). Diseñamos **páginas, catálogos y sistemas** para negocios que quieren clientes por internet: hechos primero para el celular, rápidos y fáciles de encontrar en Google y en la IA. Objetivo del sitio: **agendar una reunión** (`/agendar`, Cal.com).
 
-El producto core se vende como paquete:
-- **Landing / sitio** (captación)
-- **Agente de WhatsApp con IA** (atención y venta)
-- **Automatización / sistematización** (operación)
+**Ya no se vende el paquete "página + agente de WhatsApp con IA + automatización"** (v1). El chatbot con IA y la automatización dejaron de ser servicios públicos; Sara ya no se usa (D-167). La oferta vigente sale de `docs/blueprint/00-plan-maestro.md` §2 y `content/servicios.ts`:
 
-Modelo de cobro: **montaje (pago único) + mensualidad (recurrente)**.
+| Servicio | Paquete | Precio | Entrega |
+|---|---|---|---|
+| Páginas que venden | **Página Lista en 5 Días** (5 secciones, dominio y hosting el primer año, 2 rondas de ajustes, capacitación) | Desde 400 USD | 5 días hábiles |
+| Catálogos y sistemas a medida | **Tienda por WhatsApp en 5 Días** (catálogo con carrito, pedido ordenado al WhatsApp, panel, inventario) | Desde 800 USD | 5 días hábiles |
+| Catálogos y sistemas a medida | **Tu Negocio en Orden** (reservas, menú digital, registro de clientes/CRM) | Se cotiza | Según el sistema |
+
+- **Garantía de velocidad:** 90 o más en PageSpeed móvil o se sigue ajustando gratis.
+- **Pago:** 50 % para arrancar y 50 % al entregar. **Mantenimiento opcional:** 15 % del valor del proyecto al mes (D-022). **Cupos:** 3 proyectos nuevos al mes (D-023).
+- **Adicional:** panel para editar la página y ver métricas (se cotiza aparte, D-034).
+- Portafolio real: Danrodedm, Boost Your Menu, Arata Print y Caravana (`docs/portafolio.md`).
 
 ### Equipo
 
@@ -76,16 +82,16 @@ Principios de copy:
 
 ## 4. Stack técnico
 
+Stack vigente del sitio y el panel (WordPress, Elementor, Shopify, Dropi y Sara ya no son parte del trabajo actual):
+
 | Área | Herramienta |
 |---|---|
-| Sitios multi-cliente | WordPress + Elementor |
-| Proyectos individuales | Framer (incluye hosting/dominio) |
-| E-commerce | Shopify Basic + Wompi |
-| Automatización | n8n |
-| IA | OpenAI |
-| Base de datos | Supabase |
-| Ads & tracking | Meta Ads + Meta Pixel (instalado con plugin WPCode en el header de WordPress) |
-| Logística dropshipping | Dropi |
+| Sitio y panel | Next.js + TypeScript + Tailwind, publicado en Vercel |
+| Agenda | Cal.com (webhook firmado al panel, D-133) |
+| Base del panel | Neon + Better Auth (contraseña + doble factor), D-108 |
+| Bases de catálogos de clientes | Las de cada catálogo, aparte del panel (nunca mezclar) |
+| Automatización | n8n (Santiago) |
+| Medición | GA4 + Search Console, solo con permiso de cookies (D-130); Microsoft Clarity listo para encender (D-132) |
 
 ---
 
@@ -123,6 +129,8 @@ Series ya construidas: "7 Cifras de IA para tu negocio" y "Plantilla vs Profesio
 
 ## 7. Apps en desarrollo (MVPs)
 
+> **Por confirmar:** Mesa y Dental no aparecen en el blueprint v2. Hoy reservas, menú digital y CRM se venden dentro de *Tu Negocio en Orden*.
+
 | App | Descripción | Estado |
 |---|---|---|
 | **Mesa** | Gestión de restaurantes | Sergio lidera diseño en Figma → Santiago construye con Claude Code |
@@ -143,7 +151,9 @@ Progresión: **sistema Figma → build Claude Code**.
 
 ---
 
-## 9. Landing page — sistema de diseño (MVP en Next.js)
+## 9. Landing page — sistema de diseño (MVP en Next.js) · v1, reemplazada
+
+> **Historia (v1).** La alternancia blanco/oscuro, "sin precios" y el CTA único a WhatsApp ya no aplican: manda la §11 (v2) y `docs/sistema-de-diseno.md`.
 
 Landing propia de la agencia (le vende a comerciantes/pymes de Colombia). MVP en **Next.js 14 + TypeScript + Tailwind**; más adelante se reconstruye en Framer.
 
