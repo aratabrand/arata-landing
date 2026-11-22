@@ -90,12 +90,11 @@ Se suman herramientas; no se deja ninguna. Cada proyecto usa la que mejor le sir
 | Proyectos individuales | Framer (incluye hosting/dominio) |
 | Sitio y panel de Arata San | Next.js + TypeScript + Tailwind, en Vercel |
 | E-commerce | Shopify Basic + Wompi |
-| Base de datos | **Supabase** (proyectos de clientes) · **Neon** + Better Auth (solo el panel de Arata, D-108) |
+| Base de datos | **Supabase** (clientes) · **Neon** + Better Auth (solo el panel de Arata, D-108) |
 | Agenda | Cal.com (webhook firmado al panel, D-133) |
 | Automatización | n8n (Santiago) |
 | IA | OpenAI |
 | Ads & tracking | Meta Ads + Meta Pixel (en WordPress, con el plugin WPCode en el header); GA4 + Search Console con permiso de cookies (D-130) |
-| Logística dropshipping | Dropi |
 
 ---|---|
 | Sitio y panel | Next.js + TypeScript + Tailwind, publicado en Vercel |
