@@ -60,7 +60,7 @@ export const servicios = {
     {
       titulo: "Sitios y páginas",
       texto:
-        "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar. O un sitio corporativo con blog y panel.",
+        "Una página clara, rápida y hecha para el celular, que lleva a la gente a escribirte o a agendar. O un sitio corporativo con contacto, burbuja de WhatsApp o formulario, blog y panel.",
       etiqueta: "Página desde 400 USD · Sitio corporativo desde 700 USD",
       boton: "Ver sitios y páginas",
       href: "/paginas-web",
