@@ -18,7 +18,7 @@
 
 **Versión A · Plazo + resultado** ✅ elegida (D-038)
 
-> Badge: **Tomamos 3 proyectos nuevos al mes**
+> Badge: **Tomamos 4 proyectos nuevos al mes**
 >
 > # Tu página lista en 5 días. Hecha para vender desde el celular.
 >
@@ -28,7 +28,7 @@
 
 **Versión B · Dolor de WhatsApp**
 
-> Badge: **Tomamos 3 proyectos nuevos al mes**
+> Badge: **Tomamos 4 proyectos nuevos al mes**
 >
 > # Deja de mandar fotos por WhatsApp. Ten tu tienda lista en 5 días.
 >
@@ -38,7 +38,7 @@
 
 **Versión C · Precio a la vista**
 
-> Badge: **Tomamos 3 proyectos nuevos al mes**
+> Badge: **Tomamos 4 proyectos nuevos al mes**
 >
 > # Páginas y sistemas que le traen clientes a tu negocio.
 >
@@ -232,7 +232,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 | ¿Qué significa la garantía de velocidad? | Medimos tu página en celular con la herramienta de Google (PageSpeed). Si no saca 90 o más, la seguimos ajustando sin costo hasta que lo logre. |
 | ¿Qué pasa después de la entrega? | Te enseñamos a usar todo. Si quieres que sigamos cuidando tu página, tienes el mantenimiento opcional: 15 % del valor del proyecto al mes. |
 | ¿Trabajan con negocios fuera de Colombia? | Sí. Por ejemplo, hicimos la landing de Boost Your Menu, en New Jersey. |
-| ¿Por qué solo 3 proyectos al mes? | Porque así cumplimos los 5 días sin bajar la calidad. |
+| ¿Por qué solo 4 proyectos al mes? | Porque tomamos uno por semana y así cumplimos los 5 días sin bajar la calidad. |
 | ¿Puedo pagar por partes? | Sí. Pagas el 50 % para arrancar y el otro 50 % cuando te entregamos. |
 | ¿La reunión tiene costo? | No. Son 30 minutos y sales con el paquete y el precio para tu caso. |
 
@@ -242,7 +242,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 **Versión A · Escasez** ✅
 
-> # Este mes tomamos 3 proyectos nuevos.
+> # Este mes tomamos 4 proyectos nuevos.
 >
 > Agenda tu reunión y separa tu cupo. En 30 minutos sabes qué necesitas y cuánto cuesta.
 >
@@ -416,7 +416,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 > # Tu página puede estar publicada en 5 días hábiles.
 >
-> Este mes tomamos 3 proyectos nuevos. Agenda y separa tu cupo.
+> Este mes tomamos 4 proyectos nuevos. Agenda y separa tu cupo.
 >
 > **[Agendar reunión]**
 
@@ -557,7 +557,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 
 > # Ordena tu negocio este mes.
 >
-> Tomamos 3 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.
+> Tomamos 4 proyectos nuevos al mes. Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.
 >
 > **[Agendar reunión]**
 
@@ -762,7 +762,7 @@ Sección oculta hasta tener testimonios reales (Arata Print, Caravana).
 >
 > **Garantía de velocidad** · si tu página no saca 90 o más en celular, la seguimos ajustando gratis.
 >
-> **Tomamos 3 proyectos nuevos al mes.**
+> **Tomamos 4 proyectos nuevos al mes.**
 
 **Si pidió la auditoría:** *Te la entregamos en 48 horas y la revisamos juntos en la reunión.* ✅ El calendario solo muestra horas con mínimo 48 horas de anticipación (D-054).
 

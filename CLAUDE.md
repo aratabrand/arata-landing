@@ -17,7 +17,7 @@ Agencia digital en Bogotá, Colombia (`@arata.san.web`, sitio `aratasan.com`). D
 | Catálogos y sistemas a medida | **Tu Negocio en Orden** (reservas, menú digital, registro de clientes/CRM) | Se cotiza | Según el sistema |
 
 - **Garantía de velocidad:** 90 o más en PageSpeed móvil o se sigue ajustando gratis.
-- **Pago:** 50 % para arrancar y 50 % al entregar. **Mantenimiento opcional:** 15 % del valor del proyecto al mes (D-022). **Cupos:** 3 proyectos nuevos al mes (D-023).
+- **Pago:** 50 % para arrancar y 50 % al entregar. **Mantenimiento opcional:** 15 % del valor del proyecto al mes (D-022). **Cupos:** 4 proyectos nuevos al mes, uno por semana (D-170).
 - **Adicional:** panel para editar la página y ver métricas (se cotiza aparte, D-034).
 - Portafolio real: Danrodedm, Boost Your Menu, Arata Print y Caravana (`docs/portafolio.md`).
 
@@ -25,12 +25,11 @@ Agencia digital en Bogotá, Colombia (`@arata.san.web`, sitio `aratasan.com`). D
 
 | Persona | Rol |
 |---|---|
-| Sergio | Estrategia digital, landing pages, Meta Ads, UX, contenido, diseño de producto (Figma). Aprueba copy y decisiones de marca. |
+| Sergio | Estrategia digital, landing pages, Meta Ads, UX, contenido, diseño de producto (Figma) y **programación** (sitio, panel y builds en Claude Code, desde nov 2026). Aprueba copy y decisiones de marca. |
 | Andrés | Líder comercial, relación con clientes, sourcing de producto. |
 | Santiago | Automatización: flujos n8n y conexiones entre herramientas. |
-| Nuevo técnico (nombre por confirmar) | Programación: sitio, panel y builds en Claude Code (desde nov 2026). |
 
-Flujo típico: Sergio define a nivel de sistema/diseño (tokens Figma, marca) → el técnico de programación construye; Santiago automatiza.
+Flujo típico: Sergio define el sistema/diseño (tokens Figma, marca) y lo construye con Claude Code; Santiago automatiza (n8n).
 
 ---
 
@@ -82,10 +81,23 @@ Principios de copy:
 
 ## 4. Stack técnico
 
-Stack vigente del sitio y el panel (WordPress, Elementor, Shopify, Dropi y Sara ya no son parte del trabajo actual):
+Se suman herramientas; no se deja ninguna. Cada proyecto usa la que mejor le sirve.
 
 | Área | Herramienta |
 |---|---|
+| Páginas web de clientes (Página Lista en 5 Días) | **Astro** (D-169) |
+| Sitios multi-cliente | WordPress + Elementor |
+| Proyectos individuales | Framer (incluye hosting/dominio) |
+| Sitio y panel de Arata San | Next.js + TypeScript + Tailwind, en Vercel |
+| E-commerce | Shopify Basic + Wompi |
+| Base de datos | **Supabase** (proyectos de clientes) · **Neon** + Better Auth (solo el panel de Arata, D-108) |
+| Agenda | Cal.com (webhook firmado al panel, D-133) |
+| Automatización | n8n (Santiago) |
+| IA | OpenAI |
+| Ads & tracking | Meta Ads + Meta Pixel (en WordPress, con el plugin WPCode en el header); GA4 + Search Console con permiso de cookies (D-130) |
+| Logística dropshipping | Dropi |
+
+---|---|
 | Sitio y panel | Next.js + TypeScript + Tailwind, publicado en Vercel |
 | Agenda | Cal.com (webhook firmado al panel, D-133) |
 | Base del panel | Neon + Better Auth (contraseña + doble factor), D-108 |

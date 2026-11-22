@@ -26,7 +26,7 @@ Convertir la landing actual (un solo servicio de chatbot y automatización, CTA 
 | 1 | **Páginas que venden** (landing pages y sitios web) | Negocios que necesitan que les lleguen clientes por internet | Landing desde 400 USD · 5 días hábiles |
 | 2 | **Catálogos y sistemas a medida** *(antes "apps", D-027)* | Negocios que venden por WhatsApp o manejan pedidos, reservas, inventario o clientes a mano | Catálogo desde 800 USD · 5 días hábiles · Sistema a medida cotizado |
 
-Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 3 proyectos nuevos al mes (D-023).
+Mantenimiento mensual: 15 % del valor del proyecto (D-022). Cupos: 4 proyectos nuevos al mes, uno por semana (D-170; antes 3, D-023).
 
 **Promesa en los dos servicios:** todo se diseña **primero para celular** (mobile-first) y sale **optimizado**: rápido, encontrable en Google y en la IA, y medido. Se presenta como promesa + auditoría gratis de gancho (D-014).
 
@@ -159,7 +159,7 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] Cookies con permiso previo, formulario endurecido y Microsoft Clarity listo para encender (D-130 a D-132)
 - [x] **Estilo visual vigente: el del panel aplicado al sitio, con botones del panel** (D-141, D-142; historial de lo descartado en `04-sistema-de-diseno.md` §13)
 - [ ] Microsoft Clarity: falta el ID del proyecto para encenderlo (D-132)
-- [ ] ⏸ Pendiente: prueba de Astro para páginas de clientes (D-101)
+- [x] Astro para las páginas web de clientes (D-169, cierra D-101)
 - [ ] Blueprint consolidado
 
 ---
