@@ -30,6 +30,8 @@ ok(!!n.autorizacion?.startsWith("sí"), "notas: constancia de autorización");
 const aud = leerNotas("Necesito: Una auditoría gratis de mi página\nMi página: https://tunegocio.com\nCuándo empezar: Todavía lo estoy pensando\nWhatsApp: +57 300 000 0000");
 ok(aud.tipo === "auditoria" && aud.paginaWeb === "https://tunegocio.com" && aud.inversion === null, "notas de auditoría: tipo, página y sin inversión");
 ok(tipoDe("Un catálogo o tienda") === "catalogo" && tipoDe("Un sistema a medida") === "sistema", "tipos catálogo y sistema");
+ok(leerNotas("Necesito: Una tienda\nReferencia: 8F3A1C2B9D").referencia === "8f3a1c2b9d", "notas: código del prospecto (D-174)");
+ok(leerNotas("Referencia: x' or 1=1").referencia === null && leerNotas("Referencia: 8f3a1c2b9").referencia === null, "notas: referencia rara se ignora");
 const vacio = leerNotas("");
 ok(vacio.necesita === null && vacio.whatsapp === null && vacio.tipo === null, "sin notas (reserva directa en Cal): todo null, no falla");
 ok(leerNotas("Necesito: <script>alert(1)</script> página").necesita === "script alert(1) /script página", "notas: quita < y > (nada de HTML)");

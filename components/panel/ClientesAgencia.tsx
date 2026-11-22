@@ -112,7 +112,7 @@ export default function ClientesAgencia({ datos, vistaInicial = "clientes" }: { 
       />
 
       {vista === "prospectos" ? (
-        <Prospectos prospectos={datos.prospectos} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} />
+        <Prospectos prospectos={datos.prospectos} puedeEditar={datos.puedeEditar} puedeBorrar={datos.puedeBorrar} yo={datos.yo} ahora={datos.ahora} />
       ) : vista === "interesados" ? (
         <Interesados
           interesados={datos.interesados}

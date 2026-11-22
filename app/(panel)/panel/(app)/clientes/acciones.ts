@@ -413,3 +413,26 @@ export async function borrarProspecto(id: string): Promise<Resultado> {
     return NO(e instanceof Error ? e.message : "No se pudo borrar.");
   }
 }
+
+/** Tocó «Escribirle por WhatsApp» (D-174): un prospecto nuevo pasa a «Contactado». Si ya iba más adelante, no cambia. */
+export async function marcarContactado(id: string): Promise<Resultado> {
+  try {
+    if (!panelActivo) return NO("El panel está en modo ejemplo.");
+    const ctx = await contextoAgencia();
+    if (!ctx) return NO("Tu sesión terminó. Vuelve a entrar.");
+    if (!ctx.editaFinanzas) return NO("Solo Sergio y Andrés pueden cambiar los prospectos.");
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return NO("Prospecto no válido.");
+    const r = await db().query(
+      `update prospectos set estado = 'contactado', contactado_en = coalesce(contactado_en, now()), actualizado = now()
+        where id = $1 and negocio_id = $2 and estado = 'nuevo' returning nombre`,
+      [id, ctx.negocioId]
+    );
+    if (r.rowCount) {
+      await registrar(ctx, { accion: "editar", entidad: "prospecto", entidadId: id, titulo: `Le escribió por WhatsApp a ${r.rows[0].nombre}`, cambios: [{ campo: "Estado", antes: "Nuevo", despues: "Contactado" }] });
+      revalidatePath("/panel/clientes");
+    }
+    return SI;
+  } catch (e) {
+    return NO(e instanceof Error ? e.message : "No se pudo marcar.");
+  }
+}

@@ -1,5 +1,5 @@
 // Prueba de la clasificación de prospectos (D-173). Correr:  npx -y tsx scripts/prueba-prospectos.ts
-import { clasificar, paginaDe, prioridadDe, puntuar, rubroDe, telefonoTexto, tipoTelefonoDe, titularDe } from "../lib/panel/clientes/prospectos";
+import { clasificar, codigoDe, enlaceAgenda, mensajeProspecto, nombreCorto, saludoDe, whatsappDe, paginaDe, prioridadDe, puntuar, rubroDe, telefonoTexto, tipoTelefonoDe, titularDe } from "../lib/panel/clientes/prospectos";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 
 ok(rubroDe("Hardware store") === "ferreteria" && rubroDe("Tool store") === "ferreteria", "ferretería desde la categoría de Google");
@@ -33,5 +33,22 @@ const q = clasificar({ fuenteId: "x2", nombre: "X", sitio: "javascript:alert(1)"
 const largo = clasificar({ fuenteId: "x3", nombre: "Y", sitio: "https://ejemplo.com/" + "a".repeat(400) });
 ok(largo.sitioWeb === null && largo.pagina === "tiene_pagina", "enlace muy largo: no se guarda pero cuenta como página");
 ok(q.sitioWeb === null && q.enlaceMaps === null && q.calificacion === 5 && q.resenas === 0, "clasificar: rechaza enlaces raros y acota la calificación");
+
+
+// Mensaje de WhatsApp (D-174, versión B)
+const id = "8f3a1c2b-9d4e-4a7b-b1c2-3d4e5f6a7b8c";
+ok(codigoDe(id) === "8f3a1c2b9d", "código corto de 10 letras");
+ok(nombreCorto("Dentica Dental Clinic Bogotá - Dental Anxiety Specialists") === "Dentica Dental Clinic Bogotá" && nombreCorto("Mattelsa Bogotá | Chapinero") === "Mattelsa Bogotá" && nombreCorto("Ferretería El Campin") === "Ferretería El Campin", "nombre corto del negocio");
+ok(whatsappDe({ telefono: "573054127369" }) === "573054127369" && whatsappDe({ telefono: "3057482519" }) === "573057482519" && whatsappDe({ telefono: "576012345678" }) === null && whatsappDe({ telefono: null }) === null, "WhatsApp solo a celulares");
+// 9 a. m., 3 p. m. y 8 p. m. en Bogotá (UTC-5)
+ok(saludoDe(Date.parse("2026-11-23T14:00:00Z")) === "Buenos días" && saludoDe(Date.parse("2026-11-23T20:00:00Z")) === "Buenas tardes" && saludoDe(Date.parse("2026-11-24T01:00:00Z")) === "Buenas noches", "saludo según la hora de Bogotá");
+ok(enlaceAgenda({ id, pagina: "sin_pagina", servicio: "catalogo" }) === "https://aratasan.com/agendar?tipo=catalogo&p=8f3a1c2b9d", "enlace con tipo y código");
+ok(enlaceAgenda({ id, pagina: "tiene_pagina", servicio: "pagina" }).includes("tipo=auditoria"), "si ya tiene página, el enlace va a la auditoría");
+const m = mensajeProspecto({ id, nombre: "Ferretería El Campin", rubro: "ferreteria", pagina: "sin_pagina", servicio: "catalogo" }, "Andrés Gómez", Date.parse("2026-11-23T20:00:00Z"));
+ok(m.startsWith("Buenas tardes. Le escribe Andrés, de Arata San, una agencia de Bogotá. Encontramos Ferretería El Campin en Google Maps y vimos que todavía no tienen página."), "mensaje B: saludo, quién firma y de dónde salió el número");
+ok(m.includes("catálogos para vender por WhatsApp") && m.includes("p=8f3a1c2b9d") && m.endsWith("Si no desea que le escribamos, responda NO y no volveremos a contactarle."), "mensaje B: oferta, enlace y cómo pedir que no le escribamos");
+const d = mensajeProspecto({ id, nombre: "Dra. Camila Novoa", rubro: "odontologia", pagina: "solo_redes", servicio: "pagina" }, "", Date.parse("2026-11-23T14:00:00Z"));
+ok(d.includes("Le escribimos de Arata San") && d.includes("redes pero no una página propia") && d.includes("apartan su cita solos"), "mensaje B: consultorio con solo redes y sin firma");
+ok(!/conversi[oó]n|ROI/i.test(m + d), "sin jerga (conversión, ROI)");
 
 if (process.exitCode) console.log("HAY FALLAS");

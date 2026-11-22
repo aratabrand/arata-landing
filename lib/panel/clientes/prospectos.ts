@@ -220,3 +220,71 @@ export function telefonoTexto(digitos: string | null) {
 
 /** Consulta de la empresa en el RUES (Cámara de Comercio) para confirmar si es empresa o persona natural. */
 export const RUES = "https://www.rues.org.co/";
+
+/* ── Mensaje de WhatsApp (D-174, versión B aprobada por Sergio) ───────── */
+
+/** Código corto del prospecto para el enlace de agenda (10 letras del id): ?p=8f3a1c… */
+export const codigoDe = (id: string) => id.replace(/-/g, "").slice(0, 10).toLowerCase();
+export const CODIGO = /^[0-9a-f]{10}$/;
+
+/** "Dentica Dental Clinic Bogotá - Dental Anxiety Specialists" → "Dentica Dental Clinic Bogotá". */
+export function nombreCorto(nombre: string) {
+  const corto = nombre.split(/\s+[-|–]\s+/)[0].trim();
+  return corto.length >= 3 ? corto : nombre.trim();
+}
+
+/** Número para wa.me: solo celulares colombianos (un fijo no tiene WhatsApp). null si no se puede escribir. */
+export function whatsappDe(p: Pick<Prospecto, "telefono">): string | null {
+  const d = (p.telefono ?? "").replace(/\D/g, "");
+  if (/^573\d{9}$/.test(d)) return d;
+  if (/^3\d{9}$/.test(d)) return `57${d}`; // celular guardado sin el 57
+  return null;
+}
+
+/** Buenos días / Buenas tardes / Buenas noches según la hora de Bogotá. */
+export function saludoDe(ahoraMs: number) {
+  const h = Number(new Date(ahoraMs).toLocaleString("en-US", { hour: "numeric", hourCycle: "h23", timeZone: "America/Bogota" }));
+  return h < 12 ? "Buenos días" : h < 19 ? "Buenas tardes" : "Buenas noches";
+}
+
+/** Enlace de agenda con el tipo ya elegido y el código del prospecto (para saber que agendó desde el mensaje). */
+export function enlaceAgenda(p: Pick<Prospecto, "id" | "pagina" | "servicio">, sitio = "https://aratasan.com") {
+  const tipo = p.pagina === "tiene_pagina" ? "auditoria" : p.servicio;
+  return `${sitio}/agendar?${tipo ? `tipo=${tipo}&` : ""}p=${codigoDe(p.id)}`;
+}
+
+/**
+ * Primer mensaje (versión B, con usted). Lleva lo que pide la Ley 1581: quién escribe,
+ * de dónde salió el número, qué ofrecemos y cómo pedir que no le escribamos más.
+ * `yo` = nombre de quien está en sesión (firma el mensaje).
+ */
+export function mensajeProspecto(p: Pick<Prospecto, "id" | "nombre" | "rubro" | "pagina" | "servicio">, yo: string, ahoraMs: number) {
+  const quien = yo.trim() ? `Le escribe ${yo.trim().split(/\s+/)[0]}, de Arata San` : "Le escribimos de Arata San";
+  const negocio = nombreCorto(p.nombre);
+  const visto =
+    p.pagina === "sin_pagina"
+      ? "vimos que todavía no tienen página"
+      : p.pagina === "solo_redes"
+        ? "vimos que tienen redes pero no una página propia"
+        : "revisamos su página";
+  let oferta: string;
+  let pregunta = "¿Le gustaría que le mostremos cómo se vería la suya?";
+  if (p.pagina === "tiene_pagina") {
+    oferta = "Le revisamos sin costo qué tan rápido abre en el celular y qué la está frenando para que le escriban más.";
+    pregunta = "¿Le gustaría recibir esa revisión?";
+  } else if (p.servicio === "catalogo") {
+    oferta = "Hacemos catálogos para vender por WhatsApp: sus clientes ven los productos, arman el pedido y le llega ordenado a su WhatsApp. Queda listo en 5 días.";
+    pregunta = "¿Le gustaría que le mostremos cómo se vería el suyo?";
+  } else if (p.rubro === "odontologia") {
+    oferta = "Hacemos páginas para consultorios donde los pacientes apartan su cita solos. Queda lista en 5 días.";
+  } else {
+    oferta = "Hacemos páginas claras para el celular, para que lo encuentren en Google y le escriban. Queda lista en 5 días.";
+  }
+  return [
+    `${saludoDe(ahoraMs)}. ${quien}, una agencia de Bogotá. Encontramos ${negocio} en Google Maps y ${visto}.`,
+    oferta,
+    `${pregunta} Puede agendar 30 minutos sin costo: ${enlaceAgenda(p)}`,
+    "",
+    "Si no desea que le escribamos, responda NO y no volveremos a contactarle.",
+  ].join("\n");
+}

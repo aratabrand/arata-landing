@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { ExternalLink, Globe, MapPin, Phone, Search, Trash2 } from "./iconos";
+import { ExternalLink, Globe, MapPin, MessageCircle, Phone, Search, Trash2 } from "./iconos";
 import {
   ESTADOS_PROSPECTO,
   PAGINAS,
@@ -10,14 +10,16 @@ import {
   RUES,
   SERVICIOS,
   TITULARES,
+  mensajeProspecto,
   razonesDe,
   telefonoTexto,
+  whatsappDe,
   type EstadoProspecto,
   type Prioridad,
   type Prospecto,
   type Titular,
 } from "@/lib/panel/clientes/prospectos";
-import { borrarProspecto, guardarProspecto } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { borrarProspecto, guardarProspecto, marcarContactado } from "@/app/(panel)/panel/(app)/clientes/acciones";
 import { numero } from "@/lib/panel/formato";
 import { Hoja } from "./Clientes";
 import { Pill, Tarjeta, type TonoPill } from "./ui";
@@ -43,7 +45,21 @@ const POR_PAGINA = 60;
 
 const opciones = <T extends string>(o: Record<T, string>) => Object.entries(o) as [T, string][];
 
-export default function Prospectos({ prospectos, puedeEditar, puedeBorrar }: { prospectos: Prospecto[]; puedeEditar: boolean; puedeBorrar: boolean }) {
+export default function Prospectos({
+  prospectos,
+  puedeEditar,
+  puedeBorrar,
+  yo,
+  ahora,
+}: {
+  prospectos: Prospecto[];
+  puedeEditar: boolean;
+  puedeBorrar: boolean;
+  /** Quien está en sesión: firma el mensaje de WhatsApp (D-174). */
+  yo: string;
+  /** Hora del servidor (ISO): el saludo sale igual al hidratar. */
+  ahora: string;
+}) {
   const [q, setQ] = useState("");
   const [prioridad, setPrioridad] = useState<Prioridad | "">("");
   const [titular, setTitular] = useState<Titular | "">("");
@@ -184,7 +200,7 @@ export default function Prospectos({ prospectos, puedeEditar, puedeBorrar }: { p
 
       {actual && (
         <Hoja titulo={actual.nombre} onClose={() => setAbierto(null)}>
-          <Perfil key={actual.id} p={actual} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onBorrado={() => setAbierto(null)} />
+          <Perfil key={actual.id} p={actual} yo={yo} ahora={ahora} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onBorrado={() => setAbierto(null)} />
         </Hoja>
       )}
     </>
@@ -205,10 +221,13 @@ function Filtro<T extends string>({ etiqueta, valor, onChange, todos, opciones }
 }
 
 /** Perfil del negocio: lo que publicó, por qué tiene esa prioridad y en qué va el contacto. */
-function Perfil({ p, puedeEditar, puedeBorrar, onBorrado }: { p: Prospecto; puedeEditar: boolean; puedeBorrar: boolean; onBorrado: () => void }) {
+function Perfil({ p, yo, ahora, puedeEditar, puedeBorrar, onBorrado }: { p: Prospecto; yo: string; ahora: string; puedeEditar: boolean; puedeBorrar: boolean; onBorrado: () => void }) {
   const acc = useAccion();
   const [guardado, setGuardado] = useState(false);
   const razones = razonesDe(p);
+  const celularWa = whatsappDe(p);
+  const mensaje = mensajeProspecto(p, yo, Date.parse(ahora));
+  const cerrado = p.estado === "no_contactar" || p.estado === "no_interesa";
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -236,6 +255,37 @@ function Perfil({ p, puedeEditar, puedeBorrar, onBorrado }: { p: Prospecto; pued
           </div>
         ))}
       </dl>
+
+      {puedeEditar && (
+        <section className="space-y-2">
+          {cerrado ? (
+            <p className="rounded-frame border border-white/8 bg-surface-1 p-3 text-sm text-fog">
+              {p.estado === "no_contactar" ? "Pidió que no le escribamos. No se le vuelve a escribir." : "Dijo que no le interesa por ahora."}
+            </p>
+          ) : celularWa ? (
+            <>
+              <a
+                href={`https://wa.me/${celularWa}?text=${encodeURIComponent(mensaje)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => p.estado === "nuevo" && acc.correr(() => marcarContactado(p.id))}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-full pn-primario text-sm font-semibold"
+              >
+                <MessageCircle aria-hidden className="h-4 w-4" /> Escribirle por WhatsApp
+              </a>
+              <details className="rounded-frame border border-white/8 bg-surface-1 p-3 text-sm text-fog">
+                <summary className="cursor-pointer select-none text-white">Ver el mensaje</summary>
+                <p className="mt-2 whitespace-pre-line">{mensaje}</p>
+              </details>
+              {p.estado === "nuevo" && <p className="text-xs text-fog-dim">Al tocarlo, queda como «Contactado». Si agenda con el enlace, pasa solo a «Agendó».</p>}
+            </>
+          ) : (
+            <p className="rounded-frame border border-white/8 bg-surface-1 p-3 text-sm text-fog">
+              {p.telefono ? "Su número es fijo: no tiene WhatsApp. Llámalo o busca su celular en Google Maps." : "No publicó teléfono. Búscalo en Google Maps o en sus redes."}
+            </p>
+          )}
+        </section>
+      )}
 
       <section>
         <h3 className="mb-2 text-sm font-semibold text-white">Negocio</h3>
