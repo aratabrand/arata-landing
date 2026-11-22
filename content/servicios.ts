@@ -89,7 +89,7 @@ export const paginasWeb = {
       { p: "¿Qué son las 5 secciones?", r: "Son las partes de tu página: por ejemplo, inicio, qué ofreces, trabajos o productos, preguntas y contacto. Las definimos contigo en la reunión." },
       { p: "¿Tengo que escribir los textos?", r: "Sí. Tú nos mandas los textos de tu negocio y nosotros los organizamos en el diseño para que se lean fácil." },
       { p: "¿Y si necesito más de 5 secciones?", r: "Se puede. Te damos el precio en la propuesta." },
-      { p: "¿Tienen sitios para empresas, con varias páginas y blog?", r: "Sí: el Sitio Corporativo con Panel, desde 700 USD. Trae inicio, sobre nosotros, una página por cada servicio, blog básico y un panel básico para cambiar textos y publicar en el blog. Además, todo lo de la página: hecho primero para el celular, velocidad garantizada, lista para Google y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación." },
+      { p: "¿Tienen sitios para empresas, con varias páginas y blog?", r: "Sí: el Sitio Corporativo con Panel, desde 700 USD. Trae inicio, sobre nosotros, una página por cada servicio, página de contacto con burbuja de WhatsApp o formulario, blog básico y un panel básico para cambiar textos y publicar en el blog. Además, todo lo de la página: hecho primero para el celular, velocidad garantizada, lista para Google y la IA, dominio y hosting el primer año, 2 rondas de ajustes y capacitación." },
       { p: "¿Qué es el panel adicional?", r: "Un panel para que cambies textos y fotos tú mismo y veas las métricas de tu negocio. Lo cotizamos según las funciones que necesites." },
       { p: "¿Puedo pagar por partes?", r: "Sí: 50 % para arrancar y 50 % cuando te entregamos." },
       { p: "¿Incluye dominio y hosting?", r: "Sí, el primer año va incluido. Después lo renuevas tú o lo incluimos si tomas el mantenimiento." },
@@ -102,7 +102,7 @@ export const paginasWeb = {
       etiqueta: "Sitio Corporativo con Panel · desde 700 USD",
       titulo: "¿Tu empresa necesita más que una página?",
       texto:
-        "Un sitio con inicio, sobre nosotros, una página por cada servicio, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.",
+        "Un sitio con inicio, sobre nosotros, una página por cada servicio, contacto con burbuja de WhatsApp o formulario, blog y un panel para manejarlo tú mismo. Con todo lo técnico de la página: rápido, hecho para el celular y listo para Google.",
     },
     paraQuien: {
       titulo: "El sitio corporativo es para ti si…",
@@ -116,7 +116,7 @@ export const paginasWeb = {
     incluye: {
       titulo: "Todo lo que trae tu sitio corporativo",
       items: [
-        { icono: "paginas", titulo: "Inicio, Sobre nosotros y tus servicios", texto: "Una página por cada servicio, para explicar bien cada uno y que Google los encuentre." },
+        { icono: "paginas", titulo: "Inicio, Sobre nosotros, servicios y contacto", texto: "Una página por cada servicio, para explicar bien cada uno y que Google los encuentre, y una página de contacto." },
         { icono: "celular", titulo: "Hecho primero para el celular", texto: "Porque es donde te van a ver tus clientes." },
         { icono: "velocidad", titulo: "Velocidad garantizada", texto: "90 o más en la medición de Google. Si no lo logra, lo seguimos ajustando gratis." },
         { icono: "blog", titulo: "Blog básico", texto: "Para publicar noticias y artículos de tu empresa." },
@@ -125,6 +125,7 @@ export const paginasWeb = {
         { icono: "dominio", titulo: "Dominio y hosting", texto: "El primer año va por nuestra cuenta." },
         { icono: "ajustes", titulo: "2 rondas de ajustes", texto: "Para que quede como lo quieres." },
         { icono: "capacitacion", titulo: "Capacitación", texto: "Te enseñamos a manejar el sitio y el panel." },
+        { icono: "contacto", titulo: "Burbuja de WhatsApp o formulario", texto: "Quien visita tu sitio te escribe al WhatsApp con un toque, o te deja sus datos en un formulario." },
       ] satisfies Incluye[],
     },
     precio: {
