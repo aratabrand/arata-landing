@@ -69,11 +69,11 @@ En noviembre de 2026 se probaron varias direcciones (D-137 a D-148). Estas son l
 | Tarjeta | blanca + borde tinta al 8 % + sombra muy suave | Se separa del fondo sin bloques de color |
 | Tarjeta destacada | **Degradado lima** (`#E3FF8A` → `#C8F53A` → `#A8E33A`) con brillo blanco, texto `ink` (D-159). Una por vista: la cifra principal | Los grises de adentro se oscurecen para leerse sobre el lima |
 | Opción elegida del menú | **Píldora negra** (`ink`) con texto blanco y el ícono en lima (D-159) | |
-| Píldora activa (filtros, 7/30/90 días, pestañas) | **Relleno lima** con texto `ink` (D-159; antes morado) | |
+| Píldora activa (filtros, 7/30/90 días, pestañas) | **Morado sólido** con texto blanco (D-160) | Actúa como botón |
 | Texto | `ink` `#03010B` · `#52505C` · `#686572` | 20:1 · 7,8:1 · 5,6:1 sobre blanco |
 | Dato | **Morado** (D-151, decisión de Sergio: no verde) | Texto `#6D45F0` (5,6:1 sobre blanco); rellenos (barras, etiquetas) `#9B7BFF` con texto `ink` encima (6,4:1). El lima `#B6FF00` no se lee sobre blanco. En claro el morado marca botones **y** datos; los distingue la forma (un botón es un botón) |
 | Alerta / ámbar | `#BE123C` · `#A16207` | |
-| Botón principal | **Lima con texto `ink`** (17:1) en claro (D-159); en oscuro sigue morado con texto blanco | |
+| Botón principal | **Morado con texto blanco** en los dos modos (D-160: los botones son morados) | |
 
 **Cómo lo hace el código:** los colores que cambian con el tema son variables CSS (canales RGB) que lee la configuración de Tailwind del panel. Así `text-white`, `bg-white/5` y `border-white/10` se vuelven tinta en claro sin tocar cada componente.
 

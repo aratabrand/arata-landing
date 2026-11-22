@@ -71,7 +71,7 @@
   --pn-verde: 21 128 61;
   /* En claro: blancas, borde muy fino y sombra suave (D-159) */
   --pn-tarjeta: #ffffff;
-  --pn-tarjeta-borde: rgb(3 1 11 / 0.07);
+  --pn-tarjeta-borde: rgb(3 1 11 / 0.12);
   --pn-tarjeta-sombra: 0 1px 2px rgb(3 1 11 / 0.04), 0 10px 28px -18px rgb(3 1 11 / 0.14);
   /* D-159: la destacada (la cifra principal) en DEGRADADO LIMA con un brillo blanco, texto ink
      (17:1 sobre lima). Una sola por vista */
@@ -79,13 +79,13 @@
   --pn-destacada-borde: rgb(120 170 0 / 0.35);
   /* Píldoras: gris cálido sólido, sin borde marcado (como los chips de la referencia) */
   --pn-pildora: #efefe9;
-  --pn-pildora-borde: rgb(3 1 11 / 0.05);
+  --pn-pildora-borde: rgb(3 1 11 / 0.12);
   --pn-pildora-sombra: none;
   --pn-pildora-texto: 82 80 92;
-  /* D-159: la activa en LIMA de relleno con texto ink (lima de fondo sí se lee; como texto no) */
-  --pn-activa: linear-gradient(180deg, #d4ff5c 0%, #b6ff00 100%);
-  --pn-activa-borde: rgb(120 170 0 / 0.45);
-  --pn-activa-texto: 3 1 11;
+  /* D-159: la activa actúa como botón → MORADO sólido con texto blanco (4,6:1) */
+  --pn-activa: #7d53ff;
+  --pn-activa-borde: #7d53ff;
+  --pn-activa-texto: 255 255 255;
   --pn-campo: #ffffff;
   /* D-159: en claro las barras, líneas y anillos van en el MORADO de marca, nunca en negro */
   --pn-serie: 125 83 255;
@@ -131,13 +131,24 @@
   box-shadow: 0 8px 18px -10px rgb(3 1 11 / 0.55);
 }
 [data-tema="claro"] .pn-nav-on { color: #fff; }
-/* Interruptor de tema, campana y cuenta: negros con texto blanco en claro (D-159) */
+/* Dentro de la píldora activa morada, los contadores ("Todos 10") van en blanco suave, no en gris */
+[data-tema="claro"] .pn-pildora-activa span { color: rgb(255 255 255 / 0.8); }
+/* Contraste en claro (D-159): los bordes finos pensados para oscuro (blanco al 6–10 %) se quedaban
+   casi invisibles sobre blanco; en claro pasan a tinta al 14–18 % */
+[data-tema="claro"] .border-white\/6,
+[data-tema="claro"] .border-white\/8,
+[data-tema="claro"] .border-white\/\[0\.06\],
+[data-tema="claro"] .border-white\/\[0\.07\],
+[data-tema="claro"] .border-white\/\[0\.08\],
+[data-tema="claro"] .border-white\/\[0\.09\] { border-color: rgb(3 1 11 / 0.14); }
+[data-tema="claro"] .border-white\/10,
+[data-tema="claro"] .border-white\/12 { border-color: rgb(3 1 11 / 0.18); }
+/* La cuenta (abajo a la izquierda y el círculo en el celular): negra con texto blanco en claro (D-159) */
 [data-tema="claro"] .pn-negro { background: #03010b; border-color: transparent; color: #fff; }
 [data-tema="claro"] .pn-negro:hover { background: #1c1830; }
 [data-tema="claro"] .pn-negro .text-white,
 [data-tema="claro"] .pn-negro .text-fog { color: #fff; }
 [data-tema="claro"] .pn-negro .text-fog-dim { color: rgb(255 255 255 / 0.6); }
-[data-tema="claro"] .pn-negro .pn-perilla { background: rgb(255 255 255 / 0.16); border-color: rgb(255 255 255 / 0.22); }
 [data-tema="claro"] .pn-negro .pn-avatar { background: rgb(255 255 255 / 0.14); color: #fff; }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
@@ -166,14 +177,8 @@
 .pn-primario:active { transform: translateY(1px); }
 .pn-primario:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
 .pn-primario:focus-visible { outline: 2px solid #7d53ff; outline-offset: 2px; }
-/* D-159: en claro el botón principal va en LIMA con texto ink (17:1), como en la referencia */
-[data-tema="claro"] .pn-primario {
-  background: linear-gradient(180deg, #ccff3d 0%, #b6ff00 100%);
-  color: #03010b;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), 0 1px 2px rgb(3 1 11 / 0.08), 0 10px 22px -14px rgb(110 160 0 / 0.7);
-}
-[data-tema="claro"] .pn-primario:hover { filter: brightness(0.96); }
-[data-tema="claro"] .pn-primario:focus-visible { outline-color: #03010b; }
+/* Los botones son MORADOS en los dos modos (Sergio, D-159). En claro, sin el brillo morado de abajo */
+[data-tema="claro"] .pn-primario { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), 0 1px 2px rgb(3 1 11 / 0.12); }
 
 /* Cuadrito con ícono: SIN USO desde D-149 (los íconos decorativos se quitaron, como en el sitio, D-147) */
 
