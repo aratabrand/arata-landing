@@ -51,7 +51,8 @@ export function Glow({ className, style }: { className?: string; style?: CSSProp
 }
 
 /**
- * D-164 (referencia Kept): la ÚLTIMA palabra del título en cursiva con serifa (Instrument Serif).
+ * D-164 (referencia Kept): la ÚLTIMA palabra del título en cursiva con serifa (Instrument Serif), en lima (D-166).
+ * Dentro de una tarjeta lima (.v2-destacada) se ve en tinta.
  * Automático y sin cambiar el texto: "Lo que te cuesta, sin *sorpresas*". Si el título no es texto, va igual.
  * El panel tiene su propia copia (components/panel/ui.tsx): el panel no importa piezas del sitio (D-115).
  */
@@ -63,7 +64,7 @@ export function Acento({ texto }: { texto: ReactNode }) {
   return (
     <>
       {t.slice(0, i + 1)}
-      <em className="font-acento font-normal italic tracking-normal">{t.slice(i + 1)}</em>
+      <em className="font-acento font-normal italic tracking-normal text-lime">{t.slice(i + 1)}</em>
     </>
   );
 }
