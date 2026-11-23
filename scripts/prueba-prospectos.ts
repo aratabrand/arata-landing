@@ -4,7 +4,7 @@ const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); 
 
 ok(rubroDe("Hardware store") === "ferreteria" && rubroDe("Tool store") === "ferreteria", "ferretería desde la categoría de Google");
 ok(rubroDe("Dentist") === "odontologia" && rubroDe("Orthodontist") === "odontologia", "odontología");
-ok(rubroDe("Auto parts store") === "repuestos" && rubroDe("Clothing store") === "ropa" && rubroDe("Bakery") === "panaderia", "repuestos, ropa y panadería");
+ok(rubroDe("Auto parts store") === "repuestos" && rubroDe("Clothing store") === "ropa" && rubroDe("Bakery") === "otro", "repuestos y ropa; panaderías ya no se trabajan (D-180)");
 ok(rubroDe("Home goods store", "Depósito y Ferretería San Cipriano") === "ferreteria" && rubroDe("Home goods store", "Hogar Ideal") === "electrodomesticos", "el nombre manda si dice el rubro");
 ok(rubroDe("Real estate agency") === "otro" && rubroDe(null) === "otro", "lo que no es de un rubro queda en otro");
 

@@ -80,10 +80,9 @@ const RUBRO_DE: [RegExp, Rubro][] = [
   [/hardware|tool|ferreter/i, "ferreteria"],
   [/auto|car |motorcycle|battery|repuesto/i, "repuestos"],
   [/appliance|electronic|electrodom|computer|home goods/i, "electrodomesticos"],
-  [/bakery|pastry|panader|pasteler/i, "panaderia"],
 ];
 
-/** Qué paquete le sirve según el rubro (sale del nicho): las tiendas venden por WhatsApp; consultorios y panaderías necesitan página. */
+/** Qué paquete le sirve según el rubro (sale del nicho): las tiendas venden por WhatsApp; consultorios necesitan página. */
 const servicioDe = (rubro: Rubro): ServicioSugerido | null => NICHO[rubro]?.servicio ?? null;
 
 // Un perfil de redes no es una página propia
@@ -97,7 +96,6 @@ const PERSONA = /^(dr|dra|od|odont[oó]log[oa])\.?\s+[a-záéíóúñ]/i;
 // Si el nombre lo dice claro ("Depósito y Ferretería…"), manda sobre la categoría de Google ("Home goods store")
 const RUBRO_POR_NOMBRE: [RegExp, Rubro][] = [
   [/ferreter/i, "ferreteria"],
-  [/panader|pasteler/i, "panaderia"],
   [/odontol|dental|dentist|ortodonc/i, "odontologia"],
   [/repuesto|autoparte/i, "repuestos"],
 ];

@@ -61,7 +61,7 @@ export const NICHOS: Nicho[] = [
     busqueda: "repostería tortas por encargo",
     servicio: "catalogo",
     enfoque: "ya_vende",
-    categorias: /reposter|pasteler|postre|torta|cake|dessert|bakery|panader|galleta|cupcake/i,
+    categorias: /reposter|pasteler|postre|torta|cake|dessert|galleta|cupcake/i,
     porque: "Venden por Instagram y WhatsApp con fecha de entrega: un catálogo con pedidos por día evita cruces.",
     recomendado: true,
   },
@@ -185,7 +185,7 @@ export const NICHOS: Nicho[] = [
     categorias: /restaur|comida|pizz|hambur|asadero|cafeter|food|almuerzo|parrilla|sushi|wok/i,
     porque: "Menú digital y pedidos propios para no pagar comisión a las apps.",
   },
-  // Rubros de la primera carga (D-173): enfoque «necesita página»
+  // Rubros de la primera carga (D-173): enfoque «necesita página». Panaderías se quitaron (D-180): no se trabajan.
   {
     clave: "odontologia",
     nombre: "Odontología",
@@ -195,15 +195,7 @@ export const NICHOS: Nicho[] = [
     categorias: /dent|odont|ortodonc|orthodont|endodont|periodont/i,
     porque: "Pacientes que buscan en Google: página con reservas de citas.",
   },
-  {
-    clave: "panaderia",
-    nombre: "Panaderías",
-    busqueda: "panadería",
-    servicio: "pagina",
-    enfoque: "sin_pagina",
-    categorias: /panader|pasteler|bakery|pastry/i,
-    porque: "Negocio de barrio que aparece en Google Maps pero sin página.",
-  },
+
   {
     clave: "ferreteria",
     nombre: "Ferreterías",

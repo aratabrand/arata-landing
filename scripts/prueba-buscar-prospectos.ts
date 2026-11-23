@@ -15,7 +15,8 @@ ok(ciudadDe("Cra. 44a #24 - 11, Teusaquillo, Bogotá, Cundinamarca") === "Bogot�
 ok(new Set(NICHOS.map((n) => n.clave)).size === NICHOS.length && NICHOS.every((n) => /^[a-z_]{2,40}$/.test(n.clave)), "claves de nicho únicas y válidas para la base");
 ok(NICHOS.filter((n) => n.recomendado).every((n) => n.enfoque === "ya_vende" && n.servicio !== "pagina"), "los recomendados ya venden por internet y llevan catálogo o sistema");
 ok(ZONAS.every((z) => /^@-?\d+\.\d+,-?\d+\.\d+,\d+z$/.test(z.ll)), "zonas con centro de mapa válido");
-ok(["odontologia", "ropa", "ferreteria", "repuestos", "electrodomesticos", "panaderia"].every((k) => NICHO[k]), "los rubros de la primera carga siguen existiendo");
+ok(["odontologia", "ropa", "ferreteria", "repuestos", "electrodomesticos"].every((k) => NICHO[k]), "los rubros de la primera carga siguen existiendo");
+ok(!NICHO.panaderia && !NICHO.reposteria.categorias.test("Panadería") && NICHO.reposteria.categorias.test("Pastelería"), "panaderías fuera (D-180): ni como nicho ni dentro de repostería");
 
 // Un resultado real de Google Maps (tienda de mascotas, Teusaquillo)
 const mascotas = NICHO.mascotas;
