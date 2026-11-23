@@ -342,6 +342,7 @@ export function mensajeProspecto(p: Pick<Prospecto, "id" | "nombre" | "rubro" | 
     oferta = "Le revisamos sin costo qué tan rápido abre en el celular y qué la está frenando para que le escriban más.";
     pregunta = "¿Le gustaría recibir esa revisión?";
   } else if (p.servicio === "sistema") {
+    // Nichos de reservas y pedidos (D-179, aprobado por Sergio el 23 nov 2026)
     oferta = "Hacemos sistemas para que sus clientes aparten su cita o hagan su pedido solos, y usted lleve el orden en un solo lugar. Queda listo según lo que necesite.";
     pregunta = "¿Le gustaría que le mostremos cómo funcionaría en su negocio?";
   } else if (p.servicio === "catalogo") {
