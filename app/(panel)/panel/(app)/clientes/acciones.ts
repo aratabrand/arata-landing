@@ -369,14 +369,21 @@ export async function guardarProspecto(entrada: { id: string; estado: string; ti
     if (!(entrada.titular in TITULARES)) return NO("Elige si es empresa o persona natural.");
     const notas = limpio(entrada.notas, 2000);
     const p = (
-      await db().query(`select id, nombre, estado, titular, notas, pagina, resenas, calificacion, prioridad from prospectos where id = $1 and negocio_id = $2`, [entrada.id, ctx.negocioId])
+      await db().query(`select id, nombre, estado, titular, notas, pagina, resenas, calificacion, prioridad, enfoque, tipo_telefono from prospectos where id = $1 and negocio_id = $2`, [entrada.id, ctx.negocioId])
     ).rows[0];
     if (!p) return NO("Ese prospecto no existe.");
     // «No contactar» es para siempre (Ley 1581): solo Sergio lo puede quitar
     if (p.estado === "no_contactar" && entrada.estado !== "no_contactar" && !ctx.esDueno) return NO("Pidió que no le escribamos: solo Sergio puede cambiar ese estado.");
     const estado = entrada.estado as EstadoProspecto;
     const titular = entrada.titular as Titular;
-    const { puntos, prioridad } = puntuar({ pagina: p.pagina, resenas: Number(p.resenas), calificacion: p.calificacion === null ? null : Number(p.calificacion), titular });
+    const { puntos, prioridad } = puntuar({
+      pagina: p.pagina,
+      resenas: Number(p.resenas),
+      calificacion: p.calificacion === null ? null : Number(p.calificacion),
+      titular,
+      enfoque: p.enfoque,
+      tipoTelefono: p.tipo_telefono,
+    });
     await db().query(
       `update prospectos set estado = $3, titular = $4, notas = $5, puntos = $6, prioridad = $7, actualizado = now(),
               contactado_en = case when $3 <> 'nuevo' and contactado_en is null then now() else contactado_en end

@@ -1,17 +1,12 @@
 // Prospectos (D-173): negocios que Sellbird encontró y todavía no han agendado.
 // Tipos y funciones puras: las usan la pantalla, las acciones del servidor y el importador
-// (scripts/panel-importar-prospectos.ts). Sin base de datos: este archivo viaja al navegador.
+// (scripts/panel-importar-prospectos.ts) y «Buscar más prospectos» (D-179). Sin base de datos: viaja al navegador.
 
-export const RUBROS = {
-  odontologia: "Odontología",
-  ropa: "Ropa",
-  ferreteria: "Ferretería",
-  repuestos: "Repuestos",
-  electrodomesticos: "Electrodomésticos",
-  panaderia: "Panadería",
-  otro: "Otro",
-} as const;
-export type Rubro = keyof typeof RUBROS;
+import { NICHO, NICHOS, type Enfoque, type Nicho } from "./nichos";
+
+/** Rubro = clave del nicho (lib/panel/clientes/nichos.ts) u «otro». */
+export const RUBROS: Record<string, string> = { ...Object.fromEntries(NICHOS.map((n) => [n.clave, n.nombre])), otro: "Otro" };
+export type Rubro = string;
 
 export const SERVICIOS = {
   pagina: "Página Lista en 5 Días",
@@ -66,6 +61,8 @@ export type Prospecto = {
   resenas: number;
   calificacion: number | null;
   titular: Titular;
+  /** Con qué ojos se puntúa: ya vende por internet (D-179) o necesita página (D-173). */
+  enfoque: Enfoque;
   prioridad: Prioridad;
   puntos: number;
   estado: EstadoProspecto;
@@ -86,16 +83,8 @@ const RUBRO_DE: [RegExp, Rubro][] = [
   [/bakery|pastry|panader|pasteler/i, "panaderia"],
 ];
 
-/** Qué paquete le sirve según el rubro: las tiendas venden por WhatsApp; consultorios y panaderías necesitan página. */
-const SERVICIO_DE: Record<Rubro, ServicioSugerido | null> = {
-  odontologia: "pagina",
-  panaderia: "pagina",
-  ropa: "catalogo",
-  ferreteria: "catalogo",
-  repuestos: "catalogo",
-  electrodomesticos: "catalogo",
-  otro: null,
-};
+/** Qué paquete le sirve según el rubro (sale del nicho): las tiendas venden por WhatsApp; consultorios y panaderías necesitan página. */
+const servicioDe = (rubro: Rubro): ServicioSugerido | null => NICHO[rubro]?.servicio ?? null;
 
 // Un perfil de redes no es una página propia
 // (también marketplaces como Rappi o Mercado Libre, directorios y enlaces de WhatsApp como wa.link)
@@ -137,15 +126,30 @@ export function tipoTelefonoDe(digitos: string | null | undefined): TipoTelefono
 }
 
 export type Razon = { texto: string; puntos: number };
+type ParaPuntuar = Pick<Prospecto, "pagina" | "resenas" | "calificacion" | "titular"> & Partial<Pick<Prospecto, "enfoque" | "tipoTelefono">>;
+
+/** Una cadena grande (Puppis, Crepes…) ya tiene su sistema: no es para nosotros. */
+const esCadena = (p: ParaPuntuar) => p.pagina === "tiene_pagina" && p.resenas >= 1000;
 
 /**
- * Por qué tiene esa prioridad. Suma: sin página propia (+3), negocio activo por reseñas
+ * Por qué tiene esa prioridad. Alta desde 5 puntos, media desde 3.
+ *
+ * Enfoque «necesita página» (D-173): sin página propia (+3), negocio activo por reseñas
  * (50 o más +2, 10 o más +1), buena calificación (4,3 o más +1) y empresa con NIT (+1,
- * el contacto más seguro según la Ley 1581). Alta desde 5 puntos, media desde 3.
+ * el contacto más seguro según la Ley 1581). Máximo 7.
+ *
+ * Enfoque «ya vende por internet» (D-179): vende por redes o WhatsApp sin sistema propio (+3)
+ * o tiene página a la que le falta el sistema (+2), tiene celular para WhatsApp (+1), y las mismas
+ * reseñas, calificación y empresa. Una cadena grande (página y 1.000 reseñas o más) resta 2. Máximo 8.
  */
-export function razonesDe(p: Pick<Prospecto, "pagina" | "resenas" | "calificacion" | "titular">): Razon[] {
+export function razonesDe(p: ParaPuntuar): Razon[] {
   const r: Razon[] = [];
-  if (p.pagina === "sin_pagina") r.push({ texto: "No tiene página", puntos: 3 });
+  if (p.enfoque === "ya_vende") {
+    if (p.pagina === "solo_redes") r.push({ texto: "Vende por redes o WhatsApp, sin sistema propio", puntos: 3 });
+    else if (esCadena(p)) r.push({ texto: "Parece una cadena grande: página propia y más de 1.000 reseñas", puntos: -2 });
+    else if (p.pagina === "tiene_pagina") r.push({ texto: "Ya tiene página: le falta el sistema para vender en orden", puntos: 2 });
+    if (p.tipoTelefono === "celular") r.push({ texto: "Tiene celular: se le puede escribir por WhatsApp", puntos: 1 });
+  } else if (p.pagina === "sin_pagina") r.push({ texto: "No tiene página", puntos: 3 });
   else if (p.pagina === "solo_redes") r.push({ texto: "Solo tiene redes, no página propia", puntos: 3 });
   if (p.resenas >= 50) r.push({ texto: `Negocio activo: ${p.resenas.toLocaleString("es-CO")} reseñas`, puntos: 2 });
   else if (p.resenas >= 10) r.push({ texto: `Tiene clientes: ${p.resenas} reseñas`, puntos: 1 });
@@ -158,10 +162,13 @@ export function prioridadDe(puntos: number): Prioridad {
   return puntos >= 5 ? "alta" : puntos >= 3 ? "media" : "baja";
 }
 
-export function puntuar(p: Pick<Prospecto, "pagina" | "resenas" | "calificacion" | "titular">) {
-  const puntos = razonesDe(p).reduce((a, x) => a + x.puntos, 0);
+export function puntuar(p: ParaPuntuar) {
+  const puntos = Math.max(0, razonesDe(p).reduce((a, x) => a + x.puntos, 0));
   return { puntos, prioridad: prioridadDe(puntos) };
 }
+
+/** Puntaje máximo de cada enfoque (para mostrar «5 de 8»). */
+export const maxPuntos = (enfoque: Enfoque) => (enfoque === "ya_vende" ? 8 : 7);
 
 /** Lo que trae Sellbird de cada negocio (una fila del CSV de importación). */
 export type FilaSellbird = {
@@ -194,7 +201,7 @@ export function clasificar(f: FilaSellbird) {
     nombre,
     rubro,
     categoria: f.categoria?.trim().slice(0, 120) || null,
-    servicio: SERVICIO_DE[rubro],
+    servicio: servicioDe(rubro),
     pagina,
     sitioWeb: sitio,
     telefono: telefono && /^[0-9]{7,15}$/.test(telefono) ? telefono : null,
@@ -204,10 +211,72 @@ export function clasificar(f: FilaSellbird) {
     resenas,
     calificacion: cal,
     titular,
+    enfoque: "sin_pagina" as Enfoque,
     prioridad,
     puntos,
   };
 }
+
+/**
+ * Teléfono como lo muestra Google Maps en Colombia → solo números con el 57.
+ * "311 4485245" → 573114485245 · "(601) 6408571" → 576016408571 · "16604340" (fijo viejo de Bogotá) → 5716604340.
+ */
+export function normalizarTelefono(texto: string | null | undefined): string | null {
+  const d = (texto ?? "").replace(/\D/g, "");
+  if (!d) return null;
+  if (/^57\d{8,10}$/.test(d)) return d;
+  if (/^3\d{9}$/.test(d) || /^60\d{8}$/.test(d)) return `57${d}`;
+  if (/^[1-8]\d{7}$/.test(d)) return `57${d}`;
+  return /^[0-9]{7,15}$/.test(d) ? d : null;
+}
+
+/** Ciudad desde la dirección de Google ("Cra. 44a #24 - 11, Teusaquillo, Bogotá, Cundinamarca" → "Bogotá"). */
+export function ciudadDe(direccion: string | null | undefined): string | null {
+  const t = (direccion ?? "").trim();
+  if (!t) return null;
+  if (/bogot[aá]/i.test(t)) return "Bogotá";
+  const partes = t.split(",").map((x) => x.trim()).filter(Boolean);
+  return partes.length >= 2 ? partes[partes.length - 2].slice(0, 120) : null;
+}
+
+/** Un negocio tal como lo entrega Google Maps por Scavio (solo los campos que usamos). */
+export type FilaMaps = {
+  place_id?: string;
+  title?: string;
+  type?: string;
+  types?: string[];
+  website?: string;
+  phone?: string;
+  rating?: number;
+  reviews?: number;
+  address?: string;
+};
+
+/**
+ * De un resultado de Google Maps a un prospecto del nicho buscado (D-179).
+ * `delNicho` = la categoría o el nombre confirman el nicho; si no, se descarta como «No es del nicho».
+ */
+export function clasificarMaps(f: FilaMaps, nicho: Nicho, enfoque: Enfoque = nicho.enfoque) {
+  const placeId = String(f.place_id ?? "").trim();
+  const nombre = String(f.title ?? "").trim();
+  if (!placeId || !nombre) return null;
+  const categoria = (f.type || f.types?.[0] || "").trim() || null;
+  const base = clasificar({
+    fuenteId: `gmaps:${placeId}`.slice(0, 200),
+    nombre,
+    categoria,
+    sitio: f.website ?? null,
+    telefono: normalizarTelefono(f.phone),
+    ciudad: ciudadDe(f.address),
+    enlaceMaps: `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(placeId)}`,
+    resenas: typeof f.reviews === "number" ? f.reviews : null,
+    calificacion: typeof f.rating === "number" ? f.rating : null,
+  });
+  const delNicho = nicho.categorias.test([categoria, ...(f.types ?? []), nombre].filter(Boolean).join(" "));
+  const { puntos, prioridad } = puntuar({ ...base, enfoque });
+  return { ...base, rubro: nicho.clave, servicio: nicho.servicio, enfoque, puntos, prioridad, delNicho };
+}
+export type ProspectoMaps = NonNullable<ReturnType<typeof clasificarMaps>>;
 
 /** "+57 313 866 4158" o "+57 601 234 5678" para mostrar. */
 export function telefonoTexto(digitos: string | null) {
@@ -272,6 +341,9 @@ export function mensajeProspecto(p: Pick<Prospecto, "id" | "nombre" | "rubro" | 
   if (p.pagina === "tiene_pagina") {
     oferta = "Le revisamos sin costo qué tan rápido abre en el celular y qué la está frenando para que le escriban más.";
     pregunta = "¿Le gustaría recibir esa revisión?";
+  } else if (p.servicio === "sistema") {
+    oferta = "Hacemos sistemas para que sus clientes aparten su cita o hagan su pedido solos, y usted lleve el orden en un solo lugar. Queda listo según lo que necesite.";
+    pregunta = "¿Le gustaría que le mostremos cómo funcionaría en su negocio?";
   } else if (p.servicio === "catalogo") {
     oferta = "Hacemos catálogos para vender por WhatsApp: sus clientes ven los productos, arman el pedido y le llega ordenado a su WhatsApp. Queda listo en 5 días.";
     pregunta = "¿Le gustaría que le mostremos cómo se vería el suyo?";

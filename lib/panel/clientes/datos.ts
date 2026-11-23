@@ -4,6 +4,28 @@ import { panelActivo } from "../config";
 import { contextoAgencia } from "../finanzas/datos";
 import type { Interesado } from "./interesados";
 import type { Prospecto } from "./prospectos";
+import { scavioActivo } from "./scavio";
+
+/** Una página buscada en Google Maps desde el panel (D-179). */
+export type BusquedaProspectos = {
+  id: string;
+  quien: string;
+  nicho: string;
+  zona: string;
+  enfoque: "ya_vende" | "sin_pagina";
+  pagina: number;
+  estado: "corriendo" | "lista" | "fallo";
+  creditos: number;
+  encontrados: number;
+  nuevos: number;
+  repetidos: number;
+  descartados: number;
+  altas: number;
+  /** Descartados por los filtros (no por estar fuera del nicho): se pueden guardar sin gastar. */
+  recuperables: number;
+  error: string | null;
+  creado: string;
+};
 
 // Clientes de Arata San (solo servidor, D-110): datos de cada cliente, de dónde
 // vino y sus proyectos (servicio, estado, valor) desde Finanzas.
@@ -57,6 +79,10 @@ export type DatosClientes = {
   interesados: Interesado[];
   /** Negocios que encontró Sellbird y todavía no agendan (D-173). */
   prospectos: Prospecto[];
+  /** Búsquedas de «Buscar más prospectos» (D-179), las más recientes primero. */
+  busquedas: BusquedaProspectos[];
+  /** Hay clave de Scavio en el servidor: se puede buscar. */
+  scavio: boolean;
   /** Hora del servidor (ISO): la pantalla parte de aquí para no desfasarse al hidratar. */
   ahora: string;
   /** Nombre de quien está en sesión (firma el mensaje de seguimiento por WhatsApp, D-144). */
@@ -86,7 +112,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [cl, pr, lugares, it, notas, yo, ps] = await Promise.all([
+  const [cl, pr, lugares, it, notas, yo, ps, bs] = await Promise.all([
     db().query(
       `select c.id, c.nombre, c.empresa, c.telefono, c.pais, pa.nombre pais_nombre, c.ciudad_id, ci.nombre ciudad,
               c.sitio_web, c.instagram, c.estado, c.origen, c.origen_detalle, c.notas, c.creado
@@ -112,9 +138,15 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     db().query(`select name from "user" where id = $1`, [ctx.usuarioId]),
     db().query(
       `select id, nombre, rubro, categoria, servicio, pagina, sitio_web, telefono, tipo_telefono, ciudad, enlace_maps, resenas,
-              calificacion, titular, prioridad, puntos, estado, notas, interesado_id, creado
+              calificacion, titular, enfoque, prioridad, puntos, estado, notas, interesado_id, creado
          from prospectos where negocio_id = $1
         order by puntos desc, resenas desc, lower(nombre) limit 3000`,
+      [ctx.negocioId]
+    ),
+    db().query(
+      `select id, quien, nicho, zona, enfoque, pagina, estado, creditos, encontrados, nuevos, repetidos, descartados, altas, error, creado,
+              (select count(*) from jsonb_array_elements(resultados) x where x->>'motivo' <> 'fuera_del_nicho') recuperables
+         from prospecto_busquedas where negocio_id = $1 order by creado desc limit 200`,
       [ctx.negocioId]
     ),
   ]);
@@ -136,6 +168,27 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
     ...lugares,
     ahora: new Date().toISOString(),
     yo: String(yo.rows[0]?.name ?? ""),
+    scavio: scavioActivo(),
+    busquedas: bs.rows.map(
+      (r): BusquedaProspectos => ({
+        id: r.id,
+        quien: r.quien,
+        nicho: r.nicho,
+        zona: r.zona,
+        enfoque: r.enfoque,
+        pagina: Number(r.pagina),
+        estado: r.estado,
+        creditos: Number(r.creditos),
+        encontrados: Number(r.encontrados),
+        nuevos: Number(r.nuevos),
+        repetidos: Number(r.repetidos),
+        descartados: Number(r.descartados),
+        altas: Number(r.altas),
+        recuperables: Number(r.recuperables),
+        error: r.error,
+        creado: r.creado.toISOString(),
+      })
+    ),
     prospectos: ps.rows.map(
       (r): Prospecto => ({
         id: r.id,
@@ -152,6 +205,7 @@ export async function cargarClientesAgencia(): Promise<DatosClientes | null> {
         resenas: Number(r.resenas),
         calificacion: r.calificacion === null ? null : Number(r.calificacion),
         titular: r.titular,
+        enfoque: r.enfoque,
         prioridad: r.prioridad,
         puntos: Number(r.puntos),
         estado: r.estado,

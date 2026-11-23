@@ -209,6 +209,19 @@ Persona agenda en aratasan.com/agendar ──► Cal.com ──► webhook firma
 4. Prueba real: agendar desde aratasan.com/agendar con tu propio correo. Debe llegar el aviso al celular y aparecer en Clientes → Interesados. Después cancelar la reserva: debe llegar el aviso de cancelación.
 5. Si no llega: Cal.com → Webhooks → ese webhook → historial de entregas (muestra el código de respuesta: 401 = el secreto no coincide, 503 = falta la variable o el redeploy, 404 = el panel no está publicado).
 
+## 3f. Buscar más prospectos con Scavio (D-179)
+
+El botón **«Buscar más prospectos»** (Clientes → Prospectos, solo Sergio y Andrés) consulta Google Maps por **Scavio** desde el servidor del panel. La clave nunca llega al navegador ni al sitio.
+
+| Qué | Cómo |
+|---|---|
+| Variable | `SCAVIO_API_KEY` solo en Vercel → **`arata-panel`** → Settings → Environment Variables (Production, **Sensitive**), luego **Redeploy**. Es la misma clave de Sellbird. Sin ella el botón muestra «Falta conectar Scavio». |
+| Costo | 1 crédito por página de Google Maps (hasta 20 negocios). Ver el saldo (`/api/v1/usage`) no gasta. Plan gratis: 50 créditos; recarga 5.000 por 50 USD (nov 2026). |
+| Ahorro | Nicho + zona de Bogotá (centro del mapa `ll`), máximo 3 páginas, **no repite** una página pagada en los últimos 90 días (salvo que se marque «Buscarlas otra vez»), deja de pedir páginas cuando Google ya no trae más, y guarda en `prospecto_busquedas.resultados` lo que los filtros dejaron por fuera para **recuperarlo gratis**. |
+| Seguridad | Rol `dueno` o `finanzas`; una búsqueda a la vez; nicho y zona solo de las listas de `lib/panel/clientes/nichos.ts`; filtros limpiados en el servidor (`filtrosValidos`). Nunca toca un prospecto que ya estaba (estado, notas ni «No contactar»). Cada página queda en el historial. |
+| Tiempo | Una página tarda hasta 1 minuto: la pantalla pide una página por llamada y `clientes/page.tsx` declara `maxDuration = 120`. |
+| Código | `lib/panel/clientes/scavio.ts` (API), `app/(panel)/panel/(app)/clientes/buscar.ts` (acciones), `components/panel/BuscarProspectos.tsx` (pantalla), migración `db/panel/017_buscar_prospectos.sql`. Prueba sin gastar: `npx -y tsx scripts/prueba-buscar-prospectos.ts`. |
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.

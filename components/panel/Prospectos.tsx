@@ -10,6 +10,7 @@ import {
   RUES,
   SERVICIOS,
   TITULARES,
+  maxPuntos,
   mensajeProspecto,
   razonesDe,
   telefonoTexto,
@@ -20,13 +21,16 @@ import {
   type Titular,
 } from "@/lib/panel/clientes/prospectos";
 import { borrarProspecto, guardarProspecto, marcarContactado } from "@/app/(panel)/panel/(app)/clientes/acciones";
+import { ENFOQUES } from "@/lib/panel/clientes/nichos";
+import type { BusquedaProspectos } from "@/lib/panel/clientes/datos";
+import BuscarProspectos from "./BuscarProspectos";
 import { numero } from "@/lib/panel/formato";
 import { Hoja } from "./Clientes";
 import { Pill, Tarjeta, type TonoPill } from "./ui";
 import { BotonPrincipal, BotonSecundario, Campo, MensajeError, useAccion } from "./finanzas/comun";
 import { cn } from "@/lib/utils";
 
-// Prospectos (D-173): negocios que encontró Sellbird y todavía no han agendado.
+// Prospectos (D-173): negocios de Google Maps (Sellbird o el botón «Buscar más prospectos», D-179) que todavía no han agendado.
 // Prospectos → Interesados (agendan por Cal.com) → Clientes. Solo datos que el negocio publicó.
 
 const TONO_PRIORIDAD: Record<Prioridad, TonoPill> = { alta: "verde", media: "ambar", baja: "neutro" };
@@ -47,12 +51,18 @@ const opciones = <T extends string>(o: Record<T, string>) => Object.entries(o) a
 
 export default function Prospectos({
   prospectos,
+  busquedas,
+  scavio,
   puedeEditar,
   puedeBorrar,
   yo,
   ahora,
 }: {
   prospectos: Prospecto[];
+  /** Búsquedas hechas con «Buscar más prospectos» (D-179). */
+  busquedas: BusquedaProspectos[];
+  /** Hay clave de Scavio en el servidor. */
+  scavio: boolean;
   puedeEditar: boolean;
   puedeBorrar: boolean;
   /** Quien está en sesión: firma el mensaje de WhatsApp (D-174). */
@@ -66,6 +76,8 @@ export default function Prospectos({
   const [rubro, setRubro] = useState("");
   const [pagina, setPagina] = useState("");
   const [estado, setEstado] = useState("");
+  const [enfoque, setEnfoque] = useState("");
+  const [buscando, setBuscando] = useState(false);
   const [mostrar, setMostrar] = useState(POR_PAGINA);
   const [abierto, setAbierto] = useState<string | null>(null);
 
@@ -88,8 +100,15 @@ export default function Prospectos({
       .filter((p) => !rubro || p.rubro === rubro)
       .filter((p) => !pagina || p.pagina === pagina)
       .filter((p) => !estado || p.estado === estado)
+      .filter((p) => !enfoque || p.enfoque === enfoque)
       .filter((p) => !t || [p.nombre, p.categoria, p.telefono, RUBROS[p.rubro]].some((v) => v?.toLowerCase().includes(t)));
-  }, [prospectos, q, prioridad, titular, rubro, pagina, estado]);
+  }, [prospectos, q, prioridad, titular, rubro, pagina, estado, enfoque]);
+
+  // Solo los rubros que hay en la lista (los nichos son más de 20)
+  const rubros = useMemo(() => {
+    const hay = new Set(prospectos.map((p) => p.rubro));
+    return opciones(RUBROS).filter(([k]) => hay.has(k));
+  }, [prospectos]);
 
   const actual = prospectos.find((p) => p.id === abierto) ?? null;
   const filtrar = <T,>(set: (v: T) => void) => (v: T) => {
@@ -99,6 +118,15 @@ export default function Prospectos({
 
   return (
     <>
+      {puedeEditar && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-fog">Negocios de Google Maps que todavía no han agendado.</p>
+          <BotonPrincipal type="button" onClick={() => setBuscando(true)} className="inline-flex items-center gap-2" title={scavio ? undefined : "Falta SCAVIO_API_KEY en Vercel"}>
+            <Search aria-hidden className="h-4 w-4" /> Buscar más prospectos
+          </BotonPrincipal>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {[
           { k: "Prospectos", v: numero(resumen.total) },
@@ -137,16 +165,17 @@ export default function Prospectos({
           </div>
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             <Filtro etiqueta="Titular" valor={titular} onChange={(v) => filtrar(setTitular)(v as Titular | "")} todos="Empresa o persona" opciones={opciones(TITULARES)} />
-            <Filtro etiqueta="Rubro" valor={rubro} onChange={filtrar(setRubro)} todos="Todos los rubros" opciones={opciones(RUBROS)} />
+            <Filtro etiqueta="Rubro" valor={rubro} onChange={filtrar(setRubro)} todos="Todos los rubros" opciones={rubros} />
             <Filtro etiqueta="Página" valor={pagina} onChange={filtrar(setPagina)} todos="Con o sin página" opciones={opciones(PAGINAS)} />
             <Filtro etiqueta="Estado" valor={estado} onChange={filtrar(setEstado)} todos="Todos los estados" opciones={opciones(ESTADOS_PROSPECTO)} />
+            <Filtro etiqueta="Enfoque" valor={enfoque} onChange={filtrar(setEnfoque)} todos="Cualquier enfoque" opciones={opciones(ENFOQUES)} />
           </div>
         </div>
 
         {prospectos.length === 0 ? (
           <div className="py-12 text-center">
             <p className="text-sm text-fog">Todavía no hay prospectos.</p>
-            <p className="mt-1 text-xs text-fog-dim">Llegan desde Sellbird con scripts/panel-importar-prospectos.ts.</p>
+            <p className="mt-1 text-xs text-fog-dim">Toca «Buscar más prospectos» para traerlos de Google Maps.</p>
           </div>
         ) : visibles.length === 0 ? (
           <p className="py-10 text-center text-sm text-fog">No hay prospectos con esos filtros.</p>
@@ -198,6 +227,12 @@ export default function Prospectos({
         )}
       </Tarjeta>
 
+      {buscando && (
+        <Hoja titulo="Buscar más prospectos" onClose={() => setBuscando(false)}>
+          <BuscarProspectos busquedas={busquedas} onListo={() => setBuscando(false)} />
+        </Hoja>
+      )}
+
       {actual && (
         <Hoja titulo={actual.nombre} onClose={() => setAbierto(null)}>
           <Perfil key={actual.id} p={actual} yo={yo} ahora={ahora} puedeEditar={puedeEditar} puedeBorrar={puedeBorrar} onBorrado={() => setAbierto(null)} />
@@ -247,7 +282,7 @@ function Perfil({ p, yo, ahora, puedeEditar, puedeBorrar, onBorrado }: { p: Pros
         {[
           { k: "Reseñas", v: numero(p.resenas) },
           { k: "Calificación", v: p.calificacion === null ? "—" : `${String(p.calificacion).replace(".", ",")} ★` },
-          { k: "Puntos", v: `${p.puntos} de 7` },
+          { k: "Puntos", v: `${p.puntos} de ${maxPuntos(p.enfoque)}` },
         ].map((x) => (
           <div key={x.k} className="rounded-frame border border-white/8 bg-surface-1 p-3">
             <dt className="text-[0.7rem] text-fog-dim">{x.k}</dt>
@@ -291,7 +326,7 @@ function Perfil({ p, yo, ahora, puedeEditar, puedeBorrar, onBorrado }: { p: Pros
         <h3 className="mb-2 text-sm font-semibold text-white">Negocio</h3>
         <ul className="space-y-2 text-sm text-fog">
           <li className="text-white">
-            {RUBROS[p.rubro]}
+            {RUBROS[p.rubro] ?? "Otro"}
             {p.categoria && <span className="text-fog"> · {p.categoria} en Google</span>}
           </li>
           {p.ciudad && (
@@ -341,18 +376,18 @@ function Perfil({ p, yo, ahora, puedeEditar, puedeBorrar, onBorrado }: { p: Pros
       <section>
         <h3 className="mb-2 text-sm font-semibold text-white">Por qué tiene prioridad {PRIORIDADES[p.prioridad].toLowerCase()}</h3>
         {razones.length === 0 ? (
-          <p className="text-sm text-fog-dim">Tiene página, pocas reseñas y no sabemos si es empresa.</p>
+          <p className="text-sm text-fog-dim">{p.enfoque === "ya_vende" ? "No vemos que venda por internet, tiene pocas reseñas y no sabemos si es empresa." : "Tiene página, pocas reseñas y no sabemos si es empresa."}</p>
         ) : (
           <ul className="divide-y divide-white/6 rounded-frame border border-white/8 bg-surface-1">
             {razones.map((r) => (
               <li key={r.texto} className="flex items-center gap-3 px-3 py-2.5 text-sm">
                 <span className="min-w-0 flex-1 text-fog">{r.texto}</span>
-                <span className="shrink-0 font-display font-bold text-white">+{r.puntos}</span>
+                <span className="shrink-0 font-display font-bold text-white">{r.puntos > 0 ? `+${r.puntos}` : `−${Math.abs(r.puntos)}`}</span>
               </li>
             ))}
           </ul>
         )}
-        <p className="mt-2 text-xs text-fog-dim">Alta desde 5 puntos, media desde 3.</p>
+        <p className="mt-2 text-xs text-fog-dim">Enfoque: {ENFOQUES[p.enfoque].toLowerCase()}. Alta desde 5 puntos, media desde 3.</p>
       </section>
 
       <section>
