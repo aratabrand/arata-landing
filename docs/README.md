@@ -15,12 +15,13 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/01-estrategia-hormozi.md`](blueprint/01-estrategia-hormozi.md) | Paquetes y precios, avatar, ecuación de valor, nombres, garantías, gancho, embudo y guion de llamada | 1 |
 | [`blueprint/02-arquitectura.md`](blueprint/02-arquitectura.md) | Menú, flujo de agendamiento y estructura sección por sección de cada página | 2 |
 | [`blueprint/03-copy.md`](blueprint/03-copy.md) | Copy de cada página con versiones para elegir (todas las páginas) | 2 |
-| [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Tokens v2, componentes y estilo vigente (el del panel aplicado al sitio, D-141/D-142); §13: qué se probó y se descartó y qué piezas se comparten con el panel | 3 |
+| [`blueprint/04-sistema-de-diseno.md`](blueprint/04-sistema-de-diseno.md) | Detalle del sitio: inventario de componentes, implementación en código, reglas de velocidad y §13 (qué se probó y se descartó y qué piezas se comparten con el panel). Las reglas visuales mandan desde `sistema-de-diseno.md` | 3 |
 | [`blueprint/05-construccion.md`](blueprint/05-construccion.md) | Rutas, carpetas, flujo de agenda, eventos de GTM, configuración de Cal.com y pendientes de lanzamiento | 4 |
 | [`blueprint/06-seo-geo-velocidad.md`](blueprint/06-seo-geo-velocidad.md) | SEO por página, datos estructurados, GEO (`llms.txt`), velocidad medida, legal y **lista de lanzamiento** | 5 |
 | [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
-| [`decisiones.md`](decisiones.md) | Bitácora de cada decisión: qué, cuándo, quién y por qué | Todas |
+| [`decisiones.md`](decisiones.md) | Bitácora de cada decisión vigente: qué, cuándo, quién y por qué | Todas |
+| [`decisiones-archivo.md`](decisiones-archivo.md) | Decisiones reemplazadas del todo (historia, no se aplican) | — |
 | [`panel-cliente/`](panel-cliente/README.md) | **Blueprint del panel del cliente** (`/panel`): plan, módulos, modelo de datos, diseño y cómo montarlo para cada cliente | Aparte |
 
 Los archivos sin enlace todavía no existen: se crean al llegar a su fase.
@@ -49,6 +50,6 @@ Ambas están ocultas a Google (`noindex`) y se revisan en el preview de Vercel d
 
 - **Encabezado de estado** en cada archivo: `Estado`, `Versión`, `Última actualización`, `Aprueba`.
 - **Estados posibles:** `Borrador` → `En revisión` → `Aprobado`. Solo lo `Aprobado` se construye.
-- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva.
+- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva; cuando ya no queda nada vigente de ella, se pasa a `decisiones-archivo.md`.
 - **Copy:** español colombiano plano, según las reglas de `CLAUDE.md` §2. Esto aplica también a estos documentos cuando muestran texto que irá al sitio.
 - **Nada inventado:** métricas, testimonios y logos de clientes solo si son reales y verificables.

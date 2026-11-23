@@ -2,107 +2,50 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Aprobado (D-145 a D-153) | 1.0 | 20 nov 2026 | Sergio |
+| Aprobado (D-164 a D-168) | 1.1 | 23 nov 2026 | Sergio |
 
-> **La fuente única es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (sistema de Arata San para el sitio, el panel y todo producto nuevo, D-149). Este documento queda como el detalle del **sitio**: componentes, historial y reglas de velocidad.
+> **La fuente única es [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)** (v2.0, estilo Kept, D-164 a D-168): color, componentes, fondo, gráficos y movimiento del sitio, el panel y todo producto nuevo. **Si algo de aquí choca con esa guía, manda la guía.**
 >
-> Esta versión registra la **dirección** que dio Sergio (D-025, D-026), la traducción de las referencias de 21st.dev (D-044, §9), la **implementación en código** (§10–§12) y el **estilo vigente desde el 19 nov 2026: el del panel aplicado al sitio** (D-141, D-142; §2 y §13). Se ve en vivo en `/sistema` (guía) y en aratasan.com. **El sitio y el panel comparten base visual**: si se cambia una pieza en uno, se revisa en el otro (§13).
+> Este documento queda como el detalle del **sitio**: la dirección que dio Sergio (D-025, D-026), la traducción de 21st.dev (§9), la implementación en código (§10–§12), el inventario de componentes (§5) y el historial de la dirección visual (§13). Se ve en vivo en `/sistema` (guía) y en aratasan.com. **El sitio y el panel comparten piezas**: si se cambia una en uno, se revisa en el otro (§13).
 
 ---
 
 ## 1. Qué cambia frente a la v1
 
-| Tema | v1 (landing actual) | v2 (sitio de agencia) |
+| Tema | v1 (landing retirada) | v2 (sitio de agencia) |
 |---|---|---|
-| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro**: `#020104` desde D-145 (antes `#03010B`) |
-| Colores de marca | Morado y lima como acentos | Igual: morado, lima y demás colores de marca **solo como acentos** sobre el oscuro |
-| Tipografía | Funnel Display + Plus Jakarta Sans | **Igual** |
-| Estilo de componentes | Píldora glass, bento, timeline | Referencia **21st.dev** para componentes, menú y animaciones; **botón principal igual al del panel** (D-142); **tarjetas transparentes y morado solo en botones** (D-146) |
-| Botón principal | Lima | **Morado de marca** con texto blanco (D-142); el lima queda para los datos |
+| Fondos | Alterna blanco `#FFFFFF` y oscuro `#03010B` | **Solo oscuro**: `#020104` (D-145) |
+| Colores de marca | Morado y lima como acentos | **Lima para actuar, elegir y destacar; morado para datos y gráficas** (D-164) |
+| Tipografía | Funnel Display + Plus Jakarta Sans | Igual, más **Instrument Serif Italic** en lima para la última palabra de los títulos (D-164, D-166) |
+| Estilo de componentes | Píldora glass, bento, timeline | **Estilo Kept**: un solo estilo por componente, todo lo que se toca es píldora, tarjetas lisas (D-164) |
+| Botón principal | Lima | **Lima con texto tinta** (`.v2-primario`, D-164) |
 | Trabajos | No había portafolio | Video en loop tipo GIF dentro de mockups + animaciones premium |
 
 ---
 
-## 2. Color
 
-### Fondo y superficies
+## 2. Color, fondo e íconos
 
-Como todo es oscuro, la profundidad no sale del cambio de fondo sino de **capas de superficie** y **bordes finos**.
-
-| Token | Valor | Uso |
-|---|---|---|
-| `noche` | `#020104` | **Único fondo de página** (D-145): negro casi neutro, para que el morado no se lea como "look de IA" |
-| `ink` | `#03010B` | Texto sobre lima y fondo del panel (el panel no cambió) |
-| `surface-1` | `#0B0B0D` | Superficies sólidas (las tarjetas son transparentes, D-146) |
-| `surface-2` | `#121215` | Hover, botón secundario, elementos elevados |
-| `surface-3` | `#19191D` | Menús desplegables, modales |
-| `border-subtle` | blanco al 6 % | Borde por defecto de tarjetas |
-| `border` | blanco al 10 % | Bordes de inputs y separadores |
-| `border-strong` | blanco al 16 % | Hover y foco |
-
-**Desde D-146 las superficies son neutras** (sin tinte morado) y las tarjetas son **transparentes** (blanco al 2 %): el color de marca queda para los botones.
-
-### Texto
-
-| Token | Valor | Contraste sobre `ink` | Uso |
-|---|---|---|---|
-| `text` | `#FFFFFF` | 20:1 | Títulos y texto principal |
-| `text-secondary` | `#B4AECB` | ≈ 9.8:1 | Párrafos |
-| `text-muted` | `#8A84A8` | ≈ 5.9:1 | Etiquetas y notas (cumple AA) |
-
-### Acentos
-
-| Token | Valor | Uso | No usar para |
-|---|---|---|---|
-| `lime` | `#B6FF00` | **Solo datos** (D-142): cifras clave, anillos, pasos del proceso, estados "en vivo", la línea destacada del título del hero | Botones, interruptores, opciones elegidas, grandes superficies |
-| `purple` | `#7D53FF` | **Solo botones** (D-146): botón principal (`.v2-primario`, texto blanco 4,6:1) y lo que actúa como botón (opciones elegidas del formulario, interruptores de cookies, cápsula "Ver proyecto", sonido del video). Nunca en tarjetas, íconos, etiquetas, gráficos ni luces | Texto pequeño sobre oscuro (≈ 4.5:1, solo texto grande) |
-| `purple-deep` (`brand-ink`) | `#3B1D99` | Sin uso en el sitio desde D-146 | Texto (no se lee sobre oscuro) |
-| `brand-soft` | `#B9A4FF` | Sin uso en el sitio desde D-146: etiquetas, íconos y checks pasan a `fog` | Fondos |
-
-### Íconos y fondo continuo ✅ (D-147)
+Todo está en [`docs/sistema-de-diseno.md`](../sistema-de-diseno.md) §1, §2 y §5. Resumen para el sitio:
 
 | Pieza | Cómo va |
 |---|---|
-| Íconos decorativos | **Fuera** (Sergio: "se ven muy IA"). El Problema y "Todo lo que trae" llevan **número** (01, 02…) en vez de ícono; "Es para ti si…" lleva un punto; el adicional, el aviso de cookies y `/agendar` van sin ícono |
-| Íconos que cumplen una función | Flechas, abrir/cerrar, check, video y WhatsApp con **Phosphor** en trazo `light` (`@phosphor-icons/react`, versión SSR), en `components/v2/iconos.tsx`. **Lucide ya no se usa en el sitio** (el panel sí la sigue usando) |
-| Fondo continuo | Las líneas verticales y los haces van **una sola vez para toda la página** (`.v2-fondo` en `app/(v2)/layout.tsx`, fijo detrás del contenido; los lados se desvanecen con una capa del color del fondo, sin `mask-image`). Las secciones solo ponen su luz blanca suave (`GridBackground`, sin líneas) |
-| Grano | **Quitado** (D-148: Sergio no lo quiere, "efecto borroso"). La regla de velocidad de §12 queda por si se vuelve a usar una textura |
+| Fondo | `noche` `#020104` en toda la página (D-145) |
+| Superficies | `surface-1/2/3` `#0B0B0D` · `#121215` · `#19191D` (menús, ventanas, botón secundario); bordes blancos al 6 / 10 / 16 % |
+| Texto | `white` `#FFFFFF` · `fog` `#B8B8BE` · `fog-dim` `#8E8E96`, grises **neutros** (D-162) |
+| Tarjeta (`.v2-card`) | **Lisa** `#0F0F12`, borde blanco al 13 % y un filo de luz arriba (D-164) |
+| Tarjeta destacada (`.v2-destacada`) | **Degradado lima** con texto tinta y botón negro adentro: paquete recomendado y precio de cada servicio (D-164) |
+| Lima `#B6FF00` | Botón principal, opción elegida (sólido), interruptores encendidos, destacada, número de los precios, palabra en cursiva de los títulos |
+| Morado `#7D53FF` | Datos y gráficas. **Nunca** botones morados ni bloques morados con texto blanco |
+| Líneas de fondo | Verticales, continuas en toda la página (`.v2-fondo` en `app/(v2)/layout.tsx`, sin `mask-image`). Nunca cuadrícula |
+| Haces y luces | Haces finos por algunas líneas; luces blancas muy suaves con un **degradado lima tenue que se mueve** (`.v2-glow::after`, 24 s, solo `transform` y `opacity`; quieto con movimiento reducido, D-163). Nunca luces moradas |
+| Íconos | Sin íconos decorativos (números 01, 02… o un punto en su lugar, D-147). Los que cumplen una función, con **Phosphor `light`** (versión SSR) en `components/v2/iconos.tsx` |
+| No se usa | Grano (D-148), vidrio, humo en las tarjetas, tarjetas blancas sobre oscuro, naranja |
 
-### Fondo premium ✅ (D-145)
-
-Sergio sintió el sitio "muy IA". Lo que más lo causaba: morado brillante sobre un negro con tinte morado, cuadrícula de fondo y cuadritos de ícono en todo. Cambios:
-
-| Pieza | Cómo va |
-|---|---|
-| Fondo | `noche` `#020104` en toda la página (antes `ink` `#03010B`, con tinte morado) |
-| Cuadrícula | **Fuera.** Solo líneas verticales (`GridBackground`, también en el hero) |
-| Haces de luz | Luces finas que bajan por algunas líneas del hero y de Cómo trabajamos, lejos del texto. Solo `transform`; con movimiento reducido no salen |
-| Grano | Se probó al 4,5 % y se quitó en D-148 |
-| Luces moradas | Más suaves: 0,17 / 0,06 (antes 0,28 / 0,12) |
-| Cifras del hero | Transparentes, sin íconos y más grandes en escritorio |
-
-### Luces de fondo ✅ (D-044 → **blancas desde D-146**)
-
-Luces radiales grandes y suaves detrás de algunas secciones. **Desde D-146 son blancas** (6,5 % en el centro, 2 % a la mitad), igual que la luz de la rejilla, los haces y la luz que sigue el cursor. Antes eran moradas y eran lo que más daba el "look de IA".
-
-- Son atmósfera y nunca llevan contenido encima que dependa de ellas para leerse.
-- Máximo 1–2 luces por pantalla.
-- La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") **sigue vigente para los slides de carruseles**; en el sitio v2 se permiten solo estas luces.
-
-### Estilo del panel aplicado al sitio (D-141; tarjetas y colores ajustados en D-146)
-
-Es el estilo vigente. El 19 nov se probaron y se descartaron dos direcciones (color plano con bloques morados, D-137; tarjetas blancas, D-138; ver §13). Se volvió a la versión con luces y se le aplicó el estilo del panel (D-136, `docs/panel-cliente/03-sistema-de-diseno.md`):
-
-| Pieza | Cómo va |
-|---|---|
-| Tarjeta (`.v2-card`) | **Transparente** (D-146): blanco al 2 %, borde blanco al 7 % y un filo de luz arriba. Antes, por capas sobre `#0F0C19` (tinte morado) |
-| Tarjeta destacada (`.v2-destacada`) | **Transparente y un poco más clara** (D-146): blanco al 4,5 % y borde blanco al 20 %. Paquete recomendado y precio de cada servicio. Antes, filo morado |
-| Garantías (`.v2-glass`) | Transparentes como `.v2-card`, borde blanco al 9 % (D-146) |
-| Cuadrito de ícono (`.v2-icono`) | **Sin uso en el sitio desde D-147** (se quitaron los íconos decorativos) |
-| Botones | Los del panel (D-142): principal morado con texto blanco (`.v2-primario` = `.pn-primario`) y secundario oscuro con borde fino. La píldora con círculo de D-137 se quitó |
-| Lima | **Solo datos** (cifras, anillos, pasos, la línea del título del hero), como en el panel. Botones, opciones elegidas del formulario, interruptores de cookies y la cápsula "Ver proyecto" van en morado (D-142). Los checks de "Es para ti si" pasan a morado |
+La regla de `CLAUDE.md` §3 ("sin degradados ni orbes") es para los slides de carruseles; en el sitio se permiten solo estas luces.
 
 ---
+
 
 ## 3. Tipografía (sin cambios)
 
@@ -131,19 +74,19 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 
 | Componente | Descripción | Prioridad |
 |---|---|---|
-| Menú (header) | Barra completa (no píldora flotante); ítem activo con fondo oscuro; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
-| Botón | **El del panel** (D-142, igual a `.pn-primario` de D-136). Rectangular redondeado 10 px. Primario **morado de marca** con texto blanco (4,6:1) y filo de luz arriba (`.v2-primario`) · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` | P1 |
+| Menú (header) | Barra completa (no píldora flotante); ítem activo en píldora; **mega menú** en "Servicios" con tarjetas de vista previa (captura 05); en celular, panel a pantalla completa con entrada escalonada, hamburguesa → X y botón de agendar fijo abajo (D-070) | P1 |
+| Botón | **Uno solo, en píldora**, igual al del panel (`.v2-primario` = `.pn-primario`). Primario **lima con texto tinta** · secundario superficie oscura (`surface-2`) con borde fino · terciario texto con flecha ("Ver todo →"). La flecha se corre un poco al pasar el mouse. Para `<button>` propios: `clasesBoton()`, `FlechaBoton` (D-164) | P1 |
 | Badge / etiqueta | Píldoras para estados, categorías y "en vivo" | P1 |
-| Tarjeta base | **Negra con humo** (`.v2-card`, D-150): degradado `#0E0E10`→`#060607`, nube blanca suave abajo a la derecha, borde blanco 13 %, radio 24 px; luz blanca que sigue el cursor (`Spotlight`). La usan también las cifras del hero, el bento de servicios y las garantías | P1 |
+| Tarjeta base | **Lisa** (`.v2-card`, D-164): `#0F0F12`, borde blanco 13 %, filo de luz arriba, radio 24 px; luz blanca que sigue el cursor (`Spotlight`). La usan también las cifras del hero, el bento de servicios y las garantías | P1 |
 | Tarjeta bento con vista previa | Vista previa **enmarcada dentro** de la tarjeta (marco de 8 px, radio interno 16 px) + pie con título, descripción y enlace con flecha a la derecha (captura 01) | P1 |
 | Encabezado de sección | Título grande a la izquierda + subtítulo atenuado + botón secundario a la derecha (captura 01) | P1 |
 | Barra de progreso segmentada | Indica qué proyecto se está mostrando en el carrusel del portafolio y avanza sola (captura 01) | P1 |
 | Bento de servicios | Diagramas vivos (flujo de pedido, conexiones, gráfica "EJEMPLO"), adaptado de `ink-orbit-features` — `components/v2/ServicesBento.tsx` (D-065) | P1 |
 | Banda curva de capturas | Hero: capturas reales girando en un cilindro, dibujadas en `<canvas>` — `components/ui/tilted-grid-hero.tsx` (D-064) | P1 |
-| Tarjetas del problema | Apiladas, tarjeta transparente + **número** (01–05, D-147) + título + texto, resaltado que las recorre (el número se pinta de lima) (D-066, D-141) | P1 |
-| Cifras del hero | 3 tarjetas **transparentes** (blanco al 2 %, borde 7 %), **sin íconos**, más grandes en escritorio (cifra 48 px, ancho hasta 1024 px) + cifra con contador + texto (D-145) | P1 |
-| Tarjeta de paquete | Nombre + para quién + precio grande + botón + lista con íconos de línea. La **recomendada** lleva la tarjeta destacada (`.v2-destacada`, transparente con borde blanco más visible, D-146), etiqueta "Recomendado" blanca con texto `ink` y el único botón principal (morado, D-142); las demás, tarjeta por capas y botón oscuro (captura 03) | P1 |
-| Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: tarjeta transparente (`.v2-glass`, D-146) + ícono SVG animado en lima y blanco (`Assurances`, D-068) | P1 |
+| Tarjetas del problema | Apiladas, tarjeta lisa + **número** (01–05, D-147) + título + texto, resaltado que las recorre (el número se pinta de lima) (D-066) | P1 |
+| Cifras del hero | 3 tarjetas lisas (`.v2-card`), **sin íconos**, más grandes en escritorio (cifra 48 px, ancho hasta 1024 px) + cifra con contador + texto (D-145) | P1 |
+| Tarjeta de paquete | Nombre + para quién + precio grande (número en lima) + botón + lista con íconos de línea. La **recomendada** va en la destacada (`.v2-destacada`, **degradado lima** con texto tinta, etiqueta "Recomendado" y **botón negro** adentro); las demás, tarjeta lisa y botón secundario (D-164, captura 03) | P1 |
+| Tarjetas de garantía | Garantía, pago 50/50 y mantenimiento: tarjeta lisa + ícono SVG animado (`Assurances`, D-068) | P1 |
 | Tarjeta de proyecto | Mockup (celular / computador) con video en loop | P1 |
 | Filtro del portafolio | Por tipo: landing · catálogo · sistema | P1 |
 | Bloque de caso | Problema → solución → resultado | P1 |
@@ -152,12 +95,12 @@ Prioridad: **P1** se necesita para lanzar · **P2** se puede agregar después.
 | Preguntas frecuentes | **Dos columnas**: título a la izquierda, acordeón a la derecha; en celular, una columna (captura 02) | P1 |
 | Formulario de 3 pasos | Las 3 preguntas antes del calendario (D-017) | P1 |
 | Calendario Cal.com | Integrado en `/agendar` | P1 |
-| Banda de CTA | **Tarjeta grande** redondeada con collage de los trabajos al fondo, tintado de morado; título centrado, botón principal (morado) y nota corta debajo (captura 04) | P1 |
+| Banda de CTA | **Tarjeta grande** redondeada con collage de los trabajos al fondo; título centrado con la última palabra en cursiva lima, botón principal (lima) y nota corta debajo (captura 04) | P1 |
 | Casos de éxito | Video vertical dentro de un celular con flechas tipo reel, sonido que se activa al tocar, datos del caso debajo (`CasosReel`, `CasosExito`, D-128, D-129) | P1 |
-| Aviso de cookies | Tarjeta abajo con Aceptar (botón principal) y Rechazar (secundario) del mismo tamaño + "Elegir mis preferencias" (diálogo con interruptores morados) (D-130, D-132, D-142) | P1 |
+| Aviso de cookies | Tarjeta abajo con Aceptar (botón principal) y Rechazar (secundario) del mismo tamaño + "Elegir mis preferencias" (diálogo con interruptores **lima** al encenderse) (D-130, D-132, D-164) | P1 |
 | Footer | v2 | P1 |
 | Testimonio | Texto, nombre y foto | P1 (cuando haya testimonios) |
-| Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula morada (D-142; antes lima) que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
+| Cápsula "Ver proyecto" | `components/v2/HoverCapsule.tsx`: cápsula **lima** con texto tinta que reemplaza el puntero y sigue al mouse sobre la vista previa de un proyecto. Solo con mouse (`hover: hover`), 2 variables CSS por `requestAnimationFrame` (D-085) | P1 |
 | Fondo de líneas | **Continuo para toda la página** (`.v2-fondo`, D-147): líneas verticales blancas al 4,5 %, una cada 80 px y centradas, con haces de luz a los lados del texto; sin cuadrícula (D-145). `components/ui/grid-background.tsx` ahora solo pone la luz blanca suave de cada sección (con `lineas` vuelve a dibujar las líneas, solo para muestras) | P1 |
 | Franja de prueba | "Han confiado en nosotros" + nombres de los clientes (captura 02) | P1 |
 | Sección equipo | Dentro del inicio; **fuera por ahora** (D-043) | P2 |
@@ -214,7 +157,7 @@ Capturas en [`docs/referencias/21st-dev/`](../referencias/21st-dev/).
 
 ### Lo que **no** se toma
 
-- El **azul eléctrico** de 21st: se reemplaza por morado (luces y botón principal, D-142) y lima (datos).
+- El **azul eléctrico** de 21st: se reemplaza por lima (botones, elegido, destacado) y morado (datos y gráficas), D-164.
 - Las **tarjetas de colores claros** de la sección "Built for how you ship" (coral, rosa): rompen la regla de solo fondo oscuro (D-025).
 - La **búsqueda ⌘K** y el "Log in": el sitio no los necesita.
 
@@ -229,10 +172,10 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Pieza | Archivo | Qué hace |
 |---|---|---|
 | Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple`; opacidad `8` |
-| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (transparente), `.v2-destacada` (transparente, borde más claro), `.v2-icono` (cuadrito de ícono), `.v2-primario` (botón principal), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 |
+| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (lisa), `.v2-destacada` (degradado lima), `.v2-icono` (sin uso desde D-147), `.v2-primario` (botón principal lima), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 |
 | Contenido | `content/inicio.ts`, `content/proyectos.ts` | Copy aprobado y portafolio. **Para cambiar un texto o sumar un proyecto, se edita aquí**, no en los componentes |
-| Botón | `components/v2/Button.tsx` | `primary` (morado, `.v2-primario`) · `secondary` (oscuro con borde) · `ghost`; `md` / `lg`; `arrow`; `external`. Para un `<button>` o enlace propio (formulario, portafolio): `clasesBoton()` y `FlechaBoton` |
-| Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader` |
+| Botón | `components/v2/Button.tsx` | `primary` (lima, `.v2-primario`) · `secondary` (oscuro con borde) · `ghost`; `md` / `lg`; `arrow`; `external`. Para un `<button>` o enlace propio (formulario, portafolio): `clasesBoton()` y `FlechaBoton` |
+| Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader`, `Acento` (última palabra del título en cursiva lima, D-164/D-166) |
 | Header | `components/v2/SiteHeader.tsx` | Barra, mega menú "Servicios", panel móvil, Escape y clic afuera cierran |
 | Barra fija | `components/v2/StickyBookBar.tsx` | "Agendar reunión" en celular al bajar del hero |
 | Tarjeta con luz | `components/v2/Spotlight.tsx` | Tarjeta base + luz que sigue el cursor |
@@ -296,37 +239,39 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 
 ---
 
-## 13. Historial de la dirección visual (19 nov 2026) y cómo mantenerla
+## 13. Historial de la dirección visual (19 a 22 nov 2026) y cómo mantenerla
 
-Ese día se probaron cuatro versiones del sitio, publicadas y revisadas por Sergio. Queda registrado para no repetir lo que ya se descartó.
+Versiones del sitio y del panel publicadas y revisadas por Sergio. Queda registrado para no repetir lo que ya se descartó. **Lo vigente hoy es el estilo Kept (D-164 a D-168)**; el detalle de las decisiones viejas está en `docs/decisiones-archivo.md`.
 
 | Decisión | Qué se probó | Resultado |
 |---|---|---|
+| D-164 a D-168 (21–22 nov) | **Estilo Kept unificado** en sitio y panel: un solo estilo por componente, botón y opción elegida en lima, destacada en degradado lima, tarjetas lisas, morado solo para datos y gráficas, palabra final en cursiva lima; en el panel oscuro, menú elegido en lima (D-167) y avisos blancos (D-168) | ✅ Vigente |
+| D-162, D-163 (21 nov) | Grises neutros, cifras y nombre en lima, logo de un color, avisos al revés del fondo, contadores y degradado lima que se mueve en la web | ✅ Vigente (los botones cambiaron en D-164) |
 | D-137 | Color plano con una referencia de estudio de marca: sin luces ni degradados, paquete recomendado y cierre en **bloques morados con texto blanco**, botones en píldora con círculo y flecha | Descartado: "horrible… ese morado y texto blanco se ve fatal". Gustaron solo los botones |
 | D-138 | **Tarjetas blancas** con texto negro en lo destacado, títulos en dos tonos, botón negro con círculo lima | Publicado y descartado el mismo día |
-| D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | ✅ Vigente |
-| D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | ✅ Vigente |
-| D-155 (20 nov) | **Panel:** el lima solo en la píldora o pestaña **activa**; estados en **semáforo** (ámbar, verde, verde fuerte, rojo). El sitio sigue con la píldora gris | ✅ Vigente |
+| D-141 | Volver a la versión de la mañana (con luces moradas) y aplicarle el **estilo del panel** (D-136): tarjetas por capas, filo morado en lo destacado, cuadritos de ícono | Reemplazada por D-164 |
+| D-142 | **Botones iguales a los del panel**: principal morado, secundario oscuro; lima solo para datos | Reemplazada por D-164 (botón lima) |
+| D-155 (20 nov) | **Panel:** el lima solo en la píldora o pestaña **activa**; estados en **semáforo** (ámbar, verde, verde fuerte, rojo). El sitio sigue con la píldora gris | ✅ Vigente el semáforo; la píldora activa pasó a lima sólido (D-164) |
 | D-154 (20 nov) | Panel: todas las píldoras en lima en oscuro | Reemplazada por D-155 el mismo día |
-| D-153 (20 nov) | El **panel adopta las piezas del sitio**: tarjetas con humo, píldoras con borde e íconos de marca en las tarjetas de proyecto (versión blanca en el modo claro) | ✅ Vigente |
-| D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | ✅ Vigente |
+| D-153 (20 nov) | El **panel adopta las piezas del sitio**: tarjetas con humo, píldoras con borde e íconos de marca en las tarjetas de proyecto (versión blanca en el modo claro) | Reemplazada: tarjetas lisas (D-164) |
+| D-150 (20 nov) | **Tarjetas negras con humo**, **píldoras negras con borde** (badges, etiquetas de sección, "Recomendado", filtros) e **íconos SVG propios en grises** en los paquetes de precio; el cierre pierde su tinte morado | Reemplazada: tarjetas lisas (D-164) |
 | D-149 (20 nov) | **Sistema único** para sitio y panel (`docs/sistema-de-diseno.md`); el panel adopta el sistema y suma modo claro | ✅ Vigente |
 | D-148 (20 nov) | **Sin grano** sobre la página | ✅ Vigente |
-| D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente (en vista previa) |
-| D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | ✅ Vigente (en vista previa) |
+| D-147 (20 nov) | **Sin íconos decorativos** (números en su lugar), íconos funcionales con Phosphor `light`, fondo de líneas continuo para toda la página, grano en canvas | ✅ Vigente |
+| D-146 (20 nov) | **Tarjetas transparentes, morado solo en botones, luces blancas suaves**; superficies neutras; íconos, etiquetas, checks y gráficos sin morado | Reemplazada por D-164 (lima para actuar, morado para datos) |
 | D-145 (20 nov) | **Menos "look de IA"**: fondo negro `#020104`, sin cuadrícula (solo líneas verticales), haces de luz, grano, luces moradas más suaves, cifras del hero sin íconos | ✅ Vigente |
 
-**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **morado fuera de los botones** (D-146), **íconos decorativos en tarjetas** (D-147), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
+**Lo que no se vuelve a proponer sin una referencia nueva de Sergio:** bloques grandes de morado con texto blanco encima, **botones morados** (D-164), luces moradas, humo o vidrio en las tarjetas, **íconos decorativos en tarjetas** (D-147), tarjetas blancas sobre el oscuro, títulos en dos tonos, botones en píldora con círculo y **fondo en cuadrícula** (D-145).
 
 **Sitio y panel siguen el mismo sistema desde D-149** ([`docs/sistema-de-diseno.md`](../sistema-de-diseno.md)). Las piezas están copiadas, no compartidas, porque el CSS del panel se compila aparte y el panel no importa piezas del sitio (D-135):
 
 | Sitio (`app/globals.css`) | Panel (`styles/panel.src.css`) |
 |---|---|
 | `.v2-primario` | `.pn-primario` (iguales: si cambia uno, cambia el otro) |
-| `.v2-card` (negra con humo) | `.pn-root .v2-card` (con humo en oscuro, blanca en claro; `--pn-tarjeta`) |
-| `.v2-destacada` | `.pn-root .v2-glass` (`--pn-destacada`) |
-| `.v2-pildora` (gris) | `.pn-pildora` (gris) + `.pn-pildora-activa` (lima, solo en el panel: filtro o pestaña elegida, D-155) |
+| `.v2-card` (lisa) | `.pn-root .v2-card` (lisa en oscuro, blanca en claro; `--pn-tarjeta`) |
+| `.v2-destacada` (degradado lima) | `.pn-root .v2-glass` (degradado lima; `--pn-destacada`) |
+| `.v2-pildora` (gris) | `.pn-pildora` (gris) + `.pn-pildora-activa` (lima sólido: filtro o pestaña elegida, D-164) |
 | `components/v2/IconosMarca.tsx` | `components/panel/IconosMarca.tsx` (ids `pn-im-*`) |
 | `components/v2/iconos.tsx` (Phosphor `light`) | `components/panel/iconos.tsx` (Phosphor `light`) |
 
-Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio lleva líneas verticales con haces y luces blancas suaves; el panel no (es una herramienta) y tiene **modo claro** (D-149).
+Si se cambia una de estas piezas, **se cambia en los dos archivos** y se anota en `docs/decisiones.md`. Diferencias que sí se mantienen: el sitio lleva líneas verticales con haces y luces blancas suaves con degradado lima; el panel no (es una herramienta) y tiene **modo claro** (D-149).

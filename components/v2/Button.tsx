@@ -3,11 +3,11 @@ import type { ReactNode } from "react";
 import { ArrowRight } from "./iconos";
 import { cn } from "@/lib/utils";
 
-// Botón v2 = el del panel (D-142, igual a .pn-primario de D-136). 04-sistema-de-diseno.md §5.
-// - primary:   morado de marca con texto blanco (4,6:1), filo de luz arriba (.v2-primario). Uno por vista.
+// Botón v2 = el del panel (.v2-primario = .pn-primario, D-164). docs/sistema-de-diseno.md §4.
+// - primary:   lima con texto tinta (.v2-primario). Uno por vista.
 // - secondary: superficie oscura con borde fino.
 // - ghost:     texto con flecha ("Ver todo →").
-// Píldora (rounded-full), igual que el panel (D-161, D-162). El lima no va en botones: queda para los datos.
+// Píldora (rounded-full), igual que el panel. Lima para actuar; el morado queda para datos y gráficas.
 // Alto mínimo 44 px (área táctil).
 
 type Variant = "primary" | "secondary" | "ghost";

@@ -157,7 +157,7 @@ Cada fase tiene una **puerta**: no se pasa a la siguiente sin esa aprobación.
 - [x] **Fase 6: sitio v2 lanzado (D-091)**, medido, con GA4, Search Console y Google Business listos (D-096 a D-100)
 - [x] Casos de éxito con video en celular, también en catálogos y sistemas (D-128, D-129)
 - [x] Cookies con permiso previo, formulario endurecido y Microsoft Clarity listo para encender (D-130 a D-132)
-- [x] **Estilo visual vigente: el del panel aplicado al sitio, con botones del panel** (D-141, D-142; historial de lo descartado en `04-sistema-de-diseno.md` §13)
+- [x] **Estilo visual vigente: estilo Kept unificado en sitio y panel** (D-164 a D-168, guía en `docs/sistema-de-diseno.md`; historial de lo descartado en `04-sistema-de-diseno.md` §13)
 - [ ] Microsoft Clarity: falta el ID del proyecto para encenderlo (D-132)
 - [x] Astro para las páginas web de clientes (D-171, cierra D-101)
 - [ ] Blueprint consolidado
