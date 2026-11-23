@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
-import { ExternalLink, Globe, MapPin, MessageCircle, Phone, Search, Trash2 } from "./iconos";
+import { useMemo, useRef, useState, type FormEvent } from "react";
+import { ChevronLeft, ChevronRight, ExternalLink, Globe, MapPin, MessageCircle, Phone, Search, Trash2 } from "./iconos";
 import {
   ESTADOS_PROSPECTO,
   PAGINAS,
@@ -45,7 +45,8 @@ const TONO_ESTADO: Record<EstadoProspecto, TonoPill> = {
   no_contactar: "alerta",
 };
 const TIPO_TEL = { celular: "celular", fijo: "fijo", otro: "teléfono" } as const;
-const POR_PAGINA = 60;
+// 10 negocios por página: menos scroll (sobre todo en el celular)
+const POR_PAGINA = 10;
 
 const opciones = <T extends string>(o: Record<T, string>) => Object.entries(o) as [T, string][];
 
@@ -78,7 +79,8 @@ export default function Prospectos({
   const [estado, setEstado] = useState("");
   const [enfoque, setEnfoque] = useState("");
   const [buscando, setBuscando] = useState(false);
-  const [mostrar, setMostrar] = useState(POR_PAGINA);
+  const [paginaLista, setPaginaLista] = useState(0);
+  const inicioLista = useRef<HTMLParagraphElement | null>(null);
   const [abierto, setAbierto] = useState<string | null>(null);
 
   const resumen = useMemo(
@@ -111,9 +113,18 @@ export default function Prospectos({
   }, [prospectos]);
 
   const actual = prospectos.find((p) => p.id === abierto) ?? null;
+  // Si un filtro o un borrado deja menos páginas, se queda en la última que existe
+  const totalPaginas = Math.max(1, Math.ceil(visibles.length / POR_PAGINA));
+  const paginaActual = Math.min(paginaLista, totalPaginas - 1);
+  const desde = paginaActual * POR_PAGINA;
+  const irA = (n: number) => {
+    setPaginaLista(Math.min(Math.max(0, n), totalPaginas - 1));
+    // Vuelve al primer negocio de la página si quedó arriba de la pantalla
+    if ((inicioLista.current?.getBoundingClientRect().top ?? 0) < 0) inicioLista.current?.scrollIntoView({ block: "start" });
+  };
   const filtrar = <T,>(set: (v: T) => void) => (v: T) => {
     set(v);
-    setMostrar(POR_PAGINA);
+    setPaginaLista(0);
   };
 
   return (
@@ -181,11 +192,13 @@ export default function Prospectos({
           <p className="py-10 text-center text-sm text-fog">No hay prospectos con esos filtros.</p>
         ) : (
           <>
-            <p className="mt-4 text-xs text-fog-dim">
-              {numero(visibles.length)} {visibles.length === 1 ? "negocio" : "negocios"}, de mayor a menor prioridad
+            <p ref={inicioLista} className="mt-4 scroll-mt-24 text-xs text-fog-dim">
+              {visibles.length > POR_PAGINA
+                ? `${numero(desde + 1)}–${numero(Math.min(desde + POR_PAGINA, visibles.length))} de ${numero(visibles.length)} negocios, de mayor a menor prioridad`
+                : `${numero(visibles.length)} ${visibles.length === 1 ? "negocio" : "negocios"}, de mayor a menor prioridad`}
             </p>
             <ul className="mt-2 divide-y divide-white/6">
-              {visibles.slice(0, mostrar).map((p) => (
+              {visibles.slice(desde, desde + POR_PAGINA).map((p) => (
                 <li key={p.id}>
                   <button type="button" onClick={() => setAbierto(p.id)} className="flex w-full flex-wrap items-center gap-x-4 gap-y-2 py-3.5 text-left hover:bg-surface-2/40">
                     <span aria-hidden className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.08] font-display text-sm font-bold text-fog">
@@ -216,12 +229,18 @@ export default function Prospectos({
                 </li>
               ))}
             </ul>
-            {visibles.length > mostrar && (
-              <div className="pt-4 text-center">
-                <BotonSecundario type="button" onClick={() => setMostrar((m) => m + POR_PAGINA)}>
-                  Ver {Math.min(POR_PAGINA, visibles.length - mostrar)} más
+            {totalPaginas > 1 && (
+              <nav aria-label="Páginas de prospectos" className="flex items-center justify-between gap-3 border-t border-white/6 pt-4">
+                <BotonSecundario type="button" onClick={() => irA(paginaActual - 1)} disabled={paginaActual === 0} aria-label="Página anterior">
+                  <ChevronLeft aria-hidden className="h-4 w-4" /> <span className="hidden sm:inline">Anterior</span>
                 </BotonSecundario>
-              </div>
+                <p className="text-sm text-fog" aria-live="polite">
+                  Página <span className="font-display font-bold text-white">{paginaActual + 1}</span> de {totalPaginas}
+                </p>
+                <BotonSecundario type="button" onClick={() => irA(paginaActual + 1)} disabled={paginaActual >= totalPaginas - 1} aria-label="Página siguiente">
+                  <span className="hidden sm:inline">Siguiente</span> <ChevronRight aria-hidden className="h-4 w-4" />
+                </BotonSecundario>
+              </nav>
             )}
           </>
         )}
