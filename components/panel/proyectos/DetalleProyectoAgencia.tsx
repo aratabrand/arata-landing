@@ -25,7 +25,23 @@ import { cn } from "@/lib/utils";
 const comercial = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l: "En curso", t: "morado" }, cerrado: { l: "Cerrado", t: "lima" } } as const;
 const diasTxt = (d: number) => `${String(Math.round(d * 10) / 10).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
 
-export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { datos: DatosFinanzas; p: FinProyecto; hoy: string; historial: EventoHistorial[] }) {
+/** Tareas del proyecto (D-181), para la tarjeta «Tareas». */
+export type TareaDeProyecto = { id: string; titulo: string; estado: "por_hacer" | "en_curso" | "hecha"; responsable: string | null; fecha: string | null };
+const ESTADO_TAREA = { por_hacer: { l: "Por hacer", t: "neutro" }, en_curso: { l: "En curso", t: "ambar" }, hecha: { l: "Hecha", t: "verde" } } as const;
+
+export default function DetalleProyectoAgencia({
+  datos,
+  p,
+  hoy,
+  historial,
+  tareasEquipo = [],
+}: {
+  datos: DatosFinanzas;
+  p: FinProyecto;
+  hoy: string;
+  historial: EventoHistorial[];
+  tareasEquipo?: TareaDeProyecto[];
+}) {
   const [editando, setEditando] = useState(false);
   const router = useRouter();
   const acc = useAccion();
@@ -183,6 +199,36 @@ export default function DetalleProyectoAgencia({ datos, p, hoy, historial }: { d
           </Tarjeta>
         </div>
       </div>
+
+      {!datos.demo && (
+        <Tarjeta
+          titulo="Tareas"
+          bajada={tareasEquipo.length ? `${tareasEquipo.filter((t) => t.estado !== "hecha").length} pendientes de ${tareasEquipo.length}` : "Tareas del equipo ligadas a este proyecto"}
+          accion={
+            <Link href={`/panel/tareas?nueva=1&proyecto=${p.id}`} className="inline-flex h-9 items-center gap-1.5 rounded-full pn-secundario px-3 text-xs font-semibold text-white">
+              <Plus aria-hidden className="h-3.5 w-3.5" /> Nueva tarea
+            </Link>
+          }
+        >
+          {tareasEquipo.length === 0 ? (
+            <p className="text-sm text-fog-dim">Todavía no hay tareas de este proyecto.</p>
+          ) : (
+            <ul className="divide-y divide-white/6">
+              {tareasEquipo.map((t) => (
+                <li key={t.id}>
+                  <Link href={`/panel/tareas?t=${t.id}`} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 hover:text-white">
+                    <span className={cn("min-w-0 flex-1 text-sm text-white", t.estado === "hecha" && "text-fog-dim line-through")}>{t.titulo}</span>
+                    <span className="text-xs text-fog-dim">
+                      {[t.responsable ?? "Sin asignar", t.fecha ? fechaCorta(t.fecha) : "Sin fecha"].join(" · ")}
+                    </span>
+                    <Pill tono={ESTADO_TAREA[t.estado].t}>{ESTADO_TAREA[t.estado].l}</Pill>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Tarjeta>
+      )}
 
       <Tarjeta titulo="Historial" bajada="Quién hizo cada cambio y cuándo" accion={<History aria-hidden className="h-4 w-4 text-fog" />}>
         <Historial eventos={historial} vacio="Sin cambios registrados todavía." />

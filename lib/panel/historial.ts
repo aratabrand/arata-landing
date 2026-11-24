@@ -8,7 +8,7 @@ import { avisarEquipo } from "./push";
 // a lo que registra: sobrevive aunque se borre el proyecto o el cliente.
 
 export type Accion = "crear" | "editar" | "borrar" | "marcar" | "cerrar" | "publicar";
-export type Entidad = "proyecto" | "cliente" | "gasto" | "gasto-fijo" | "dias" | "paso" | "reparto" | "servicio" | "persona" | "sitio" | "ciudad" | "interesado" | "prospecto";
+export type Entidad = "proyecto" | "cliente" | "gasto" | "gasto-fijo" | "dias" | "paso" | "reparto" | "servicio" | "persona" | "sitio" | "ciudad" | "interesado" | "prospecto" | "tarea";
 export type Cambio = { campo: string; antes: string; despues: string };
 
 export type Registro = {
@@ -94,6 +94,7 @@ export async function registrarSistema(negocioId: string, quien: string, r: Regi
 function urlDe(r: Registro) {
   if (r.entidad === "interesado") return "/panel/clientes?ver=interesados";
   if (r.entidad === "prospecto") return "/panel/clientes?ver=prospectos";
+  if (r.entidad === "tarea") return r.accion === "borrar" || !r.entidadId ? "/panel/tareas" : `/panel/tareas?t=${r.entidadId}`;
   if (r.proyectoId && r.accion !== "borrar") return `/panel/proyectos/${r.proyectoId}`;
   if (r.entidad === "cliente") return "/panel/clientes";
   return "/panel/notificaciones";

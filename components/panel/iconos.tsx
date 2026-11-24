@@ -30,6 +30,13 @@ import {
   HandCoins as PHandCoins,
   Info as PInfo,
   Kanban,
+  ListChecks as PListChecks,
+  Circle as PCircle,
+  CircleHalf,
+  DotsSixVertical,
+  Table as PTable,
+  CalendarBlank,
+  CaretDown,
   Lock as PLock,
   MagnifyingGlass,
   MapPin as PMapPin,
@@ -124,6 +131,13 @@ export const Settings = fino(GearSix);
 export const ShoppingBag = fino(PShoppingBag);
 export const Smartphone = fino(DeviceMobile);
 export const SquareKanban = fino(Kanban);
+export const ListChecks = fino(PListChecks);
+export const Circle = fino(PCircle);
+export const CircleMedio = fino(CircleHalf);
+export const Arrastrar = fino(DotsSixVertical);
+export const Tabla = fino(PTable);
+export const CalendarioSemana = fino(CalendarBlank);
+export const ChevronDown = fino(CaretDown);
 export const Sun = fino(PSun);
 export const Target = fino(PTarget);
 export const Trash2 = fino(Trash);

@@ -6,6 +6,7 @@ import { estadoSesion } from "@/lib/panel/sesion";
 import { contextoAgencia, negocioAgencia } from "@/lib/panel/finanzas/datos";
 import { contarSinLeer } from "@/lib/panel/notificaciones";
 import { db } from "@/lib/panel/db";
+import { pendientesHoy } from "@/lib/panel/tareas/datos";
 
 // Barrera real del panel: sesión válida en la base + doble factor activo.
 // Finanzas y Equipo solo aparecen para miembros de la agencia (Arata San), nunca
@@ -44,6 +45,9 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
         )
         .catch(() => null);
       if (pa?.rows[0]?.n) contadores["/panel/clientes"] = pa.rows[0].n;
+      // Contador de Tareas (D-181): tus tareas de hoy y las vencidas
+      const tp = await pendientesHoy(ctx!.negocioId, ctx!.usuarioId).catch(() => 0);
+      if (tp) contadores["/panel/tareas"] = tp;
     }
   }
   return (

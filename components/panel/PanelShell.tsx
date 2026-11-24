@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "./iconos";
+import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, ListChecks, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "./iconos";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -29,9 +29,12 @@ export const navPanel = [
   { href: "/panel", label: "Resumen", icon: LayoutDashboard, agencia: false, rutas: ["/panel"] },
   { href: "/panel/clientes", label: "Clientes", icon: Users, agencia: false, rutas: ["/panel/clientes"] },
   { href: "/panel/proyectos", label: "Proyectos", icon: SquareKanban, agencia: false, rutas: ["/panel/proyectos"] },
+  // Tareas del equipo (D-181): solo Arata San
+  { href: "/panel/tareas", label: "Tareas", icon: ListChecks, agencia: true, rutas: ["/panel/tareas"] },
   // Solo Arata San (D-109): nunca se muestra a clientes de página web
   { href: "/panel/finanzas", label: "Finanzas", icon: Wallet, agencia: true, rutas: ["/panel/finanzas"] },
-  { href: "/panel/configuracion", label: "Configuración", icon: Settings, agencia: false, rutas: ["/panel/configuracion", "/panel/sitio", "/panel/equipo"] },
+  // En las pestañas del celular (6 con Tareas) va el nombre corto para que no se corte
+  { href: "/panel/configuracion", label: "Configuración", corto: "Ajustes", icon: Settings, agencia: false, rutas: ["/panel/configuracion", "/panel/sitio", "/panel/equipo"] },
 ] as const;
 
 const activo = (path: string, rutas: readonly string[]) => rutas.some((r) => (r === "/panel" ? path === r : path === r || path.startsWith(r + "/")));
@@ -119,12 +122,14 @@ export default function PanelShell({
         className="fixed inset-x-0 bottom-0 z-30 border-t border-white/[0.07] bg-noche/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
       >
         <ul className="grid" style={{ gridTemplateColumns: `repeat(${nav.length}, minmax(0, 1fr))` }}>
-          {nav.map(({ href, label, icon: Icon, rutas }) => {
+          {nav.map((opcion) => {
+            const { href, label, icon: Icon, rutas } = opcion;
             const on = activo(path, rutas);
             return (
               <li key={href}>
                 <Link
                   href={href}
+                  aria-label={"corto" in opcion ? label : undefined}
                   aria-current={on ? "page" : undefined}
                   className={cn("relative flex h-16 flex-col items-center justify-center gap-1 px-0.5 text-[0.65rem] font-medium leading-none", on ? "text-white" : "text-fog-dim")}
                 >
@@ -133,7 +138,7 @@ export default function PanelShell({
                     <Icon aria-hidden className={cn("h-5 w-5", on && "text-fog")} />
                     {(contadores[href] ?? 0) > 0 && <span aria-hidden className="absolute -right-2 -top-1.5 h-2 w-2 rounded-full bg-[#B6FF00] ring-2 ring-noche" />}
                   </span>
-                  {label}
+                  {"corto" in opcion ? opcion.corto : label}
                   {(contadores[href] ?? 0) > 0 && <span className="sr-only">, {contadores[href]} por atender</span>}
                 </Link>
               </li>

@@ -5,11 +5,12 @@ import { panelActivo } from "@/lib/panel/config";
 import { hoyColombia, fechaBogota } from "@/lib/panel/fecha";
 import { alertasVencimiento } from "@/lib/panel/alertas";
 import { recordatorioEspera } from "@/lib/panel/clientes/interesados";
-import { avisarEquipo, pushActivo } from "@/lib/panel/push";
+import { avisarA, avisarEquipo, pushActivo } from "@/lib/panel/push";
+import { resumenDiario } from "@/lib/panel/tareas/tareas";
 import type { FinProyecto } from "@/lib/panel/finanzas/tipos";
 import type { FinTarea } from "@/lib/panel/finanzas/procesos";
 
-// Aviso diario de vencimientos (D-119) y de interesados en espera (D-144). Lo llama Vercel Cron a las 8 a. m. de Bogotá
+// Aviso diario de vencimientos (D-119), de interesados en espera (D-144) y de las tareas de cada persona (D-181). Lo llama Vercel Cron a las 8 a. m. de Bogotá
 // (13:00 UTC, vercel.json) con "Authorization: Bearer CRON_SECRET". Para cada proyecto:
 // 2 días antes, el día de entrega y cada mañana que vaya tarde. Nunca repite el mismo
 // aviso el mismo día (tabla avisos_enviados).
@@ -67,6 +68,30 @@ export async function GET(req: NextRequest) {
       if (!nuevo.rowCount) continue;
       avisos++;
       const r = await avisarEquipo(n.id, { titulo: rec.titulo, cuerpo: rec.cuerpo, url: "/panel/clientes?ver=interesados", etiqueta: `espera-${x.id}` });
+      enviados += r.enviados;
+    }
+
+    // Tareas (D-181): a cada persona, sus tareas de hoy y las vencidas (una vez al día)
+    const delEquipo = await db().query(
+      `select p.usuario_id, p.nombre, t.titulo, t.fecha::text fecha, t.estado, t.prioridad
+         from agencia_tareas t join equipo_personas p on p.id = t.responsable_id
+        where t.negocio_id = $1 and p.usuario_id is not null and p.activo and t.estado <> 'hecha' and t.fecha <= $2::date`,
+      [n.id, hoy]
+    );
+    type Pendiente = Parameters<typeof resumenDiario>[1][number];
+    const porPersona = new Map<string, { nombre: string; lista: Pendiente[] }>();
+    delEquipo.rows.forEach((r) => {
+      const x: { nombre: string; lista: Pendiente[] } = porPersona.get(r.usuario_id) ?? { nombre: r.nombre, lista: [] };
+      x.lista.push({ titulo: r.titulo, fecha: r.fecha, estado: r.estado, prioridad: r.prioridad });
+      porPersona.set(r.usuario_id, x);
+    });
+    for (const [usuarioId, x] of porPersona) {
+      const res = resumenDiario(x.nombre, x.lista, hoy);
+      if (!res) continue;
+      const nuevo = await db().query(`insert into avisos_tareas (usuario_id, fecha) values ($1, $2) on conflict do nothing`, [usuarioId, hoy]);
+      if (!nuevo.rowCount) continue;
+      avisos++;
+      const r = await avisarA(n.id, usuarioId, { titulo: res.titulo, cuerpo: res.cuerpo, url: "/panel/tareas", etiqueta: "tareas-del-dia" });
       enviados += r.enviados;
     }
   }
