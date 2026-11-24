@@ -412,7 +412,155 @@ function Contacto() {
   );
 }
 
+/* Catálogo (D-195) · Catálogo con carrito: productos por categoría y el pedido se arma solo */
+function Carrito() {
+  const prods = [0, 1, 2, 3];
+  return (
+    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
+      {["Todo", "Camisetas", "Gorras"].map((t, i) => (
+        <g key={t}>
+          <rect x={8 + [0, 40, 102][i]} y="6" width={[34, 56, 46][i]} height="16" rx="8" fill={i === 0 ? L : FILL} stroke={i === 0 ? "none" : LINE} />
+          <text x={8 + [0, 40, 102][i] + [34, 56, 46][i] / 2} y="17" textAnchor="middle" fontSize="7.5" fontWeight={i === 0 ? 800 : 400} fill={i === 0 ? "#03010B" : S} fontFamily="var(--font-sans)">
+            {t}
+          </text>
+        </g>
+      ))}
+      {/* carrito con el número de productos */}
+      <g>
+        <path d="M278 8 h5 l4 14 h15 l3 -10 h-20" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="290" cy="26" r="1.8" fill="rgba(255,255,255,0.7)" />
+        <circle cx="300" cy="26" r="1.8" fill="rgba(255,255,255,0.7)" />
+        <g className="ib-pop" style={v(4)}>
+          <circle cx="307" cy="8" r="6.5" fill={L} />
+          <text x="307" y="10.8" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#03010B" fontFamily="var(--font-display)">3</text>
+        </g>
+      </g>
+      {prods.map((i) => (
+        <g key={i} className="ib-rise" style={v(i)}>
+          <rect x={8 + i * 78} y="32" width="70" height="92" rx="8" fill={FILL} stroke={i === 1 ? L : LINE} strokeOpacity={i === 1 ? 0.6 : 1} />
+          <rect x={14 + i * 78} y="38" width="58" height="40" rx="5" fill={i === 1 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
+          <rect x={14 + i * 78} y="85" width="40" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+          <rect x={14 + i * 78} y="95" width="26" height="4" rx="2" fill={i === 1 ? L : "rgba(255,255,255,0.25)"} />
+          <circle cx={63 + i * 78} cy="110" r="7" fill={i === 1 ? L : "rgba(255,255,255,0.12)"} />
+          <path d={`M${60 + i * 78} 110 h6 M${63 + i * 78} 107 v6`} stroke={i === 1 ? "#03010B" : "#FFFFFF"} strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      ))}
+      <circle cx="141" cy="110" r="10" fill="none" stroke={L} strokeWidth="1.5" className="ib-tap" />
+    </svg>
+  );
+}
+
+/* Catálogo (D-195) · Pedido directo a tu WhatsApp: llega ordenado, con productos y cantidades */
+function Whatsapp() {
+  const lineas = [
+    { t: "2 × Camiseta negra", y: 112 },
+    { t: "1 × Gorra", y: 126 },
+    { t: "3 × Stickers", y: 140 },
+  ];
+  return (
+    <svg viewBox="0 0 160 250" className="h-full w-full" aria-hidden>
+      <rect x="30" y="12" width="100" height="228" rx="20" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
+      <rect x="66" y="19" width="28" height="5" rx="2.5" fill={LINE} />
+      {/* encabezado del chat */}
+      <rect x="38" y="30" width="84" height="26" rx="6" fill="rgba(255,255,255,0.06)" />
+      <circle cx="51" cy="43" r="7" fill={L} />
+      <path d="M47.5 46.5 l1-2.6 a3.6 3.6 0 1 1 1.5 1.5 z" fill="none" stroke="#03010B" strokeWidth="1.1" strokeLinejoin="round" />
+      <rect x="62" y="38" width="40" height="4.5" rx="2.25" fill="rgba(255,255,255,0.7)" />
+      <rect x="62" y="46" width="26" height="3.5" rx="1.75" fill="rgba(255,255,255,0.25)" />
+      {/* el pedido */}
+      <g className="ib-rise" style={v(0)}>
+        <rect x="42" y="72" width="76" height="98" rx="8" fill="rgba(182,255,0,0.1)" stroke={L} strokeOpacity="0.5" />
+        <text x="49" y="88" fontSize="8" fontWeight="800" fill={L} fontFamily="var(--font-display)">Nuevo pedido</text>
+        <rect x="49" y="94" width="62" height="1" fill="rgba(255,255,255,0.15)" />
+      </g>
+      {lineas.map((l, i) => (
+        <text key={l.t} x="49" y={l.y - 4} fontSize="6.6" fill="rgba(255,255,255,0.85)" fontFamily="var(--font-sans)" className="ib-rise" style={v(i + 1)}>
+          {l.t}
+        </text>
+      ))}
+      <g className="ib-rise" style={v(4)}>
+        <rect x="49" y="144" width="62" height="1" fill="rgba(255,255,255,0.15)" />
+        <text x="49" y="158" fontSize="7" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">Total</text>
+        <text x="111" y="158" textAnchor="end" fontSize="7" fontWeight="800" fill={L} fontFamily="var(--font-display)">$ 148.000</text>
+        <path d="M100 165 l2 2 l4 -4 M104 165 l2 2 l4 -4" fill="none" stroke={L} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      {/* respuesta */}
+      <g className="ib-pop" style={v(5)}>
+        <rect x="42" y="180" width="56" height="20" rx="7" fill="rgba(255,255,255,0.08)" />
+        <rect x="48" y="188" width="40" height="4" rx="2" fill="rgba(255,255,255,0.4)" />
+      </g>
+    </svg>
+  );
+}
+
+/* Catálogo (D-195) · Panel para tu tienda: los pedidos del día con su estado */
+function PanelTienda() {
+  const pedidos = [
+    { n: "#128", e: "Nuevo", on: true },
+    { n: "#127", e: "Preparando", on: false },
+    { n: "#126", e: "Entregado", on: false },
+  ];
+  return (
+    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
+      <rect x="8" y="6" width="304" height="118" rx="10" fill="rgba(255,255,255,0.02)" stroke={LINE} />
+      <rect x="8" y="6" width="56" height="118" rx="10" fill="rgba(255,255,255,0.04)" />
+      {[22, 36, 50, 64].map((y, i) => (
+        <rect key={y} x="18" y={y} width="34" height="5" rx="2.5" fill={i === 1 ? L : "rgba(255,255,255,0.2)"} />
+      ))}
+      <text x="76" y="24" fontSize="8" fill={S} fontFamily="var(--font-sans)">Pedidos de hoy</text>
+      <text x="300" y="26" textAnchor="end" fontSize="16" fontWeight="800" fill={L} fontFamily="var(--font-display)" className="ib-fade" style={v(1)}>
+        12
+      </text>
+      {pedidos.map((p, i) => (
+        <g key={p.n} className="ib-rise" style={v(i)}>
+          <rect x="74" y={36 + i * 29} width="228" height="24" rx="6" fill={FILL} stroke={p.on ? L : "none"} strokeOpacity="0.5" />
+          <text x="84" y={51 + i * 29} fontSize="8" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">{p.n}</text>
+          <rect x="112" y={45 + i * 29} width={70 - i * 10} height="5" rx="2.5" fill="rgba(255,255,255,0.4)" />
+          <rect x="238" y={41 + i * 29} width="56" height="14" rx="7" fill={p.on ? L : "rgba(255,255,255,0.1)"} />
+          <text x="266" y={50.5 + i * 29} textAnchor="middle" fontSize="7" fontWeight={p.on ? 800 : 400} fill={p.on ? "#03010B" : S} fontFamily="var(--font-sans)">
+            {p.e}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* Catálogo (D-195) · Inventario: cuánto queda de cada producto */
+function Inventario() {
+  const prods = [
+    { t: "Camiseta negra", q: 24, w: 150 },
+    { t: "Gorra", q: 12, w: 76 },
+    { t: "Termo", q: 3, w: 20 },
+  ];
+  return (
+    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
+      {prods.map((p, i) => (
+        <g key={p.t}>
+          <rect x="8" y={10 + i * 40} width="38" height="30" rx="6" fill={i === 2 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
+          <text x="56" y={21 + i * 40} fontSize="8" fill="rgba(255,255,255,0.85)" fontFamily="var(--font-sans)">{p.t}</text>
+          <rect x="56" y={28 + i * 40} width="200" height="7" rx="3.5" fill="rgba(255,255,255,0.08)" />
+          <rect x="56" y={28 + i * 40} width={p.w} height="7" rx="3.5" fill={i === 2 ? L : "rgba(255,255,255,0.55)"} className="ib-bar" />
+          <text x="300" y={36 + i * 40} textAnchor="end" fontSize="16" fontWeight="800" fill={i === 2 ? L : "#FFFFFF"} fontFamily="var(--font-display)" className="ib-fade" style={v(i + 1)}>
+            {p.q}
+          </text>
+          {i === 2 && (
+            <g className="ib-pop" style={v(3)}>
+              <rect x="186" y={10 + i * 40} width="70" height="14" rx="7" fill="rgba(182,255,0,0.14)" stroke={L} strokeOpacity="0.6" />
+              <text x="221" y={19.5 + i * 40} textAnchor="middle" fontSize="7" fontWeight="800" fill={L} fontFamily="var(--font-sans)">Quedan pocos</text>
+            </g>
+          )}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 const ILUSTRACION: Record<string, () => ReactNode> = {
+  carrito: Carrito,
+  whatsapp: Whatsapp,
+  panelTienda: PanelTienda,
+  inventario: Inventario,
   contacto: Contacto,
   paginas: Paginas,
   blog: Blog,
@@ -428,7 +576,12 @@ const ILUSTRACION: Record<string, () => ReactNode> = {
 };
 
 // Posición en la grilla de 4 columnas × 3 filas (escritorio). En celular, una columna.
+// Catálogo (D-195): carrito, panel e inventario a lo ancho y el chat de WhatsApp alto, como el celular.
 const CELDA: Record<string, { clase: string; alto: string }> = {
+  carrito: { clase: "lg:col-span-2", alto: "h-36" },
+  panelTienda: { clase: "lg:col-span-2", alto: "h-36" },
+  inventario: { clase: "lg:col-span-2", alto: "h-36" },
+  whatsapp: { clase: "lg:row-span-2", alto: "h-56 lg:h-72" },
   secciones: { clase: "lg:col-span-2", alto: "h-36" },
   paginas: { clase: "lg:col-span-2", alto: "h-36" },
   blog: { clase: "", alto: "h-28" },

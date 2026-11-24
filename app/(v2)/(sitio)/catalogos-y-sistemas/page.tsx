@@ -9,6 +9,7 @@ import {
 } from "@/components/v2/ServiceSections";
 import { Assurances } from "@/components/v2/Pricing";
 import CasosExito from "@/components/v2/CasosExito";
+import IncludesBento from "@/components/v2/IncludesBento";
 import { catalogos as c } from "@/content/servicios";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
@@ -40,7 +41,9 @@ export default function CatalogosYSistemas() {
       />
       <ServiceHero {...c.hero} tipo="catalogo" />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre="" items={c.problema.items} />
-      {/* D-129: "Tu catálogo, listo para vender" se reemplaza por los casos de éxito en video. La franja de precio se queda. */}
+      {/* D-195: "Tu catálogo, listo para vender" vuelve como bento con ilustraciones, antes del video de Caravana (D-129 lo había quitado). */}
+      <IncludesBento id="tienda" titulo={c.tienda.titulo} items={c.tienda.items} />
+      {/* D-129: casos de éxito en video. La franja de precio va debajo. */}
       <CasosExito
         id="casos-catalogo"
         servicio="catalogo"
