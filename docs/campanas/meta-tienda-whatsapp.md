@@ -2,10 +2,10 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Borrador | 0.1 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
+| Borrador | 0.2 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
 
 **Landing:** `aratasan.com/lp/catalogos` (D-188, D-189) · **Objetivo:** reuniones agendadas para *Tienda por WhatsApp en 5 Días* (desde 800 USD).
-**Regla:** primero se aprueba el copy (§5) y después se construye (§4). Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
+**Regla:** primero se aprueba el copy (§5) y después se construye (§4). Ya construido (D-190): sin *Tu Negocio en Orden*, precio en pesos y las respuestas de productos y primer año. Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
 
 ---
 
@@ -25,7 +25,7 @@ Medido sobre la construcción de producción, en local, con Lighthouse en celula
 | Largo de la página | **13 pantallas** en celular pequeño | Larga para tráfico frío de Instagram. Meta: 8 o 9 |
 | Botones a agendar | 6, más la barra fija | Bien |
 | Enlaces que sacan de la página | **0** (se quitaron portafolio y fichas, D-189) | Bien. Solo quedan Agendar y la política de datos (en otra pestaña) |
-| Ofertas en la página | **2**: Tienda por WhatsApp y *Tu Negocio en Orden* | Distrae: el anuncio vende una sola cosa |
+| Ofertas en la página | ~~2~~ → **1** (se quitó *Tu Negocio en Orden*, D-190) | Un anuncio, una oferta |
 | Prueba social | 1 video (Caravana), **sin testimonio** | Es lo que más falta para tráfico frío |
 | Origen del interesado | Las `utm` de Meta no pasan a `/agendar` ni a Cal.com | Si rechaza cookies, no sabemos que vino de Meta |
 | `/agendar` | Tiene el menú completo del sitio | Al tocar «Agendar» vuelve a haber salidas |
@@ -88,8 +88,8 @@ Medido sobre la construcción de producción, en local, con Lighthouse en celula
 | «El que me hizo la página desapareció» | Mantenimiento opcional (15 % al mes); seguimos aquí | FAQ (nueva) |
 | «¿Y si no me sirve?» | Garantía de velocidad + 2 rondas de ajustes | Junto al precio |
 | «Mis clientes no pagan en línea» | No hace falta: el pedido llega por WhatsApp y cobras como siempre | FAQ (ya está) |
-| «Tengo muchos productos» | ◻ Falta el límite de productos (pendiente de Sergio) | FAQ |
-| «¿La tienda es mía? ¿Qué pasa después del primer año?» | ◻ Falta la respuesta: costo de dominio y hosting desde el año 2 | FAQ (nueva) |
+| «Tengo muchos productos» | Caben más de 100 (D-190) | FAQ ✅ |
+| «¿Qué pasa después del primer año?» | Se renueva el contrato y se paga el dominio (D-190) | FAQ ✅ |
 
 ---
 
@@ -150,7 +150,7 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 | 1 | **Pixel + evento *Lead*** con permiso propio en el aviso de cookies y la política actualizada | Sin pixel, Meta no sabe a quién buscar | Sergio y Andrés (25 nov) + Claude |
 | 2 | **Pasar el origen a la agenda:** las `utm` de la landing viajan a `/agendar` y quedan en las notas de Cal.com («Origen: Meta · ángulo A»); el panel lo muestra en Interesados. Además, evento `clic_agendar` en cada botón de la landing | Saber qué anuncio trae reuniones aunque rechacen cookies, y cuánta gente toca «Agendar» | Claude |
 | 3 | **`/agendar` sin menú** cuando viene de la landing | Al tocar «Agendar» vuelven a aparecer salidas | Claude |
-| 4 | **Quitar *Tu Negocio en Orden*** de la landing (sección y su pregunta frecuente) | Un anuncio, una oferta, un botón | Claude (aprueba Sergio) |
+| 4 | ✅ **Quitar *Tu Negocio en Orden*** de la landing (sección, pregunta y mención en el proceso), D-190 | Un anuncio, una oferta, un botón | Hecho |
 | 5 | **Titular según el ángulo del anuncio** (§5.1) | Continuidad entre anuncio y página | Copy: Sergio · Código: Claude |
 | 6 | **Título sin animación en la landing** | Baja el LCP de 3,3 s y deja la velocidad fija arriba de 90 | Claude |
 
@@ -161,9 +161,9 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 | 7 | **Sección de dolores más fuerte:** 4 tarjetas por grupo (tiempo, ventas, control, confianza) con el costo de seguir igual (§5.2) | La sección actual es corta y no dice qué le cuesta |
 | 8 | **«Así te llega el pedido»:** captura real de un pedido en WhatsApp | Es la promesa central; hoy no se ve |
 | 9 | **Testimonio de Caravana** (texto o video corto del dueño) | Única pieza de prueba que falta y la más fuerte para tráfico frío |
-| 10 | **Preguntas que faltan:** cuántos productos caben, qué pasa después del primer año, si la tienda es mía, si sirve si no sé de tecnología | Son las objeciones de §2-F |
+| 10 | **Preguntas que faltan** (§5.4). ✅ Ya están: cuántos productos caben y qué pasa después del primer año (D-190) | Son las objeciones de §2-F |
 | 11 | **Página más corta:** de 13 a 8 o 9 pantallas (sin *Tu Negocio en Orden*, casos en una fila deslizable) | Tráfico frío lee poco |
-| 12 | **Precio también en pesos** («Desde 800 USD, unos $ X COP») | El comerciante colombiano piensa en pesos; el dólar asusta o confunde. Necesita decisión de Sergio |
+| 12 | ✅ **Precio en pesos:** «Desde $ 2.800.000 · unos 800 USD» (D-190) | El comerciante colombiano piensa en pesos |
 
 ### P2 — Pruebas A/B (una a la vez, con al menos 2 semanas de datos)
 
@@ -176,41 +176,111 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 
 ---
 
-## 5. Copy para aprobar (Sergio)
+## 5. Copy: ¿resuelve los dolores? (revisión del 24 nov 2026)
 
-Español colombiano plano, en tú, igual que el sitio.
+### 5.0 Lo que la landing dice hoy, dolor por dolor
 
-### 5.1 Titular (uno por ángulo)
+Se compararon los 24 dolores de §2 con todo el texto de `/lp/catalogos` (ya sin *Tu Negocio en Orden* y con precio en pesos, D-190).
 
-| Ángulo | Versión | Titular | Subtítulo |
+| Grupo | Dolor | ¿Lo dice hoy? | Dónde / qué falta |
 |---|---|---|---|
-| Actual | — | Tu tienda lista en 5 días. Los pedidos te llegan al WhatsApp. | Catálogo con carrito, inventario y un panel para manejar tu negocio desde el celular. Desde 800 USD. |
-| A — Tiempo | A1 | Deja de mandar foto por foto. | Tu tienda con todos tus productos en un enlace. El cliente arma su pedido y te llega ordenado al WhatsApp. Lista en 5 días. |
-| A — Tiempo | A2 | Tus clientes arman el pedido solos. Tú solo lo despachas. | Catálogo con carrito que te manda el pedido al WhatsApp, a cualquier hora. Lista en 5 días, desde 800 USD. |
-| B — Ventas | B1 | Que ningún pedido se te pierda en el chat. | Cada pedido te llega ordenado al WhatsApp y queda guardado en tu panel. Tu tienda lista en 5 días. |
-| C — Control | C1 | Sabe qué vendes, qué te queda y qué te compran más. | Tienda con inventario y datos de venta en tu celular. Los pedidos te llegan al WhatsApp. Lista en 5 días. |
+| A. Tiempo | Foto por foto | ✅ | Dolores, tarjeta 1. No dice cuánto tiempo le quita |
+| A. Tiempo | «¿Precio?» todo el día | ❌ | En ninguna parte |
+| A. Tiempo | Pedidos a las 11 de la noche | ❌ | Nunca se dice que la tienda recibe pedidos a cualquier hora |
+| A. Tiempo | Pedidos regados en el chat | ✅ | Dolores, tarjeta 2 |
+| B. Ventas | Pedidos que se pierden | ✅ | Dolores, tarjeta 2, y el titular |
+| B. Ventas | Si se demora, el cliente compra en otro lado | ❌ | — |
+| B. Ventas | En Instagram nadie encuentra los precios | ❌ | — |
+| B. Ventas | El catálogo de WhatsApp Business se queda corto | ❌ | — |
+| C. Control | No sabe cuánto le queda | ✅ | Dolores, tarjeta 3, y preguntas |
+| C. Control | No sabe qué le compran más | ✅ | Dolores, tarjeta 4. No se muestra el panel con datos |
+| C. Control | Cuaderno o Excel | 🟡 | Solo «panel desde el celular» en el subtítulo |
+| D. Confianza | «¿Es real o es estafa?» | ❌ | — |
+| D. Confianza | Se ve más pequeño que la competencia | ❌ | — |
+| E. Riesgo | Si cierran el Instagram, se queda sin negocio | ❌ | — |
+| E. Riesgo | Comisión por cada venta | ❌ | Es un argumento fuerte y no se usa: el pedido llega directo |
+| E. Riesgo | Mensualidad en dólares | 🟡 | El precio ya va en pesos, pero «Mantenimiento 15 % al mes» parece una mensualidad obligatoria |
+| F. Miedos | No sabe de tecnología | 🟡 | Solo «Capacitación incluida» en el proceso |
+| F. Miedos | No tiene tiempo | ✅ | 5 días hábiles, desde el primer pantallazo |
+| F. Miedos | Es caro | ✅ | Pesos y pago 50 % / 50 % |
+| F. Miedos | El que le hizo la página desapareció | 🟡 | La tarjeta de mantenimiento no dice para qué sirve |
+| F. Miedos | ¿Y si no me sirve? | 🟡 | La garantía es de velocidad y dice «tu página», no «tu tienda» |
+| F. Miedos | Sus clientes no pagan en línea | ✅ | Preguntas |
+| F. Miedos | Tiene muchos productos | ✅ | Preguntas: más de 100 (D-190) |
+| F. Miedos | Después del primer año | ✅ | Preguntas: se renueva el contrato y se paga el dominio (D-190) |
 
-### 5.2 Sección de dolores (reemplaza «Si vendes por WhatsApp, esto te suena»)
+**Resultado: 10 resueltos, 5 a medias y 9 sin tocar.** Lo mejor cubierto es el *control* (inventario, qué se vende). Faltan por completo la *confianza* y la *dependencia de Instagram*, y la mitad del *tiempo* y de las *ventas que se escapan*: justo los dolores que más se sienten en el día a día.
 
-**Título:** «Vender por WhatsApp no debería quitarte todo el día» · alterna: «Si vendes por chat, esto te pasa»
+Otros problemas del copy actual:
 
-| Tarjeta | Texto |
-|---|---|
-| Tiempo | Mandas foto por foto y respondes «¿precio?» todo el día. |
-| Ventas | Si te demoras en contestar, el cliente le compra a otro. |
-| Pedidos | Los pedidos se te pierden entre mensajes, audios y fotos. |
-| Control | No sabes cuánto te queda ni qué es lo que más se vende. |
+| # | Problema | Por qué importa |
+|---|---|---|
+| 1 | El subtítulo del inicio es una lista de funciones («catálogo con carrito, inventario y un panel») | El comerciante compra el resultado (menos chat, más pedidos), no las funciones |
+| 2 | La sección de dolores no tiene cierre | Nombra el problema y no lo conecta con la solución |
+| 3 | «Videos reales de los catálogos y páginas que hicimos, y lo que dicen sus dueños» | Hoy no hay testimonio y habla de páginas: promete algo que la sección no muestra |
+| 4 | La garantía dice «tu página» | En esta landing se vende una tienda |
+| 5 | «Mantenimiento opcional: 15 % al mes» sin contexto | Para este cliente suena a mensualidad obligatoria |
 
-**Cierre:** «Con tu tienda, el cliente ve todo, arma su pedido y te llega ordenado. Tú solo lo despachas.»
+### 5.1 Titular (★ = recomendado)
 
-### 5.3 Preguntas nuevas
+| Ángulo | Versión | Titular | Subtítulo | Dolores que cubre |
+|---|---|---|---|---|
+| Actual | — | Tu tienda lista en 5 días. Los pedidos te llegan al WhatsApp. | Catálogo con carrito, inventario y un panel para manejar tu negocio desde el celular. Desde $ 2.800.000. | B1, F2 |
+| A — Tiempo | ★ A1 | Deja de mandar foto por foto. | Todos tus productos con precio en un enlace. El cliente arma su pedido y te llega ordenado al WhatsApp. Tu tienda lista en 5 días, desde $ 2.800.000. | A1, A2, A4, B1, F2, F3 |
+| A — Tiempo | A2 | Tus clientes arman el pedido solos. Tú solo lo despachas. | Una tienda que te manda los pedidos ordenados al WhatsApp, a cualquier hora. Lista en 5 días, desde $ 2.800.000. | A3, A4, B1, F2, F3 |
+| B — Ventas | B1 | Que ningún pedido se te pierda en el chat. | Cada pedido te llega ordenado al WhatsApp y queda guardado en tu panel. Tu tienda lista en 5 días, desde $ 2.800.000. | A4, B1, C3, F2, F3 |
+| C — Control | C1 | Sabe qué vendes, qué te queda y qué se vende más. | Tienda con inventario y datos de venta en tu celular. Los pedidos te llegan al WhatsApp. Lista en 5 días, desde $ 2.800.000. | C1, C2, C3, F2, F3 |
 
-| Pregunta | Respuesta |
-|---|---|
-| ¿Necesito saber de tecnología? | No. Te la entregamos funcionando y te enseñamos a subir productos y ver pedidos desde el celular. |
-| ¿Cuántos productos caben? | ◻ Pendiente del límite (Sergio). |
-| ¿La tienda es mía? | ◻ Pendiente: dominio a nombre de quién y costo desde el segundo año. |
-| ¿Y si después necesito un cambio? | Tienes 2 rondas de ajustes incluidas. Después, el mantenimiento es opcional. |
+★ **A1** porque nombra el dolor que más se ve (la galería de fotos, caso Caravana) y en el subtítulo resuelve el «¿precio?», el pedido ordenado, el tiempo y el precio. Las otras quedan para los anuncios de cada ángulo (`utm_content`).
+
+### 5.2 Sección de dolores
+
+**Título:** ★ «Vender por chat no debería quitarte todo el día» · alterna: «Si vendes por WhatsApp, esto te suena» (la actual)
+
+| # | Título de la tarjeta | Texto | Dolores |
+|---|---|---|---|
+| 1 | Mandas foto por foto | Y respondes «¿precio?» todo el día. El cliente se cansa antes de comprar. | A1, A2 |
+| 2 | Los pedidos se pierden en el chat | Entre audios, fotos y mensajes, alguno se te pasa o llega con la talla equivocada. | A4, B1 |
+| 3 | Si te demoras, compra en otro lado | Mientras le contestas a uno, otro se cansa de esperar. Y de noche nadie te compra. | B2, A3 |
+| 4 | No sabes qué tienes ni qué se vende | Vendes lo que ya no hay y compras mercancía a ciegas. | C1, C2 |
+
+**Cierre (nuevo):** «Con tu tienda, el cliente ve todo con precio, arma su pedido a cualquier hora y te llega ordenado al WhatsApp. Tú solo lo despachas.»
+
+### 5.3 Caso de éxito (corrige el problema 3)
+
+| Campo | Hoy | Propuesta |
+|---|---|---|
+| Etiqueta | Casos de éxito | Caso real |
+| Título | Mira cómo les funciona a nuestros clientes. | Así le funciona a Caravana. |
+| Texto | Videos reales de los catálogos y páginas que hicimos, y lo que dicen sus dueños. | Pasaron de mandar fotos por WhatsApp a una tienda con inventario, pedidos y datos de venta en un panel. |
+
+Cuando llegue el testimonio del dueño de Caravana, se vuelve a «lo que dice su dueño».
+
+### 5.4 Preguntas frecuentes (orden por objeción)
+
+Se cubren los dolores D y E sin agregar secciones nuevas. Quedan 9 preguntas (hoy son 8).
+
+| # | Pregunta | Respuesta | Estado |
+|---|---|---|---|
+| 1 | ¿Cómo me llegan los pedidos? | El cliente arma su pedido en tu tienda y te llega ordenado a tu WhatsApp, con productos y cantidades. | Ya está |
+| 2 | ¿Me cobran comisión por cada venta? | No. El pedido te llega directo a tu WhatsApp y el pago lo recibes tú completo. | Nueva (E2) |
+| 3 | ¿Por qué una tienda y no solo Instagram o el catálogo de WhatsApp? | Porque es tuya: tu dominio, tus productos y tus pedidos. Si Instagram cambia o te cierran la cuenta, tu tienda sigue funcionando. Y se ve como un negocio serio, así tus clientes confían en comprarte. | Nueva (B3, B4, D1, D2, E1) |
+| 4 | ¿Necesito saber de tecnología? | No. Te la entregamos funcionando y te enseñamos a subir productos y ver tus pedidos desde el celular. | Nueva (F1) |
+| 5 | ¿Cuántos productos caben? | Más de 100. El precio depende de cuántos productos y categorías tengas: en la reunión te damos el precio exacto. | Ya está (reemplaza «¿Por qué el precio dice "desde"?») |
+| 6 | ¿Quién sube los productos y maneja el inventario? | Tú, desde tu panel, también en el celular. Te enseñamos en la capacitación. | Une dos que ya están |
+| 7 | ¿Puedo pagar por partes? | Sí: 50 % para arrancar y 50 % cuando te entregamos. | Ya está |
+| 8 | ¿Mis clientes pueden pagar en línea? | Por ahora no. El cliente arma su pedido, te llega por WhatsApp y cobras como siempre. | Ya está, más corta |
+| 9 | ¿Hay que pagar algo cada mes? | No es obligatorio. El primer año el dominio y el hosting van por nuestra cuenta; después se renueva el contrato y se paga el dominio. El mantenimiento (15 % del valor del proyecto al mes) es opcional, por si quieres que nos encarguemos del soporte. | Une «después del primer año» con el mantenimiento (E3, F4) |
+
+### 5.5 Ajustes cortos
+
+| Dónde | Hoy | Propuesta |
+|---|---|---|
+| Garantía | «Si tu página no saca 90…» | «Si tu tienda no saca 90 o más en velocidad móvil de Google, la seguimos ajustando gratis hasta lograrlo.» |
+| Mantenimiento | «15 % del valor de tu proyecto al mes.» | «Opcional: 15 % al mes si quieres que nos encarguemos del soporte.» |
+| Llamado final | «Agenda y te decimos en 30 minutos qué necesitas y cuánto cuesta.» | «Agenda y en 30 minutos te decimos cuánto cuesta tu tienda.» |
+
+**Con todo lo anterior: 21 de 24 dolores cubiertos y 3 a medias.** «No sabe qué le compran» necesita mostrar el panel con datos (P1 #8). «El que me la hizo desapareció» y «¿y si no me sirve?» se responden con texto, pero lo que los cierra es la prueba: el testimonio del dueño de Caravana (P1 #9).
 
 ---
 

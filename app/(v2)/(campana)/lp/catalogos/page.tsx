@@ -3,7 +3,6 @@ import { ProblemSection, StepsSection } from "@/components/v2/HomeSections";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
 import {
   CasesSection,
-  CustomSystemSection,
   PriceBar,
   ServiceHero,
 } from "@/components/v2/ServiceSections";
@@ -44,7 +43,6 @@ export default function LandingCatalogos() {
           </>
         }
       />
-      <CustomSystemSection {...c.sistema} />
       <CasesSection {...c.casos} sinEnlaces />
       <StepsSection id="proceso" {...c.proceso} />
       <FaqSection titulo={c.faq.titulo} subtitulo="" items={c.faq.items} />
