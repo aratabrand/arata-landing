@@ -3,7 +3,7 @@
 //   npx -y tsx scripts/prueba-decisiones.ts --siguiente  → dice el siguiente número libre (mira también main)
 //
 // Revisa:
-//   ERROR  · un ID repetido, en los dos archivos a la vez, con huecos o mal escrito (siempre D-000, 3 cifras)
+//   ERROR  · un ID repetido, en los dos archivos a la vez, con huecos o mal escrito (siempre con 3 cifras, p. ej. D-007)
 //   ERROR  · una referencia en el código o en los documentos a un ID que no existe
 //   ERROR  · una fila sin fecha o sin estado
 //   AVISO  · una cita a una decisión ARCHIVADA que no dice que es historia (antes, archivada, reemplaza, revierte…)
