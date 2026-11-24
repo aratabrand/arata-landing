@@ -100,9 +100,13 @@ export function textosLanding(conOferta: boolean) {
     // (content/servicios.ts); con la oferta, la entrega dice que los primeros 30 productos los subimos nosotros.
     incluye: {
       titulo: "Todo lo que incluye tu tienda",
-      items: catalogos.tienda.items.map((it) =>
-        conOferta && it.icono === "entrega" ? { ...it, texto: "Desde que apruebas la propuesta. Los primeros 30 productos los subimos nosotros." } : it
-      ),
+      // D-199: cada punto con su ilustración animada del bento (components/v2/IncludesBento.tsx)
+      items: catalogos.tienda.items.map((it) => {
+        const icono = ({ whatsapp: "pedido", panel: "panelTienda" } as Record<string, string>)[it.icono] ?? it.icono;
+        const texto =
+          conOferta && it.icono === "entrega" ? "Desde que apruebas la propuesta. Los primeros 30 productos los subimos nosotros." : it.texto;
+        return { ...it, icono, texto };
+      }),
       bono: conOferta ? { etiqueta: "Bono de noviembre", texto: OFERTA.bono } : null,
     },
     // D-198: garantía elegida (auditoría, Copy B1), junto a la de velocidad

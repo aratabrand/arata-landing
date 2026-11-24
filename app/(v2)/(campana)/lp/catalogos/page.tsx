@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ProblemSection, StepsSection } from "@/components/v2/HomeSections";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
-import { CasesSection, IncludesSection, PriceBar, ServiceHero } from "@/components/v2/ServiceSections";
+import { CasesSection, PriceBar, ServiceHero } from "@/components/v2/ServiceSections";
+import IncludesBento from "@/components/v2/IncludesBento";
 import { Assurances } from "@/components/v2/Pricing";
 import CasosExito from "@/components/v2/CasosExito";
 import MarcoCampana from "@/components/v2/campana/MarcoCampana";
@@ -38,10 +39,12 @@ export default function LandingCatalogos() {
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre={c.problema.cierre} items={c.problema.items} />
       <CasosExito id="casos-catalogo" servicio="catalogo" sinEnlaces textos={c.casosExito} />
       {/* D-198: primero todo lo que recibe (pila de valor), después el bono, el precio y las garantías */}
-      <IncludesSection
+      <IncludesBento
         id="incluye"
         titulo={c.incluye.titulo}
         items={c.incluye.items}
+        // D-199: con 10 puntos, la entrega va a lo ancho y la grilla de 4 columnas queda completa
+        celdas={{ entrega: { clase: "sm:col-span-2 lg:col-span-4", alto: "mx-auto h-24 w-full max-w-xl" } }}
         pie={
           <div className="mt-10 space-y-4">
             {c.incluye.bono && (
