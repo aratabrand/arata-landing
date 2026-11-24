@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ProblemSection, StepsSection } from "@/components/v2/HomeSections";
 import { CtaCard, FaqSection } from "@/components/v2/Closing";
-import { CasesSection, PriceBar, ServiceHero } from "@/components/v2/ServiceSections";
+import { CasesSection, IncludesSection, PriceBar, ServiceHero } from "@/components/v2/ServiceSections";
 import { Assurances } from "@/components/v2/Pricing";
 import CasosExito from "@/components/v2/CasosExito";
 import MarcoCampana from "@/components/v2/campana/MarcoCampana";
@@ -36,13 +36,20 @@ export default function LandingCatalogos() {
     >
       <ServiceHero {...c.hero} tipo="catalogo" enlace={AGENDAR_LP} />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre={c.problema.cierre} items={c.problema.items} />
-      <CasosExito
-        id="casos-catalogo"
-        servicio="catalogo"
-        sinEnlaces
-        textos={c.casosExito}
+      <CasosExito id="casos-catalogo" servicio="catalogo" sinEnlaces textos={c.casosExito} />
+      {/* D-198: primero todo lo que recibe (pila de valor), después el bono, el precio y las garantías */}
+      <IncludesSection
+        id="incluye"
+        titulo={c.incluye.titulo}
+        items={c.incluye.items}
         pie={
-          <>
+          <div className="mt-10 space-y-4">
+            {c.incluye.bono && (
+              <div className="flex flex-col gap-2 rounded-card border border-lime/30 bg-surface-1 p-5 sm:flex-row sm:items-center sm:gap-4 sm:p-6">
+                <span className="inline-flex w-fit rounded-full bg-lime px-3 py-1 text-xs font-semibold text-ink">{c.incluye.bono.etiqueta}</span>
+                <p className="font-display text-lg font-bold tracking-heading text-white">{c.incluye.bono.texto}</p>
+              </div>
+            )}
             <PriceBar
               precio={c.tienda.precio}
               antes={c.tienda.precioAntes}
@@ -52,8 +59,13 @@ export default function LandingCatalogos() {
               boton={c.tienda.boton}
               tipo="catalogo"
             />
-            <Assurances className="mt-4" items={c.aseguramientos} />
-          </>
+            <article className="v2-card p-6">
+              <span className="inline-flex rounded-full bg-lime px-3 py-1 text-xs font-semibold text-ink">{c.garantia.etiqueta}</span>
+              <h3 className="mt-3 font-display text-xl font-bold tracking-heading text-white">{c.garantia.titulo}</h3>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-fog">{c.garantia.texto}</p>
+            </article>
+            <Assurances items={c.aseguramientos} />
+          </div>
         }
       />
       <CasesSection {...c.casos} sinEnlaces />

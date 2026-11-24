@@ -29,6 +29,10 @@ export const OFERTA = {
   condicion: "para quien agende hasta el 30 de noviembre",
   /** D-197: el 50 % para arrancar, en plata (aprobado por Sergio). */
   arranque: "$\u00A01.100.000",
+  /** D-198: bono de noviembre (Sergio eligió solo este). */
+  bono: "Te subimos tus primeros 30 productos.",
+  /** D-198: cupos de ESTA campaña (el sitio sigue con 4 al mes, D-172). */
+  cupos: "Este mes tomamos máximo 8 tiendas.",
 };
 
 export function ofertaVigente(ahora = new Date()): boolean {
@@ -92,6 +96,21 @@ export function textosLanding(conOferta: boolean) {
         ? `para quien agende hasta el ${OFERTA.hastaTexto}.`
         : "unos 800 USD. Depende del tamaño de tu tienda.",
     },
+    // D-198: la pila de valor visible antes del precio (auditoría, mejora 1). Lista aprobada de la tienda
+    // (content/servicios.ts); con la oferta, la entrega dice que los primeros 30 productos los subimos nosotros.
+    incluye: {
+      titulo: "Todo lo que incluye tu tienda",
+      items: catalogos.tienda.items.map((it) =>
+        conOferta && it.icono === "entrega" ? { ...it, texto: "Desde que apruebas la propuesta. Los primeros 30 productos los subimos nosotros." } : it
+      ),
+      bono: conOferta ? { etiqueta: "Bono de noviembre", texto: OFERTA.bono } : null,
+    },
+    // D-198: garantía elegida (auditoría, Copy B1), junto a la de velocidad
+    garantia: {
+      etiqueta: "Garantía",
+      titulo: "Te la dejamos funcionando",
+      texto: "El día de la entrega hacemos contigo un pedido de prueba y te llega a tu WhatsApp. Si algo no funciona, lo arreglamos sin costo antes de cobrarte el segundo 50 %.",
+    },
     // §5.5: garantía de la tienda (no de la página) y mantenimiento con su para qué
     aseguramientos: precios.aseguramientos.map((a) =>
       a.tipo === "velocidad"
@@ -125,7 +144,12 @@ export function textosLanding(conOferta: boolean) {
             ? "Más de 100, organizados por categorías."
             : "Más de 100. El precio depende de cuántos productos y categorías tengas: en la reunión te damos el precio exacto.",
         },
-        { p: "¿Quién sube los productos y maneja el inventario?", r: "Tú, desde tu panel, también en el celular. Te enseñamos en la capacitación." },
+        {
+          p: "¿Quién sube los productos y maneja el inventario?",
+          r: conOferta
+            ? "Los primeros 30 productos los subimos nosotros (bono de noviembre). Después, tú desde tu panel, también en el celular. Te enseñamos en la capacitación."
+            : "Tú, desde tu panel, también en el celular. Te enseñamos en la capacitación.",
+        },
         { p: "¿Puedo pagar por partes?", r: "Sí: 50 % para arrancar y 50 % cuando te entregamos." },
         { p: "¿Mis clientes pueden pagar en línea?", r: "Por ahora no. El cliente arma su pedido, te llega por WhatsApp y cobras como siempre." },
         {
@@ -138,7 +162,8 @@ export function textosLanding(conOferta: boolean) {
     cta: {
       ...catalogos.cta,
       href: AGENDAR_LP,
-      texto: "Tomamos 4 proyectos nuevos al mes. Agenda y en 30 minutos te decimos cuánto cuesta tu tienda.",
+      // D-198: con la campaña, 8 tiendas al mes (el sitio sigue con 4)
+      texto: `${conOferta ? OFERTA.cupos : "Tomamos 4 proyectos nuevos al mes."} Agenda y en 30 minutos te decimos cuánto cuesta tu tienda.`,
     },
   };
 }
