@@ -170,13 +170,13 @@ export const catalogos = {
     ],
   },
   tienda: {
-    // D-129: el título y la lista ya no se muestran (los reemplazan los casos en video).
-    // Se conservan por si vuelven; la franja de precio (precio, nota, pago, botón) sí se usa.
+    // D-200: el título y la lista vuelven como bento con ilustraciones, antes del video de Caravana
+    // (D-129 los había quitado). La franja de precio sigue debajo del video.
     titulo: "Tu catálogo, listo para vender",
     items: [
       { icono: "carrito", titulo: "Catálogo con carrito", texto: "Tus clientes ven tus productos ordenados por categoría y arman su pedido." },
-      { icono: "whatsapp", titulo: "Pedido directo a tu WhatsApp", texto: "El pedido te llega ordenado, con productos y cantidades." },
-      { icono: "panel", titulo: "Panel para tu tienda", texto: "Manejas tus productos y tus pedidos desde el celular." },
+      { icono: "pedido", titulo: "Pedido directo a tu WhatsApp", texto: "El pedido te llega ordenado, con productos y cantidades." },
+      { icono: "panelTienda", titulo: "Panel para tu tienda", texto: "Manejas tus productos y tus pedidos desde el celular." },
       { icono: "inventario", titulo: "Inventario", texto: "Sabes cuánto tienes de cada producto." },
       { icono: "velocidad", titulo: "Velocidad garantizada", texto: "90 o más en la medición de Google, o la seguimos ajustando gratis." },
       { icono: "google", titulo: "Lista para Google y la IA", texto: "Configuración para Google, Google Business y la IA." },
