@@ -55,7 +55,7 @@ export function textosLanding(conOferta: boolean) {
       precio: conOferta ? OFERTA.precio : `Desde ${PRECIO_COP}`,
       precioAntes: conOferta ? OFERTA.antes : undefined,
       precioNota: conOferta
-        ? `${OFERTA.nombre.toLowerCase()}, hasta el ${OFERTA.hastaTexto}.`
+        ? `precio especial hasta el ${OFERTA.hastaTexto}.`
         : "unos 800 USD. Depende del tamaño de tu tienda.",
     },
     // D-190: sin «Tu Negocio en Orden»: el anuncio vende una sola oferta.

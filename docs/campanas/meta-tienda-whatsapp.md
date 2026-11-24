@@ -2,12 +2,23 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Borrador | 0.2 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
+| Borrador | 0.3 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
 
 **Landing:** `aratasan.com/lp/catalogos` (D-188, D-189) · **Objetivo:** reuniones agendadas para *Tienda por WhatsApp en 5 Días* (desde 800 USD).
 **Regla:** primero se aprueba el copy (§5) y después se construye (§4). Ya construido (D-190): sin *Tu Negocio en Orden*, precio en pesos y las respuestas de productos y primer año. Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
 
 ---
+
+## 0. Oferta vigente (D-191)
+
+| Qué | Valor |
+|---|---|
+| Precio de noviembre | **$ 2.200.000** (antes $ 2.800.000), precio fijo, sin «desde» |
+| Hasta | 30 de noviembre de 2026, 11:59 p. m. de Bogotá. El 1 de diciembre la landing vuelve sola a «Desde $ 2.800.000» y la cinta desaparece (se revisa cada hora) |
+| Dónde se ve | Cinta lima fija arriba (precio, precio tachado y días que quedan), inicio y franja de precio |
+| Se cambia en | `OFERTA` en `content/campanas/catalogos.ts` |
+| ◻ Por definir | Qué cuenta para la oferta: ¿agendar antes del 30 o aprobar y pagar el 50 % antes del 30? Andrés debe respetar el precio a quien agendó con la cinta a la vista |
+| Regla | El Estatuto del Consumidor (Ley 1480 de 2011) pide que una promoción diga su vigencia y sus condiciones, y que se respete el precio anunciado. Los anuncios de Meta con este precio se apagan el 30 de noviembre |
 
 ## 1. Resultado de las pruebas (24 nov 2026)
 
