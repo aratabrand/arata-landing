@@ -162,12 +162,15 @@ export function IncludesSection({
 /** Franja de precio dentro de una sección (Tienda por WhatsApp). */
 export function PriceBar({
   precio,
+  antes,
   nota,
   pago,
   boton,
   tipo,
 }: {
   precio: string;
+  /** Precio normal tachado al lado, cuando hay oferta (D-191). */
+  antes?: string;
   nota: string;
   pago: string;
   boton: string;
@@ -177,7 +180,14 @@ export function PriceBar({
     <div className="mt-6 flex flex-col gap-5 v2-destacada rounded-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
       <div>
         <p className="font-display text-[2rem] font-extrabold leading-none tracking-display text-lime">
-          {precio} <span className="font-sans text-base font-normal tracking-normal text-fog">· {nota}</span>
+          {precio}{" "}
+          {antes && (
+            <>
+              <span className="sr-only">, antes </span>
+              <s className="font-sans text-lg font-semibold tracking-normal text-fog-dim">{antes}</s>{" "}
+            </>
+          )}
+          <span className="font-sans text-base font-normal tracking-normal text-fog">· {nota}</span>
         </p>
         <p className="mt-2 text-sm text-fog">{pago}</p>
       </div>
