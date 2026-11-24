@@ -20,6 +20,8 @@ export const OFERTA = {
   vence: "2026-12-01T00:00:00-05:00",
   hastaTexto: "30 de noviembre",
   nombre: "Precio de noviembre",
+  /** D-195: la condición. Vale para quien AGENDA la reunión hasta el 30 de noviembre (no hace falta pagar antes). */
+  condicion: "para quien agende hasta el 30 de noviembre",
 };
 
 export function ofertaVigente(ahora = new Date()): boolean {
@@ -79,7 +81,7 @@ export function textosLanding(conOferta: boolean) {
       precio: conOferta ? OFERTA.precio : `Desde ${PRECIO_COP}`,
       precioAntes: conOferta ? OFERTA.antes : undefined,
       precioNota: conOferta
-        ? `precio especial hasta el ${OFERTA.hastaTexto}.`
+        ? `para quien agende hasta el ${OFERTA.hastaTexto}.`
         : "unos 800 USD. Depende del tamaño de tu tienda.",
     },
     // §5.5: garantía de la tienda (no de la página) y mantenimiento con su para qué

@@ -17,7 +17,7 @@
 | Hasta | 30 de noviembre de 2026, 11:59 p. m. de Bogotá. El 1 de diciembre la landing vuelve sola a «Desde $ 2.800.000» y la cinta desaparece (se revisa cada hora) |
 | Dónde se ve | Cinta lima fija arriba (precio, precio tachado y días que quedan), inicio y franja de precio |
 | Se cambia en | `OFERTA` en `content/campanas/catalogos.ts` |
-| ◻ Por definir | Qué cuenta para la oferta: ¿agendar antes del 30 o aprobar y pagar el 50 % antes del 30? Andrés debe respetar el precio a quien agendó con la cinta a la vista |
+| Condición (D-195) | Vale para quien **agende** la reunión hasta el 30 de noviembre, aunque la propuesta o el pago lleguen en diciembre. Se dice junto al precio. Auditoría y mejoras: [`auditoria-oferta-2026-11-24.md`](auditoria-oferta-2026-11-24.md) |
 | Regla | El Estatuto del Consumidor (Ley 1480 de 2011) pide que una promoción diga su vigencia y sus condiciones, y que se respete el precio anunciado. Los anuncios de Meta con este precio se apagan el 30 de noviembre |
 
 ## 1. Resultado de las pruebas (24 nov 2026)

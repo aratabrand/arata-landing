@@ -153,6 +153,7 @@ Progresión: **sistema Figma → build Claude Code**.
 - Secretos (API keys, tokens de Meta/OpenAI/Supabase) van en `.env`, **nunca commiteados**.
 - Salidas modulares: preferir respuestas tipo tabla, no prosa larga.
 - Iteración dirigida: cambios puntuales a slides/elementos específicos, no rebuilds completos.
+- **Ofertas, precios, promociones, garantías, bonos o pitch:** usar la skill `alex-hormozi-pitch` (`.claude/skills/alex-hormozi-pitch/`): crear (Flujo A) o auditar (Flujo B) con el método de *$100M Offers*, sin inventar datos y con la Ley 1480 (D-196). Última auditoría: `docs/campanas/auditoria-oferta-2026-11-24.md`.
 
 ---
 
