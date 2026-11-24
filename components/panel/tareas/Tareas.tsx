@@ -10,7 +10,6 @@ import {
   avanceItems,
   diasDeSemana,
   diasLaborales,
-  esFinDeSemana,
   fechaCorta,
   lunesDe,
   ordenarDia,
@@ -303,8 +302,6 @@ function Semana({
   onNueva: (fecha: string | null) => void;
 }) {
   const dias = diasLaborales(lunes);
-  // Lo que quedó para sábado o domingo de esta semana (no hay columna: se muestra aparte)
-  const finDeSemana = ordenarDia(tareas.filter((t) => t.fecha !== null && t.fecha > sumarDias(lunes, 4) && t.fecha <= sumarDias(lunes, 6) && esFinDeSemana(t.fecha)));
   const [sobre, setSobre] = useState<{ fecha: string | null; antesDe: string | null } | null>(null);
   const esEstaSemana = lunes === semanaDeTrabajo(hoy);
   // Las vencidas de semanas pasadas se ven en «Atrasadas» para no perderlas
@@ -411,20 +408,6 @@ function Semana({
           );
         })}
       </div>
-
-      {finDeSemana.length > 0 && (
-        <section className="rounded-card border border-white/8 p-3" aria-label="Fin de semana">
-          <h3 className="mb-2 text-sm font-semibold text-fog">
-            Fin de semana <span className="ml-1 text-xs font-normal text-fog-dim">{finDeSemana.length}</span>
-          </h3>
-          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {finDeSemana.map((t) => (
-              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable />
-            ))}
-          </ul>
-          <p className="mt-2 text-[0.7rem] text-fog-dim">Quedaron para sábado o domingo. Arrástralas a un día de la semana si se hacen entre semana.</p>
-        </section>
-      )}
 
       <section {...zona(null)} className={cn("rounded-card border border-white/8 p-3 transition-colors", sobre?.fecha === null && "bg-white/[0.03]")} aria-label="Sin fecha">
         <header className="mb-2 flex items-center justify-between">
