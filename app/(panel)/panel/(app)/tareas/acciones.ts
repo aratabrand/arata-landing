@@ -8,7 +8,7 @@ import { contextoAgencia, type ContextoAgencia } from "@/lib/panel/finanzas/dato
 import { diferencias, registrar } from "@/lib/panel/historial";
 import { avisarA } from "@/lib/panel/push";
 import { hoyColombia } from "@/lib/panel/fecha";
-import { AREAS, ESTADOS_TAREA, FECHA, PRIORIDADES_TAREA, RECORDATORIOS, fechaCorta, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
+import { AREAS, ESTADOS_TAREA, FECHA, PRIORIDADES_TAREA, RECORDATORIOS, fechaCorta, moverRango, rangoTexto, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
 import type { Resultado } from "../finanzas/acciones";
 
 // Tareas del equipo (D-181). Los tres (Sergio, Andrés y Santiago) crean, asignan y editan;
@@ -43,7 +43,7 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
   if (!UUID.test(id)) return null;
   return (
     await db().query(
-      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha::text fecha, t.prioridad, t.estado, t.recordatorio, f.nombre proyecto,
+      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha::text fecha, t.fecha_fin::text fecha_fin, t.prioridad, t.estado, t.recordatorio, f.nombre proyecto,
               coalesce((select json_agg(json_build_object('id', p.id, 'nombre', p.nombre, 'usuario', p.usuario_id) order by p.orden, p.creado)
                           from tarea_responsables r join equipo_personas p on p.id = r.persona_id where r.tarea_id = t.id), '[]') responsables
          from agencia_tareas t left join fin_proyectos f on f.id = t.proyecto_id
@@ -58,6 +58,7 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
         area: Area;
         proyecto_id: string | null;
         fecha: string | null;
+        fecha_fin: string | null;
         prioridad: PrioridadTarea;
         estado: EstadoTarea;
         recordatorio: keyof typeof RECORDATORIOS | null;
@@ -99,6 +100,8 @@ export type EntradaTarea = {
   /** Personas del equipo que la hacen (D-186: una o varias; vacío = sin asignar). */
   responsableIds?: string[];
   fecha?: string | null;
+  /** Día en que debe quedar lista (D-187). Vacío = la tarea es de un solo día. */
+  fechaFin?: string | null;
   prioridad: string;
   estado?: string;
   /** Clave de RECORDATORIOS o vacío (sin recordatorio, D-183). */
@@ -119,6 +122,11 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
     if (!(estado in ESTADOS_TAREA)) return NO("Elige el estado.");
     const fecha = e.fecha ? String(e.fecha) : null;
     if (fecha && !FECHA.test(fecha)) return NO("Revisa la fecha.");
+    let fechaFin = e.fechaFin ? String(e.fechaFin) : null;
+    if (fechaFin && !FECHA.test(fechaFin)) return NO("Revisa la fecha final.");
+    if (fechaFin && !fecha) return NO("Para poner fecha final, elige también el día en que empieza.");
+    if (fechaFin && fecha && fechaFin < fecha) return NO("La fecha final no puede ser antes del día en que empieza.");
+    if (fechaFin === fecha) fechaFin = null;
     const proyectoId = e.proyectoId || null;
     if (proyectoId && !(UUID.test(proyectoId) && (await db().query(`select 1 from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId])).rowCount))
       return NO("Ese proyecto no existe.");
@@ -146,9 +154,9 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         : 0;
       const id = (
         await db().query(
-          `insert into agencia_tareas (negocio_id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, hecha_en, recordatorio, recordatorio_por)
-           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, case when $9 = 'hecha' then now() end, $12, case when $12::text is not null then $11 end) returning id`,
-          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, orden, ctx.usuarioId, recordatorio]
+          `insert into agencia_tareas (negocio_id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, hecha_en, recordatorio, recordatorio_por, fecha_fin)
+           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, case when $9 = 'hecha' then now() end, $12, case when $12::text is not null then $11 end, $13) returning id`,
+          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, orden, ctx.usuarioId, recordatorio, fechaFin]
         )
       ).rows[0].id as string;
       await guardarResponsables(id, responsableIds);
@@ -169,11 +177,11 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
     await db().query(
       `update agencia_tareas set titulo = $3, descripcion = $4, area = $5, proyecto_id = $6, responsable_id = $7, fecha = $8, prioridad = $9, estado = $10,
               hecha_en = case when $10 = 'hecha' then coalesce(hecha_en, now()) else null end, actualizado = now(),
-              recordatorio = $11,
+              recordatorio = $11, fecha_fin = $13,
               -- Quien pone o cambia el recordatorio también lo recibe
               recordatorio_por = case when $11::text is null then null when recordatorio is distinct from $11 then $12 else recordatorio_por end
         where id = $1 and negocio_id = $2`,
-      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, recordatorio, ctx.usuarioId]
+      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, recordatorio, ctx.usuarioId, fechaFin]
     );
     await guardarResponsables(antes.id, responsableIds);
     const proyecto = proyectoId ? ((await db().query(`select nombre from fin_proyectos where id = $1`, [proyectoId])).rows[0]?.nombre as string) : null;
@@ -182,7 +190,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
       {
         titulo: antes.titulo,
         responsable: nombres(antes.responsables),
-        fecha: fechaCorta(antes.fecha, hoy),
+        fecha: rangoTexto({ fecha: antes.fecha, fechaFin: antes.fecha_fin }, hoy),
         prioridad: PRIORIDADES_TAREA[antes.prioridad],
         estado: ESTADOS_TAREA[antes.estado],
         area: AREAS[antes.area],
@@ -193,7 +201,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
       {
         titulo,
         responsable: nombres(personas),
-        fecha: fechaCorta(fecha, hoy),
+        fecha: rangoTexto({ fecha, fechaFin }, hoy),
         prioridad: PRIORIDADES_TAREA[prioridad],
         estado: ESTADOS_TAREA[estado],
         area: AREAS[area],
@@ -246,7 +254,7 @@ export async function cambiarEstadoTarea(id: string, estado: string): Promise<Re
  * Arrastrar en el tablero: la tarea pasa a otro día (o a «Sin fecha») y queda antes de `antesDe`
  * (o al final). Se renumera el orden de ese día.
  */
-export async function moverTarea(entrada: { id: string; fecha: string | null; antesDe?: string | null }): Promise<Resultado> {
+export async function moverTarea(entrada: { id: string; fecha: string | null; antesDe?: string | null; desde?: string | null }): Promise<Resultado> {
   try {
     const ctx = await contexto();
     if (esFallo(ctx)) return ctx;
@@ -254,25 +262,29 @@ export async function moverTarea(entrada: { id: string; fecha: string | null; an
     if (fecha && !FECHA.test(fecha)) return NO("Día no válido.");
     const t = await tareaDe(ctx, entrada.id);
     if (!t) return NO("Esa tarea no existe.");
+    // Rango (D-187): se mueve completo, conservando cuántos días dura. `desde` = columna de donde se arrastró
+    const desde = entrada.desde && FECHA.test(entrada.desde) ? entrada.desde : t.fecha;
+    const { fecha: inicio, fechaFin: fin } = moverRango({ fecha: t.fecha, fechaFin: t.fecha_fin }, fecha, desde);
     const delDia = (
-      await db().query(`select id from agencia_tareas where negocio_id = $1 and fecha is not distinct from $2::date and id <> $3 order by orden, creado`, [ctx.negocioId, fecha, t.id])
+      await db().query(`select id from agencia_tareas where negocio_id = $1 and fecha is not distinct from $2::date and id <> $3 order by orden, creado`, [ctx.negocioId, inicio, t.id])
     ).rows.map((r) => r.id as string);
     const i = entrada.antesDe ? delDia.indexOf(entrada.antesDe) : -1;
     delDia.splice(i < 0 ? delDia.length : i, 0, t.id);
-    await db().query(`update agencia_tareas set fecha = $3, actualizado = now() where id = $1 and negocio_id = $2`, [t.id, ctx.negocioId, fecha]);
+    await db().query(`update agencia_tareas set fecha = $3, fecha_fin = $4, actualizado = now() where id = $1 and negocio_id = $2`, [t.id, ctx.negocioId, inicio, fin]);
     await db().query(
       `update agencia_tareas a set orden = x.orden from unnest($2::uuid[]) with ordinality as x(id, orden) where a.id = x.id and a.negocio_id = $1`,
       [ctx.negocioId, delDia]
     );
-    if (t.fecha !== fecha) {
+    if (t.fecha !== inicio) {
       const hoy = hoyColombia();
+      const nuevo = rangoTexto({ fecha: inicio, fechaFin: fin }, hoy);
       await registrar(ctx, {
         accion: "editar",
         entidad: "tarea",
         entidadId: t.id,
         proyectoId: t.proyecto_id,
-        titulo: `Movió «${t.titulo}» a ${fechaCorta(fecha, hoy).toLowerCase()}`,
-        cambios: [{ campo: "Fecha", antes: fechaCorta(t.fecha, hoy), despues: fechaCorta(fecha, hoy) }],
+        titulo: `Movió «${t.titulo}» a ${nuevo.toLowerCase()}`,
+        cambios: [{ campo: "Fecha", antes: rangoTexto({ fecha: t.fecha, fechaFin: t.fecha_fin }, hoy), despues: nuevo }],
       });
     }
     listo();

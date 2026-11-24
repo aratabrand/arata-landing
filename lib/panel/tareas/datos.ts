@@ -23,7 +23,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
   if (!ctx) return null;
   const [ta, it, co, pe, pr] = await Promise.all([
     db().query(
-      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha, t.prioridad, t.estado, t.orden, t.recordatorio, t.creado_por, t.creado,
+      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha, t.fecha_fin, t.prioridad, t.estado, t.orden, t.recordatorio, t.creado_por, t.creado,
               (select coalesce(array_agg(r.persona_id::text order by p.orden, p.creado), '{}') from tarea_responsables r
                  join equipo_personas p on p.id = r.persona_id where r.tarea_id = t.id) responsables
          from agencia_tareas t
@@ -65,6 +65,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
         proyectoId: r.proyecto_id,
         responsables: r.responsables ?? [],
         fecha: fechaBogota(r.fecha),
+        fechaFin: fechaBogota(r.fecha_fin),
         prioridad: r.prioridad,
         estado: r.estado,
         orden: Number(r.orden),

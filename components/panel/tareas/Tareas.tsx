@@ -7,17 +7,22 @@ import {
   AREAS,
   ESTADOS_TAREA,
   PRIORIDADES_TAREA,
+  activaEn,
   avanceItems,
   diasDeSemana,
   diasLaborales,
+  duracion,
   fechaCorta,
+  moverRango,
   lunesDe,
   ordenarDia,
   ordenarTabla,
   partesDia,
   rangoSemana,
+  rangoTexto,
   semanaDeTrabajo,
   sumarDias,
+  vence,
   vencida,
   type Area,
   type Columna,
@@ -31,6 +36,7 @@ import { Hoja } from "../Clientes";
 import { PanelHeader, PanelPage, Pill, type TonoPill } from "../ui";
 import { BotonPrincipal, BotonSecundario, MensajeError } from "../finanzas/comun";
 import FichaTarea, { type NuevaTarea } from "./FichaTarea";
+import { useArrastreTactil, type Destino } from "./arrastreTactil";
 import { cn } from "@/lib/utils";
 
 // Tareas del equipo (D-181): tablero de la semana (lunes a domingo, arrastrar entre días)
@@ -79,10 +85,10 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
     const pend = filtradas.filter((t) => t.estado !== "hecha");
     const dias = new Set(diasDeSemana(lunesDe(hoy)));
     return {
-      hoy: pend.filter((t) => t.fecha === hoy).length,
+      hoy: pend.filter((t) => activaEn(t, hoy)).length,
       vencidas: pend.filter((t) => vencida(t, hoy)).length,
       enCurso: pend.filter((t) => t.estado === "en_curso").length,
-      hechasSemana: filtradas.filter((t) => t.estado === "hecha" && t.fecha && dias.has(t.fecha)).length,
+      hechasSemana: filtradas.filter((t) => t.estado === "hecha" && vence(t) && dias.has(vence(t)!)).length,
     };
   }, [filtradas, hoy]);
 
@@ -101,18 +107,21 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
     router.refresh();
   }
 
-  async function mover(id: string, fecha: string | null, antesDe: string | null) {
+  async function mover(id: string, destino: string | null, antesDe: string | null, desde: string | null) {
     setTareas((l) => {
       const t = l.find((x) => x.id === id);
       if (!t) return l;
+      // Rango (D-187): se corre completo, conservando cuántos días dura
+      const nuevo = { ...t, ...moverRango(t, destino, desde) };
+      const fecha = nuevo.fecha;
       const resto = l.filter((x) => x.id !== id);
       const delDia = ordenarDia(resto.filter((x) => x.fecha === fecha));
       const i = antesDe ? delDia.findIndex((x) => x.id === antesDe) : -1;
-      delDia.splice(i < 0 ? delDia.length : i, 0, { ...t, fecha });
+      delDia.splice(i < 0 ? delDia.length : i, 0, nuevo);
       const orden = new Map(delDia.map((x, n) => [x.id, n + 1]));
       return [...resto.filter((x) => x.fecha !== fecha), ...delDia].map((x) => (orden.has(x.id) ? { ...x, orden: orden.get(x.id)! } : x));
     });
-    const r = await moverTarea({ id, fecha, antesDe }).catch(() => ({ ok: false as const, error: "Sin conexión." }));
+    const r = await moverTarea({ id, fecha: destino, antesDe, desde }).catch(() => ({ ok: false as const, error: "Sin conexión." }));
     if (!r.ok) setError(r.error);
     router.refresh();
   }
@@ -264,27 +273,49 @@ function Responsables({ nombres }: { nombres: string[] }) {
   );
 }
 
-function TarjetaTarea({ t, responsables, proyecto, hoy, onAbrir, onEstado, arrastrable, onArrastre }: DatosTarjeta & { arrastrable?: boolean; onArrastre?: (e: DragEvent<HTMLLIElement>) => void }) {
+type Tactil = ReturnType<typeof useArrastreTactil>;
+
+function TarjetaTarea({
+  t,
+  responsables,
+  proyecto,
+  hoy,
+  onAbrir,
+  onEstado,
+  arrastrable,
+  onArrastre,
+  desde = null,
+  tactil,
+}: DatosTarjeta & { arrastrable?: boolean; onArrastre?: (e: DragEvent<HTMLLIElement>) => void; desde?: string | null; tactil?: Tactil }) {
   const { hechos, total } = avanceItems(t.items);
   const tarde = vencida(t, hoy);
+  const libre = (fn: () => void) => () => !tactil?.clicBloqueado() && fn();
   return (
     <li
       draggable={arrastrable}
       onDragStart={(e) => {
         e.dataTransfer.setData("text/plain", t.id);
+        e.dataTransfer.setData("text/desde", desde ?? "");
         e.dataTransfer.effectAllowed = "move";
       }}
       onDragOver={onArrastre}
+      {...(arrastrable && tactil ? tactil.props(t.id, desde) : {})}
+      style={tactil?.estilo(t.id)}
       data-tarea={t.id}
-      className={cn("group rounded-frame border border-white/8 bg-surface-1 p-2 transition-colors hover:border-white/20", arrastrable && "cursor-grab active:cursor-grabbing", t.estado === "hecha" && "opacity-60")}
+      className={cn(
+        "group select-none rounded-frame border border-white/8 bg-surface-1 p-2 transition-colors [-webkit-touch-callout:none] hover:border-white/20",
+        arrastrable && "cursor-grab active:cursor-grabbing",
+        t.estado === "hecha" && "opacity-60"
+      )}
     >
       <div className="flex items-start gap-1.5">
-        <button type="button" onClick={onEstado} aria-label={`Estado: ${ESTADOS_TAREA[t.estado]}. Pasar a ${ESTADOS_TAREA[SIGUIENTE[t.estado]].toLowerCase()}`} className="-m-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full hover:bg-white/[0.06]">
+        <button type="button" onClick={libre(onEstado)} aria-label={`Estado: ${ESTADOS_TAREA[t.estado]}. Pasar a ${ESTADOS_TAREA[SIGUIENTE[t.estado]].toLowerCase()}`} className="-m-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full hover:bg-white/[0.06]">
           <IconoEstado estado={t.estado} />
         </button>
-        <button type="button" onClick={onAbrir} className="min-w-0 flex-1 text-left">
+        <button type="button" onClick={libre(onAbrir)} className="min-w-0 flex-1 text-left">
           <span className={cn("block break-words text-[0.82rem] font-medium leading-snug text-white", t.estado === "hecha" && "line-through")}>{t.titulo}</span>
           {proyecto && <span className="mt-0.5 block truncate text-[0.7rem] text-fog-dim">{proyecto}</span>}
+          {duracion(t) > 1 && <span className="mt-0.5 block text-[0.7rem] text-fog-dim">{rangoTexto(t, hoy)}</span>}
         </button>
       </div>
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
@@ -339,8 +370,14 @@ function Estados({
   onEstado: (t: Tarea, a: EstadoTarea) => void;
   onNueva: (estado: EstadoTarea) => void;
 }) {
-  const [sobre, setSobre] = useState<EstadoTarea | null>(null);
+  const [sobreRaton, setSobre] = useState<EstadoTarea | null>(null);
   const [verHechas, setVerHechas] = useState(HECHAS_VISIBLES);
+  // Con el dedo (D-187): mantener presionada la tarjeta y soltarla en otra columna
+  const tactil = useArrastreTactil((id, _desde, d: Destino) => {
+    const t = tareas.find((x) => x.id === id);
+    if (t && d.zona in ESTADOS_TAREA) onEstado(t, d.zona as EstadoTarea);
+  });
+  const sobre = sobreRaton ?? ((tactil.sobre?.zona as EstadoTarea | undefined) || null);
   // Pendientes: primero lo que vence antes (sin fecha al final) y lo más urgente. Hechas: las más recientes arriba
   const PESO: Record<PrioridadTarea, number> = { urgente: 0, alta: 1, media: 2, baja: 3 };
   const ordenar = (l: Tarea[], estado: EstadoTarea) =>
@@ -362,6 +399,7 @@ function Estados({
           <section
             key={c.estado}
             aria-label={ESTADOS_TAREA[c.estado]}
+            data-zona={c.estado}
             onDragOver={(e) => {
               e.preventDefault();
               e.dataTransfer.dropEffect = "move";
@@ -394,7 +432,7 @@ function Estados({
             </header>
             <ul className="flex-1 space-y-2">
               {lista.map((t) => (
-                <TarjetaEstado key={t.id} t={t} hoy={hoy} responsables={t.responsables.map(nombreDe)} proyecto={proyectoDe(t.proyectoId)} onAbrir={() => onAbrir(t.id)} onHecha={() => onEstado(t, "hecha")} />
+                <TarjetaEstado key={t.id} t={t} hoy={hoy} responsables={t.responsables.map(nombreDe)} proyecto={proyectoDe(t.proyectoId)} onAbrir={() => onAbrir(t.id)} onHecha={() => onEstado(t, "hecha")} tactil={tactil} />
               ))}
               {todas.length === 0 && <li className="px-1 py-6 text-center text-xs text-fog-dim">{c.estado === "hecha" ? "Lo que se termine aparece aquí." : "Nada por aquí. Arrastra una tarea o crea una."}</li>}
             </ul>
@@ -411,9 +449,26 @@ function Estados({
 }
 
 /** Tarjeta del tablero por estado: título, día, prioridad, responsable y el botón «¡Hecha!» (como Notion). */
-function TarjetaEstado({ t, hoy, responsables, proyecto, onAbrir, onHecha }: { t: Tarea; hoy: string; responsables: string[]; proyecto: string | null; onAbrir: () => void; onHecha: () => void }) {
+function TarjetaEstado({
+  t,
+  hoy,
+  responsables,
+  proyecto,
+  onAbrir,
+  onHecha,
+  tactil,
+}: {
+  t: Tarea;
+  hoy: string;
+  responsables: string[];
+  proyecto: string | null;
+  onAbrir: () => void;
+  onHecha: () => void;
+  tactil: Tactil;
+}) {
   const { hechos, total } = avanceItems(t.items);
   const tarde = vencida(t, hoy);
+  const libre = (fn: () => void) => () => !tactil.clicBloqueado() && fn();
   return (
     <li
       draggable
@@ -421,14 +476,16 @@ function TarjetaEstado({ t, hoy, responsables, proyecto, onAbrir, onHecha }: { t
         e.dataTransfer.setData("text/plain", t.id);
         e.dataTransfer.effectAllowed = "move";
       }}
+      {...tactil.props(t.id, t.estado)}
+      style={tactil.estilo(t.id)}
       data-tarea={t.id}
-      className="cursor-grab rounded-frame border border-white/8 bg-surface-1 p-3 transition-colors hover:border-white/20 active:cursor-grabbing"
+      className="cursor-grab select-none rounded-frame border border-white/8 bg-surface-1 p-3 transition-colors [-webkit-touch-callout:none] hover:border-white/20 active:cursor-grabbing"
     >
-      <button type="button" onClick={onAbrir} className="block w-full text-left">
+      <button type="button" onClick={libre(onAbrir)} className="block w-full text-left">
         <span className={cn("block break-words text-sm font-medium leading-snug text-white", t.estado === "hecha" && "text-fog line-through")}>{t.titulo}</span>
         {proyecto && <span className="mt-0.5 block truncate text-[0.7rem] text-fog-dim">{proyecto}</span>}
         <span className={cn("mt-2 block text-xs", tarde ? "font-semibold text-alerta" : "text-fog")}>
-          {fechaCorta(t.fecha, hoy)}
+          {rangoTexto(t, hoy)}
           {tarde && " · vencida"}
         </span>
       </button>
@@ -447,7 +504,7 @@ function TarjetaEstado({ t, hoy, responsables, proyecto, onAbrir, onHecha }: { t
         )}
         {t.recordatorio && t.estado !== "hecha" && <Bell aria-label="Tiene recordatorio" className="h-3.5 w-3.5 text-fog-dim" />}
         {t.estado !== "hecha" && (
-          <button type="button" onClick={onHecha} className="ml-auto inline-flex h-7 items-center gap-1 rounded-full border border-white/10 px-2.5 text-[0.72rem] font-semibold text-fog hover:border-verde/40 hover:text-verde">
+          <button type="button" onClick={libre(onHecha)} className="ml-auto inline-flex h-7 items-center gap-1 rounded-full border border-white/10 px-2.5 text-[0.72rem] font-semibold text-fog hover:border-verde/40 hover:text-verde">
             <Check aria-hidden className="h-3.5 w-3.5" /> ¡Hecha!
           </button>
         )}
@@ -472,14 +529,20 @@ function Semana({
   hoy: string;
   onSemana: (lunes: string) => void;
   tarjeta: (t: Tarea) => DatosTarjeta;
-  onMover: (id: string, fecha: string | null, antesDe: string | null) => void;
+  onMover: (id: string, fecha: string | null, antesDe: string | null, desde: string | null) => void;
   onNueva: (fecha: string | null) => void;
 }) {
   const dias = diasLaborales(lunes);
-  const [sobre, setSobre] = useState<{ fecha: string | null; antesDe: string | null } | null>(null);
+  const [sobreRaton, setSobre] = useState<{ fecha: string | null; antesDe: string | null } | null>(null);
+  // Con el dedo (D-187): mantener presionada y soltar en otro día (o en «Sin fecha»)
+  const tactil = useArrastreTactil((id, desde, d: Destino) => {
+    const fecha = d.zona === "sin-fecha" ? null : d.zona;
+    if (d.antesDe !== id) onMover(id, fecha, d.antesDe, desde);
+  });
+  const sobre = sobreRaton ?? (tactil.sobre ? { fecha: tactil.sobre.zona === "sin-fecha" ? null : tactil.sobre.zona, antesDe: tactil.sobre.antesDe } : null);
   const esEstaSemana = lunes === semanaDeTrabajo(hoy);
   // Las vencidas de semanas pasadas se ven en «Atrasadas» para no perderlas
-  const atrasadas = ordenarDia(tareas.filter((t) => vencida(t, hoy) && t.fecha! < lunes));
+  const atrasadas = ordenarDia(tareas.filter((t) => vencida(t, hoy) && vence(t)! < lunes));
   const sinFecha = ordenarDia(tareas.filter((t) => t.fecha === null && t.estado !== "hecha"));
 
   const zona = (fecha: string | null) => ({
@@ -495,9 +558,10 @@ function Semana({
     onDrop: (e: DragEvent<HTMLElement>) => {
       e.preventDefault();
       const id = e.dataTransfer.getData("text/plain");
+      const desde = e.dataTransfer.getData("text/desde") || null;
       const antes = sobre?.fecha === fecha ? sobre.antesDe : null;
       setSobre(null);
-      if (id && antes !== id) onMover(id, fecha, antes);
+      if (id && antes !== id) onMover(id, fecha, antes, desde);
     },
   });
   const sobreTarjeta = (fecha: string | null, id: string) => (e: DragEvent<HTMLLIElement>) => {
@@ -515,7 +579,7 @@ function Semana({
       {items.map((t) => (
         <Fragment key={t.id}>
           {sobre?.fecha === fecha && sobre.antesDe === t.id && <li aria-hidden className="h-1 rounded-full bg-[#B6FF00]" />}
-          <TarjetaTarea {...tarjeta(t)} arrastrable onArrastre={sobreTarjeta(fecha, t.id)} />
+          <TarjetaTarea {...tarjeta(t)} arrastrable onArrastre={sobreTarjeta(fecha, t.id)} desde={fecha} tactil={tactil} />
         </Fragment>
       ))}
       {sobre?.fecha === fecha && sobre.antesDe === null && <li aria-hidden className="h-1 rounded-full bg-[#B6FF00]" />}
@@ -548,7 +612,7 @@ function Semana({
           <h3 className="mb-2 text-xs font-semibold text-alerta">Atrasadas de semanas anteriores · {atrasadas.length}</h3>
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {atrasadas.map((t) => (
-              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable />
+              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable desde={t.fecha} tactil={tactil} />
             ))}
           </ul>
           <p className="mt-2 text-[0.7rem] text-fog-dim">Arrástralas a un día de esta semana o ábrelas para cambiarles la fecha.</p>
@@ -557,13 +621,15 @@ function Semana({
 
       <div className="grid gap-3 lg:grid-cols-5">
         {dias.map((d) => {
-          const items = ordenarDia(tareas.filter((t) => t.fecha === d));
+          // Un rango (D-187) sale en cada día que dura
+          const items = ordenarDia(tareas.filter((t) => activaEn(t, d)));
           const { dia, corto } = partesDia(d);
           const esHoy = d === hoy;
           return (
             <section
               key={d}
               {...zona(d)}
+              data-zona={d}
               aria-label={`${dia} ${corto}`}
               className={cn("flex min-h-[7rem] min-w-0 flex-col rounded-card border p-2 transition-colors", esHoy ? "border-[#B6FF00]/40" : "border-white/8", sobre?.fecha === d && "bg-white/[0.03]")}
             >
@@ -583,7 +649,7 @@ function Semana({
         })}
       </div>
 
-      <section {...zona(null)} className={cn("rounded-card border border-white/8 p-3 transition-colors", sobre?.fecha === null && "bg-white/[0.03]")} aria-label="Sin fecha">
+      <section {...zona(null)} data-zona="sin-fecha" className={cn("rounded-card border border-white/8 p-3 transition-colors", sobre?.fecha === null && "bg-white/[0.03]")} aria-label="Sin fecha">
         <header className="mb-2 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-fog">
             Sin fecha <span className="ml-1 text-xs font-normal text-fog-dim">{sinFecha.length}</span>
@@ -597,7 +663,7 @@ function Semana({
         ) : (
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {sinFecha.map((t) => (
-              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable />
+              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable desde={null} tactil={tactil} />
             ))}
           </ul>
         )}
@@ -747,7 +813,7 @@ function TablaTareas({
                         {t.responsables.length ? t.responsables.map((id) => nombreDe(id).split(" ")[0]).join(", ") : "Sin asignar"}
                       </span>
                     </td>
-                    <td className={cn("whitespace-nowrap px-3 py-2", vencida(t, hoy) ? "text-alerta" : "text-fog")}>{fechaCorta(t.fecha, hoy)}</td>
+                    <td className={cn("whitespace-nowrap px-3 py-2", vencida(t, hoy) ? "text-alerta" : "text-fog")}>{rangoTexto(t, hoy)}</td>
                     <td className="px-3 py-2 pr-4 text-fog sm:pr-5">{AREAS[t.area as Area]}</td>
                   </tr>
                 );

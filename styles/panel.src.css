@@ -401,6 +401,10 @@
 .pn-input:focus { outline: none; border-color: #7d53ff; box-shadow: 0 0 0 3px rgba(125, 83, 255, 0.25); }
 select.pn-input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, rgb(var(--pn-fog-dim)) 50%), linear-gradient(135deg, rgb(var(--pn-fog-dim)) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 2rem; }
 @media (min-width: 640px) { .pn-input { font-size: 0.875rem; } }
+/* D-187: en iPhone y Android el campo de fecha salía centrado y con otro alto; igual que los demás campos */
+input[type="date"].pn-input { -webkit-appearance: none; appearance: none; text-align: left; line-height: 2.75rem; min-width: 0; }
+input[type="date"].pn-input::-webkit-date-and-time-value { text-align: left; margin: 0; }
+input[type="date"].pn-input::-webkit-calendar-picker-indicator { opacity: 0.6; }
 
 
 @tailwind utilities;

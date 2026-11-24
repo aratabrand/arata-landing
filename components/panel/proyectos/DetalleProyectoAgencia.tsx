@@ -26,7 +26,7 @@ const comercial = { propuesta: { l: "Propuesta", t: "neutro" }, "en-curso": { l:
 const diasTxt = (d: number) => `${String(Math.round(d * 10) / 10).replace(".", ",")} ${d === 1 ? "día" : "días"}`;
 
 /** Tareas del proyecto (D-181), para la tarjeta «Tareas». */
-export type TareaDeProyecto = { id: string; titulo: string; estado: "por_hacer" | "en_curso" | "hecha"; responsable: string | null; fecha: string | null };
+export type TareaDeProyecto = { id: string; titulo: string; estado: "por_hacer" | "en_curso" | "hecha"; responsable: string | null; fechaFin?: string | null; fecha: string | null };
 const ESTADO_TAREA = { por_hacer: { l: "Por hacer", t: "neutro" }, en_curso: { l: "En curso", t: "ambar" }, hecha: { l: "Hecha", t: "verde" } } as const;
 
 export default function DetalleProyectoAgencia({
@@ -219,7 +219,7 @@ export default function DetalleProyectoAgencia({
                   <Link href={`/panel/tareas?t=${t.id}`} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 hover:text-white">
                     <span className={cn("min-w-0 flex-1 text-sm text-white", t.estado === "hecha" && "text-fog-dim line-through")}>{t.titulo}</span>
                     <span className="text-xs text-fog-dim">
-                      {[t.responsable ?? "Sin asignar", t.fecha ? fechaCorta(t.fecha) : "Sin fecha"].join(" · ")}
+                      {[t.responsable ?? "Sin asignar", t.fecha ? (t.fechaFin && t.fechaFin !== t.fecha ? `${fechaCorta(t.fecha)} – ${fechaCorta(t.fechaFin)}` : fechaCorta(t.fecha)) : "Sin fecha"].join(" · ")}
                     </span>
                     <Pill tono={ESTADO_TAREA[t.estado].t}>{ESTADO_TAREA[t.estado].l}</Pill>
                   </Link>

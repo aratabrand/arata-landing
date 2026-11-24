@@ -39,8 +39,10 @@ export type Tarea = {
   proyectoId: string | null;
   /** Personas del equipo que la hacen (D-186: puede ser más de una). Vacío = sin asignar. */
   responsables: string[];
-  /** AAAA-MM-DD (día del tablero). null = sin fecha. */
+  /** AAAA-MM-DD: día en que empieza (o el único día). null = sin fecha. */
   fecha: string | null;
+  /** AAAA-MM-DD: día en que debe quedar lista (D-187). null = es de un solo día. */
+  fechaFin: string | null;
   prioridad: PrioridadTarea;
   estado: EstadoTarea;
   orden: number;
@@ -113,7 +115,42 @@ export function rangoSemana(lunes: string, dias = 4) {
 
 /* ── Orden y estado ─────────────────────────────────────────────────── */
 
-export const vencida = (t: Pick<Tarea, "fecha" | "estado">, hoy: string) => t.estado !== "hecha" && t.fecha !== null && t.fecha < hoy;
+/** Día en que debe quedar lista: la final del rango, o el único día (D-187). */
+export const vence = (t: Pick<Tarea, "fecha" | "fechaFin">) => t.fechaFin ?? t.fecha;
+
+/** ¿Se trabaja ese día? (dentro del rango). */
+export const activaEn = (t: Pick<Tarea, "fecha" | "fechaFin">, dia: string) => t.fecha !== null && t.fecha <= dia && dia <= (vence(t) as string);
+
+export const vencida = (t: Pick<Tarea, "fecha" | "fechaFin" | "estado">, hoy: string) => {
+  const v = vence(t);
+  return t.estado !== "hecha" && v !== null && v < hoy;
+};
+
+/** Días que dura (1 si es de un solo día). */
+export const duracion = (t: Pick<Tarea, "fecha" | "fechaFin">) =>
+  t.fecha && t.fechaFin ? Math.round((Date.parse(`${t.fechaFin}T12:00:00Z`) - Date.parse(`${t.fecha}T12:00:00Z`)) / 86_400_000) + 1 : 1;
+
+/**
+ * Mover en el tablero (D-187): el rango se corre completo, conservando cuántos días dura.
+ * `desde` = día (columna) de donde se arrastró; `destino` = día donde se soltó (null = «Sin fecha»).
+ */
+export function moverRango(t: Pick<Tarea, "fecha" | "fechaFin">, destino: string | null, desde: string | null) {
+  if (!destino) return { fecha: null, fechaFin: null };
+  const dias = duracion(t);
+  const base = desde ?? t.fecha;
+  const inicio = t.fecha && base ? sumarDias(t.fecha, Math.round((Date.parse(`${destino}T12:00:00Z`) - Date.parse(`${base}T12:00:00Z`)) / 86_400_000)) : destino;
+  return { fecha: inicio, fechaFin: dias > 1 ? sumarDias(inicio, dias - 1) : null };
+}
+
+/** "Hoy", "Mar 24 nov" o el rango "Lun 23 – Jue 26 nov" (D-187). */
+export function rangoTexto(t: Pick<Tarea, "fecha" | "fechaFin">, hoy: string) {
+  if (!t.fecha) return "Sin fecha";
+  if (!t.fechaFin || t.fechaFin === t.fecha) return fechaCorta(t.fecha, hoy);
+  const a = partesDia(t.fecha);
+  const b = partesDia(t.fechaFin);
+  const mismoMes = t.fecha.slice(0, 7) === t.fechaFin.slice(0, 7);
+  return `${a.dia.slice(0, 3)} ${mismoMes ? a.corto.split(" ")[0] : a.corto} – ${b.dia.slice(0, 3)} ${b.corto}`;
+}
 
 /** Dentro de un día: primero las pendientes, por el orden que les dieron arrastrando y luego por prioridad. */
 export function ordenarDia<T extends Pick<Tarea, "estado" | "orden" | "prioridad" | "creado">>(lista: T[]) {
@@ -156,11 +193,13 @@ export function avanceItems(items: ItemTarea[]) {
 }
 
 /** Aviso de las 8 a. m. para una persona: null si no tiene nada pendiente hoy ni vencido. */
-export function resumenDiario(nombre: string, tareas: Pick<Tarea, "titulo" | "fecha" | "estado" | "prioridad">[], hoy: string) {
+export function resumenDiario(nombre: string, tareas: (Pick<Tarea, "titulo" | "fecha" | "estado" | "prioridad"> & { fechaFin?: string | null })[], hoy: string) {
+  // Pendientes: empezaron hoy o antes (un rango en curso cuenta «para hoy»; si ya pasó su final, «vencida»)
   const pendientes = tareas.filter((t) => t.estado !== "hecha" && t.fecha !== null && t.fecha <= hoy);
   if (!pendientes.length) return null;
-  const deHoy = pendientes.filter((t) => t.fecha === hoy);
-  const tarde = pendientes.filter((t) => t.fecha! < hoy);
+  const fin = (t: (typeof pendientes)[number]) => t.fechaFin ?? t.fecha!;
+  const deHoy = pendientes.filter((t) => fin(t) >= hoy);
+  const tarde = pendientes.filter((t) => fin(t) < hoy);
   const partes = [deHoy.length ? `${deHoy.length} para hoy` : "", tarde.length ? `${tarde.length} ${tarde.length === 1 ? "vencida" : "vencidas"}` : ""].filter(Boolean);
   const primero = [...pendientes].sort((a, b) => PESO[a.prioridad] - PESO[b.prioridad])[0];
   return {
@@ -174,14 +213,17 @@ export function resumenDiario(nombre: string, tareas: Pick<Tarea, "titulo" | "fe
  * tarea; el aviso de las 8 a. m. lo manda una sola vez (tabla avisos_recordatorios). Si lo ponen tarde
  * (ej. «una semana antes» para algo de pasado mañana), llega en el siguiente aviso de las 8 a. m.
  */
-export function tocaRecordar(t: Pick<Tarea, "recordatorio" | "fecha" | "estado">, hoy: string) {
-  if (!t.recordatorio || !t.fecha || t.estado === "hecha") return false;
-  return sumarDias(t.fecha, -DIAS_ANTES[t.recordatorio]) <= hoy && hoy <= t.fecha;
+export function tocaRecordar(t: Pick<Tarea, "recordatorio" | "fecha" | "estado"> & { fechaFin?: string | null }, hoy: string) {
+  // Cuenta desde el día en que debe quedar lista (la final del rango, D-187)
+  const v = t.fechaFin ?? t.fecha;
+  if (!t.recordatorio || !v || t.estado === "hecha") return false;
+  return sumarDias(v, -DIAS_ANTES[t.recordatorio]) <= hoy && hoy <= v;
 }
 
 /** Texto del aviso del recordatorio. */
-export function textoRecordatorio(t: Pick<Tarea, "titulo" | "fecha" | "prioridad">, hoy: string) {
-  const cuando = t.fecha === hoy ? "Es para hoy" : t.fecha === sumarDias(hoy, 1) ? "Es para mañana" : `Es para el ${fechaCorta(t.fecha, hoy).toLowerCase()}`;
+export function textoRecordatorio(t: Pick<Tarea, "titulo" | "fecha" | "prioridad"> & { fechaFin?: string | null }, hoy: string) {
+  const v = t.fechaFin ?? t.fecha;
+  const cuando = v === hoy ? "Es para hoy" : v === sumarDias(hoy, 1) ? "Es para mañana" : `Es para el ${fechaCorta(v, hoy).toLowerCase()}`;
   return { titulo: `⏰ Recordatorio: ${t.titulo}`.slice(0, 120), cuerpo: `${cuando}${t.prioridad === "urgente" ? " · Urgente" : ""}` };
 }
 

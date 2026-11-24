@@ -9,6 +9,8 @@ import {
   RECORDATORIOS,
   avanceItems,
   cuandoLlega,
+  duracion,
+  rangoTexto,
   diasLaborales,
   fechaCorta,
   lunesDe,
@@ -63,7 +65,14 @@ export default function FichaTarea({
   const [guardado, setGuardado] = useState(false);
   const [estado, setEstado] = useState<EstadoTarea>(tarea?.estado ?? nueva?.estado ?? "por_hacer");
   const [prioridad, setPrioridad] = useState<PrioridadTarea>(tarea?.prioridad ?? "media");
-  const [fecha, setFecha] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
+  const [fecha, setFechaInicio] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
+  // Rango (D-187): «Hasta» es opcional; vacío = la tarea es de un solo día
+  const [fechaFin, setFechaFin] = useState<string>(tarea?.fechaFin ?? "");
+  const setFecha = (f: string) => {
+    setFechaInicio(f);
+    // Si el inicio queda después del final (o se quita), el final se ajusta
+    if (!f || (fechaFin && fechaFin < f)) setFechaFin("");
+  };
   // Responsables (D-186): una o varias personas
   const [responsables, setResponsables] = useState<string[]>(tarea?.responsables ?? nueva?.responsableIds ?? []);
   const alternar = (id: string) => setResponsables((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
@@ -88,6 +97,7 @@ export default function FichaTarea({
           proyectoId: proyectoId || null,
           responsableIds: responsables,
           fecha: fecha || null,
+          fechaFin: fecha && fechaFin && fechaFin > fecha ? fechaFin : null,
           prioridad,
           estado,
           recordatorio: recordatorio || null,
@@ -152,7 +162,7 @@ export default function FichaTarea({
         </div>
 
         <fieldset className="space-y-2">
-          <legend className="text-xs font-medium text-fog">Día · {fechaCorta(fecha || null, hoy)}</legend>
+          <legend className="text-xs font-medium text-fog">Desde · {fechaCorta(fecha || null, hoy)}</legend>
           <div className="flex flex-wrap gap-1.5">
             {semana.map((d) => (
               <button
@@ -175,7 +185,28 @@ export default function FichaTarea({
               Sin fecha
             </button>
           </div>
-          <input type="date" aria-label="Otra fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} className="pn-input" />
+          <input type="date" aria-label="Desde (otra fecha)" value={fecha} onChange={(e) => setFecha(e.target.value)} className="pn-input" />
+        </fieldset>
+
+        <fieldset className="space-y-2" disabled={!fecha}>
+          <legend className="text-xs font-medium text-fog">
+            Hasta <span className="text-fog-dim">· {!fecha ? "elige primero desde cuándo" : fechaFin && fechaFin > fecha ? `${rangoTexto({ fecha, fechaFin }, hoy)} (${duracion({ fecha, fechaFin })} días)` : "el mismo día"}</span>
+          </legend>
+          <div className="flex items-center gap-2">
+            <input
+              type="date"
+              aria-label="Hasta"
+              value={fechaFin}
+              min={fecha || undefined}
+              onChange={(e) => setFechaFin(e.target.value)}
+              className="pn-input min-w-0 flex-1 disabled:opacity-50"
+            />
+            {fechaFin && (
+              <button type="button" onClick={() => setFechaFin("")} className="h-11 shrink-0 rounded-full border px-3 text-xs font-semibold pn-pildora hover:text-white">
+                Mismo día
+              </button>
+            )}
+          </div>
         </fieldset>
 
         <Campo
@@ -183,7 +214,7 @@ export default function FichaTarea({
           obligatorio={false}
           ayuda={
             recordatorio
-              ? `${cuandoLlega(recordatorio, fecha || null, hoy) ?? "Ponle un día a la tarea para que llegue."} Le llega a quien tiene la tarea y a ti.`
+              ? `${cuandoLlega(recordatorio, (fecha && fechaFin > fecha ? fechaFin : fecha) || null, hoy) ?? "Ponle un día a la tarea para que llegue."} Le llega a quien tiene la tarea y a ti.`
               : "Te avisa al celular antes de que se venza."
           }
         >
