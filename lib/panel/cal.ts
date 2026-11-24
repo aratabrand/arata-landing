@@ -112,6 +112,26 @@ export function leerNotas(notas: unknown, evento?: string | null): Notas {
   };
 }
 
+/**
+ * WhatsApp y autorización cuando NO vienen en las notas (agenda directa de las landings, D-197):
+ * se leen de las preguntas de la reserva en Cal.com. Identificadores que se buscan, en orden:
+ * la pregunta propia «whatsapp» (tipo teléfono), el teléfono del sistema «attendeePhoneNumber»
+ * y el teléfono del invitado. La casilla de datos es la pregunta «autorizacion» (tipo casilla).
+ */
+export function datosDePreguntas(respuestas: Record<string, unknown>, invitado: Record<string, unknown>, cuando = new Date()) {
+  const valor = (k: string) => {
+    const r = respuestas[k];
+    return r && typeof r === "object" && "value" in r ? (r as { value: unknown }).value : r;
+  };
+  const whatsapp = whatsappLimpio(valor("whatsapp")) ?? whatsappLimpio(valor("attendeePhoneNumber")) ?? whatsappLimpio(invitado.phoneNumber);
+  const casilla = valor("autorizacion");
+  const autorizacion =
+    casilla === true || casilla === "true"
+      ? `sí, casilla en Cal.com, ${cuando.toLocaleString("es-CO", { timeZone: "America/Bogota" })} (hora de Bogotá)`
+      : null;
+  return { whatsapp, autorizacion };
+}
+
 /* ── El aviso de Cal.com ─────────────────────────────────────────────── */
 
 export type Aviso =
@@ -179,6 +199,7 @@ export function leerAviso(cuerpo: unknown): Aviso {
   const correoCrudo = limpiar(invitado.email ?? obj(respuestas.email).value, 254);
   const evento = limpiar(p.type ?? p.eventTitle, 120) || null;
   const notas = leerNotas(p.additionalNotes ?? obj(respuestas.notes).value, evento);
+  const preguntas = datosDePreguntas(respuestas, invitado);
 
   const meta = obj(p.metadata);
   const videoData = obj(p.videoCallData);
@@ -193,13 +214,14 @@ export function leerAviso(cuerpo: unknown): Aviso {
     bookingId: Number.isSafeInteger(id) ? id : null,
     nombre,
     correo: CORREO.test(correoCrudo) ? correoCrudo : null,
-    whatsapp: notas.whatsapp,
+    whatsapp: notas.whatsapp ?? preguntas.whatsapp,
     necesita: notas.necesita,
     tipo: notas.tipo,
     paginaWeb: notas.paginaWeb,
     cuando: notas.cuando,
     inversion: notas.inversion,
-    autorizacion: notas.autorizacion,
+    // La casilla de Cal.com, si existe, es la constancia más fuerte; si no, la línea de las notas
+    autorizacion: preguntas.autorizacion ?? notas.autorizacion,
     referencia: notas.referencia,
     evento,
     inicio,
