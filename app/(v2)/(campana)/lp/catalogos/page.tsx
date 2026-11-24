@@ -37,11 +37,12 @@ export default function LandingCatalogos() {
       cinta={conOferta ? <CintaOferta enlace={AGENDAR_CATALOGO} /> : undefined}
     >
       <ServiceHero {...c.hero} tipo="catalogo" />
-      <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre="" items={c.problema.items} />
+      <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre={c.problema.cierre} items={c.problema.items} />
       <CasosExito
         id="casos-catalogo"
         servicio="catalogo"
         sinEnlaces
+        textos={c.casosExito}
         pie={
           <>
             <PriceBar
@@ -52,7 +53,7 @@ export default function LandingCatalogos() {
               boton={c.tienda.boton}
               tipo="catalogo"
             />
-            <Assurances className="mt-4" />
+            <Assurances className="mt-4" items={c.aseguramientos} />
           </>
         }
       />

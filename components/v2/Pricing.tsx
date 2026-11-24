@@ -207,10 +207,17 @@ const ICONOS_GLASS = {
 } as const;
 
 /** Tarjetas de garantía, pago y mantenimiento (D-068; estilo del panel desde D-141). */
-export function Assurances({ className }: { className?: string }) {
+export function Assurances({
+  className,
+  items = precios.aseguramientos,
+}: {
+  className?: string;
+  /** Textos propios de las tarjetas (landing de campaña, D-192); si no, los del sitio. */
+  items?: typeof precios.aseguramientos;
+}) {
   return (
     <div className={cn("grid gap-4 md:grid-cols-3", className)}>
-      {precios.aseguramientos.map((a, i) => {
+      {items.map((a, i) => {
         const { Icon, glow } = ICONOS_GLASS[a.tipo as keyof typeof ICONOS_GLASS];
         return (
           <Reveal key={a.tipo} delay={i * 90} className="h-full">
