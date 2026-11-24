@@ -37,7 +37,8 @@ export type Tarea = {
   descripcion: string | null;
   area: Area;
   proyectoId: string | null;
-  responsableId: string | null;
+  /** Personas del equipo que la hacen (D-186: puede ser más de una). Vacío = sin asignar. */
+  responsables: string[];
   /** AAAA-MM-DD (día del tablero). null = sin fecha. */
   fecha: string | null;
   prioridad: PrioridadTarea;
@@ -135,7 +136,7 @@ export function ordenarTabla(lista: Tarea[], col: Columna, asc: boolean, nombreD
       case "prioridad":
         return PESO[t.prioridad];
       case "responsable":
-        return t.responsableId ? nombreDe(t.responsableId).toLowerCase() : "￿";
+        return t.responsables.length ? t.responsables.map((id) => nombreDe(id)).sort().join(", ").toLowerCase() : "\uffff";
       case "fecha":
         return t.fecha ?? "9999-99-99";
       case "area":

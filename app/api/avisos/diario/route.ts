@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
     // Tareas (D-181): a cada persona, sus tareas de hoy y las vencidas (una vez al día)
     const delEquipo = await db().query(
       `select p.usuario_id, p.nombre, t.titulo, t.fecha::text fecha, t.estado, t.prioridad
-         from agencia_tareas t join equipo_personas p on p.id = t.responsable_id
+         from agencia_tareas t join tarea_responsables r on r.tarea_id = t.id join equipo_personas p on p.id = r.persona_id
         where t.negocio_id = $1 and p.usuario_id is not null and p.activo and t.estado <> 'hecha' and t.fecha <= $2::date`,
       [n.id, hoy]
     );
@@ -88,8 +88,10 @@ export async function GET(req: NextRequest) {
     });
     // Recordatorios de tareas (D-183): a quien la tiene y a quien lo puso, una vez por día de la tarea
     const recordar = await db().query(
-      `select t.id, t.titulo, t.fecha::text fecha, t.estado, t.prioridad, t.recordatorio, t.recordatorio_por, p.usuario_id responsable
-         from agencia_tareas t left join equipo_personas p on p.id = t.responsable_id
+      `select t.id, t.titulo, t.fecha::text fecha, t.estado, t.prioridad, t.recordatorio, t.recordatorio_por,
+              (select coalesce(array_agg(p.usuario_id), '{}') from tarea_responsables r join equipo_personas p on p.id = r.persona_id
+                where r.tarea_id = t.id and p.usuario_id is not null) usuarios
+         from agencia_tareas t
         where t.negocio_id = $1 and t.recordatorio is not null and t.estado <> 'hecha' and t.fecha >= $2::date`,
       [n.id, hoy]
     );
@@ -99,7 +101,8 @@ export async function GET(req: NextRequest) {
       if (!nuevo.rowCount) continue;
       avisos++;
       const txt = textoRecordatorio({ titulo: t.titulo, fecha: t.fecha, prioridad: t.prioridad }, hoy);
-      for (const usuarioId of new Set([t.responsable, t.recordatorio_por].filter(Boolean) as string[])) {
+      // A todos los responsables (D-186) y a quien puso el recordatorio
+      for (const usuarioId of new Set([...(t.usuarios as string[]), t.recordatorio_por].filter(Boolean) as string[])) {
         const r = await avisarA(n.id, usuarioId, { titulo: txt.titulo, cuerpo: txt.cuerpo, url: `/panel/tareas?t=${t.id}`, etiqueta: `recordatorio-${t.id}` });
         enviados += r.enviados;
       }

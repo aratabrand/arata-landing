@@ -23,7 +23,9 @@ export default async function DetalleProyectoPage({ params }: { params: Promise<
         // Tareas del equipo ligadas al proyecto (D-181): pendientes primero
         db()
           .query(
-            `select t.id, t.titulo, t.estado, t.fecha, e.nombre responsable from agencia_tareas t left join equipo_personas e on e.id = t.responsable_id
+            `select t.id, t.titulo, t.estado, t.fecha,
+                    (select string_agg(e.nombre, ', ' order by e.orden, e.creado) from tarea_responsables r join equipo_personas e on e.id = r.persona_id where r.tarea_id = t.id) responsable
+               from agencia_tareas t
               where t.negocio_id = $1 and t.proyecto_id = $2 order by (t.estado = 'hecha'), t.fecha nulls last, t.orden limit 100`,
             [datos.negocioId, p.id]
           )

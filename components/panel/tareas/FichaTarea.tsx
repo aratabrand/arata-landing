@@ -39,7 +39,7 @@ function Pildora({ activa, onClick, children }: { activa: boolean; onClick: () =
   );
 }
 
-export type NuevaTarea = { fecha?: string | null; proyectoId?: string | null; responsableId?: string | null; area?: Area; estado?: EstadoTarea };
+export type NuevaTarea = { fecha?: string | null; proyectoId?: string | null; responsableIds?: string[]; area?: Area; estado?: EstadoTarea };
 
 export default function FichaTarea({
   tarea,
@@ -64,6 +64,9 @@ export default function FichaTarea({
   const [estado, setEstado] = useState<EstadoTarea>(tarea?.estado ?? nueva?.estado ?? "por_hacer");
   const [prioridad, setPrioridad] = useState<PrioridadTarea>(tarea?.prioridad ?? "media");
   const [fecha, setFecha] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
+  // Responsables (D-186): una o varias personas
+  const [responsables, setResponsables] = useState<string[]>(tarea?.responsables ?? nueva?.responsableIds ?? []);
+  const alternar = (id: string) => setResponsables((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
   const [recordatorio, setRecordatorio] = useState<Recordatorio | "">(tarea?.recordatorio ?? "");
   const [proyectoId, setProyectoId] = useState(tarea?.proyectoId ?? nueva?.proyectoId ?? "");
   const [area, setArea] = useState<Area>(tarea?.area ?? nueva?.area ?? (nueva?.proyectoId ? "proyectos" : "proyectos"));
@@ -83,7 +86,7 @@ export default function FichaTarea({
           descripcion: String(f.get("descripcion") ?? ""),
           area,
           proyectoId: proyectoId || null,
-          responsableId: String(f.get("responsable") ?? "") || null,
+          responsableIds: responsables,
           fecha: fecha || null,
           prioridad,
           estado,
@@ -122,17 +125,21 @@ export default function FichaTarea({
           </div>
         </fieldset>
 
+        <fieldset className="space-y-2">
+          <legend className="text-xs font-medium text-fog">
+            Responsables <span className="text-fog-dim">· {responsables.length === 0 ? "sin asignar" : responsables.length === 1 ? "1 persona" : `${responsables.length} personas`}</span>
+          </legend>
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Responsables">
+            {personas.map((p) => (
+              <Pildora key={p.id} activa={responsables.includes(p.id)} onClick={() => alternar(p.id)}>
+                {p.nombre}
+              </Pildora>
+            ))}
+          </div>
+          <p className="text-[0.7rem] text-fog-dim">Toca para sumar o quitar. A cada persona le llega el aviso.</p>
+        </fieldset>
+
         <div className="grid gap-3 sm:grid-cols-2">
-          <Campo etiqueta="Responsable" obligatorio={false}>
-            <select name="responsable" defaultValue={tarea?.responsableId ?? nueva?.responsableId ?? ""} className="pn-input">
-              <option value="">Sin asignar</option>
-              {personas.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
-          </Campo>
           <Campo etiqueta="Área">
             <select value={area} onChange={(e) => setArea(e.target.value as Area)} className="pn-input">
               {opciones(AREAS).map(([k, l]) => (
@@ -331,7 +338,7 @@ function Comentarios({ tarea }: { tarea: Tarea }) {
       >
         <textarea value={texto} onChange={(e) => setTexto(e.target.value)} rows={2} maxLength={1000} placeholder="Escribe un comentario" aria-label="Nuevo comentario" className="pn-input h-auto py-2.5" />
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-fog-dim">{tarea.responsableId ? "Le llega aviso a quien tiene la tarea." : ""}</p>
+          <p className="text-xs text-fog-dim">{tarea.responsables.length ? (tarea.responsables.length === 1 ? "Le llega aviso a quien tiene la tarea." : "Les llega aviso a quienes tienen la tarea.") : ""}</p>
           <BotonSecundario type="submit" disabled={acc.pendiente || !texto.trim()}>
             <Send aria-hidden className="h-4 w-4" /> Comentar
           </BotonSecundario>

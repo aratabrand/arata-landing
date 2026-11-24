@@ -43,9 +43,10 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
   if (!UUID.test(id)) return null;
   return (
     await db().query(
-      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.responsable_id, t.fecha::text fecha, t.prioridad, t.estado, t.recordatorio,
-              p.nombre responsable, p.usuario_id responsable_usuario, f.nombre proyecto
-         from agencia_tareas t left join equipo_personas p on p.id = t.responsable_id left join fin_proyectos f on f.id = t.proyecto_id
+      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha::text fecha, t.prioridad, t.estado, t.recordatorio, f.nombre proyecto,
+              coalesce((select json_agg(json_build_object('id', p.id, 'nombre', p.nombre, 'usuario', p.usuario_id) order by p.orden, p.creado)
+                          from tarea_responsables r join equipo_personas p on p.id = r.persona_id where r.tarea_id = t.id), '[]') responsables
+         from agencia_tareas t left join fin_proyectos f on f.id = t.proyecto_id
         where t.id = $1 and t.negocio_id = $2`,
       [id, ctx.negocioId]
     )
@@ -56,13 +57,12 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
         descripcion: string | null;
         area: Area;
         proyecto_id: string | null;
-        responsable_id: string | null;
         fecha: string | null;
         prioridad: PrioridadTarea;
         estado: EstadoTarea;
         recordatorio: keyof typeof RECORDATORIOS | null;
-        responsable: string | null;
-        responsable_usuario: string | null;
+        /** Responsables (D-186): persona, nombre y su usuario del panel (para avisos). */
+        responsables: { id: string; nombre: string; usuario: string | null }[];
         proyecto: string | null;
       }
     | undefined;
@@ -83,13 +83,21 @@ function avisarAsignada(ctx: ContextoAgencia, tarea: { id: string; titulo: strin
   });
 }
 
+/** Deja en la lista exactamente esas personas (D-186). */
+async function guardarResponsables(tareaId: string, ids: string[]) {
+  await db().query(`delete from tarea_responsables where tarea_id = $1 and not (persona_id = any($2::uuid[]))`, [tareaId, ids]);
+  if (ids.length)
+    await db().query(`insert into tarea_responsables (tarea_id, persona_id) select $1, x from unnest($2::uuid[]) x on conflict do nothing`, [tareaId, ids]);
+}
+
 export type EntradaTarea = {
   id?: string;
   titulo: string;
   descripcion?: string;
   area: string;
   proyectoId?: string | null;
-  responsableId?: string | null;
+  /** Personas del equipo que la hacen (D-186: una o varias; vacío = sin asignar). */
+  responsableIds?: string[];
   fecha?: string | null;
   prioridad: string;
   estado?: string;
@@ -114,13 +122,18 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
     const proyectoId = e.proyectoId || null;
     if (proyectoId && !(UUID.test(proyectoId) && (await db().query(`select 1 from fin_proyectos where id = $1 and negocio_id = $2`, [proyectoId, ctx.negocioId])).rowCount))
       return NO("Ese proyecto no existe.");
-    const responsableId = e.responsableId || null;
-    const persona = responsableId
-      ? UUID.test(responsableId)
-        ? (await db().query(`select id, nombre, usuario_id from equipo_personas where id = $1 and negocio_id = $2 and activo`, [responsableId, ctx.negocioId])).rows[0]
-        : undefined
-      : null;
-    if (responsableId && !persona) return NO("Elige a alguien del equipo.");
+    // Responsables (D-186): solo personas activas del equipo de la agencia, sin repetir
+    const pedidos = [...new Set((Array.isArray(e.responsableIds) ? e.responsableIds : []).map(String))];
+    if (pedidos.length > 10) return NO("Máximo 10 personas por tarea.");
+    if (pedidos.some((x) => !UUID.test(x))) return NO("Elige personas del equipo.");
+    const personas = pedidos.length
+      ? ((
+          await db().query(`select id, nombre, usuario_id from equipo_personas where negocio_id = $1 and activo and id = any($2::uuid[]) order by orden, creado`, [ctx.negocioId, pedidos])
+        ).rows as { id: string; nombre: string; usuario_id: string | null }[])
+      : [];
+    if (personas.length !== pedidos.length) return NO("Elige personas del equipo.");
+    const responsableIds = personas.map((x) => x.id);
+    const nombres = (l: { nombre: string }[]) => (l.length ? l.map((x) => x.nombre).join(", ") : "Sin asignar");
     const recordatorio = e.recordatorio ? String(e.recordatorio) : null;
     if (recordatorio && !(recordatorio in RECORDATORIOS)) return NO("Elige un recordatorio de la lista.");
     const area = e.area as Area;
@@ -135,17 +148,18 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         await db().query(
           `insert into agencia_tareas (negocio_id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, hecha_en, recordatorio, recordatorio_por)
            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, case when $9 = 'hecha' then now() end, $12, case when $12::text is not null then $11 end) returning id`,
-          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado, orden, ctx.usuarioId, recordatorio]
+          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, orden, ctx.usuarioId, recordatorio]
         )
       ).rows[0].id as string;
+      await guardarResponsables(id, responsableIds);
       await registrar(ctx, {
         accion: "crear",
         entidad: "tarea",
         entidadId: id,
         proyectoId,
-        titulo: `Creó la tarea «${titulo}»${persona ? ` para ${persona.nombre}` : ""}`,
+        titulo: `Creó la tarea «${titulo}»${personas.length ? ` para ${nombres(personas)}` : ""}`,
       });
-      avisarAsignada(ctx, { id, titulo, fecha, prioridad }, persona?.usuario_id ?? null);
+      personas.forEach((x) => avisarAsignada(ctx, { id, titulo, fecha, prioridad }, x.usuario_id));
       listo();
       return { ok: true, id };
     }
@@ -159,14 +173,15 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
               -- Quien pone o cambia el recordatorio también lo recibe
               recordatorio_por = case when $11::text is null then null when recordatorio is distinct from $11 then $12 else recordatorio_por end
         where id = $1 and negocio_id = $2`,
-      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado, recordatorio, ctx.usuarioId]
+      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableIds[0] ?? null, fecha, prioridad, estado, recordatorio, ctx.usuarioId]
     );
+    await guardarResponsables(antes.id, responsableIds);
     const proyecto = proyectoId ? ((await db().query(`select nombre from fin_proyectos where id = $1`, [proyectoId])).rows[0]?.nombre as string) : null;
     const hoy = hoyColombia();
     const cambios = diferencias(
       {
         titulo: antes.titulo,
-        responsable: antes.responsable ?? "Sin asignar",
+        responsable: nombres(antes.responsables),
         fecha: fechaCorta(antes.fecha, hoy),
         prioridad: PRIORIDADES_TAREA[antes.prioridad],
         estado: ESTADOS_TAREA[antes.estado],
@@ -177,7 +192,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
       },
       {
         titulo,
-        responsable: persona?.nombre ?? "Sin asignar",
+        responsable: nombres(personas),
         fecha: fechaCorta(fecha, hoy),
         prioridad: PRIORIDADES_TAREA[prioridad],
         estado: ESTADOS_TAREA[estado],
@@ -186,10 +201,12 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         descripcion,
         recordatorio: recordatorio ? RECORDATORIOS[recordatorio as keyof typeof RECORDATORIOS] : "Sin recordatorio",
       },
-      { titulo: "Título", responsable: "Responsable", fecha: "Fecha", prioridad: "Prioridad", estado: "Estado", area: "Área", proyecto: "Proyecto", descripcion: "Descripción", recordatorio: "Recordatorio" }
+      { titulo: "Título", responsable: "Responsables", fecha: "Fecha", prioridad: "Prioridad", estado: "Estado", area: "Área", proyecto: "Proyecto", descripcion: "Descripción", recordatorio: "Recordatorio" }
     );
     if (cambios.length) await registrar(ctx, { accion: "editar", entidad: "tarea", entidadId: antes.id, proyectoId, titulo: `Editó la tarea «${titulo}»`, cambios });
-    if (responsableId && responsableId !== antes.responsable_id) avisarAsignada(ctx, { id: antes.id, titulo, fecha, prioridad }, persona?.usuario_id ?? null);
+    // Aviso solo a quien se sumó ahora
+    const yaEstaban = new Set(antes.responsables.map((x) => x.id));
+    personas.filter((x) => !yaEstaban.has(x.id)).forEach((x) => avisarAsignada(ctx, { id: antes.id, titulo, fecha, prioridad }, x.usuario_id));
     listo();
     return { ok: true, id: antes.id };
   } catch (err) {
@@ -346,15 +363,15 @@ export async function comentarTarea(tareaId: string, texto: string): Promise<Res
     const quien = String((await db().query(`select name from "user" where id = $1`, [ctx.usuarioId])).rows[0]?.name ?? "Alguien").slice(0, 80);
     await db().query(`insert into tarea_comentarios (tarea_id, usuario_id, quien, texto) values ($1, $2, $3, $4)`, [t.id, ctx.usuarioId, quien, limpioTexto]);
     await registrar(ctx, { accion: "editar", entidad: "tarea", entidadId: t.id, proyectoId: t.proyecto_id, titulo: `Comentó en «${t.titulo}»` });
-    // A quien tiene la tarea le llega el comentario (si no es quien lo escribió)
-    if (t.responsable_usuario && t.responsable_usuario !== ctx.usuarioId) {
-      const destino = t.responsable_usuario;
-      after(() =>
-        avisarA(ctx.negocioId, destino, { titulo: `💬 ${quien.split(" ")[0]} comentó en «${t.titulo}»`, cuerpo: limpioTexto.slice(0, 200), url: `/panel/tareas?t=${t.id}`, etiqueta: `tarea-${t.id}` })
-          .then(() => undefined)
-          .catch((e) => console.error("Aviso de comentario:", e))
-      );
-    }
+    // A quienes tienen la tarea les llega el comentario (menos a quien lo escribió)
+    const destinos = [...new Set(t.responsables.map((x) => x.usuario).filter((u): u is string => Boolean(u) && u !== ctx.usuarioId))];
+    if (destinos.length)
+      after(async () => {
+        for (const destino of destinos)
+          await avisarA(ctx.negocioId, destino, { titulo: `💬 ${quien.split(" ")[0]} comentó en «${t.titulo}»`, cuerpo: limpioTexto.slice(0, 200), url: `/panel/tareas?t=${t.id}`, etiqueta: `tarea-${t.id}` }).catch((e) =>
+            console.error("Aviso de comentario:", e)
+          );
+      });
     listo();
     return { ok: true };
   } catch (err) {

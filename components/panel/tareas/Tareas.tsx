@@ -62,12 +62,14 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
   const [error, setError] = useState("");
 
   const nombreDe = (id: string | null) => personas.find((p) => p.id === id)?.nombre ?? "Sin asignar";
+  // Nueva tarea desde un filtro: ya trae a esa persona como responsable
+  const deFiltro = () => (quien === "yo" ? (datos.yo ? [datos.yo] : []) : quien && quien !== "nadie" ? [quien] : []);
   const proyectoDe = (id: string | null) => proyectos.find((p) => p.id === id)?.nombre ?? null;
 
   const filtradas = useMemo(
     () =>
       tareas
-        .filter((t) => (quien === "" ? true : quien === "yo" ? t.responsableId === datos.yo : quien === "nadie" ? !t.responsableId : t.responsableId === quien))
+        .filter((t) => (quien === "" ? true : quien === "yo" ? !!datos.yo && t.responsables.includes(datos.yo) : quien === "nadie" ? t.responsables.length === 0 : t.responsables.includes(quien)))
         .filter((t) => !area || t.area === area)
         .filter((t) => !prioridad || t.prioridad === prioridad),
     [tareas, quien, area, prioridad, datos.yo]
@@ -116,7 +118,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
   }
 
   const actual = abierta?.tipo === "tarea" ? (tareas.find((t) => t.id === abierta.id) ?? null) : null;
-  const tarjeta = (t: Tarea) => ({ t, responsable: t.responsableId ? nombreDe(t.responsableId) : null, proyecto: proyectoDe(t.proyectoId), hoy, onAbrir: () => setAbierta({ tipo: "tarea", id: t.id }), onEstado: () => cambiarEstado(t) });
+  const tarjeta = (t: Tarea) => ({ t, responsables: t.responsables.map(nombreDe), proyecto: proyectoDe(t.proyectoId), hoy, onAbrir: () => setAbierta({ tipo: "tarea", id: t.id }), onEstado: () => cambiarEstado(t) });
 
   return (
     <PanelPage>
@@ -124,7 +126,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
         titulo="Tareas"
         bajada="Lo que hay que hacer, quién lo hace y para cuándo. Arrastra una tarea para cambiarla de estado o de día."
         accion={
-          <BotonPrincipal type="button" onClick={() => setAbierta({ tipo: "nueva", datos: { fecha: hoy, responsableId: quien === "yo" ? datos.yo : null } })} className="inline-flex items-center gap-2">
+          <BotonPrincipal type="button" onClick={() => setAbierta({ tipo: "nueva", datos: { fecha: hoy, responsableIds: quien === "yo" && datos.yo ? [datos.yo] : [] } })} className="inline-flex items-center gap-2">
             <Plus aria-hidden className="h-4 w-4" /> Nueva tarea
           </BotonPrincipal>
         }
@@ -202,7 +204,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
           proyectoDe={proyectoDe}
           onAbrir={(id) => setAbierta({ tipo: "tarea", id })}
           onEstado={cambiarEstado}
-          onNueva={(estado) => setAbierta({ tipo: "nueva", datos: { fecha: hoy, estado, responsableId: quien === "yo" ? datos.yo : quien && quien !== "nadie" ? quien : null } })}
+          onNueva={(estado) => setAbierta({ tipo: "nueva", datos: { fecha: hoy, estado, responsableIds: deFiltro() } })}
         />
       ) : vista === "semana" ? (
         <Semana
@@ -212,7 +214,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
           onSemana={setLunes}
           tarjeta={tarjeta}
           onMover={mover}
-          onNueva={(fecha) => setAbierta({ tipo: "nueva", datos: { fecha, responsableId: quien === "yo" ? datos.yo : quien && quien !== "nadie" ? quien : null } })}
+          onNueva={(fecha) => setAbierta({ tipo: "nueva", datos: { fecha, responsableIds: deFiltro() } })}
         />
       ) : (
         <TablaTareas tareas={filtradas} hoy={hoy} nombreDe={nombreDe} proyectoDe={proyectoDe} onAbrir={(id) => setAbierta({ tipo: "tarea", id })} onEstado={(t) => cambiarEstado(t)} />
@@ -238,7 +240,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
 
 /* ── Tarjeta ───────────────────────────────────────────────────────── */
 
-type DatosTarjeta = { t: Tarea; responsable: string | null; proyecto: string | null; hoy: string; onAbrir: () => void; onEstado: () => void };
+type DatosTarjeta = { t: Tarea; responsables: string[]; proyecto: string | null; hoy: string; onAbrir: () => void; onEstado: () => void };
 
 function IconoEstado({ estado }: { estado: EstadoTarea }) {
   if (estado === "hecha") return <CircleCheck aria-hidden className="h-5 w-5 text-verde" />;
@@ -246,12 +248,23 @@ function IconoEstado({ estado }: { estado: EstadoTarea }) {
   return <Circle aria-hidden className="h-5 w-5 text-fog-dim" />;
 }
 
-/** Responsable con su nombre (D-183): primer nombre, en píldora. */
-function Responsable({ nombre }: { nombre: string }) {
-  return <span className="inline-flex max-w-[8rem] truncate rounded-full bg-white/[0.08] px-2 py-0.5 text-[0.7rem] font-semibold text-white">{nombre.split(" ")[0]}</span>;
+/** Responsables con su nombre (D-183, D-186): hasta 2 píldoras y «+N» si son más. */
+function Responsables({ nombres }: { nombres: string[] }) {
+  if (!nombres.length) return <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>;
+  const visibles = nombres.slice(0, 2);
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1" title={nombres.join(", ")}>
+      {visibles.map((n) => (
+        <span key={n} className="inline-flex max-w-[7rem] truncate rounded-full bg-white/[0.08] px-2 py-0.5 text-[0.7rem] font-semibold text-white">
+          {n.split(" ")[0]}
+        </span>
+      ))}
+      {nombres.length > 2 && <span className="rounded-full bg-white/[0.08] px-2 py-0.5 text-[0.7rem] font-semibold text-fog">+{nombres.length - 2}</span>}
+    </span>
+  );
 }
 
-function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrastrable, onArrastre }: DatosTarjeta & { arrastrable?: boolean; onArrastre?: (e: DragEvent<HTMLLIElement>) => void }) {
+function TarjetaTarea({ t, responsables, proyecto, hoy, onAbrir, onEstado, arrastrable, onArrastre }: DatosTarjeta & { arrastrable?: boolean; onArrastre?: (e: DragEvent<HTMLLIElement>) => void }) {
   const { hechos, total } = avanceItems(t.items);
   const tarde = vencida(t, hoy);
   return (
@@ -292,7 +305,9 @@ function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrast
             <Bell aria-label="Tiene recordatorio" className="h-3.5 w-3.5" />
           </span>
         )}
-        <span className="ml-auto">{responsable ? <Responsable nombre={responsable} /> : <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>}</span>
+        <span className="ml-auto">
+          <Responsables nombres={responsables} />
+        </span>
       </div>
     </li>
   );
@@ -379,7 +394,7 @@ function Estados({
             </header>
             <ul className="flex-1 space-y-2">
               {lista.map((t) => (
-                <TarjetaEstado key={t.id} t={t} hoy={hoy} responsable={t.responsableId ? nombreDe(t.responsableId) : null} proyecto={proyectoDe(t.proyectoId)} onAbrir={() => onAbrir(t.id)} onHecha={() => onEstado(t, "hecha")} />
+                <TarjetaEstado key={t.id} t={t} hoy={hoy} responsables={t.responsables.map(nombreDe)} proyecto={proyectoDe(t.proyectoId)} onAbrir={() => onAbrir(t.id)} onHecha={() => onEstado(t, "hecha")} />
               ))}
               {todas.length === 0 && <li className="px-1 py-6 text-center text-xs text-fog-dim">{c.estado === "hecha" ? "Lo que se termine aparece aquí." : "Nada por aquí. Arrastra una tarea o crea una."}</li>}
             </ul>
@@ -396,7 +411,7 @@ function Estados({
 }
 
 /** Tarjeta del tablero por estado: título, día, prioridad, responsable y el botón «¡Hecha!» (como Notion). */
-function TarjetaEstado({ t, hoy, responsable, proyecto, onAbrir, onHecha }: { t: Tarea; hoy: string; responsable: string | null; proyecto: string | null; onAbrir: () => void; onHecha: () => void }) {
+function TarjetaEstado({ t, hoy, responsables, proyecto, onAbrir, onHecha }: { t: Tarea; hoy: string; responsables: string[]; proyecto: string | null; onAbrir: () => void; onHecha: () => void }) {
   const { hechos, total } = avanceItems(t.items);
   const tarde = vencida(t, hoy);
   return (
@@ -419,7 +434,7 @@ function TarjetaEstado({ t, hoy, responsable, proyecto, onAbrir, onHecha }: { t:
       </button>
       <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
         <Pill tono={TONO_PRIORIDAD[t.prioridad]}>{PRIORIDADES_TAREA[t.prioridad]}</Pill>
-        {responsable ? <Responsable nombre={responsable} /> : <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>}
+        <Responsables nombres={responsables} />
         {total > 0 && (
           <span className="inline-flex items-center gap-1 text-[0.7rem] text-fog-dim">
             <ListChecks aria-hidden className="h-3.5 w-3.5" /> {hechos}/{total}
@@ -729,7 +744,7 @@ function TablaTareas({
                     </td>
                     <td className="px-3 py-2 text-fog">
                       <span className="inline-flex items-center gap-2">
-                        {nombreDe(t.responsableId)}
+                        {t.responsables.length ? t.responsables.map((id) => nombreDe(id).split(" ")[0]).join(", ") : "Sin asignar"}
                       </span>
                     </td>
                     <td className={cn("whitespace-nowrap px-3 py-2", vencida(t, hoy) ? "text-alerta" : "text-fog")}>{fechaCorta(t.fecha, hoy)}</td>

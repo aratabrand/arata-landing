@@ -23,9 +23,11 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
   if (!ctx) return null;
   const [ta, it, co, pe, pr] = await Promise.all([
     db().query(
-      `select id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, recordatorio, creado_por, creado
-         from agencia_tareas
-        where negocio_id = $1 and (estado <> 'hecha' or hecha_en > now() - interval '60 days' or fecha >= current_date - 7)
+      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha, t.prioridad, t.estado, t.orden, t.recordatorio, t.creado_por, t.creado,
+              (select coalesce(array_agg(r.persona_id::text order by p.orden, p.creado), '{}') from tarea_responsables r
+                 join equipo_personas p on p.id = r.persona_id where r.tarea_id = t.id) responsables
+         from agencia_tareas t
+        where t.negocio_id = $1 and (estado <> 'hecha' or hecha_en > now() - interval '60 days' or fecha >= current_date - 7)
         order by fecha nulls last, orden, creado
         limit 2000`,
       [ctx.negocioId]
@@ -61,7 +63,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
         descripcion: r.descripcion,
         area: r.area,
         proyectoId: r.proyecto_id,
-        responsableId: r.responsable_id,
+        responsables: r.responsables ?? [],
         fecha: fechaBogota(r.fecha),
         prioridad: r.prioridad,
         estado: r.estado,
@@ -84,8 +86,9 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
 /** Para el contador del menú: tus tareas pendientes de hoy y las vencidas. */
 export async function pendientesHoy(negocioId: string, usuarioId: string) {
   const r = await db().query(
-    `select count(*)::int n from agencia_tareas t join equipo_personas p on p.id = t.responsable_id
-      where t.negocio_id = $1 and p.usuario_id = $2 and t.estado <> 'hecha' and t.fecha <= $3::date`,
+    `select count(*)::int n from agencia_tareas t
+      where t.negocio_id = $1 and t.estado <> 'hecha' and t.fecha <= $3::date
+        and exists (select 1 from tarea_responsables r join equipo_personas p on p.id = r.persona_id where r.tarea_id = t.id and p.usuario_id = $2)`,
     [negocioId, usuarioId, hoyColombia()]
   );
   return Number(r.rows[0]?.n ?? 0);

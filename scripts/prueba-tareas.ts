@@ -16,7 +16,7 @@ ok(fechaCorta("2026-11-24", "2026-11-24") === "Hoy" && fechaCorta("2026-11-25", 
 ok(fechaCorta("2026-11-27", "2026-11-24") === "Vie 27 nov" && fechaCorta(null, "2026-11-24") === "Sin fecha", "otro día y sin fecha");
 
 // Vencidas y orden
-const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: "marketing", proyectoId: null, responsableId: x.responsableId ?? null, fecha: x.fecha ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, recordatorio: x.recordatorio ?? null, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
+const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: "marketing", proyectoId: null, responsables: x.responsables ?? [], fecha: x.fecha ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, recordatorio: x.recordatorio ?? null, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
 ok(vencida(t({ fecha: "2026-11-23" }), "2026-11-24") && !vencida(t({ fecha: "2026-11-23", estado: "hecha" }), "2026-11-24") && !vencida(t({ fecha: null }), "2026-11-24"), "vencida: pendiente con fecha pasada");
 const dia = ordenarDia([t({ id: "hecha", estado: "hecha", orden: 1 }), t({ id: "b", orden: 2 }), t({ id: "a", orden: 1 })]);
 ok(dia.map((x) => x.id).join() === "a,b,hecha", "en el día: pendientes por orden y las hechas al final");
@@ -26,7 +26,7 @@ const tabla = ordenarTabla([t({ id: "sin", fecha: null }), t({ id: "jue", fecha:
 ok(tabla.map((x) => x.id).join() === "lun,jue,sin", "tabla por fecha: sin fecha al final");
 const porPrioridad = ordenarTabla([t({ id: "baja", prioridad: "baja" }), t({ id: "urg", prioridad: "urgente" }), t({ id: "alta", prioridad: "alta" })], "prioridad", true, () => "");
 ok(porPrioridad.map((x) => x.id).join() === "urg,alta,baja", "tabla por prioridad: urgente primero");
-const porNombre = ordenarTabla([t({ id: "x", responsableId: null }), t({ id: "s", responsableId: "s" }), t({ id: "a", responsableId: "a" })], "responsable", true, (id) => (id === "a" ? "Andrés" : "Santiago"));
+const porNombre = ordenarTabla([t({ id: "x", responsables: [] }), t({ id: "s", responsables: ["s"] }), t({ id: "a", responsables: ["a", "s"] })], "responsable", true, (id) => (id === "a" ? "Andrés" : "Santiago"));
 ok(porNombre.map((x) => x.id).join() === "a,s,x", "tabla por responsable: sin asignar al final");
 
 // Aviso de las 8 a. m.
