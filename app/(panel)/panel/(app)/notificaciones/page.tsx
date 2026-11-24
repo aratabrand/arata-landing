@@ -5,7 +5,7 @@ import { cargarFinanzas, contextoAgencia } from "@/lib/panel/finanzas/datos";
 import { hoyColombia } from "@/lib/panel/fecha";
 import { historialDe } from "@/lib/panel/historial";
 import { alertasVencimiento } from "@/lib/panel/alertas";
-import { vistoHasta } from "@/lib/panel/notificaciones";
+import { misNotificaciones, vistoHasta } from "@/lib/panel/notificaciones";
 import { clavePublica, pushActivo } from "@/lib/panel/push";
 import { panelActivo } from "@/lib/panel/config";
 
@@ -18,8 +18,9 @@ export default async function NotificacionesPage() {
   if (!datos) notFound();
   const hoy = hoyColombia();
   const alertas = alertasVencimiento(datos, hoy).map((a) => ({ id: a.proyecto.id, nombre: a.proyecto.nombre, tipo: a.tipo, dias: a.dias, texto: a.texto }));
-  if (!panelActivo || datos.demo) return <Notificaciones alertas={alertas} eventos={[]} visto={null} miUsuario={null} push={{ activo: false, clave: "" }} demo />;
+  const ahora = Date.now();
+  if (!panelActivo || datos.demo) return <Notificaciones alertas={alertas} eventos={[]} mias={[]} ahora={ahora} visto={null} miUsuario={null} push={{ activo: false, clave: "" }} demo />;
   const ctx = (await contextoAgencia())!;
-  const [eventos, visto] = await Promise.all([historialDe(ctx.negocioId, { limite: 200 }), vistoHasta(ctx.negocioId, ctx.usuarioId)]);
-  return <Notificaciones alertas={alertas} eventos={eventos} visto={visto} miUsuario={ctx.usuarioId} push={{ activo: pushActivo, clave: clavePublica() }} />;
+  const [eventos, mias, visto] = await Promise.all([historialDe(ctx.negocioId, { limite: 200 }), misNotificaciones(ctx.negocioId, ctx.usuarioId, 100), vistoHasta(ctx.negocioId, ctx.usuarioId)]);
+  return <Notificaciones alertas={alertas} eventos={eventos} mias={mias} ahora={ahora} visto={visto} miUsuario={ctx.usuarioId} push={{ activo: pushActivo, clave: clavePublica() }} />;
 }

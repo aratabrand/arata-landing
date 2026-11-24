@@ -6,6 +6,7 @@ import { hoyColombia, fechaBogota } from "@/lib/panel/fecha";
 import { alertasVencimiento } from "@/lib/panel/alertas";
 import { recordatorioEspera } from "@/lib/panel/clientes/interesados";
 import { avisarA, avisarEquipo, pushActivo } from "@/lib/panel/push";
+import { limpiarBorradas } from "@/lib/panel/notificaciones";
 import { resumenDiario, textoRecordatorio, tocaRecordar } from "@/lib/panel/tareas/tareas";
 import type { FinProyecto } from "@/lib/panel/finanzas/tipos";
 import type { FinTarea } from "@/lib/panel/finanzas/procesos";
@@ -114,5 +115,7 @@ export async function GET(req: NextRequest) {
       enviados += r.enviados;
     }
   }
+  // Lo borrado a mano que ya caducó solo (24 h) no necesita guardarse (D-185)
+  await limpiarBorradas().catch(() => {});
   return NextResponse.json({ ok: true, hoy, avisos, enviados }, { headers: { "cache-control": "no-store" } });
 }

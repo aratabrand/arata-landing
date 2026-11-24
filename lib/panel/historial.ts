@@ -131,6 +131,7 @@ export type EventoHistorial = {
   usuarioId: string | null;
   accion: Accion;
   entidad: Entidad;
+  entidadId: string | null;
   proyectoId: string | null;
   clienteId: string | null;
   titulo: string;
@@ -139,12 +140,13 @@ export type EventoHistorial = {
   creado: string;
 };
 
-const mapa = (r: Record<string, unknown>): EventoHistorial => ({
+export const historialMapa = (r: Record<string, unknown>): EventoHistorial => ({
   id: Number(r.id),
   quien: String(r.quien),
   usuarioId: (r.usuario_id as string) ?? null,
   accion: r.accion as Accion,
   entidad: r.entidad as Entidad,
+  entidadId: (r.entidad_id as string) ?? null,
   proyectoId: (r.proyecto_id as string) ?? null,
   clienteId: (r.cliente_id as string) ?? null,
   titulo: String(r.titulo),
@@ -166,9 +168,9 @@ export async function historialDe(negocioId: string, filtro: { proyectoId?: stri
   }
   vals.push(Math.min(500, filtro.limite ?? 100));
   const r = await db().query(
-    `select id, quien, usuario_id, accion, entidad, proyecto_id, cliente_id, titulo, cambios, importante, creado
+    `select id, quien, usuario_id, accion, entidad, entidad_id, proyecto_id, cliente_id, titulo, cambios, importante, creado
        from panel_historial where ${where.join(" and ")} order by creado desc, id desc limit $${vals.length}`,
     vals
   );
-  return r.rows.map(mapa);
+  return r.rows.map(historialMapa);
 }

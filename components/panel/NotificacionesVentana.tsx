@@ -7,14 +7,14 @@ import { AlarmClock, Bell, BellRing, X } from "./iconos";
 import { verNotificacionesRecientes } from "@/app/(panel)/panel/(app)/notificaciones/acciones";
 import type { EventoHistorial } from "@/lib/panel/historial";
 import type { TipoAlerta } from "@/lib/panel/alertas";
-import Historial from "./Historial";
+import ListaNotificaciones from "./ListaNotificaciones";
 import { cn } from "@/lib/utils";
 
 // Campana del panel (D-120): abre una ventana con las alertas de entrega y los últimos
 // cambios. En escritorio cae debajo de la campana; en celular es una ventana flotante
 // (no ocupa toda la pantalla). Lo completo (y activar avisos) está en /panel/notificaciones.
 
-type Datos = { alertas: { id: string; nombre: string; tipo: TipoAlerta; texto: string }[]; eventos: EventoHistorial[]; visto: string | null; miUsuario: string };
+type Datos = { alertas: { id: string; nombre: string; tipo: TipoAlerta; texto: string }[]; eventos: EventoHistorial[]; visto: string | null; miUsuario: string; ahora: number };
 
 export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: number; demo: boolean }) {
   const [abierta, setAbierta] = useState(false);
@@ -32,12 +32,12 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
     if (!abierta) return;
     let vivo = true;
     if (demo) {
-      setDatos({ alertas: [], eventos: [], visto: null, miUsuario: "" });
+      setDatos({ alertas: [], eventos: [], visto: null, miUsuario: "", ahora: Date.now() });
     } else {
       verNotificacionesRecientes().then((r) => {
         if (!vivo) return;
         if (r.ok) {
-          setDatos(r);
+          setDatos({ ...r, ahora: Date.now() });
           router.refresh(); // el contador del menú baja (ya se marcaron como vistas)
         } else setError(r.error);
       });
@@ -53,7 +53,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
     };
   }, [abierta, demo, router]);
 
-  const nuevos = datos ? new Set(datos.eventos.filter((e) => e.usuarioId !== datos.miUsuario && (!datos.visto || e.creado > datos.visto)).map((e) => e.id)) : undefined;
+  const nuevos = datos ? new Set(datos.eventos.filter((e) => e.usuarioId !== datos.miUsuario && (!datos.visto || e.creado > datos.visto)).map((e) => e.id)) : new Set<number>();
 
   return (
     <div ref={ref} className="relative">
@@ -117,7 +117,7 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                 <div className="space-y-4">
                   {datos.alertas.length > 0 && (
                     <section>
-                      <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Entregas</p>
+                      <p className="mb-2 px-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Entregas (se quedan hasta resolverse)</p>
                       <ul className="space-y-1.5">
                         {datos.alertas.map((a) => (
                           <li key={a.id}>
@@ -136,16 +136,13 @@ export default function NotificacionesVentana({ sinLeer, demo }: { sinLeer: numb
                       </ul>
                     </section>
                   )}
-                  <section>
-                    <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">Últimos cambios</p>
-                    <Historial eventos={datos.eventos} nuevos={nuevos} compacto vacio="Todavía no hay cambios." />
-                  </section>
+                  <ListaNotificaciones eventos={datos.eventos} nuevos={nuevos} ahora={datos.ahora} onCambio={() => router.refresh()} />
                 </div>
               )}
             </div>
 
             <Link href="/panel/notificaciones" className="flex items-center justify-center gap-2 border-t border-white/[0.06] px-4 py-3 text-xs font-semibold text-fog hover:text-white">
-              <BellRing aria-hidden className="h-3.5 w-3.5 text-fog" /> Avisos en este dispositivo e historial completo
+              <BellRing aria-hidden className="h-3.5 w-3.5 text-fog" /> Avisos en este dispositivo e historial del panel
             </Link>
           </div>
         </>

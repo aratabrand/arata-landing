@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/panel/db";
 import { panelActivo } from "@/lib/panel/config";
 import { cargarFinanzas, contextoAgencia } from "@/lib/panel/finanzas/datos";
-import { marcarVisto, vistoHasta } from "@/lib/panel/notificaciones";
-import { historialDe, type EventoHistorial } from "@/lib/panel/historial";
+import { borrarNotificacion, borrarTodas, marcarVisto, misNotificaciones, vistoHasta } from "@/lib/panel/notificaciones";
+import type { EventoHistorial } from "@/lib/panel/historial";
 import { alertasVencimiento, type TipoAlerta } from "@/lib/panel/alertas";
 import { hoyColombia } from "@/lib/panel/fecha";
 import { avisarA, pushActivo } from "@/lib/panel/push";
@@ -88,10 +88,36 @@ export async function verNotificacionesRecientes(): Promise<
     const ctx = await ctxAgencia();
     const datos = await cargarFinanzas();
     const alertas = datos ? alertasVencimiento(datos, hoyColombia()).map((a) => ({ id: a.proyecto.id, nombre: a.proyecto.nombre, tipo: a.tipo, texto: a.texto })) : [];
-    const [eventos, visto] = await Promise.all([historialDe(ctx.negocioId, { limite: 12 }), vistoHasta(ctx.negocioId, ctx.usuarioId)]);
+    // Solo las de esta persona: de otros, de las últimas 24 horas y que no haya borrado (D-185)
+    const [eventos, visto] = await Promise.all([misNotificaciones(ctx.negocioId, ctx.usuarioId, 40), vistoHasta(ctx.negocioId, ctx.usuarioId)]);
     await marcarVisto(ctx.negocioId, ctx.usuarioId);
     return { ok: true, alertas, eventos, visto, miUsuario: ctx.usuarioId };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "No se pudieron leer las notificaciones." };
+  }
+}
+
+/** Borra una notificación solo para quien la borra (X o deslizar). El historial queda igual (D-185). */
+export async function borrarUnaNotificacion(id: number): Promise<Resultado> {
+  try {
+    const ctx = await ctxAgencia();
+    if (!Number.isSafeInteger(id) || id <= 0) return { ok: false, error: "Notificación no válida." };
+    await borrarNotificacion(ctx.negocioId, ctx.usuarioId, id);
+    revalidatePath("/panel", "layout");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudo borrar." };
+  }
+}
+
+/** «Borrar todas»: deja la campana limpia para quien la toca (D-185). */
+export async function borrarTodasNotificaciones(): Promise<Resultado> {
+  try {
+    const ctx = await ctxAgencia();
+    await borrarTodas(ctx.negocioId, ctx.usuarioId);
+    revalidatePath("/panel", "layout");
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "No se pudieron borrar." };
   }
 }

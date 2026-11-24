@@ -10,6 +10,8 @@ import { PanelHeader, PanelPage, Pill, Tarjeta } from "./ui";
 import { BotonSecundario, MensajeError, useAccion } from "./finanzas/comun";
 import { Segmentado } from "./Resumen";
 import Historial from "./Historial";
+import ListaNotificaciones from "./ListaNotificaciones";
+import { HORAS_NOTIFICACION } from "@/lib/panel/tiempo";
 import { cn } from "@/lib/utils";
 
 // Notificaciones (D-119): alertas de vencimiento, todos los cambios del panel y
@@ -17,23 +19,31 @@ import { cn } from "@/lib/utils";
 
 type AlertaVista = { id: string; nombre: string; tipo: TipoAlerta; dias: number; texto: string };
 type Filtro = "todos" | "importantes" | "otros";
+type Pestana = "mias" | "historial";
 
 export default function Notificaciones({
   alertas,
   eventos,
+  mias,
+  ahora,
   visto,
   miUsuario,
   push,
   demo = false,
 }: {
   alertas: AlertaVista[];
+  /** Historial del panel (todo, compartido): no se borra. */
   eventos: EventoHistorial[];
+  /** Notificaciones de esta persona: de otros, últimas 24 horas, sin las que borró (D-185). */
+  mias: EventoHistorial[];
+  ahora: number;
   visto: string | null;
   miUsuario: string | null;
   push: { activo: boolean; clave: string };
   demo?: boolean;
 }) {
   const [filtro, setFiltro] = useState<Filtro>("todos");
+  const [pestana, setPestana] = useState<Pestana>("mias");
   // Lo que llegó desde la última visita (de otras personas) se marca como nuevo
   const [nuevos] = useState(() => new Set(eventos.filter((e) => e.usuarioId !== miUsuario && (!visto || e.creado > visto)).map((e) => e.id)));
   useEffect(() => {
@@ -75,9 +85,24 @@ export default function Notificaciones({
         )}
       </Tarjeta>
 
+      <Segmentado
+        etiqueta="Ver"
+        opciones={[
+          { valor: "mias" as const, label: "Mis notificaciones" },
+          { valor: "historial" as const, label: "Historial del panel" },
+        ]}
+        valor={pestana}
+        onChange={setPestana}
+      />
+
+      {pestana === "mias" ? (
+        <Tarjeta titulo="Mis notificaciones" bajada={`Lo que hicieron los demás en las últimas ${HORAS_NOTIFICACION} horas. Solo las ves tú; borrarlas no cambia el historial.`}>
+          {demo ? <p className="text-sm text-fog">Disponible con el panel conectado.</p> : <ListaNotificaciones eventos={mias} nuevos={nuevos} ahora={ahora} grande />}
+        </Tarjeta>
+      ) : (
       <Tarjeta
-        titulo="Cambios"
-        bajada={nuevos.size ? `${nuevos.size} ${nuevos.size === 1 ? "nuevo" : "nuevos"} desde tu última visita` : "Todo lo que se hace en el panel"}
+        titulo="Historial del panel"
+        bajada="Todo lo que se hace en el panel, de todos. Es el registro: no se borra."
         accion={
           <Segmentado
             etiqueta="Filtrar cambios"
@@ -97,6 +122,7 @@ export default function Notificaciones({
           <Historial eventos={lista} nuevos={nuevos} vacio={filtro === "todos" ? "Todavía no hay cambios registrados." : "No hay cambios con este filtro."} />
         )}
       </Tarjeta>
+      )}
     </PanelPage>
   );
 }
