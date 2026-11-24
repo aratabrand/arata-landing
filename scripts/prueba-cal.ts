@@ -2,6 +2,7 @@
 import { createHmac } from "node:crypto";
 import { firmaValida, leerAviso, leerNotas, enlaceSeguro, whatsappLimpio, tipoDe } from "../lib/panel/cal";
 import { agendar } from "../content/agendar";
+import { textosAgenda } from "../content/campanas/catalogos";
 import { PLAZOS, datosDeCliente, diasParaPlazo, mensajeSeguimiento, plazoDesde, plazoValido, recordatorioEspera, type Interesado } from "../lib/panel/clientes/interesados";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 const secreto = "secreto-de-prueba-0123456789";
@@ -70,6 +71,24 @@ if (a.accion !== "ignorar") {
   ok(a.enlaceLlamada === "https://app.cal.com/video/bFJeNb2uX8ANpT3JL5EfXw", "aviso: enlace de la llamada");
   ok(a.enlaceReserva === "https://app.cal.com/booking/bFJeNb2uX8ANpT3JL5EfXw", "aviso: página de la reserva en Cal");
 }
+
+// ── Agenda directa de la landing (D-197): sin formulario, el WhatsApp y la casilla vienen de Cal.com
+const lp = textosAgenda(true);
+const notasLp = `${lp.notas}\n${lp.notaAutorizacion}, 24/11/2026, 5:00:00 p. m. (hora de Bogotá)`;
+const directa = leerAviso(base({}, { additionalNotes: notasLp, responses: { whatsapp: { label: "WhatsApp", value: "+57 310 555 1234" }, autorizacion: { value: true } } }));
+if (directa.accion !== "ignorar") {
+  ok(directa.tipo === "catalogo" && /oferta de noviembre/.test(directa.necesita ?? ""), "landing: llega como catálogo y con la oferta de noviembre");
+  ok(/precio de noviembre/.test(directa.inversion ?? "") && /2\.200\.000/.test(directa.inversion ?? ""), "landing: la inversión trae el precio de noviembre (D-195)");
+  ok(directa.whatsapp === "573105551234", "landing: el WhatsApp sale de la pregunta «whatsapp» de Cal.com");
+  ok(/^sí, casilla en Cal\.com/.test(directa.autorizacion ?? ""), "landing: con casilla en Cal.com, esa es la constancia");
+}
+const sinCasilla = leerAviso(base({}, { additionalNotes: notasLp, responses: { attendeePhoneNumber: { value: "+573209998877" } } }));
+if (sinCasilla.accion !== "ignorar") {
+  ok(sinCasilla.whatsapp === "573209998877", "landing: sin pregunta propia, usa el teléfono del sistema de Cal.com");
+  ok(/^acepté el aviso de datos al agendar/.test(sinCasilla.autorizacion ?? ""), "landing: sin casilla, queda la constancia del aviso de la landing");
+}
+const formGana = leerAviso(base({}, { responses: { whatsapp: { value: "+57 311 000 0000" } } }));
+if (formGana.accion !== "ignorar") ok(formGana.whatsapp === "573001234567", "/agendar: el WhatsApp del formulario manda sobre el de Cal.com");
 const meet = leerAviso(base({}, { metadata: {}, location: "https://meet.google.com/abc-defg-hij" }));
 ok(meet.accion === "creada" && meet.enlaceLlamada === "https://meet.google.com/abc-defg-hij", "sin metadata: usa el enlace de Meet de location");
 const raro = leerAviso(base({}, { metadata: { videoCallUrl: "https://evil.com/x" }, location: "Oficina" }));

@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 // Sin menú ni enlaces a otras páginas: quien llega por un anuncio tiene una sola salida.
 // Mismo estilo del header del sitio: transparente arriba y vidrio oscuro al bajar.
 // D-192: si hay `cinta` (oferta), va encima del menú y las dos quedan fijas arriba.
-export default function CampanaHeader({ cta, cinta }: { cta: Boton; cinta?: ReactNode }) {
+export default function CampanaHeader({ cta, cinta }: { cta?: Boton; cinta?: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -32,9 +32,11 @@ export default function CampanaHeader({ cta, cinta }: { cta: Boton; cinta?: Reac
           <span className="flex h-11 shrink-0 items-center" aria-label="Arata San">
             <Logo surface="dark" className="h-6 w-auto" />
           </span>
-          <Button href={cta.enlace} size="md" className="h-10">
-            {cta.texto}
-          </Button>
+          {cta && (
+            <Button href={cta.enlace} size="md" className="h-10">
+              {cta.texto}
+            </Button>
+          )}
         </div>
       </header>
     </div>

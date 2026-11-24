@@ -6,7 +6,7 @@ import { Assurances } from "@/components/v2/Pricing";
 import CasosExito from "@/components/v2/CasosExito";
 import MarcoCampana from "@/components/v2/campana/MarcoCampana";
 import CintaOferta from "@/components/v2/campana/CintaOferta";
-import { ofertaVigente, textosLanding } from "@/content/campanas/catalogos";
+import { AGENDAR_LP, ofertaVigente, textosLanding } from "@/content/campanas/catalogos";
 import { paginaV2 } from "@/lib/seo";
 
 // Landing de la campaña de Meta (D-189): copia de /catalogos-y-sistemas con marco propio.
@@ -15,8 +15,6 @@ import { paginaV2 } from "@/lib/seo";
 // D-192: la oferta de noviembre termina sola. La página es estática pero se vuelve a armar
 // cada hora: pasada la fecha sale sin cinta y con el precio normal.
 export const revalidate = 3600;
-
-const AGENDAR_CATALOGO = "/agendar?tipo=catalogo";
 
 export function generateMetadata(): Metadata {
   const c = textosLanding(ofertaVigente());
@@ -33,10 +31,10 @@ export default function LandingCatalogos() {
   const c = textosLanding(conOferta);
   return (
     <MarcoCampana
-      cta={{ texto: "Agendar reunión", enlace: AGENDAR_CATALOGO }}
-      cinta={conOferta ? <CintaOferta enlace={AGENDAR_CATALOGO} /> : undefined}
+      cta={{ texto: "Agendar reunión", enlace: AGENDAR_LP }}
+      cinta={conOferta ? <CintaOferta enlace={AGENDAR_LP} /> : undefined}
     >
-      <ServiceHero {...c.hero} tipo="catalogo" />
+      <ServiceHero {...c.hero} tipo="catalogo" enlace={AGENDAR_LP} />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre={c.problema.cierre} items={c.problema.items} />
       <CasosExito
         id="casos-catalogo"
@@ -48,6 +46,7 @@ export default function LandingCatalogos() {
             <PriceBar
               precio={c.tienda.precio}
               antes={c.tienda.precioAntes}
+              enlace={AGENDAR_LP}
               nota={c.tienda.precioNota}
               pago={c.tienda.pago}
               boton={c.tienda.boton}

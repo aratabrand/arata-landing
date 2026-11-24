@@ -1,10 +1,15 @@
 import { catalogos } from "@/content/servicios";
 import { precios } from "@/content/inicio";
+import { agendar } from "@/content/agendar";
+import { CLARITY_ACTIVO } from "@/lib/consentimiento";
 
 /* ── Landing de campaña de Meta: Tienda por WhatsApp — /lp/catalogos (D-189) ──
    Arranca como copia de /catalogos-y-sistemas. Para cambiar un texto SOLO en la
    campaña, se pone la llave aquí y la página del sitio no se toca.
    Plan y copy aprobado (D-193): docs/campanas/meta-tienda-whatsapp.md §5 */
+
+// D-197: desde la landing se va DIRECTO al calendario (sin las preguntas de /agendar, que son del sitio).
+export const AGENDAR_LP = "/lp/catalogos/agendar";
 
 // D-191: precio normal en pesos. 800 USD con la TRM del 24 nov 2026 ($ 3.505,92) = $ 2.804.736 → redondeado.
 // Espacio que no se parte (\u00A0): el «$» nunca queda solo al final de una línea.
@@ -22,6 +27,8 @@ export const OFERTA = {
   nombre: "Precio de noviembre",
   /** D-195: la condición. Vale para quien AGENDA la reunión hasta el 30 de noviembre (no hace falta pagar antes). */
   condicion: "para quien agende hasta el 30 de noviembre",
+  /** D-197: el 50 % para arrancar, en plata (aprobado por Sergio). */
+  arranque: "$\u00A01.100.000",
 };
 
 export function ofertaVigente(ahora = new Date()): boolean {
@@ -80,6 +87,7 @@ export function textosLanding(conOferta: boolean) {
       ...catalogos.tienda,
       precio: conOferta ? OFERTA.precio : `Desde ${PRECIO_COP}`,
       precioAntes: conOferta ? OFERTA.antes : undefined,
+      pago: conOferta ? `Arrancas con ${OFERTA.arranque} y pagas el resto cuando te entregamos.` : catalogos.tienda.pago,
       precioNota: conOferta
         ? `para quien agende hasta el ${OFERTA.hastaTexto}.`
         : "unos 800 USD. Depende del tamaño de tu tienda.",
@@ -129,7 +137,39 @@ export function textosLanding(conOferta: boolean) {
     // §5.5: llamado final
     cta: {
       ...catalogos.cta,
+      href: AGENDAR_LP,
       texto: "Tomamos 4 proyectos nuevos al mes. Agenda y en 30 minutos te decimos cuánto cuesta tu tienda.",
     },
   };
 }
+
+/* ── Agenda directa de la landing (D-197) ─────────────────────────────────
+   Quien llega por el anuncio no responde las preguntas del sitio: elige la hora de una.
+   Lo que la reunión necesita viaja en las notas de Cal.com, en las líneas que ya lee el
+   panel (lib/panel/cal.ts → leerNotas): «Necesito» (tipo + oferta) e «Inversión» (el precio
+   que se le respeta, D-195). La persona ve estas notas al reservar: van en primera persona y
+   sin palabras internas. El nombre, el correo y el WhatsApp los pide Cal.com. */
+export function textosAgenda(conOferta: boolean) {
+  return {
+    meta: {
+      title: "Agenda tu reunión · Tienda por WhatsApp · Arata San",
+      description: "Elige la hora de tu reunión de 30 minutos, sin costo.",
+    },
+    titulo: agendar.titulo,
+    texto: "30 minutos, sin costo. Elige la hora que te sirva.",
+    oferta: conOferta ? `${OFERTA.nombre}: ${OFERTA.precio} ${OFERTA.condicion}.` : null,
+    lateral: agendar.lateral,
+    // Aviso de datos antes de agendar (Ley 1581): mismo contenido de la casilla de /agendar (D-099)
+    aviso: `Al agendar autorizas a Arata San a usar tus datos para atender tu solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (${CLARITY_ACTIVO ? "Cal.com, Google y Microsoft" : "Cal.com y Google"}), que pueden estar fuera de Colombia, según la`,
+    avisoLink: agendar.pasos.datos.autorizacionLink,
+    notas: [
+      "Necesito: Un catálogo o tienda · oferta de noviembre",
+      conOferta ? `Inversión: ${OFERTA.precio.replace("\u00A0", " ")}, precio de noviembre (agendé antes del 30)` : null,
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    /** El navegador le agrega la fecha y hora del momento en que abre el calendario (constancia, D-099). */
+    notaAutorizacion: "Autorización de datos: acepté el aviso de datos al agendar",
+  };
+}
+

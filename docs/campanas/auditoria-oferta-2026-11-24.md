@@ -85,7 +85,7 @@
 | # | Mejora | Palanca | Por qué | Esfuerzo | Decide |
 |---|---|---|---|---|---|
 | 1 | **Mostrar «Todo lo que incluye tu tienda»** junto al precio, con la lista que ya existe en `tienda.items` (10 cosas), y al final «Todo por $ 2.200.000» | Pila de valor | Hoy el precio se compara con «una tienda». Con la lista se compara con todo lo que recibe | Bajo: el componente (`IncludesSection`) y la lista (`tienda.items`) ya existen en el sitio | Sergio |
-| 2 | **Agenda coherente cuando viene de la landing:** sin menú del sitio, sin la pregunta de inversión en USD (o con opciones en pesos) y con «Origen: landing de Meta · Precio de noviembre» en las notas de Cal.com | Continuidad | Andrés sabe a quién respetarle el precio y la persona no ve otra moneda ni otras salidas | Medio | Sergio |
+| 2 | ✅ **Hecho (D-197): agenda directa, sin preguntas ni menú.** **Agenda coherente cuando viene de la landing:** sin menú del sitio, sin la pregunta de inversión en USD (o con opciones en pesos) y con «Origen: landing de Meta · Precio de noviembre» en las notas de Cal.com | Continuidad | Andrés sabe a quién respetarle el precio y la persona no ve otra moneda ni otras salidas | Medio | Sergio |
 | 3 | **Cinta del celular con la condición** (Copy A) | Urgencia + Ley 1480 | Es lo primero que se ve; la condición tiene que estar ahí | Bajo | Sergio |
 | 4 | **Regla de cupos para la oferta** y una pregunta frecuente (Copy D) | Escasez honesta | Evita prometer una fecha que no se puede cumplir | Bajo (es una decisión) | Sergio y Andrés |
 
@@ -94,9 +94,9 @@
 | # | Mejora | Palanca | Por qué | Esfuerzo | Decide |
 |---|---|---|---|---|---|
 | 5 | **Garantía que ataque el miedo del comerciante** (Copy B) | Probabilidad | La de velocidad es para páginas; este cliente teme que no le sirva | Bajo | Sergio (D-029 había descartado la garantía de plazo) |
-| 6 | **Bonos de noviembre** que quiten objeciones (Copy C): subir sus primeros productos, código QR para el local y los empaques, kit para compartir la tienda | Esfuerzo + pila | Quitan el esfuerzo más grande (subir productos) y ayudan a vender desde el día uno. Un bono con fecha protege el precio mejor que otro descuento | Medio (se entregan en cada proyecto) | Sergio |
+| 6 | **Bonos de noviembre** que quiten objeciones (Copy C). Sergio eligió solo «Te subimos tus primeros productos»; ◻ falta cuántos | Esfuerzo + pila | Quitan el esfuerzo más grande (subir productos) y ayudan a vender desde el día uno. Un bono con fecha protege el precio mejor que otro descuento | Medio (se entregan en cada proyecto) | Sergio |
 | 7 | **Testimonio del dueño de Caravana** y captura real de un pedido en WhatsApp | Probabilidad | La prueba que más pesa para tráfico frío | Bajo (falta el material) | Sergio |
-| 8 | **Precio en plata para arrancar:** «Arrancas con $ 1.100.000 y el resto al entregar» | Sacrificio | Baja la sensación de gasto sin bajar el precio | Bajo | Sergio |
+| 8 | ✅ **Hecho (D-197).** **Precio en plata para arrancar:** «Arrancas con $ 1.100.000 y el resto al entregar» | Sacrificio | Baja la sensación de gasto sin bajar el precio | Bajo | Sergio |
 | 9 | **El camino completo en una línea:** «Agendas, en 48 h tienes la propuesta y en 5 días hábiles tu tienda» | Tiempo de espera | Hace creíble el «5 días» | Bajo | Sergio |
 
 ### P2 — pruebas A/B (una a la vez, 2 semanas de datos)
