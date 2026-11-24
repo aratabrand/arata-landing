@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import { Bell, CircleCheck, Send, Trash2, X } from "../iconos";
 import {
-  AREAS,
   ESTADOS_TAREA,
   PRIORIDADES_TAREA,
   RECORDATORIOS,
@@ -18,6 +17,7 @@ import {
   partesDia,
   sumarDias,
   type Area,
+  type AreaTarea,
   type EstadoTarea,
   type PersonaTarea,
   type PrioridadTarea,
@@ -25,7 +25,7 @@ import {
   type ProyectoTarea,
   type Tarea,
 } from "@/lib/panel/tareas/tareas";
-import { agregarItem, borrarItem, borrarTarea, comentarTarea, guardarTarea, marcarItem } from "@/app/(panel)/panel/(app)/tareas/acciones";
+import { agregarArea, agregarItem, borrarItem, quitarArea, borrarTarea, comentarTarea, guardarTarea, marcarItem } from "@/app/(panel)/panel/(app)/tareas/acciones";
 import { BotonPrincipal, BotonSecundario, Campo, MensajeError, useAccion } from "../finanzas/comun";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +48,7 @@ export default function FichaTarea({
   nueva,
   personas,
   proyectos,
+  areas,
   hoy,
   puedeBorrar,
   onListo,
@@ -56,6 +57,7 @@ export default function FichaTarea({
   nueva?: NuevaTarea;
   personas: PersonaTarea[];
   proyectos: ProyectoTarea[];
+  areas: AreaTarea[];
   hoy: string;
   puedeBorrar: boolean;
   /** Se guardó (nueva) o se borró: cerrar la ficha. */
@@ -78,7 +80,7 @@ export default function FichaTarea({
   const alternar = (id: string) => setResponsables((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
   const [recordatorio, setRecordatorio] = useState<Recordatorio | "">(tarea?.recordatorio ?? "");
   const [proyectoId, setProyectoId] = useState(tarea?.proyectoId ?? nueva?.proyectoId ?? "");
-  const [area, setArea] = useState<Area>(tarea?.area ?? nueva?.area ?? (nueva?.proyectoId ? "proyectos" : "proyectos"));
+  const [area, setArea] = useState<Area>(tarea?.area ?? nueva?.area ?? "proyectos");
   // Días rápidos: lunes a viernes de la semana que se trabaja; «Próx. lunes» si no está ya en la lista
   const semana = diasLaborales(semanaDeTrabajo(hoy));
   const proximoLunes = sumarDias(lunesDe(hoy), 7);
@@ -149,17 +151,7 @@ export default function FichaTarea({
           <p className="text-[0.7rem] text-fog-dim">Toca para sumar o quitar. A cada persona le llega el aviso.</p>
         </fieldset>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Campo etiqueta="Área">
-            <select value={area} onChange={(e) => setArea(e.target.value as Area)} className="pn-input">
-              {opciones(AREAS).map(([k, l]) => (
-                <option key={k} value={k}>
-                  {l}
-                </option>
-              ))}
-            </select>
-          </Campo>
-        </div>
+        <CampoArea areas={areas} area={area} onArea={setArea} puedeQuitar={puedeBorrar} />
 
         <fieldset className="space-y-2">
           <legend className="text-xs font-medium text-fog">Desde · {fechaCorta(fecha || null, hoy)}</legend>
@@ -273,6 +265,128 @@ export default function FichaTarea({
 
       {tarea && <ListaChequeo tarea={tarea} />}
       {tarea && <Comentarios tarea={tarea} />}
+    </div>
+  );
+}
+
+const NUEVA_AREA = "__nueva";
+
+/** Área de trabajo (D-188): las fijas, las agregadas y «+ Agregar área…» al final. */
+function CampoArea({ areas, area, onArea, puedeQuitar }: { areas: AreaTarea[]; area: string; onArea: (a: string) => void; puedeQuitar: boolean }) {
+  const acc = useAccion();
+  // Las recién agregadas se ven de una vez (la página se refresca detrás)
+  const [nuevas, setNuevas] = useState<AreaTarea[]>([]);
+  const [quitadas, setQuitadas] = useState<string[]>([]);
+  const [agregando, setAgregando] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const todas = [...areas, ...nuevas.filter((n) => !areas.some((a) => a.clave === n.clave))].filter((a) => !quitadas.includes(a.clave));
+  const lista = todas.some((a) => a.clave === area) ? todas : [...todas, { clave: area, nombre: area, agregada: true }];
+  const agregadas = todas.filter((a) => a.agregada);
+
+  const agregar = () => {
+    const n = nombre.trim();
+    let clave: string | null = null;
+    acc.correr(
+      async () => {
+        const r = await agregarArea(n);
+        if (r.ok) clave = r.id ?? null;
+        return r;
+      },
+      () => {
+        const c = clave as string | null;
+        if (!c) return;
+        setNuevas((l) => [...l, { clave: c, nombre: n.charAt(0).toUpperCase() + n.slice(1), agregada: true }]);
+        onArea(c);
+        setNombre("");
+        setAgregando(false);
+      }
+    );
+  };
+
+  return (
+    <div className="space-y-2">
+      <Campo etiqueta="Área" ayuda={area === "proyectos" && !agregando ? "Para las tareas de un proyecto: elígelo abajo en «Proyecto»." : undefined}>
+        <select
+          value={agregando ? NUEVA_AREA : area}
+          onChange={(e) => {
+            if (e.target.value === NUEVA_AREA) setAgregando(true);
+            else {
+              setAgregando(false);
+              onArea(e.target.value);
+            }
+          }}
+          className="pn-input"
+        >
+          {lista.map((a) => (
+            <option key={a.clave} value={a.clave}>
+              {a.nombre}
+            </option>
+          ))}
+          <option value={NUEVA_AREA}>+ Agregar área…</option>
+        </select>
+      </Campo>
+      {agregando && (
+        <div className="space-y-3 rounded-2xl border border-white/8 p-3">
+          <div className="flex items-center gap-2">
+            <input
+              aria-label="Nombre del área nueva"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  if (nombre.trim().length >= 2) agregar();
+                }
+              }}
+              maxLength={40}
+              autoComplete="off"
+              placeholder="Ej. Ventas"
+              className="pn-input min-w-0 flex-1"
+              autoFocus
+            />
+            <BotonPrincipal type="button" pendiente={acc.pendiente} disabled={nombre.trim().length < 2} onClick={agregar} className="h-11 shrink-0">
+              Agregar
+            </BotonPrincipal>
+            <button type="button" aria-label="Cancelar" onClick={() => (setAgregando(false), setNombre(""))} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-fog-dim hover:text-white">
+              <X aria-hidden className="h-4 w-4" />
+            </button>
+          </div>
+          {agregadas.length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-[0.7rem] text-fog-dim">Áreas agregadas{puedeQuitar ? " · quita las que ya no se usen" : ""}</p>
+              <ul className="flex flex-wrap gap-1.5">
+                {agregadas.map((a) => (
+                  <li key={a.clave} className="pn-pildora flex h-8 items-center gap-1 rounded-full border pl-3 pr-1 text-xs font-semibold">
+                    {a.nombre}
+                    {puedeQuitar ? (
+                      <button
+                        type="button"
+                        aria-label={`Quitar el área ${a.nombre}`}
+                        disabled={acc.pendiente}
+                        onClick={() =>
+                          acc.correr(
+                            () => quitarArea(a.clave),
+                            () => {
+                              setQuitadas((l) => [...l, a.clave]);
+                              if (area === a.clave) onArea("proyectos");
+                            }
+                          )
+                        }
+                        className="flex h-6 w-6 items-center justify-center rounded-full text-fog-dim hover:text-alerta"
+                      >
+                        <X aria-hidden className="h-3.5 w-3.5" />
+                      </button>
+                    ) : (
+                      <span className="w-2" />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <MensajeError error={acc.error} />
+        </div>
+      )}
     </div>
   );
 }

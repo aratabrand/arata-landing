@@ -4,7 +4,8 @@ import { Fragment, useEffect, useMemo, useState, type DragEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Bell, CalendarioSemana, ChatBubble, Check, SquareKanban as Kanban, ChevronLeft, ChevronRight, Circle, CircleCheck, CircleMedio, ListChecks, Plus, Search, Tabla } from "../iconos";
 import {
-  AREAS,
+  nombreArea,
+  type AreaTarea,
   ESTADOS_TAREA,
   PRIORIDADES_TAREA,
   activaEn,
@@ -24,7 +25,6 @@ import {
   sumarDias,
   vence,
   vencida,
-  type Area,
   type Columna,
   type EstadoTarea,
   type PrioridadTarea,
@@ -187,9 +187,9 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
           </select>
           <select aria-label="Filtrar por área" value={area} onChange={(e) => setArea(e.target.value)} className="pn-input h-9 w-full py-0 text-xs sm:w-auto">
             <option value="">Área</option>
-            {opciones(AREAS).map(([k, l]) => (
-              <option key={k} value={k}>
-                {l}
+            {datos.areas.map((a) => (
+              <option key={a.clave} value={a.clave}>
+                {a.nombre}
               </option>
             ))}
           </select>
@@ -226,7 +226,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
           onNueva={(fecha) => setAbierta({ tipo: "nueva", datos: { fecha, responsableIds: deFiltro() } })}
         />
       ) : (
-        <TablaTareas tareas={filtradas} hoy={hoy} nombreDe={nombreDe} proyectoDe={proyectoDe} onAbrir={(id) => setAbierta({ tipo: "tarea", id })} onEstado={(t) => cambiarEstado(t)} />
+        <TablaTareas tareas={filtradas} areas={datos.areas} hoy={hoy} nombreDe={nombreDe} proyectoDe={proyectoDe} onAbrir={(id) => setAbierta({ tipo: "tarea", id })} onEstado={(t) => cambiarEstado(t)} />
       )}
 
       {abierta && (abierta.tipo === "nueva" || actual) && (
@@ -237,6 +237,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
             nueva={abierta.tipo === "nueva" ? abierta.datos : undefined}
             personas={personas}
             proyectos={proyectos}
+            areas={datos.areas}
             hoy={hoy}
             puedeBorrar={datos.puedeBorrar}
             onListo={cerrar}
@@ -676,6 +677,7 @@ function Semana({
 
 function TablaTareas({
   tareas,
+  areas,
   hoy,
   nombreDe,
   proyectoDe,
@@ -683,6 +685,7 @@ function TablaTareas({
   onEstado,
 }: {
   tareas: Tarea[];
+  areas: AreaTarea[];
   hoy: string;
   nombreDe: (id: string | null) => string;
   proyectoDe: (id: string | null) => string | null;
@@ -701,8 +704,8 @@ function TablaTareas({
     const lista = tareas
       .filter((x) => (estado === "pendientes" ? x.estado !== "hecha" : !estado || x.estado === estado))
       .filter((x) => !t || [x.titulo, x.descripcion, proyectoDe(x.proyectoId)].some((v) => v?.toLowerCase().includes(t)));
-    return ordenarTabla(lista, col, asc, nombreDe);
-  }, [tareas, estado, q, col, asc, nombreDe, proyectoDe]);
+    return ordenarTabla(lista, col, asc, nombreDe, areas);
+  }, [tareas, estado, q, col, asc, nombreDe, proyectoDe, areas]);
   const total = Math.max(1, Math.ceil(filas.length / POR_PAGINA));
   const pag = Math.min(pagina, total - 1);
 
@@ -814,7 +817,7 @@ function TablaTareas({
                       </span>
                     </td>
                     <td className={cn("whitespace-nowrap px-3 py-2", vencida(t, hoy) ? "text-alerta" : "text-fog")}>{rangoTexto(t, hoy)}</td>
-                    <td className="px-3 py-2 pr-4 text-fog sm:pr-5">{AREAS[t.area as Area]}</td>
+                    <td className="px-3 py-2 pr-4 text-fog sm:pr-5">{nombreArea(t.area, areas)}</td>
                   </tr>
                 );
               })}

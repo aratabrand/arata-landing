@@ -8,7 +8,7 @@ import { contextoAgencia, type ContextoAgencia } from "@/lib/panel/finanzas/dato
 import { diferencias, registrar } from "@/lib/panel/historial";
 import { avisarA } from "@/lib/panel/push";
 import { hoyColombia } from "@/lib/panel/fecha";
-import { AREAS, ESTADOS_TAREA, FECHA, PRIORIDADES_TAREA, RECORDATORIOS, fechaCorta, moverRango, rangoTexto, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
+import { AREAS, ESTADOS_TAREA, claveArea, nombreArea, type AreaTarea, FECHA, PRIORIDADES_TAREA, RECORDATORIOS, fechaCorta, moverRango, rangoTexto, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
 import type { Resultado } from "../finanzas/acciones";
 
 // Tareas del equipo (D-181). Los tres (Sergio, Andrés y Santiago) crean, asignan y editan;
@@ -55,7 +55,7 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
         id: string;
         titulo: string;
         descripcion: string | null;
-        area: Area;
+        area: string;
         proyecto_id: string | null;
         fecha: string | null;
         fecha_fin: string | null;
@@ -91,6 +91,54 @@ async function guardarResponsables(tareaId: string, ids: string[]) {
     await db().query(`insert into tarea_responsables (tarea_id, persona_id) select $1, x from unnest($2::uuid[]) x on conflict do nothing`, [tareaId, ids]);
 }
 
+/** Áreas fijas + las agregadas por el equipo (D-188). */
+async function areasDe(ctx: ContextoAgencia): Promise<AreaTarea[]> {
+  const r = await db().query(`select clave, nombre from tarea_areas where negocio_id = $1`, [ctx.negocioId]);
+  return [...Object.entries(AREAS).map(([clave, nombre]) => ({ clave, nombre, agregada: false })), ...r.rows.map((x) => ({ clave: x.clave, nombre: x.nombre, agregada: true }))];
+}
+
+/** Agrega un área de trabajo (D-188). Los tres pueden. Devuelve la clave en `id`. */
+export async function agregarArea(nombre: string): Promise<Resultado> {
+  try {
+    const ctx = await contexto();
+    if (esFallo(ctx)) return ctx;
+    const n = limpio(nombre, 40)?.replace(/\s+/g, " ");
+    if (!n || n.length < 2) return NO("Escribe el nombre del área.");
+    const clave = claveArea(n);
+    if (clave.length < 2) return NO("Usa letras o números en el nombre.");
+    const areas = await areasDe(ctx);
+    const igual = areas.find((a) => a.clave === clave);
+    if (igual) return NO(`Ya existe el área «${igual.nombre}».`);
+    if (areas.filter((a) => a.agregada).length >= 30) return NO("Máximo 30 áreas agregadas.");
+    const bonito = n.charAt(0).toUpperCase() + n.slice(1);
+    await db().query(`insert into tarea_areas (negocio_id, clave, nombre, creado_por) values ($1, $2, $3, $4)`, [ctx.negocioId, clave, bonito, ctx.usuarioId]);
+    await registrar(ctx, { accion: "crear", entidad: "tarea", titulo: `Agregó el área «${bonito}» en Tareas` });
+    listo();
+    return { ok: true, id: clave };
+  } catch (err) {
+    return NO(err instanceof Error ? err.message : "No se pudo agregar el área.");
+  }
+}
+
+/** Quita un área agregada que ya no tiene tareas. Solo Sergio. Las fijas no se quitan. */
+export async function quitarArea(clave: string): Promise<Resultado> {
+  try {
+    const ctx = await contexto();
+    if (esFallo(ctx)) return ctx;
+    if (!ctx.esDueno) return NO("Solo Sergio puede quitar áreas.");
+    const a = (await db().query(`select clave, nombre from tarea_areas where negocio_id = $1 and clave = $2`, [ctx.negocioId, String(clave)])).rows[0];
+    if (!a) return NO("Esa área no se puede quitar.");
+    const n = Number((await db().query(`select count(*)::int n from agencia_tareas where negocio_id = $1 and area = $2`, [ctx.negocioId, a.clave])).rows[0].n);
+    if (n) return NO(`«${a.nombre}» tiene ${n === 1 ? "1 tarea" : `${n} tareas`}: pásalas a otra área antes de quitarla.`);
+    await db().query(`delete from tarea_areas where negocio_id = $1 and clave = $2`, [ctx.negocioId, a.clave]);
+    await registrar(ctx, { accion: "borrar", entidad: "tarea", titulo: `Quitó el área «${a.nombre}» de Tareas` });
+    listo();
+    return { ok: true };
+  } catch (err) {
+    return NO(err instanceof Error ? err.message : "No se pudo quitar el área.");
+  }
+}
+
 export type EntradaTarea = {
   id?: string;
   titulo: string;
@@ -116,7 +164,8 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
     const titulo = limpio(e.titulo, 160);
     if (!titulo || titulo.length < 2) return NO("Escribe qué hay que hacer.");
     const descripcion = limpio(e.descripcion, 4000);
-    if (!(e.area in AREAS)) return NO("Elige un área.");
+    const areas = await areasDe(ctx);
+    if (!areas.some((a) => a.clave === e.area)) return NO("Elige un área.");
     if (!(e.prioridad in PRIORIDADES_TAREA)) return NO("Elige la prioridad.");
     const estado = (e.estado ?? "por_hacer") as EstadoTarea;
     if (!(estado in ESTADOS_TAREA)) return NO("Elige el estado.");
@@ -193,7 +242,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         fecha: rangoTexto({ fecha: antes.fecha, fechaFin: antes.fecha_fin }, hoy),
         prioridad: PRIORIDADES_TAREA[antes.prioridad],
         estado: ESTADOS_TAREA[antes.estado],
-        area: AREAS[antes.area],
+        area: nombreArea(antes.area, areas),
         proyecto: antes.proyecto,
         descripcion: antes.descripcion,
         recordatorio: antes.recordatorio ? RECORDATORIOS[antes.recordatorio] : "Sin recordatorio",
@@ -204,7 +253,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         fecha: rangoTexto({ fecha, fechaFin }, hoy),
         prioridad: PRIORIDADES_TAREA[prioridad],
         estado: ESTADOS_TAREA[estado],
-        area: AREAS[area],
+        area: nombreArea(area, areas),
         proyecto,
         descripcion,
         recordatorio: recordatorio ? RECORDATORIOS[recordatorio as keyof typeof RECORDATORIOS] : "Sin recordatorio",
