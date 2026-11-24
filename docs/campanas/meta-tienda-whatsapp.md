@@ -2,7 +2,7 @@
 
 | Estado | Versión | Última actualización | Aprueba |
 |---|---|---|---|
-| Borrador | 0.3 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
+| Copy aprobado (D-193) | 0.4 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
 
 **Landing:** `aratasan.com/lp/catalogos` (D-189, D-190) · **Objetivo:** reuniones agendadas para *Tienda por WhatsApp en 5 Días* (desde 800 USD).
 **Regla:** primero se aprueba el copy (§5) y después se construye (§4). Ya construido (D-191): sin *Tu Negocio en Orden*, precio en pesos y las respuestas de productos y primer año. Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
@@ -187,7 +187,7 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 
 ---
 
-## 5. Copy: ¿resuelve los dolores? (revisión del 24 nov 2026)
+## 5. Copy: ¿resuelve los dolores? (revisión del 24 nov 2026) — ✅ aprobado y construido (D-193)
 
 ### 5.0 Lo que la landing dice hoy, dolor por dolor
 
