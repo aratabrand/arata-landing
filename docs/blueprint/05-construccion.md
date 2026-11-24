@@ -22,6 +22,7 @@ Cómo quedó construido el sitio de agencia v2: rutas, carpetas, contenido, fluj
 | `/privacidad` | `app/(v2)/(sitio)/privacidad/page.tsx` | ✅ (faltan RUT y dirección ◻) |
 | 404 | `app/not-found.tsx` | ✅ estilo v2, vale para todo el sitio |
 | `/sistema` (guía viva) | `app/(v2)/sistema/page.tsx` | ✅ interna, `noindex` |
+| `/lp/catalogos` (campaña de Meta, D-189) | `app/(v2)/(campana)/lp/catalogos/page.tsx` + layout `(campana)` | ✅ `noindex`, sin menú, textos en `content/campanas/catalogos.ts` |
 
 **Todas las páginas son estáticas (SSG):** el texto llega en el HTML para Google y la IA.
 

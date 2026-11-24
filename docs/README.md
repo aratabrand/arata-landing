@@ -20,6 +20,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/06-seo-geo-velocidad.md`](blueprint/06-seo-geo-velocidad.md) | SEO por página, datos estructurados, GEO (`llms.txt`), velocidad medida, legal y **lista de lanzamiento** | 5 |
 | [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
+| [`campanas/meta-tienda-whatsapp.md`](campanas/meta-tienda-whatsapp.md) | **Campaña de Meta** de Tienda por WhatsApp: pruebas de la landing `/lp/catalogos`, dolores del comerciante, ángulos de anuncio, mejoras por prioridad y copy para aprobar | Campañas |
 | [`decisiones.md`](decisiones.md) | Bitácora de cada decisión vigente: qué, cuándo, quién y por qué | Todas |
 | [`decisiones-archivo.md`](decisiones-archivo.md) | Decisiones reemplazadas del todo (historia, no se aplican) | — |
 | [`panel-cliente/`](panel-cliente/README.md) | **Blueprint del panel del cliente** (`/panel`): plan, módulos, modelo de datos, diseño y cómo montarlo para cada cliente | Aparte |
@@ -50,6 +51,6 @@ Ambas están ocultas a Google (`noindex`) y se revisan en el preview de Vercel d
 
 - **Encabezado de estado** en cada archivo: `Estado`, `Versión`, `Última actualización`, `Aprueba`.
 - **Estados posibles:** `Borrador` → `En revisión` → `Aprobado`. Solo lo `Aprobado` se construye.
-- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva; cuando ya no queda nada vigente de ella, se pasa a `decisiones-archivo.md`.
+- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…), único para todo el proyecto. El número se pide con `npx -y tsx scripts/prueba-decisiones.ts --siguiente` y la bitácora se revisa con la misma prueba sin `--siguiente` antes de unir a `main` (D-194). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva; cuando ya no queda nada vigente de ella, se pasa a `decisiones-archivo.md`.
 - **Copy:** español colombiano plano, según las reglas de `CLAUDE.md` §2. Esto aplica también a estos documentos cuando muestran texto que irá al sitio.
 - **Nada inventado:** métricas, testimonios y logos de clientes solo si son reales y verificables.

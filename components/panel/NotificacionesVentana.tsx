@@ -10,7 +10,7 @@ import type { TipoAlerta } from "@/lib/panel/alertas";
 import ListaNotificaciones from "./ListaNotificaciones";
 import { cn } from "@/lib/utils";
 
-// Campana del panel (D-120): abre una ventana con las alertas de entrega y los últimos
+// Campana del panel (nació en D-120, archivada; hoy en el marco de D-136): abre una ventana con las alertas de entrega y los últimos
 // cambios. En escritorio cae debajo de la campana; en celular es una ventana flotante
 // (no ocupa toda la pantalla). Lo completo (y activar avisos) está en /panel/notificaciones.
 

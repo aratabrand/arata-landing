@@ -19,14 +19,14 @@ export const metadata: Metadata = {
 };
 
 const colores = [
-  { token: "ink", hex: "#03010B", uso: "Único fondo de página", clase: "bg-noche border border-white/10" },
-  { token: "surface-1", hex: "#0B0B0D", uso: "Superficies sólidas (tarjetas: transparentes)", clase: "bg-surface-1 border border-white/10" },
+  { token: "noche", hex: "#020104", uso: "Único fondo de página (D-145)", clase: "bg-noche border border-white/10" },
+  { token: "surface-1", hex: "#0B0B0D", uso: "Superficies sólidas (las tarjetas son lisas, #0F0F12, D-164)", clase: "bg-surface-1 border border-white/10" },
   { token: "surface-2", hex: "#121215", uso: "Hover, botón secundario", clase: "bg-surface-2" },
   { token: "surface-3", hex: "#19191D", uso: "Menús y modales", clase: "bg-surface-3" },
-  { token: "lime", hex: "#B6FF00", uso: "Datos: cifras clave, anillos, pasos", clase: "bg-lime" },
-  { token: "brand", hex: "#7D53FF", uso: "Solo botones (D-146)", clase: "bg-brand" },
-  { token: "brand-soft", hex: "#B9A4FF", uso: "Sin uso en el sitio (D-146)", clase: "bg-brand-soft" },
-  { token: "brand-ink", hex: "#3B1D99", uso: "Sin uso en el sitio (D-146)", clase: "bg-brand-ink" },
+  { token: "lime", hex: "#B6FF00", uso: "Actuar, elegir y destacar: botón principal, opción elegida, precios (D-164)", clase: "bg-lime" },
+  { token: "brand", hex: "#7D53FF", uso: "Datos y gráficas (D-164)", clase: "bg-brand" },
+  { token: "brand-soft", hex: "#B9A4FF", uso: "Sin uso en el sitio", clase: "bg-brand-soft" },
+  { token: "brand-ink", hex: "#3B1D99", uso: "Sin uso en el sitio", clase: "bg-brand-ink" },
 ];
 
 const textos = [
@@ -127,7 +127,7 @@ export default function SistemaV2() {
           <Bloque id="b-botones" titulo="Botones · píldora · alto mín. 44 px">
             <div className="flex flex-wrap items-center gap-3">
               <Button href="#" size="lg" arrow>
-                Primario (morado)
+                Primario (lima)
               </Button>
               <Button href="#">Primario md</Button>
               <Button href="#" variant="secondary" size="lg" arrow>
@@ -137,10 +137,10 @@ export default function SistemaV2() {
                 Terciario
               </Button>
             </div>
-            <p className="mt-4 text-sm text-fog">Regla: un solo botón morado por vista (el CTA principal). El lima queda para los datos.</p>
+            <p className="mt-4 text-sm text-fog">Regla: un solo botón principal por vista, lima con texto tinta (D-164). El morado queda para datos y gráficas.</p>
           </Bloque>
 
-          <Bloque id="b-panel" titulo="Tarjetas transparentes · morado solo en botones (D-146)">
+          <Bloque id="b-panel" titulo="Tarjetas lisas · un solo estilo (D-164)">
             <div className="grid gap-4 md:grid-cols-3">
               <div className="v2-card p-6">
                 <p className="font-display text-2xl font-bold text-white">5 días</p>

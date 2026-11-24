@@ -35,6 +35,7 @@ export type TextosReel = {
   reproducir: string;
   anterior: string;
   siguiente: string;
+  /** Vacío = sin enlace al caso (landings de campaña, D-190). */
   verCaso: string;
 };
 
@@ -311,7 +312,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
               </figure>
             )}
 
-            <Link
+            {textos.verCaso && <Link
               href={`/portafolio/${c.slug}`}
               className="cx-i group mt-7 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-lime"
               style={{ "--d": 4 } as CSSProperties}
@@ -319,7 +320,7 @@ export default function CasosReel({ items, textos }: { items: CasoReel[]; textos
             >
               {textos.verCaso}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
-            </Link>
+            </Link>}
           </article>
         ))}
       </div>

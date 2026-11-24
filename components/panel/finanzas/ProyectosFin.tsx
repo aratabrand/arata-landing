@@ -146,7 +146,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
   const [estado, setEstado] = useState<EstadoProyecto>(p?.estado ?? "en-curso");
   const [clienteId, setClienteId] = useState(p?.clienteId ?? "");
   const [servicioId, setServicioId] = useState(p?.servicioId ?? "");
-  // "¿Quién trabajó?" (D-124): filas nuevas y registros que se quitan; se guardan junto con el proyecto
+  // "¿Quién trabajó?" (D-125): filas nuevas y registros que se quitan; se guardan junto con el proyecto
   const [valor, setValor] = useState(p?.valor ?? 0);
   const [nuevas, setNuevas] = useState<{ clave: number; personaId: string; actividad: string; dias: string }[]>([]);
   const [quitar, setQuitar] = useState<string[]>([]);
@@ -235,7 +235,7 @@ export function FormProyecto({ p, datos, hoy, onListo }: { p?: FinProyecto; dato
   );
 }
 
-// ── "¿Quién trabajó?" al cerrar (D-124) ─────────────────────────────
+// ── "¿Quién trabajó?" al cerrar (D-125) ─────────────────────────────
 // Persona + área + días (1 día = 8 h). Se guardan junto con el proyecto y el reparto se ve en vivo.
 type FilaNueva = { clave: number; personaId: string; actividad: string; dias: string };
 

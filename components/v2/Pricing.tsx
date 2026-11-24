@@ -9,8 +9,8 @@ import { AGENDAR, precios, type Paquete } from "@/content/inicio";
 import { cn } from "@/lib/utils";
 
 // Precios (ref. 21st.dev captura 03, D-044):
-// la tarjeta recomendada lleva el filo morado (.v2-destacada, D-141), badge y el único botón principal (morado, D-142).
-// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas con filo morado (D-068, D-141).
+// la tarjeta recomendada va en degradado lima (.v2-destacada), con badge y el único botón principal (lima, D-164).
+// La garantía va junto al precio (Hormozi: donde aparece la duda), en tarjetas .v2-glass (D-068; estilo actual D-164).
 
 export function PricingCard({ paquete }: { paquete: Paquete }) {
   const rec = paquete.recomendado;
@@ -206,11 +206,18 @@ const ICONOS_GLASS = {
   mantenimiento: { Icon: MaintenanceIcon, glow: "rgba(255,255,255,0.135)" },
 } as const;
 
-/** Tarjetas de garantía, pago y mantenimiento (D-068; estilo del panel desde D-141). */
-export function Assurances({ className }: { className?: string }) {
+/** Tarjetas de garantía, pago y mantenimiento (D-068; estilo actual D-164). */
+export function Assurances({
+  className,
+  items = precios.aseguramientos,
+}: {
+  className?: string;
+  /** Textos propios de las tarjetas (landing de campaña, D-192); si no, los del sitio. */
+  items?: typeof precios.aseguramientos;
+}) {
   return (
     <div className={cn("grid gap-4 md:grid-cols-3", className)}>
-      {precios.aseguramientos.map((a, i) => {
+      {items.map((a, i) => {
         const { Icon, glow } = ICONOS_GLASS[a.tipo as keyof typeof ICONOS_GLASS];
         return (
           <Reveal key={a.tipo} delay={i * 90} className="h-full">

@@ -12,8 +12,14 @@ export default function CasosExito({
   id = "casos",
   servicio,
   pie,
+  sinEnlaces = false,
+  textos,
 }: {
+  /** Etiqueta, título y texto propios (landing de campaña, D-192); si no, los de casosExito. */
+  textos?: { eyebrow?: string; titulo?: string; texto?: string };
   id?: string;
+  /** Landings de campaña (D-190): sin enlace a la ficha del caso, nadie sale de la página. */
+  sinEnlaces?: boolean;
   servicio?: "pagina" | "catalogo";
   pie?: ReactNode;
 } = {}) {
@@ -44,11 +50,11 @@ export default function CasosExito({
       <Glow className="left-[-10%] top-[30%] h-[520px] w-[520px] opacity-60" />
       <Container className="relative">
         <Reveal className="max-w-2xl">
-          <Eyebrow>{casosExito.eyebrow}</Eyebrow>
+          <Eyebrow>{textos?.eyebrow ?? casosExito.eyebrow}</Eyebrow>
           <h2 id={`${id}-titulo`} className="mt-3 font-display text-v2-h2 font-bold tracking-heading text-white">
-            <Acento texto={casosExito.titulo} />
+            <Acento texto={textos?.titulo ?? casosExito.titulo} />
           </h2>
-          <p className="mt-3 max-w-xl text-v2-lead text-fog">{casosExito.texto}</p>
+          <p className="mt-3 max-w-xl text-v2-lead text-fog">{textos?.texto ?? casosExito.texto}</p>
         </Reveal>
 
         <Reveal className="mt-14 sm:mt-16" variant="scale">
@@ -61,7 +67,7 @@ export default function CasosExito({
               reproducir: casosExito.reproducir,
               anterior: casosExito.anterior,
               siguiente: casosExito.siguiente,
-              verCaso: casosExito.verCaso,
+              verCaso: sinEnlaces ? "" : casosExito.verCaso,
             }}
           />
         </Reveal>

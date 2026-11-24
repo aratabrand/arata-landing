@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-// Íconos de marca en SVG propio (D-150): volumen en grises metálicos, sin color, para dar
+// Íconos de marca en SVG propio (nacieron en D-150, archivada): volumen en grises metálicos, sin color, para dar
 // personalidad a ALGUNAS tarjetas (paquetes de precio). No reemplazan a los íconos de función
 // (Phosphor, components/v2/iconos.tsx) y no se ponen en todas las tarjetas: solo donde ayudan a
 // distinguir una opción de otra. 0 KB de imagen y sin JavaScript.

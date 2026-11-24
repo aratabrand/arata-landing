@@ -173,7 +173,7 @@ export default function DetalleProyectoAgencia({
             {p.notas && <p className="mt-4 whitespace-pre-line border-t border-white/8 pt-3 text-sm text-fog">{p.notas}</p>}
           </Tarjeta>
 
-          {/* Quién trabajó (D-124): por persona y área, no por paso. Al cerrar se completa en el formulario. */}
+          {/* Quién trabajó (D-125): por persona y área, no por paso. Al cerrar se completa en el formulario. */}
           <Tarjeta titulo="Quién trabajó" bajada="Días por persona y área (1 día = 8 h)">
             {horasPor.size > 0 && (
               <ul className="mb-3 space-y-2 text-sm">

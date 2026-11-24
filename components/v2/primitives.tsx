@@ -21,7 +21,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "v2-pildora px-3 py-1.5 text-xs font-medium", // D-150: píldora negra con borde gris claro
+        "v2-pildora px-3 py-1.5 text-xs font-medium", // píldora negra con borde gris claro (nació en D-150, archivada)
         className
       )}
     >
@@ -36,7 +36,7 @@ export function Badge({
   );
 }
 
-/** Etiqueta de sección (eyebrow). D-150: píldora negra con borde, como en la referencia ("Pricing"). */
+/** Etiqueta de sección (eyebrow). Píldora negra con borde, como en la referencia ("Pricing"); nació en D-150, archivada. */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <p className={cn("w-fit", className)}>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, BellRing, Globe, UsersRound } from "./iconos";
 import { PanelHeader, PanelPage } from "./ui";
 
-// Configuración (D-120): reúne en tarjetas lo que antes eran opciones sueltas del menú.
+// Configuración (nació en D-120, archivada; marco actual D-136): reúne en tarjetas lo que antes eran opciones sueltas del menú.
 // Equipo y Notificaciones existen solo para la agencia (D-109, D-119).
 
 export default function Configuracion({ agencia }: { agencia: boolean }) {
