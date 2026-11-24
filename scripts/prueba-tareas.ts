@@ -1,5 +1,5 @@
 // Prueba de Tareas (D-181), sin base de datos. Correr:  npx -y tsx scripts/prueba-tareas.ts
-import { diasDeSemana, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
+import { diasDeSemana, diasLaborales, esFinDeSemana, semanaDeTrabajo, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 
 // Semanas de lunes a domingo
@@ -8,7 +8,10 @@ ok(lunesDe("2027-01-01") === "2026-12-28", "la semana cruza de año");
 ok(JSON.stringify(diasDeSemana("2026-11-23")) === JSON.stringify(["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27", "2026-11-28", "2026-11-29"]), "7 días de lunes a domingo");
 ok(sumarDias("2026-02-28", 1) === "2026-03-01" && sumarDias("2026-03-01", -1) === "2026-02-28", "sumar y restar días");
 ok(partesDia("2026-11-24").dia === "Martes" && partesDia("2026-11-24").corto === "24 nov", "nombre del día y fecha corta");
-ok(rangoSemana("2026-11-23") === "23 – 29 nov" && rangoSemana("2026-11-30") === "30 nov – 6 dic", "rango de la semana");
+ok(rangoSemana("2026-11-23") === "23 – 27 nov" && rangoSemana("2026-12-28") === "28 dic – 1 ene" && rangoSemana("2026-11-23", 6) === "23 – 29 nov", "rango de lunes a viernes (y hasta el domingo si se pide)");
+ok(diasLaborales("2026-11-23").length === 5 && diasLaborales("2026-11-23")[4] === "2026-11-27", "tablero de lunes a viernes");
+ok(esFinDeSemana("2026-11-28") && esFinDeSemana("2026-11-29") && !esFinDeSemana("2026-11-27"), "sábado y domingo son fin de semana");
+ok(semanaDeTrabajo("2026-11-25") === "2026-11-23" && semanaDeTrabajo("2026-11-28") === "2026-11-30" && semanaDeTrabajo("2026-11-29") === "2026-11-30", "el fin de semana el tablero abre la semana siguiente");
 ok(fechaCorta("2026-11-24", "2026-11-24") === "Hoy" && fechaCorta("2026-11-25", "2026-11-24") === "Mañana" && fechaCorta("2026-11-23", "2026-11-24") === "Ayer", "hoy, mañana y ayer");
 ok(fechaCorta("2026-11-27", "2026-11-24") === "Vie 27 nov" && fechaCorta(null, "2026-11-24") === "Sin fecha", "otro día y sin fecha");
 

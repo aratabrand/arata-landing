@@ -64,6 +64,13 @@ export function lunesDe(fecha: string) {
 /** Los 7 días de la semana que empieza ese lunes. */
 export const diasDeSemana = (lunes: string) => Array.from({ length: 7 }, (_, i) => sumarDias(lunes, i));
 
+/** El tablero muestra solo los días de trabajo: lunes a viernes (D-182). */
+export const diasLaborales = (lunes: string) => diasDeSemana(lunes).slice(0, 5);
+export const esFinDeSemana = (fecha: string) => [0, 6].includes(aUTC(fecha).getUTCDay());
+
+/** Semana que se trabaja: la de hoy, o la siguiente si hoy es sábado o domingo. */
+export const semanaDeTrabajo = (hoy: string) => (esFinDeSemana(hoy) ? sumarDias(lunesDe(hoy), 7) : lunesDe(hoy));
+
 const DIAS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 
@@ -83,9 +90,9 @@ export function fechaCorta(fecha: string | null, hoy: string) {
   return `${dia.slice(0, 3)} ${corto}`;
 }
 
-/** "24 – 30 nov" o "29 dic – 4 ene". */
-export function rangoSemana(lunes: string) {
-  const fin = sumarDias(lunes, 6);
+/** "23 – 27 nov" (lunes a viernes) o "29 dic – 2 ene". Con `dias = 6`, hasta el domingo. */
+export function rangoSemana(lunes: string, dias = 4) {
+  const fin = sumarDias(lunes, dias);
   const a = aUTC(lunes);
   const b = aUTC(fin);
   return a.getUTCMonth() === b.getUTCMonth() ? `${a.getUTCDate()} – ${partesDia(fin).corto}` : `${partesDia(lunes).corto} – ${partesDia(fin).corto}`;

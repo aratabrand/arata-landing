@@ -9,12 +9,15 @@ import {
   PRIORIDADES_TAREA,
   avanceItems,
   diasDeSemana,
+  diasLaborales,
+  esFinDeSemana,
   fechaCorta,
   lunesDe,
   ordenarDia,
   ordenarTabla,
   partesDia,
   rangoSemana,
+  semanaDeTrabajo,
   sumarDias,
   vencida,
   type Area,
@@ -50,7 +53,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
   const [tareas, setTareas] = useState(datos.tareas);
   useEffect(() => setTareas(datos.tareas), [datos.tareas]);
   const [vista, setVista] = useState<Vista>("semana");
-  const [lunes, setLunes] = useState(lunesDe(hoy));
+  const [lunes, setLunes] = useState(semanaDeTrabajo(hoy));
   const [quien, setQuien] = useState<string>(""); // "" todas · "yo" · id de persona · "nadie"
   const [area, setArea] = useState("");
   const [prioridad, setPrioridad] = useState("");
@@ -117,7 +120,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
     <PanelPage>
       <PanelHeader
         titulo="Tareas"
-        bajada="Lo que hay que hacer esta semana, quién lo hace y para cuándo. Arrastra una tarea para cambiarla de día."
+        bajada="Lo que hay que hacer de lunes a viernes, quién lo hace y para cuándo. Arrastra una tarea para cambiarla de día."
         accion={
           <BotonPrincipal type="button" onClick={() => setAbierta({ tipo: "nueva", datos: { fecha: hoy, responsableId: quien === "yo" ? datos.yo : null } })} className="inline-flex items-center gap-2">
             <Plus aria-hidden className="h-4 w-4" /> Nueva tarea
@@ -299,9 +302,11 @@ function Semana({
   onMover: (id: string, fecha: string | null, antesDe: string | null) => void;
   onNueva: (fecha: string | null) => void;
 }) {
-  const dias = diasDeSemana(lunes);
+  const dias = diasLaborales(lunes);
+  // Lo que quedó para sábado o domingo de esta semana (no hay columna: se muestra aparte)
+  const finDeSemana = ordenarDia(tareas.filter((t) => t.fecha !== null && t.fecha > sumarDias(lunes, 4) && t.fecha <= sumarDias(lunes, 6) && esFinDeSemana(t.fecha)));
   const [sobre, setSobre] = useState<{ fecha: string | null; antesDe: string | null } | null>(null);
-  const esEstaSemana = lunes === lunesDe(hoy);
+  const esEstaSemana = lunes === semanaDeTrabajo(hoy);
   // Las vencidas de semanas pasadas se ven en «Atrasadas» para no perderlas
   const atrasadas = ordenarDia(tareas.filter((t) => vencida(t, hoy) && t.fecha! < lunes));
   const sinFecha = ordenarDia(tareas.filter((t) => t.fecha === null && t.estado !== "hecha"));
@@ -361,7 +366,7 @@ function Semana({
           </BotonSecundario>
         </div>
         {!esEstaSemana && (
-          <BotonSecundario type="button" onClick={() => onSemana(lunesDe(hoy))}>
+          <BotonSecundario type="button" onClick={() => onSemana(semanaDeTrabajo(hoy))}>
             Volver a esta semana
           </BotonSecundario>
         )}
@@ -379,7 +384,7 @@ function Semana({
         </section>
       )}
 
-      <div className="grid gap-3 lg:grid-cols-7 lg:gap-2">
+      <div className="grid gap-3 lg:grid-cols-5">
         {dias.map((d) => {
           const items = ordenarDia(tareas.filter((t) => t.fecha === d));
           const { dia, corto } = partesDia(d);
@@ -406,6 +411,20 @@ function Semana({
           );
         })}
       </div>
+
+      {finDeSemana.length > 0 && (
+        <section className="rounded-card border border-white/8 p-3" aria-label="Fin de semana">
+          <h3 className="mb-2 text-sm font-semibold text-fog">
+            Fin de semana <span className="ml-1 text-xs font-normal text-fog-dim">{finDeSemana.length}</span>
+          </h3>
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {finDeSemana.map((t) => (
+              <TarjetaTarea key={t.id} {...tarjeta(t)} arrastrable />
+            ))}
+          </ul>
+          <p className="mt-2 text-[0.7rem] text-fog-dim">Quedaron para sábado o domingo. Arrástralas a un día de la semana si se hacen entre semana.</p>
+        </section>
+      )}
 
       <section {...zona(null)} className={cn("rounded-card border border-white/8 p-3 transition-colors", sobre?.fecha === null && "bg-white/[0.03]")} aria-label="Sin fecha">
         <header className="mb-2 flex items-center justify-between">

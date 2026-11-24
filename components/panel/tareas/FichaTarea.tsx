@@ -7,9 +7,10 @@ import {
   ESTADOS_TAREA,
   PRIORIDADES_TAREA,
   avanceItems,
-  diasDeSemana,
+  diasLaborales,
   fechaCorta,
   lunesDe,
+  semanaDeTrabajo,
   partesDia,
   sumarDias,
   type Area,
@@ -62,7 +63,9 @@ export default function FichaTarea({
   const [fecha, setFecha] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
   const [proyectoId, setProyectoId] = useState(tarea?.proyectoId ?? nueva?.proyectoId ?? "");
   const [area, setArea] = useState<Area>(tarea?.area ?? nueva?.area ?? (nueva?.proyectoId ? "proyectos" : "proyectos"));
-  const semana = diasDeSemana(lunesDe(hoy));
+  // Días rápidos: lunes a viernes de la semana que se trabaja; «Próx. lunes» si no está ya en la lista
+  const semana = diasLaborales(semanaDeTrabajo(hoy));
+  const proximoLunes = sumarDias(lunesDe(hoy), 7);
 
   const enviar = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -151,9 +154,11 @@ export default function FichaTarea({
                 {d === hoy ? "Hoy" : partesDia(d).dia.slice(0, 3)}
               </button>
             ))}
-            <button type="button" aria-pressed={fecha === sumarDias(lunesDe(hoy), 7)} onClick={() => setFecha(sumarDias(lunesDe(hoy), 7))} className={cn("h-9 rounded-full border px-2.5 text-xs font-semibold", fecha === sumarDias(lunesDe(hoy), 7) ? "pn-pildora-activa" : "pn-pildora hover:text-white")}>
-              Próx. lunes
-            </button>
+            {!semana.includes(proximoLunes) && (
+              <button type="button" aria-pressed={fecha === proximoLunes} onClick={() => setFecha(proximoLunes)} className={cn("h-9 rounded-full border px-2.5 text-xs font-semibold", fecha === proximoLunes ? "pn-pildora-activa" : "pn-pildora hover:text-white")}>
+                Próx. lunes
+              </button>
+            )}
             <button type="button" aria-pressed={!fecha} onClick={() => setFecha("")} className={cn("h-9 rounded-full border px-2.5 text-xs font-semibold", !fecha ? "pn-pildora-activa" : "pn-pildora hover:text-white")}>
               Sin fecha
             </button>
