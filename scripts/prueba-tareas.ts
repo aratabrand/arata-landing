@@ -1,5 +1,5 @@
 // Prueba de Tareas (D-181), sin base de datos. Correr:  npx -y tsx scripts/prueba-tareas.ts
-import { activaEn, duracion, moverRango, rangoTexto, vence, cuandoLlega, textoRecordatorio, tocaRecordar, diasDeSemana, diasLaborales, esFinDeSemana, semanaDeTrabajo, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
+import { AREAS, AREAS_FIJAS, claveArea, nombreArea, activaEn, duracion, moverRango, rangoTexto, vence, cuandoLlega, textoRecordatorio, tocaRecordar, diasDeSemana, diasLaborales, esFinDeSemana, semanaDeTrabajo, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 
 // Semanas de lunes a domingo
@@ -16,7 +16,7 @@ ok(fechaCorta("2026-11-24", "2026-11-24") === "Hoy" && fechaCorta("2026-11-25", 
 ok(fechaCorta("2026-11-27", "2026-11-24") === "Vie 27 nov" && fechaCorta(null, "2026-11-24") === "Sin fecha", "otro día y sin fecha");
 
 // Vencidas y orden
-const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: "marketing", proyectoId: null, responsables: x.responsables ?? [], fecha: x.fecha ?? null, fechaFin: x.fechaFin ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, recordatorio: x.recordatorio ?? null, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
+const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: x.area ?? "marketing", proyectoId: null, responsables: x.responsables ?? [], fecha: x.fecha ?? null, fechaFin: x.fechaFin ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, recordatorio: x.recordatorio ?? null, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
 ok(vencida(t({ fecha: "2026-11-23" }), "2026-11-24") && !vencida(t({ fecha: "2026-11-23", estado: "hecha" }), "2026-11-24") && !vencida(t({ fecha: null }), "2026-11-24"), "vencida: pendiente con fecha pasada");
 const dia = ordenarDia([t({ id: "hecha", estado: "hecha", orden: 1 }), t({ id: "b", orden: 2 }), t({ id: "a", orden: 1 })]);
 ok(dia.map((x) => x.id).join() === "a,b,hecha", "en el día: pendientes por orden y las hechas al final");
@@ -57,3 +57,11 @@ ok(JSON.stringify(moverRango(r3, null, "2026-11-25")) === JSON.stringify({ fecha
 ok(tocaRecordar({ recordatorio: "1_dia", fecha: "2026-11-23", fechaFin: "2026-11-27", estado: "por_hacer" }, "2026-11-26") && !tocaRecordar({ recordatorio: "1_dia", fecha: "2026-11-23", fechaFin: "2026-11-27", estado: "por_hacer" }, "2026-11-22"), "recordatorio cuenta desde el final del rango");
 const rr = resumenDiario("Sergio", [{ titulo: "Rango en curso", fecha: "2026-11-20", fechaFin: "2026-11-26", estado: "por_hacer", prioridad: "media" }], "2026-11-24")!;
 ok(rr.titulo === "✅ Sergio, tienes 1 para hoy", "un rango en curso cuenta «para hoy», no vencida");
+
+// Áreas (D-188): fijas + agregadas
+ok(Object.keys(AREAS).join() === "proyectos,marketing,desarrollo,finanzas,diseno", "áreas fijas: proyectos, marketing, desarrollo, finanzas y diseño");
+ok(claveArea("Ventas y Alianzas") === "ventas-y-alianzas" && claveArea("  Administración ") === "administracion" && claveArea("¡¡!!") === "", "clave del área nueva sin tildes ni signos");
+const conVentas = [...AREAS_FIJAS, { clave: "ventas", nombre: "Ventas", agregada: true }];
+ok(nombreArea("ventas", conVentas) === "Ventas" && nombreArea("diseno", conVentas) === "Diseño" && nombreArea("otra-cosa", conVentas) === "Otra cosa", "nombre del área (y si ya no existe)");
+const porArea = ordenarTabla([t({ id: "v", area: "ventas" }), t({ id: "d", area: "diseno" }), t({ id: "m", area: "marketing" })], "area", true, () => "", conVentas);
+ok(porArea.map((x) => x.id).join() === "d,m,v", "la tabla ordena por el nombre del área");

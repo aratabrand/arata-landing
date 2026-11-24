@@ -2,7 +2,7 @@ import { db } from "../db";
 import { panelActivo } from "../config";
 import { fechaBogota, hoyColombia } from "../fecha";
 import { contextoAgencia } from "../finanzas/datos";
-import type { PersonaTarea, ProyectoTarea, Tarea } from "./tareas";
+import { AREAS_FIJAS, type AreaTarea, type PersonaTarea, type ProyectoTarea, type Tarea } from "./tareas";
 
 // Lectura de Tareas (D-181, solo servidor). Solo la agencia; todos los miembros ven todo.
 // Se traen las pendientes y las hechas de los últimos 60 días (las viejas ya no sirven en el tablero).
@@ -11,6 +11,8 @@ export type DatosTareas = {
   tareas: Tarea[];
   personas: PersonaTarea[];
   proyectos: ProyectoTarea[];
+  /** Áreas fijas y las que agregó el equipo (D-188). */
+  areas: AreaTarea[];
   /** Persona del equipo de quien está en sesión (para «Mis tareas»). */
   yo: string | null;
   puedeBorrar: boolean;
@@ -21,7 +23,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
   if (!panelActivo) return null;
   const ctx = await contextoAgencia();
   if (!ctx) return null;
-  const [ta, it, co, pe, pr] = await Promise.all([
+  const [ta, it, co, pe, pr, ar] = await Promise.all([
     db().query(
       `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.fecha, t.fecha_fin, t.prioridad, t.estado, t.orden, t.recordatorio, t.creado_por, t.creado,
               (select coalesce(array_agg(r.persona_id::text order by p.orden, p.creado), '{}') from tarea_responsables r
@@ -49,6 +51,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
         order by (estado = 'cerrado'), lower(nombre)`,
       [ctx.negocioId]
     ),
+    db().query(`select clave, nombre from tarea_areas where negocio_id = $1 order by lower(nombre)`, [ctx.negocioId]),
   ]);
   const items = new Map<string, Tarea["items"]>();
   it.rows.forEach((r) => items.set(r.tarea_id, [...(items.get(r.tarea_id) ?? []), { id: r.id, texto: r.texto, hecho: r.hecho, orden: Number(r.orden) }]));
@@ -78,6 +81,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
     ),
     personas,
     proyectos: pr.rows.map((r): ProyectoTarea => ({ id: r.id, nombre: r.nombre })),
+    areas: [...AREAS_FIJAS, ...ar.rows.map((r): AreaTarea => ({ clave: r.clave, nombre: r.nombre, agregada: true }))],
     yo: personas.find((p) => p.usuarioId === ctx.usuarioId)?.id ?? null,
     puedeBorrar: ctx.esDueno,
     hoy: hoyColombia(),

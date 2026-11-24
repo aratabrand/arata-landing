@@ -1,15 +1,36 @@
 // Tareas del equipo de Arata San (D-181). Tipos y funciones puras: las usan la pantalla,
 // las acciones del servidor y el aviso diario. Sin base de datos: este archivo viaja al navegador.
 
+/** Áreas fijas (D-188). «Proyectos» = tareas ligadas a un proyecto. El equipo agrega más (tabla tarea_areas). */
 export const AREAS = {
   proyectos: "Proyectos",
   marketing: "Marketing",
-  ventas: "Ventas",
+  desarrollo: "Desarrollo",
   finanzas: "Finanzas",
   diseno: "Diseño",
-  administracion: "Administración",
 } as const;
-export type Area = keyof typeof AREAS;
+/** Clave de AREAS o de un área agregada. */
+export type Area = string;
+export type AreaTarea = { clave: string; nombre: string; agregada: boolean };
+
+export const AREAS_FIJAS: AreaTarea[] = Object.entries(AREAS).map(([clave, nombre]) => ({ clave, nombre, agregada: false }));
+
+/** Clave de un área nueva a partir de su nombre: «Ventas y alianzas» → «ventas-y-alianzas». */
+export function claveArea(nombre: string) {
+  return nombre
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40)
+    .replace(/-+$/, "");
+}
+
+/** Nombre para mostrar (si el área ya no existe, la clave con mayúscula). */
+export function nombreArea(clave: string, areas: AreaTarea[]) {
+  return areas.find((a) => a.clave === clave)?.nombre ?? clave.charAt(0).toUpperCase() + clave.slice(1).replace(/-/g, " ");
+}
 
 export const PRIORIDADES_TAREA = { urgente: "Urgente", alta: "Alta", media: "Media", baja: "Baja" } as const;
 export type PrioridadTarea = keyof typeof PRIORIDADES_TAREA;
@@ -162,7 +183,7 @@ export function ordenarDia<T extends Pick<Tarea, "estado" | "orden" | "prioridad
 export type Columna = "titulo" | "estado" | "prioridad" | "responsable" | "fecha" | "area";
 
 /** Orden de la tabla por columna (las fechas vacías y los sin asignar van al final). */
-export function ordenarTabla(lista: Tarea[], col: Columna, asc: boolean, nombreDe: (id: string | null) => string) {
+export function ordenarTabla(lista: Tarea[], col: Columna, asc: boolean, nombreDe: (id: string | null) => string, areas: AreaTarea[] = AREAS_FIJAS) {
   const ORDEN_ESTADO: Record<EstadoTarea, number> = { por_hacer: 0, en_curso: 1, hecha: 2 };
   const valor = (t: Tarea): string | number => {
     switch (col) {
@@ -177,7 +198,7 @@ export function ordenarTabla(lista: Tarea[], col: Columna, asc: boolean, nombreD
       case "fecha":
         return t.fecha ?? "9999-99-99";
       case "area":
-        return AREAS[t.area];
+        return nombreArea(t.area, areas).toLowerCase();
     }
   };
   return [...lista].sort((a, b) => {
