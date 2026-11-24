@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState, type DragEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, CalendarioSemana, ChatBubble, ChevronLeft, ChevronRight, Circle, CircleCheck, CircleMedio, ListChecks, Plus, Search, Tabla } from "../iconos";
+import { Bell, CalendarioSemana, ChatBubble, Check, SquareKanban as Kanban, ChevronLeft, ChevronRight, Circle, CircleCheck, CircleMedio, ListChecks, Plus, Search, Tabla } from "../iconos";
 import {
   AREAS,
   ESTADOS_TAREA,
@@ -42,7 +42,8 @@ const TONO_ESTADO: Record<EstadoTarea, TonoPill> = { por_hacer: "alerta", en_cur
 const SIGUIENTE: Record<EstadoTarea, EstadoTarea> = { por_hacer: "en_curso", en_curso: "hecha", hecha: "por_hacer" };
 const opciones = <T extends string>(o: Record<T, string>) => Object.entries(o) as [T, string][];
 
-type Vista = "semana" | "tabla";
+// D-184: la vista general es el tablero por estado (como Notion); la semana y la tabla son otras opciones
+type Vista = "estados" | "semana" | "tabla";
 type Abierta = { tipo: "tarea"; id: string } | { tipo: "nueva"; datos: NuevaTarea } | null;
 
 export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; abrir?: string; nueva?: NuevaTarea }) {
@@ -52,7 +53,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
   // Copia local para mover al instante al arrastrar (el servidor confirma después)
   const [tareas, setTareas] = useState(datos.tareas);
   useEffect(() => setTareas(datos.tareas), [datos.tareas]);
-  const [vista, setVista] = useState<Vista>("semana");
+  const [vista, setVista] = useState<Vista>("estados");
   const [lunes, setLunes] = useState(semanaDeTrabajo(hoy));
   const [quien, setQuien] = useState<string>(""); // "" todas · "yo" · id de persona · "nadie"
   const [area, setArea] = useState("");
@@ -89,8 +90,9 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
     if (abrir || nueva) router.replace(path, { scroll: false });
   };
 
-  async function cambiarEstado(t: Tarea) {
-    const nuevo = SIGUIENTE[t.estado];
+  async function cambiarEstado(t: Tarea, a?: EstadoTarea) {
+    const nuevo = a ?? SIGUIENTE[t.estado];
+    if (nuevo === t.estado) return;
     setTareas((l) => l.map((x) => (x.id === t.id ? { ...x, estado: nuevo } : x)));
     const r = await cambiarEstadoTarea(t.id, nuevo).catch(() => ({ ok: false as const, error: "Sin conexión." }));
     if (!r.ok) setError(r.error);
@@ -120,7 +122,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
     <PanelPage>
       <PanelHeader
         titulo="Tareas"
-        bajada="Lo que hay que hacer de lunes a viernes, quién lo hace y para cuándo. Arrastra una tarea para cambiarla de día."
+        bajada="Lo que hay que hacer, quién lo hace y para cuándo. Arrastra una tarea para cambiarla de estado o de día."
         accion={
           <BotonPrincipal type="button" onClick={() => setAbierta({ tipo: "nueva", datos: { fecha: hoy, responsableId: quien === "yo" ? datos.yo : null } })} className="inline-flex items-center gap-2">
             <Plus aria-hidden className="h-4 w-4" /> Nueva tarea
@@ -146,6 +148,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
         <div className="flex flex-wrap gap-2">
           <div className="flex gap-1 rounded-full border border-white/8 p-1" role="group" aria-label="Vista">
             {[
+              { v: "estados" as const, l: "Por estado", I: Kanban },
               { v: "semana" as const, l: "Semana", I: CalendarioSemana },
               { v: "tabla" as const, l: "Tabla", I: Tabla },
             ].map(({ v, l, I }) => (
@@ -191,7 +194,17 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
       </div>
       <MensajeError error={error} />
 
-      {vista === "semana" ? (
+      {vista === "estados" ? (
+        <Estados
+          tareas={filtradas}
+          hoy={hoy}
+          nombreDe={nombreDe}
+          proyectoDe={proyectoDe}
+          onAbrir={(id) => setAbierta({ tipo: "tarea", id })}
+          onEstado={cambiarEstado}
+          onNueva={(estado) => setAbierta({ tipo: "nueva", datos: { fecha: hoy, estado, responsableId: quien === "yo" ? datos.yo : quien && quien !== "nadie" ? quien : null } })}
+        />
+      ) : vista === "semana" ? (
         <Semana
           tareas={filtradas}
           lunes={lunes}
@@ -202,7 +215,7 @@ export default function Tareas({ datos, abrir, nueva }: { datos: DatosTareas; ab
           onNueva={(fecha) => setAbierta({ tipo: "nueva", datos: { fecha, responsableId: quien === "yo" ? datos.yo : quien && quien !== "nadie" ? quien : null } })}
         />
       ) : (
-        <TablaTareas tareas={filtradas} hoy={hoy} nombreDe={nombreDe} proyectoDe={proyectoDe} onAbrir={(id) => setAbierta({ tipo: "tarea", id })} onEstado={cambiarEstado} />
+        <TablaTareas tareas={filtradas} hoy={hoy} nombreDe={nombreDe} proyectoDe={proyectoDe} onAbrir={(id) => setAbierta({ tipo: "tarea", id })} onEstado={(t) => cambiarEstado(t)} />
       )}
 
       {abierta && (abierta.tipo === "nueva" || actual) && (
@@ -280,6 +293,149 @@ function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrast
           </span>
         )}
         <span className="ml-auto">{responsable ? <Responsable nombre={responsable} /> : <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>}</span>
+      </div>
+    </li>
+  );
+}
+
+/* ── Por estado (vista general, D-184) ────────────────────────────── */
+
+const COLUMNAS: { estado: EstadoTarea; punto: string; fondo: string; texto: string }[] = [
+  { estado: "por_hacer", punto: "bg-alerta-fuerte", fondo: "bg-alerta-fuerte/5", texto: "text-alerta" },
+  { estado: "en_curso", punto: "bg-ambar", fondo: "bg-ambar/5", texto: "text-ambar" },
+  { estado: "hecha", punto: "bg-verde", fondo: "bg-verde/5", texto: "text-verde" },
+];
+const HECHAS_VISIBLES = 10;
+
+function Estados({
+  tareas,
+  hoy,
+  nombreDe,
+  proyectoDe,
+  onAbrir,
+  onEstado,
+  onNueva,
+}: {
+  tareas: Tarea[];
+  hoy: string;
+  nombreDe: (id: string | null) => string;
+  proyectoDe: (id: string | null) => string | null;
+  onAbrir: (id: string) => void;
+  onEstado: (t: Tarea, a: EstadoTarea) => void;
+  onNueva: (estado: EstadoTarea) => void;
+}) {
+  const [sobre, setSobre] = useState<EstadoTarea | null>(null);
+  const [verHechas, setVerHechas] = useState(HECHAS_VISIBLES);
+  // Pendientes: primero lo que vence antes (sin fecha al final) y lo más urgente. Hechas: las más recientes arriba
+  const PESO: Record<PrioridadTarea, number> = { urgente: 0, alta: 1, media: 2, baja: 3 };
+  const ordenar = (l: Tarea[], estado: EstadoTarea) =>
+    [...l].sort((a, b) =>
+      estado === "hecha"
+        ? (b.fecha ?? "").localeCompare(a.fecha ?? "") || b.creado.localeCompare(a.creado)
+        : (a.fecha ?? "9999").localeCompare(b.fecha ?? "9999") || PESO[a.prioridad] - PESO[b.prioridad]
+    );
+
+  return (
+    <div className="grid gap-3 lg:grid-cols-3">
+      {COLUMNAS.map((c) => {
+        const todas = ordenar(
+          tareas.filter((t) => t.estado === c.estado),
+          c.estado
+        );
+        const lista = c.estado === "hecha" ? todas.slice(0, verHechas) : todas;
+        return (
+          <section
+            key={c.estado}
+            aria-label={ESTADOS_TAREA[c.estado]}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              setSobre(c.estado);
+            }}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) setSobre(null);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setSobre(null);
+              const t = tareas.find((x) => x.id === e.dataTransfer.getData("text/plain"));
+              if (t) onEstado(t, c.estado);
+            }}
+            className={cn("flex min-h-[10rem] min-w-0 flex-col rounded-card border p-2.5 transition-colors", c.fondo, sobre === c.estado ? "border-white/25" : "border-white/[0.06]")}
+          >
+            <header className="mb-2.5 flex min-h-8 items-center justify-between gap-2 px-1">
+              <h3 className="flex items-center gap-2">
+                <span className={cn("inline-flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.04] px-2.5 py-1 text-xs font-semibold", c.texto)}>
+                  <span aria-hidden className={cn("h-2 w-2 rounded-full", c.punto)} />
+                  {ESTADOS_TAREA[c.estado]}
+                </span>
+                <span className={cn("text-sm font-semibold", c.texto)}>{todas.length}</span>
+              </h3>
+              {c.estado !== "hecha" && (
+                <button type="button" onClick={() => onNueva(c.estado)} aria-label={`Nueva tarea en ${ESTADOS_TAREA[c.estado]}`} className="flex h-8 w-8 items-center justify-center rounded-full text-fog-dim hover:bg-white/[0.06] hover:text-white">
+                  <Plus aria-hidden className="h-4 w-4" />
+                </button>
+              )}
+            </header>
+            <ul className="flex-1 space-y-2">
+              {lista.map((t) => (
+                <TarjetaEstado key={t.id} t={t} hoy={hoy} responsable={t.responsableId ? nombreDe(t.responsableId) : null} proyecto={proyectoDe(t.proyectoId)} onAbrir={() => onAbrir(t.id)} onHecha={() => onEstado(t, "hecha")} />
+              ))}
+              {todas.length === 0 && <li className="px-1 py-6 text-center text-xs text-fog-dim">{c.estado === "hecha" ? "Lo que se termine aparece aquí." : "Nada por aquí. Arrastra una tarea o crea una."}</li>}
+            </ul>
+            {c.estado === "hecha" && todas.length > lista.length && (
+              <button type="button" onClick={() => setVerHechas((n) => n + HECHAS_VISIBLES)} className="mt-2 h-9 rounded-full text-xs font-semibold text-fog hover:bg-white/[0.04] hover:text-white">
+                Ver {Math.min(HECHAS_VISIBLES, todas.length - lista.length)} más
+              </button>
+            )}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Tarjeta del tablero por estado: título, día, prioridad, responsable y el botón «¡Hecha!» (como Notion). */
+function TarjetaEstado({ t, hoy, responsable, proyecto, onAbrir, onHecha }: { t: Tarea; hoy: string; responsable: string | null; proyecto: string | null; onAbrir: () => void; onHecha: () => void }) {
+  const { hechos, total } = avanceItems(t.items);
+  const tarde = vencida(t, hoy);
+  return (
+    <li
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/plain", t.id);
+        e.dataTransfer.effectAllowed = "move";
+      }}
+      data-tarea={t.id}
+      className="cursor-grab rounded-frame border border-white/8 bg-surface-1 p-3 transition-colors hover:border-white/20 active:cursor-grabbing"
+    >
+      <button type="button" onClick={onAbrir} className="block w-full text-left">
+        <span className={cn("block break-words text-sm font-medium leading-snug text-white", t.estado === "hecha" && "text-fog line-through")}>{t.titulo}</span>
+        {proyecto && <span className="mt-0.5 block truncate text-[0.7rem] text-fog-dim">{proyecto}</span>}
+        <span className={cn("mt-2 block text-xs", tarde ? "font-semibold text-alerta" : "text-fog")}>
+          {fechaCorta(t.fecha, hoy)}
+          {tarde && " · vencida"}
+        </span>
+      </button>
+      <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+        <Pill tono={TONO_PRIORIDAD[t.prioridad]}>{PRIORIDADES_TAREA[t.prioridad]}</Pill>
+        {responsable ? <Responsable nombre={responsable} /> : <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>}
+        {total > 0 && (
+          <span className="inline-flex items-center gap-1 text-[0.7rem] text-fog-dim">
+            <ListChecks aria-hidden className="h-3.5 w-3.5" /> {hechos}/{total}
+          </span>
+        )}
+        {t.comentarios.length > 0 && (
+          <span className="inline-flex items-center gap-1 text-[0.7rem] text-fog-dim">
+            <ChatBubble aria-hidden className="h-3.5 w-3.5" /> {t.comentarios.length}
+          </span>
+        )}
+        {t.recordatorio && t.estado !== "hecha" && <Bell aria-label="Tiene recordatorio" className="h-3.5 w-3.5 text-fog-dim" />}
+        {t.estado !== "hecha" && (
+          <button type="button" onClick={onHecha} className="ml-auto inline-flex h-7 items-center gap-1 rounded-full border border-white/10 px-2.5 text-[0.72rem] font-semibold text-fog hover:border-verde/40 hover:text-verde">
+            <Check aria-hidden className="h-3.5 w-3.5" /> ¡Hecha!
+          </button>
+        )}
       </div>
     </li>
   );

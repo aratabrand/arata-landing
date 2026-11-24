@@ -39,7 +39,7 @@ function Pildora({ activa, onClick, children }: { activa: boolean; onClick: () =
   );
 }
 
-export type NuevaTarea = { fecha?: string | null; proyectoId?: string | null; responsableId?: string | null; area?: Area };
+export type NuevaTarea = { fecha?: string | null; proyectoId?: string | null; responsableId?: string | null; area?: Area; estado?: EstadoTarea };
 
 export default function FichaTarea({
   tarea,
@@ -61,7 +61,7 @@ export default function FichaTarea({
 }) {
   const acc = useAccion();
   const [guardado, setGuardado] = useState(false);
-  const [estado, setEstado] = useState<EstadoTarea>(tarea?.estado ?? "por_hacer");
+  const [estado, setEstado] = useState<EstadoTarea>(tarea?.estado ?? nueva?.estado ?? "por_hacer");
   const [prioridad, setPrioridad] = useState<PrioridadTarea>(tarea?.prioridad ?? "media");
   const [fecha, setFecha] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
   const [recordatorio, setRecordatorio] = useState<Recordatorio | "">(tarea?.recordatorio ?? "");
