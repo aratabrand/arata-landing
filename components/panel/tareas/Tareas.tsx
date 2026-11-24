@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState, type DragEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { CalendarioSemana, ChatBubble, ChevronLeft, ChevronRight, Circle, CircleCheck, CircleMedio, ListChecks, Plus, Search, Tabla } from "../iconos";
+import { Bell, CalendarioSemana, ChatBubble, ChevronLeft, ChevronRight, Circle, CircleCheck, CircleMedio, ListChecks, Plus, Search, Tabla } from "../iconos";
 import {
   AREAS,
   ESTADOS_TAREA,
@@ -36,8 +36,9 @@ import { cn } from "@/lib/utils";
 // Tareas del equipo (D-181): tablero de la semana (lunes a domingo, arrastrar entre días)
 // y tabla tipo Notion (ordenar por columna, filtros). Clic en una tarea → su ficha.
 
-const TONO_PRIORIDAD: Record<PrioridadTarea, TonoPill> = { urgente: "alerta", alta: "ambar", media: "neutro", baja: "neutro" };
-const TONO_ESTADO: Record<EstadoTarea, TonoPill> = { por_hacer: "neutro", en_curso: "ambar", hecha: "verde" };
+// Semáforo (D-183): rojo = atender ya, ámbar = en camino o pronto, verde = bien; baja en gris (sin apuro)
+const TONO_PRIORIDAD: Record<PrioridadTarea, TonoPill> = { urgente: "alerta", alta: "ambar", media: "verde", baja: "neutro" };
+const TONO_ESTADO: Record<EstadoTarea, TonoPill> = { por_hacer: "alerta", en_curso: "ambar", hecha: "verde" };
 const SIGUIENTE: Record<EstadoTarea, EstadoTarea> = { por_hacer: "en_curso", en_curso: "hecha", hecha: "por_hacer" };
 const opciones = <T extends string>(o: Record<T, string>) => Object.entries(o) as [T, string][];
 
@@ -232,12 +233,9 @@ function IconoEstado({ estado }: { estado: EstadoTarea }) {
   return <Circle aria-hidden className="h-5 w-5 text-fog-dim" />;
 }
 
-function Iniciales({ nombre }: { nombre: string }) {
-  return (
-    <span title={nombre} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[0.65rem] font-bold text-white">
-      {nombre.slice(0, 1).toUpperCase()}
-    </span>
-  );
+/** Responsable con su nombre (D-183): primer nombre, en píldora. */
+function Responsable({ nombre }: { nombre: string }) {
+  return <span className="inline-flex max-w-[8rem] truncate rounded-full bg-white/[0.08] px-2 py-0.5 text-[0.7rem] font-semibold text-white">{nombre.split(" ")[0]}</span>;
 }
 
 function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrastrable, onArrastre }: DatosTarjeta & { arrastrable?: boolean; onArrastre?: (e: DragEvent<HTMLLIElement>) => void }) {
@@ -264,7 +262,7 @@ function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrast
         </button>
       </div>
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-        {t.prioridad !== "media" && <Pill tono={TONO_PRIORIDAD[t.prioridad]}>{PRIORIDADES_TAREA[t.prioridad]}</Pill>}
+        <Pill tono={TONO_PRIORIDAD[t.prioridad]}>{PRIORIDADES_TAREA[t.prioridad]}</Pill>
         {tarde && <Pill tono="alerta">Vencida</Pill>}
         {total > 0 && (
           <span className="inline-flex items-center gap-1 text-[0.7rem] text-fog-dim">
@@ -276,7 +274,12 @@ function TarjetaTarea({ t, responsable, proyecto, hoy, onAbrir, onEstado, arrast
             <ChatBubble aria-hidden className="h-3.5 w-3.5" /> {t.comentarios.length}
           </span>
         )}
-        <span className="ml-auto">{responsable ? <Iniciales nombre={responsable} /> : null}</span>
+        {t.recordatorio && t.estado !== "hecha" && (
+          <span title="Tiene recordatorio" className="inline-flex items-center text-fog-dim">
+            <Bell aria-label="Tiene recordatorio" className="h-3.5 w-3.5" />
+          </span>
+        )}
+        <span className="ml-auto">{responsable ? <Responsable nombre={responsable} /> : <span className="text-[0.7rem] text-fog-dim">Sin asignar</span>}</span>
       </div>
     </li>
   );
@@ -570,7 +573,6 @@ function TablaTareas({
                     </td>
                     <td className="px-3 py-2 text-fog">
                       <span className="inline-flex items-center gap-2">
-                        {t.responsableId && <Iniciales nombre={nombreDe(t.responsableId)} />}
                         {nombreDe(t.responsableId)}
                       </span>
                     </td>

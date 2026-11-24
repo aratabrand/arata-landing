@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, ListChecks, LogOut, MessageCircle, Settings, SquareKanban, Users, Wallet } from "./iconos";
+import { ArrowUpRight, ChevronsUpDown, LayoutDashboard, ListChecks, LogOut, MenuRecoger, MessageCircle, Settings, SquareKanban, Users, Wallet } from "./iconos";
 import Logo from "@/components/panel/LogoPanel";
 import type { Negocio } from "@/content/panel/tipos";
 import { cn } from "@/lib/utils";
@@ -47,6 +47,7 @@ export default function PanelShell({
   sinFranja = ["/panel/finanzas", "/panel/equipo"],
   sinLeer = 0,
   contadores = {},
+  menuRecogido = false,
   children,
 }: {
   negocio: Negocio;
@@ -60,9 +61,18 @@ export default function PanelShell({
   sinLeer?: number;
   /** Número junto a una opción del menú (D-163, como la referencia Kept): ruta → cantidad por atender. */
   contadores?: Record<string, number>;
+  /** Menú lateral recogido (solo íconos) al abrir, según la cookie pn-menu (D-183). */
+  menuRecogido?: boolean;
   children: ReactNode;
 }) {
   const path = usePathname() ?? "/panel";
+  const [recogido, setRecogido] = useState(menuRecogido);
+  const alternarMenu = () => {
+    const nuevo = !recogido;
+    setRecogido(nuevo);
+    const seguro = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `pn-menu=${nuevo ? "recogido" : "abierto"}; Path=/; Max-Age=31536000; SameSite=Lax${seguro}`;
+  };
   const nav = navPanel.filter((n) => conFinanzas || !n.agencia);
   // Notificaciones existen solo para la agencia (D-119); en el ejemplo también se muestran
   const conNotif = conFinanzas;
@@ -74,15 +84,28 @@ export default function PanelShell({
   return (
     <div className="min-h-screen">
       {/* ── Barra lateral (escritorio) ── */}
-      <aside className="pn-lateral fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col px-4 pb-4 pt-7 lg:flex">
-        <Link href="/panel" aria-label="Inicio del panel" className="px-3">
-          <Logo className="h-6 w-auto" />
-        </Link>
-        <MenuLateral principal={principal} general={general} path={path} contadores={contadores} />
-        <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante="tarjeta" />
+      {/* D-183: se puede recoger (solo íconos, 76 px) y desplegar; se recuerda en la cookie pn-menu */}
+      <aside className={cn("pn-lateral fixed inset-y-0 left-0 z-40 hidden flex-col pb-4 pt-7 lg:flex", recogido ? "w-[76px] px-3" : "w-[248px] px-4")}>
+        <div className={cn("flex items-center", recogido ? "flex-col gap-4" : "justify-between gap-2 pl-3")}>
+          <Link href="/panel" aria-label="Inicio del panel" className={cn(recogido && "flex h-10 w-10 items-center justify-center")}>
+            <Logo className="h-6 w-auto" soloMarca={recogido} />
+          </Link>
+          <button
+            type="button"
+            onClick={alternarMenu}
+            aria-label={recogido ? "Desplegar el menú" : "Recoger el menú"}
+            aria-expanded={!recogido}
+            title={recogido ? "Desplegar el menú" : "Recoger el menú"}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-fog-dim transition-colors hover:bg-white/[0.06] hover:text-white"
+          >
+            <MenuRecoger aria-hidden className={cn("h-5 w-5", recogido && "-scale-x-100")} />
+          </button>
+        </div>
+        <MenuLateral principal={principal} general={general} path={path} contadores={contadores} recogido={recogido} />
+        <MenuCuenta negocio={negocio} usuario={usuario} conSesion={conSesion} variante={recogido ? "lateral" : "tarjeta"} />
       </aside>
 
-      <div className="lg:pl-[248px]">
+      <div className={recogido ? "lg:pl-[76px]" : "lg:pl-[248px]"}>
         <div className="lg:p-3 lg:pl-0">
           <div className="min-h-screen bg-canvas lg:min-h-[calc(100vh-1.5rem)] lg:rounded-[28px] lg:border lg:border-white/[0.06] lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
             {/* ── Barra superior del contenido ── */}
@@ -153,7 +176,19 @@ export default function PanelShell({
 // ── Menú lateral con selector que se desliza (solo escritorio) ──
 type Opcion = (typeof navPanel)[number];
 
-function MenuLateral({ principal, general, path, contadores }: { principal: readonly Opcion[]; general: readonly Opcion[]; path: string; contadores: Record<string, number> }) {
+function MenuLateral({
+  principal,
+  general,
+  path,
+  contadores,
+  recogido = false,
+}: {
+  principal: readonly Opcion[];
+  general: readonly Opcion[];
+  path: string;
+  contadores: Record<string, number>;
+  recogido?: boolean;
+}) {
   const caja = useRef<HTMLElement | null>(null);
   const items = useRef<Record<string, HTMLAnchorElement | null>>({});
   const [sel, setSel] = useState<{ y: number; h: number } | null>(null);
@@ -174,12 +209,16 @@ function MenuLateral({ principal, general, path, contadores }: { principal: read
     window.addEventListener("resize", medir);
     document.fonts?.ready.then(medir).catch(() => {});
     return () => window.removeEventListener("resize", medir);
-  }, [elegida, todas.length]);
+  }, [elegida, todas.length, recogido]);
 
   const grupo = (titulo: string, lista: readonly Opcion[]) =>
     lista.length > 0 && (
       <div>
-        <p className="px-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">{titulo}</p>
+        {recogido ? (
+          <span aria-hidden className="mx-auto block h-px w-6 bg-white/[0.08]" />
+        ) : (
+          <p className="px-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-fog-dim">{titulo}</p>
+        )}
         <ul className="mt-2.5 space-y-1">
           {lista.map(({ href, label, icon: Icon, rutas }) => {
             const on = activo(path, rutas);
@@ -191,12 +230,21 @@ function MenuLateral({ principal, general, path, contadores }: { principal: read
                   }}
                   href={href}
                   aria-current={on ? "page" : undefined}
-                  className={cn("group relative z-10 flex h-10 items-center gap-3 rounded-full px-3.5 text-sm font-medium transition-colors", on ? "pn-nav-on text-white" : "text-fog hover:bg-white/[0.04] hover:text-white")}
+                  title={recogido ? label : undefined}
+                  className={cn(
+                    "group relative z-10 flex h-10 items-center rounded-full text-sm font-medium transition-colors",
+                    // Recogido: círculo de 40 px; el elegido lleva el lima ahí mismo (sin el selector que se desliza)
+                    recogido ? "mx-auto w-10 justify-center" : "gap-3 px-3.5",
+                    on ? cn("pn-nav-on text-white", recogido && "pn-selector border") : "text-fog hover:bg-white/[0.04] hover:text-white"
+                  )}
                 >
-                  <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-[#B6FF00]" : "text-fog-dim group-hover:text-fog")} />
-                  {label}
+                  <span className="relative">
+                    <Icon aria-hidden className={cn("h-[1.1rem] w-[1.1rem] transition-colors", on ? "text-[#B6FF00]" : "text-fog-dim group-hover:text-fog")} />
+                    {recogido && (contadores[href] ?? 0) > 0 && <span aria-hidden className="absolute -right-1.5 -top-1 h-2 w-2 rounded-full bg-[#B6FF00] ring-2 ring-noche" />}
+                  </span>
+                  <span className={cn(recogido && "sr-only")}>{label}</span>
                   {/* Contador (D-163): píldora lima con número en tinta, como la referencia */}
-                  {(contadores[href] ?? 0) > 0 && (
+                  {!recogido && (contadores[href] ?? 0) > 0 && (
                     <span className="pn-contador ml-auto min-w-[1.5rem] rounded-full bg-[#B6FF00] px-1.5 text-center text-[0.7rem] font-bold leading-5 text-[#03010B]">
                       <span className="sr-only">Por atender: </span>
                       {contadores[href]}
@@ -214,7 +262,7 @@ function MenuLateral({ principal, general, path, contadores }: { principal: read
     <nav ref={caja} aria-label="Panel" className="relative mt-9 min-h-0 flex-1 space-y-7">
       {/* Selector (D-159): píldora completa que se desliza (solo transform). Mismo componente en los dos
           modos: en oscuro, blanco suave; en claro, negra. El ícono de la opción elegida va en lima */}
-      {sel && (
+      {sel && !recogido && (
         <span
           aria-hidden
           className="pn-selector pointer-events-none absolute left-0 top-0 w-full rounded-full border border-white/[0.1] bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-transform duration-300 ease-out motion-reduce:transition-none"
@@ -228,7 +276,18 @@ function MenuLateral({ principal, general, path, contadores }: { principal: read
 }
 
 // ── Cuenta: nombre, ver la página, soporte (clientes) y salir ──
-function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negocio; usuario?: { nombre: string; correo?: string } | null; conSesion: boolean; variante: "tarjeta" | "circulo" }) {
+function MenuCuenta({
+  negocio,
+  usuario,
+  conSesion,
+  variante,
+}: {
+  negocio: Negocio;
+  usuario?: { nombre: string; correo?: string } | null;
+  conSesion: boolean;
+  /** tarjeta: menú lateral abierto · lateral: menú lateral recogido (solo la inicial) · circulo: barra del celular */
+  variante: "tarjeta" | "circulo" | "lateral";
+}) {
   const [abierto, setAbierto] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
   const path = usePathname();
@@ -250,8 +309,8 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
   }, [abierto]);
 
   return (
-    <div ref={ref} className="relative">
-      {variante === "circulo" ? (
+    <div ref={ref} className={cn("relative", variante === "lateral" && "mx-auto")}>
+      {variante !== "tarjeta" ? (
         <button
           type="button"
           onClick={() => setAbierto((v) => !v)}
@@ -280,7 +339,7 @@ function MenuCuenta({ negocio, usuario, conSesion, variante }: { negocio: Negoci
         </button>
       )}
       {abierto && (
-        <div role="menu" className={cn("absolute z-50 w-64 overflow-hidden rounded-2xl border border-white/10 bg-surface-3 p-1.5 shadow-2xl", variante === "tarjeta" ? "bottom-[calc(100%+0.5rem)] left-0" : "right-0 top-[calc(100%+0.5rem)]")}>
+        <div role="menu" className={cn("absolute z-50 w-64 overflow-hidden rounded-2xl border border-white/10 bg-surface-3 p-1.5 shadow-2xl", variante === "circulo" ? "right-0 top-[calc(100%+0.5rem)]" : "bottom-[calc(100%+0.5rem)] left-0")}>
           <div className="px-3 py-2.5">
             <p className="truncate text-sm font-semibold text-white">{nombre}</p>
             <p className="truncate text-xs text-fog-dim">{usuario?.correo ?? negocio.nombre}</p>

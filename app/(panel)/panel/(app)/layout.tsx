@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import PanelShell from "@/components/panel/PanelShell";
 import { obtenerPanel } from "@/lib/panel/datos";
 import { RUTA_DOBLE_FACTOR, RUTA_ENTRAR, panelActivo } from "@/lib/panel/config";
@@ -50,8 +51,10 @@ export default async function PanelAppLayout({ children }: { children: React.Rea
       if (tp) contadores["/panel/tareas"] = tp;
     }
   }
+  // Menú lateral recogido o desplegado (D-183): preferencia en la cookie pn-menu, para pintarlo bien desde el primer cuadro
+  const menuRecogido = (await cookies()).get("pn-menu")?.value === "recogido";
   return (
-    <PanelShell negocio={negocio} usuario={usuario} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer} contadores={contadores}>
+    <PanelShell negocio={negocio} usuario={usuario} conSesion={panelActivo} conFinanzas={conFinanzas} sinFranja={sinFranja} sinLeer={sinLeer} contadores={contadores} menuRecogido={menuRecogido}>
       {children}
     </PanelShell>
   );

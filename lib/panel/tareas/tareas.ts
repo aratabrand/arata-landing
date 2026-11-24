@@ -18,6 +18,16 @@ const PESO: Record<PrioridadTarea, number> = { urgente: 0, alta: 1, media: 2, ba
 export const ESTADOS_TAREA = { por_hacer: "Por hacer", en_curso: "En curso", hecha: "Hecha" } as const;
 export type EstadoTarea = keyof typeof ESTADOS_TAREA;
 
+/** Recordatorio antes del día de la tarea (D-183). Llega con el aviso de las 8 a. m. */
+export const RECORDATORIOS = {
+  mismo_dia: "El mismo día",
+  "1_dia": "Un día antes (24 h)",
+  "2_dias": "Dos días antes",
+  "1_semana": "Una semana antes",
+} as const;
+export type Recordatorio = keyof typeof RECORDATORIOS;
+const DIAS_ANTES: Record<Recordatorio, number> = { mismo_dia: 0, "1_dia": 1, "2_dias": 2, "1_semana": 7 };
+
 export type ItemTarea = { id: string; texto: string; hecho: boolean; orden: number };
 export type ComentarioTarea = { id: string; texto: string; quien: string; creado: string };
 
@@ -33,6 +43,8 @@ export type Tarea = {
   prioridad: PrioridadTarea;
   estado: EstadoTarea;
   orden: number;
+  /** null = sin recordatorio. */
+  recordatorio: Recordatorio | null;
   creadoPor: string | null;
   creado: string;
   items: ItemTarea[];
@@ -154,4 +166,30 @@ export function resumenDiario(nombre: string, tareas: Pick<Tarea, "titulo" | "fe
     titulo: `${tarde.length ? "⚠️" : "✅"} ${nombre.split(" ")[0]}, tienes ${partes.join(" y ")}`,
     cuerpo: `Empieza por: ${primero.titulo}${pendientes.length > 1 ? ` (y ${pendientes.length - 1} más)` : ""}`,
   };
+}
+
+/**
+ * ¿Le toca llegar hoy el recordatorio? Desde el día que pide (ej. un día antes) hasta el día de la
+ * tarea; el aviso de las 8 a. m. lo manda una sola vez (tabla avisos_recordatorios). Si lo ponen tarde
+ * (ej. «una semana antes» para algo de pasado mañana), llega en el siguiente aviso de las 8 a. m.
+ */
+export function tocaRecordar(t: Pick<Tarea, "recordatorio" | "fecha" | "estado">, hoy: string) {
+  if (!t.recordatorio || !t.fecha || t.estado === "hecha") return false;
+  return sumarDias(t.fecha, -DIAS_ANTES[t.recordatorio]) <= hoy && hoy <= t.fecha;
+}
+
+/** Texto del aviso del recordatorio. */
+export function textoRecordatorio(t: Pick<Tarea, "titulo" | "fecha" | "prioridad">, hoy: string) {
+  const cuando = t.fecha === hoy ? "Es para hoy" : t.fecha === sumarDias(hoy, 1) ? "Es para mañana" : `Es para el ${fechaCorta(t.fecha, hoy).toLowerCase()}`;
+  return { titulo: `⏰ Recordatorio: ${t.titulo}`.slice(0, 120), cuerpo: `${cuando}${t.prioridad === "urgente" ? " · Urgente" : ""}` };
+}
+
+/** Cuándo llega, para mostrarlo en la ficha: "Llega el jue 26 nov a las 8 a. m.". */
+export function cuandoLlega(recordatorio: Recordatorio | null, fecha: string | null, hoy: string) {
+  if (!recordatorio || !fecha) return null;
+  if (fecha < hoy) return "El día de la tarea ya pasó: no llega.";
+  const dia = sumarDias(fecha, -DIAS_ANTES[recordatorio]);
+  if (dia > hoy) return `Llega ${fechaCorta(dia, hoy).toLowerCase()} a las 8 a. m.`;
+  if (fecha > hoy) return "Llega con el próximo aviso de las 8 a. m.";
+  return "La tarea es hoy: llega solo si todavía no han dado las 8 a. m.";
 }

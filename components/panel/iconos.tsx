@@ -30,6 +30,7 @@ import {
   HandCoins as PHandCoins,
   Info as PInfo,
   Kanban,
+  SidebarSimple,
   ListChecks as PListChecks,
   Circle as PCircle,
   CircleHalf,
@@ -131,6 +132,7 @@ export const Settings = fino(GearSix);
 export const ShoppingBag = fino(PShoppingBag);
 export const Smartphone = fino(DeviceMobile);
 export const SquareKanban = fino(Kanban);
+export const MenuRecoger = fino(SidebarSimple);
 export const ListChecks = fino(PListChecks);
 export const Circle = fino(PCircle);
 export const CircleMedio = fino(CircleHalf);

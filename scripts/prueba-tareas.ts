@@ -1,5 +1,5 @@
 // Prueba de Tareas (D-181), sin base de datos. Correr:  npx -y tsx scripts/prueba-tareas.ts
-import { diasDeSemana, diasLaborales, esFinDeSemana, semanaDeTrabajo, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
+import { cuandoLlega, textoRecordatorio, tocaRecordar, diasDeSemana, diasLaborales, esFinDeSemana, semanaDeTrabajo, fechaCorta, lunesDe, ordenarDia, ordenarTabla, partesDia, rangoSemana, resumenDiario, sumarDias, vencida, type Tarea } from "../lib/panel/tareas/tareas";
 const ok = (c: boolean, m: string) => { console.log((c ? "✓ " : "✗ ") + m); if (!c) process.exitCode = 1; };
 
 // Semanas de lunes a domingo
@@ -16,7 +16,7 @@ ok(fechaCorta("2026-11-24", "2026-11-24") === "Hoy" && fechaCorta("2026-11-25", 
 ok(fechaCorta("2026-11-27", "2026-11-24") === "Vie 27 nov" && fechaCorta(null, "2026-11-24") === "Sin fecha", "otro día y sin fecha");
 
 // Vencidas y orden
-const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: "marketing", proyectoId: null, responsableId: x.responsableId ?? null, fecha: x.fecha ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
+const t = (x: Partial<Tarea>): Tarea => ({ id: x.id ?? "a", titulo: x.titulo ?? "T", descripcion: null, area: "marketing", proyectoId: null, responsableId: x.responsableId ?? null, fecha: x.fecha ?? null, prioridad: x.prioridad ?? "media", estado: x.estado ?? "por_hacer", orden: x.orden ?? 0, recordatorio: x.recordatorio ?? null, creadoPor: null, creado: x.creado ?? "2026-11-01T00:00:00Z", items: [], comentarios: [] });
 ok(vencida(t({ fecha: "2026-11-23" }), "2026-11-24") && !vencida(t({ fecha: "2026-11-23", estado: "hecha" }), "2026-11-24") && !vencida(t({ fecha: null }), "2026-11-24"), "vencida: pendiente con fecha pasada");
 const dia = ordenarDia([t({ id: "hecha", estado: "hecha", orden: 1 }), t({ id: "b", orden: 2 }), t({ id: "a", orden: 1 })]);
 ok(dia.map((x) => x.id).join() === "a,b,hecha", "en el día: pendientes por orden y las hechas al final");
@@ -36,3 +36,12 @@ const r = resumenDiario("Andrés Cuadros", [t({ titulo: "Llamar a Pets And Go", 
 ok(r.titulo === "⚠️ Andrés, tienes 2 para hoy y 1 vencida", "título: para hoy y vencidas");
 ok(r.cuerpo === "Empieza por: Llamar a Pets And Go (y 2 más)", "empieza por la más urgente");
 ok(resumenDiario("Santi", [t({ fecha: hoy })], hoy)!.titulo === "✅ Santi, tienes 1 para hoy", "solo de hoy: sin alerta");
+
+// Recordatorios (D-183)
+ok(!tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "1_dia" }), "2026-11-25"), "un día antes: el miércoles todavía no (tarea del viernes)");
+ok(tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "1_dia" }), "2026-11-26"), "un día antes: llega el jueves");
+ok(tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "mismo_dia" }), "2026-11-27") && !tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "mismo_dia" }), "2026-11-26"), "el mismo día: solo ese día");
+ok(tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "1_semana" }), "2026-11-26"), "puesto tarde (una semana antes): llega en el siguiente aviso");
+ok(!tocaRecordar(t({ fecha: "2026-11-27", recordatorio: "1_dia", estado: "hecha" }), "2026-11-26") && !tocaRecordar(t({ fecha: null, recordatorio: "1_dia" }), "2026-11-26") && !tocaRecordar(t({ fecha: "2026-11-24", recordatorio: "1_dia" }), "2026-11-26"), "no llega si está hecha, sin fecha o ya pasó");
+ok(textoRecordatorio(t({ titulo: "Enviar cotización", fecha: "2026-11-27", prioridad: "urgente" }), "2026-11-26").cuerpo === "Es para mañana · Urgente", "texto del recordatorio");
+ok(cuandoLlega("1_dia", "2026-11-27", "2026-11-24") === "Llega jue 26 nov a las 8 a. m." && cuandoLlega(null, "2026-11-27", "2026-11-24") === null, "la ficha dice cuándo llega");

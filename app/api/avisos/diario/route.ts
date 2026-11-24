@@ -6,7 +6,7 @@ import { hoyColombia, fechaBogota } from "@/lib/panel/fecha";
 import { alertasVencimiento } from "@/lib/panel/alertas";
 import { recordatorioEspera } from "@/lib/panel/clientes/interesados";
 import { avisarA, avisarEquipo, pushActivo } from "@/lib/panel/push";
-import { resumenDiario } from "@/lib/panel/tareas/tareas";
+import { resumenDiario, textoRecordatorio, tocaRecordar } from "@/lib/panel/tareas/tareas";
 import type { FinProyecto } from "@/lib/panel/finanzas/tipos";
 import type { FinTarea } from "@/lib/panel/finanzas/procesos";
 
@@ -85,6 +85,25 @@ export async function GET(req: NextRequest) {
       x.lista.push({ titulo: r.titulo, fecha: r.fecha, estado: r.estado, prioridad: r.prioridad });
       porPersona.set(r.usuario_id, x);
     });
+    // Recordatorios de tareas (D-183): a quien la tiene y a quien lo puso, una vez por día de la tarea
+    const recordar = await db().query(
+      `select t.id, t.titulo, t.fecha::text fecha, t.estado, t.prioridad, t.recordatorio, t.recordatorio_por, p.usuario_id responsable
+         from agencia_tareas t left join equipo_personas p on p.id = t.responsable_id
+        where t.negocio_id = $1 and t.recordatorio is not null and t.estado <> 'hecha' and t.fecha >= $2::date`,
+      [n.id, hoy]
+    );
+    for (const t of recordar.rows) {
+      if (!tocaRecordar({ recordatorio: t.recordatorio, fecha: t.fecha, estado: t.estado }, hoy)) continue;
+      const nuevo = await db().query(`insert into avisos_recordatorios (tarea_id, fecha) values ($1, $2) on conflict do nothing`, [t.id, t.fecha]);
+      if (!nuevo.rowCount) continue;
+      avisos++;
+      const txt = textoRecordatorio({ titulo: t.titulo, fecha: t.fecha, prioridad: t.prioridad }, hoy);
+      for (const usuarioId of new Set([t.responsable, t.recordatorio_por].filter(Boolean) as string[])) {
+        const r = await avisarA(n.id, usuarioId, { titulo: txt.titulo, cuerpo: txt.cuerpo, url: `/panel/tareas?t=${t.id}`, etiqueta: `recordatorio-${t.id}` });
+        enviados += r.enviados;
+      }
+    }
+
     for (const [usuarioId, x] of porPersona) {
       const res = resumenDiario(x.nombre, x.lista, hoy);
       if (!res) continue;

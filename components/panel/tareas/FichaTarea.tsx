@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { CircleCheck, Send, Trash2, X } from "../iconos";
+import { Bell, CircleCheck, Send, Trash2, X } from "../iconos";
 import {
   AREAS,
   ESTADOS_TAREA,
   PRIORIDADES_TAREA,
+  RECORDATORIOS,
   avanceItems,
+  cuandoLlega,
   diasLaborales,
   fechaCorta,
   lunesDe,
@@ -17,6 +19,7 @@ import {
   type EstadoTarea,
   type PersonaTarea,
   type PrioridadTarea,
+  type Recordatorio,
   type ProyectoTarea,
   type Tarea,
 } from "@/lib/panel/tareas/tareas";
@@ -61,6 +64,7 @@ export default function FichaTarea({
   const [estado, setEstado] = useState<EstadoTarea>(tarea?.estado ?? "por_hacer");
   const [prioridad, setPrioridad] = useState<PrioridadTarea>(tarea?.prioridad ?? "media");
   const [fecha, setFecha] = useState<string>(tarea ? (tarea.fecha ?? "") : nueva?.fecha === undefined ? hoy : (nueva.fecha ?? ""));
+  const [recordatorio, setRecordatorio] = useState<Recordatorio | "">(tarea?.recordatorio ?? "");
   const [proyectoId, setProyectoId] = useState(tarea?.proyectoId ?? nueva?.proyectoId ?? "");
   const [area, setArea] = useState<Area>(tarea?.area ?? nueva?.area ?? (nueva?.proyectoId ? "proyectos" : "proyectos"));
   // Días rápidos: lunes a viernes de la semana que se trabaja; «Próx. lunes» si no está ya en la lista
@@ -83,6 +87,7 @@ export default function FichaTarea({
           fecha: fecha || null,
           prioridad,
           estado,
+          recordatorio: recordatorio || null,
         }),
       () => (tarea ? setGuardado(true) : onListo())
     );
@@ -165,6 +170,28 @@ export default function FichaTarea({
           </div>
           <input type="date" aria-label="Otra fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} className="pn-input" />
         </fieldset>
+
+        <Campo
+          etiqueta="Recordatorio"
+          obligatorio={false}
+          ayuda={
+            recordatorio
+              ? `${cuandoLlega(recordatorio, fecha || null, hoy) ?? "Ponle un día a la tarea para que llegue."} Le llega a quien tiene la tarea y a ti.`
+              : "Te avisa al celular antes de que se venza."
+          }
+        >
+          <span className="relative block">
+            <Bell aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fog-dim" />
+            <select value={recordatorio} onChange={(e) => setRecordatorio(e.target.value as Recordatorio | "")} className="pn-input pl-9">
+              <option value="">Sin recordatorio</option>
+              {opciones(RECORDATORIOS).map(([k, l]) => (
+                <option key={k} value={k}>
+                  {l}
+                </option>
+              ))}
+            </select>
+          </span>
+        </Campo>
 
         <Campo etiqueta="Proyecto" obligatorio={false}>
           <select

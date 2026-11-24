@@ -23,7 +23,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
   if (!ctx) return null;
   const [ta, it, co, pe, pr] = await Promise.all([
     db().query(
-      `select id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, creado
+      `select id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, recordatorio, creado_por, creado
          from agencia_tareas
         where negocio_id = $1 and (estado <> 'hecha' or hecha_en > now() - interval '60 days' or fecha >= current_date - 7)
         order by fecha nulls last, orden, creado
@@ -66,6 +66,7 @@ export async function cargarTareas(): Promise<DatosTareas | null> {
         prioridad: r.prioridad,
         estado: r.estado,
         orden: Number(r.orden),
+        recordatorio: r.recordatorio,
         creadoPor: r.creado_por,
         creado: r.creado.toISOString(),
         items: items.get(r.id) ?? [],

@@ -8,7 +8,7 @@ import { contextoAgencia, type ContextoAgencia } from "@/lib/panel/finanzas/dato
 import { diferencias, registrar } from "@/lib/panel/historial";
 import { avisarA } from "@/lib/panel/push";
 import { hoyColombia } from "@/lib/panel/fecha";
-import { AREAS, ESTADOS_TAREA, FECHA, PRIORIDADES_TAREA, fechaCorta, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
+import { AREAS, ESTADOS_TAREA, FECHA, PRIORIDADES_TAREA, RECORDATORIOS, fechaCorta, type Area, type EstadoTarea, type PrioridadTarea } from "@/lib/panel/tareas/tareas";
 import type { Resultado } from "../finanzas/acciones";
 
 // Tareas del equipo (D-181). Los tres (Sergio, Andrés y Santiago) crean, asignan y editan;
@@ -43,7 +43,7 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
   if (!UUID.test(id)) return null;
   return (
     await db().query(
-      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.responsable_id, t.fecha::text fecha, t.prioridad, t.estado,
+      `select t.id, t.titulo, t.descripcion, t.area, t.proyecto_id, t.responsable_id, t.fecha::text fecha, t.prioridad, t.estado, t.recordatorio,
               p.nombre responsable, p.usuario_id responsable_usuario, f.nombre proyecto
          from agencia_tareas t left join equipo_personas p on p.id = t.responsable_id left join fin_proyectos f on f.id = t.proyecto_id
         where t.id = $1 and t.negocio_id = $2`,
@@ -60,6 +60,7 @@ async function tareaDe(ctx: ContextoAgencia, id: string) {
         fecha: string | null;
         prioridad: PrioridadTarea;
         estado: EstadoTarea;
+        recordatorio: keyof typeof RECORDATORIOS | null;
         responsable: string | null;
         responsable_usuario: string | null;
         proyecto: string | null;
@@ -92,6 +93,8 @@ export type EntradaTarea = {
   fecha?: string | null;
   prioridad: string;
   estado?: string;
+  /** Clave de RECORDATORIOS o vacío (sin recordatorio, D-183). */
+  recordatorio?: string | null;
 };
 
 /** Crea o edita una tarea. */
@@ -118,6 +121,8 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         : undefined
       : null;
     if (responsableId && !persona) return NO("Elige a alguien del equipo.");
+    const recordatorio = e.recordatorio ? String(e.recordatorio) : null;
+    if (recordatorio && !(recordatorio in RECORDATORIOS)) return NO("Elige un recordatorio de la lista.");
     const area = e.area as Area;
     const prioridad = e.prioridad as PrioridadTarea;
 
@@ -128,9 +133,9 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         : 0;
       const id = (
         await db().query(
-          `insert into agencia_tareas (negocio_id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, hecha_en)
-           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, case when $9 = 'hecha' then now() end) returning id`,
-          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado, orden, ctx.usuarioId]
+          `insert into agencia_tareas (negocio_id, titulo, descripcion, area, proyecto_id, responsable_id, fecha, prioridad, estado, orden, creado_por, hecha_en, recordatorio, recordatorio_por)
+           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, case when $9 = 'hecha' then now() end, $12, case when $12::text is not null then $11 end) returning id`,
+          [ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado, orden, ctx.usuarioId, recordatorio]
         )
       ).rows[0].id as string;
       await registrar(ctx, {
@@ -149,9 +154,12 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
     if (!antes) return NO("Esa tarea no existe.");
     await db().query(
       `update agencia_tareas set titulo = $3, descripcion = $4, area = $5, proyecto_id = $6, responsable_id = $7, fecha = $8, prioridad = $9, estado = $10,
-              hecha_en = case when $10 = 'hecha' then coalesce(hecha_en, now()) else null end, actualizado = now()
+              hecha_en = case when $10 = 'hecha' then coalesce(hecha_en, now()) else null end, actualizado = now(),
+              recordatorio = $11,
+              -- Quien pone o cambia el recordatorio también lo recibe
+              recordatorio_por = case when $11::text is null then null when recordatorio is distinct from $11 then $12 else recordatorio_por end
         where id = $1 and negocio_id = $2`,
-      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado]
+      [antes.id, ctx.negocioId, titulo, descripcion, area, proyectoId, responsableId, fecha, prioridad, estado, recordatorio, ctx.usuarioId]
     );
     const proyecto = proyectoId ? ((await db().query(`select nombre from fin_proyectos where id = $1`, [proyectoId])).rows[0]?.nombre as string) : null;
     const hoy = hoyColombia();
@@ -165,6 +173,7 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         area: AREAS[antes.area],
         proyecto: antes.proyecto,
         descripcion: antes.descripcion,
+        recordatorio: antes.recordatorio ? RECORDATORIOS[antes.recordatorio] : "Sin recordatorio",
       },
       {
         titulo,
@@ -175,8 +184,9 @@ export async function guardarTarea(e: EntradaTarea): Promise<Resultado> {
         area: AREAS[area],
         proyecto,
         descripcion,
+        recordatorio: recordatorio ? RECORDATORIOS[recordatorio as keyof typeof RECORDATORIOS] : "Sin recordatorio",
       },
-      { titulo: "Título", responsable: "Responsable", fecha: "Fecha", prioridad: "Prioridad", estado: "Estado", area: "Área", proyecto: "Proyecto", descripcion: "Descripción" }
+      { titulo: "Título", responsable: "Responsable", fecha: "Fecha", prioridad: "Prioridad", estado: "Estado", area: "Área", proyecto: "Proyecto", descripcion: "Descripción", recordatorio: "Recordatorio" }
     );
     if (cambios.length) await registrar(ctx, { accion: "editar", entidad: "tarea", entidadId: antes.id, proyectoId, titulo: `Editó la tarea «${titulo}»`, cambios });
     if (responsableId && responsableId !== antes.responsable_id) avisarAsignada(ctx, { id: antes.id, titulo, fecha, prioridad }, persona?.usuario_id ?? null);

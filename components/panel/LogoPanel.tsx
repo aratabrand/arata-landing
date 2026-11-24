@@ -7,9 +7,12 @@
 export default function LogoPanel({
   surface = "dark",
   className = "",
+  soloMarca = false,
 }: {
   surface?: "dark" | "light";
   className?: string;
+  /** Solo la marca (sin el texto «Arata San»): menú lateral recogido (D-183). */
+  soloMarca?: boolean;
 }) {
   // surface dark  -> texto blanco
   // surface light -> texto oscuro (ink)
@@ -17,7 +20,7 @@ export default function LogoPanel({
 
   return (
     <svg
-      viewBox="0 0 680 119"
+      viewBox={soloMarca ? "0 0 104 119" : "0 0 680 119"}
       className={className}
       fill="none"
       role="img"
