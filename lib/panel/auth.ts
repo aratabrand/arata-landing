@@ -42,6 +42,8 @@ function crear() {
       twoFactor({
         issuer: "Arata San",
         accountLockout: { enabled: true, maxFailedAttempts: 5, durationSeconds: 15 * 60 },
+        // Tiempo entre la contraseña y el código (antes 10 min por defecto: con más, el código correcto se rechazaba)
+        twoFactorCookieMaxAge: 15 * 60,
       }),
       nextCookies(), // siempre de último
     ],

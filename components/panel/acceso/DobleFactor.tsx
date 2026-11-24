@@ -17,8 +17,12 @@ type Paso =
   | { paso: "respaldo"; codigos: string[] }
   | { paso: "codigo" };
 
+/** Pasó el tiempo entre la contraseña y el código (15 min): ningún código sirve, hay que volver a entrar. */
+const vencido = (err: { code?: string; message?: string } | null) => /two.?factor.?cookie/i.test(`${err?.code ?? ""} ${err?.message ?? ""}`);
+
 function mensajeError(err: { status?: number; code?: string; message?: string } | null) {
   if (!err) return "";
+  if (vencido(err)) return "Pasaron más de 15 minutos desde que pusiste tu contraseña y por seguridad se venció. Vuelve a entrar y escribe el código enseguida.";
   if (err.status === 429) return "Demasiados intentos. Espera un minuto.";
   if (`${err.code ?? ""} ${err.message ?? ""}`.toLowerCase().includes("lock")) return "Cuenta bloqueada 15 minutos por códigos equivocados.";
   return "Ese código no sirve. Revisa que sea el más reciente.";
@@ -30,6 +34,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
   const [usarRespaldo, setUsarRespaldo] = useState(false);
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [caducado, setCaducado] = useState(false);
 
   if (modo === "inactivo") {
     return <p className="text-center text-sm text-fog">El inicio de sesión todavía no está conectado.</p>;
@@ -69,6 +74,7 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
     setEnviando(false);
     if (error) {
       setCodigo("");
+      if (vencido(error)) setCaducado(true);
       return setError(mensajeError(error));
     }
     if (paso.paso === "qr") return setPaso({ paso: "respaldo", codigos: paso.respaldo });
@@ -95,8 +101,14 @@ export default function DobleFactor({ modo }: { modo: Modo }) {
           {error}
         </p>
       )}
+      {caducado && (
+        <button type="button" onClick={salir} className="h-11 w-full rounded-full pn-primario text-sm font-semibold">
+          Volver a entrar
+        </button>
+      )}
       <button
         type="submit"
+        hidden={caducado}
         disabled={enviando || codigo.length < 6}
         className="h-11 w-full rounded-full pn-primario text-sm font-semibold disabled:opacity-50"
       >

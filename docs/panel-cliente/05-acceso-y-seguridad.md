@@ -222,6 +222,10 @@ El botón **«Buscar más prospectos»** (Clientes → Prospectos, solo Sergio y
 | Tiempo | Una página tarda hasta 1 minuto: la pantalla pide una página por llamada y `clientes/page.tsx` declara `maxDuration = 120`. |
 | Código | `lib/panel/clientes/scavio.ts` (API), `app/(panel)/panel/(app)/clientes/buscar.ts` (acciones), `components/panel/BuscarProspectos.tsx` (pantalla), migración `db/panel/017_buscar_prospectos.sql`. Prueba sin gastar: `npx -y tsx scripts/prueba-buscar-prospectos.ts`. |
 
+## 3g. «El código no sirve» aunque sea el correcto (24 nov 2026)
+
+Después de poner la contraseña hay **15 minutos** para escribir el código (`twoFactorCookieMaxAge` en `lib/panel/auth.ts`; antes eran 10 por defecto). Pasado ese tiempo Better Auth rechaza cualquier código (`INVALID_TWO_FACTOR_COOKIE`) y **no** cuenta como intento fallido. La pantalla ahora lo dice claro («Pasaron más de 15 minutos…») y muestra **«Volver a entrar»**. Si alguien reporta que su código no sirve, revisar en Neon: `twoFactor.failedVerificationCount` en 0 y `lockedUntil` vacío = fue el tiempo, no el código. Si el contador sube, revisar que el celular tenga la hora automática y que la app no tenga una entrada vieja de «Arata San».
+
 ## 4. Si se pierde el celular
 
 1. Entrar con **uno de los códigos de respaldo** ("No tengo el celular: usar un código de respaldo"). Cada código sirve una vez.
