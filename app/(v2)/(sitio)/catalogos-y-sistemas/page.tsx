@@ -41,8 +41,14 @@ export default function CatalogosYSistemas() {
       />
       <ServiceHero {...c.hero} tipo="catalogo" />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre="" items={c.problema.items} />
-      {/* D-195: "Tu catálogo, listo para vender" vuelve como bento con ilustraciones, antes del video de Caravana (D-129 lo había quitado). */}
-      <IncludesBento id="tienda" titulo={c.tienda.titulo} items={c.tienda.items} />
+      {/* D-200: "Tu catálogo, listo para vender" vuelve como bento con ilustraciones, antes del video de Caravana (D-129 lo había quitado). */}
+      <IncludesBento
+        id="tienda"
+        titulo={c.tienda.titulo}
+        items={c.tienda.items}
+        // Como en /lp/catalogos (D-199): con 10 puntos, la entrega va a lo ancho y la grilla queda completa
+        celdas={{ entrega: { clase: "sm:col-span-2 lg:col-span-4", alto: "mx-auto h-24 w-full max-w-xl" } }}
+      />
       {/* D-129: casos de éxito en video. La franja de precio va debajo. */}
       <CasosExito
         id="casos-catalogo"

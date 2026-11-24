@@ -5,7 +5,7 @@ import { Container, SectionHeader } from "./primitives";
 import type { Incluye } from "@/content/servicios";
 import { cn } from "@/lib/utils";
 
-// "Todo lo que trae tu página" (D-078): bento con una ilustración SVG animada
+// "Todo lo que trae tu página" (D-078) y "Todo lo que incluye tu tienda" (D-199): bento con una ilustración SVG animada
 // que cuenta CADA punto (no un ícono genérico). Las animaciones arrancan cuando la
 // tarjeta entra en pantalla (.is-visible de <Reveal>), son solo transform/opacity
 // y con movimiento reducido se ve el estado final. CSS en globals.css (.ib-*).
@@ -412,153 +412,173 @@ function Contacto() {
   );
 }
 
-/* Catálogo (D-195) · Catálogo con carrito: productos por categoría y el pedido se arma solo */
+/* ── Tienda por WhatsApp (D-199): las cuatro piezas propias de la tienda ── */
+
+/* Catálogo con carrito: el cliente ve los productos y los agrega al carrito */
 function Carrito() {
-  const prods = [0, 1, 2, 3];
+  const productos = [0, 1, 2, 3];
   return (
-    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
-      {["Todo", "Camisetas", "Gorras"].map((t, i) => (
-        <g key={t}>
-          <rect x={8 + [0, 40, 102][i]} y="6" width={[34, 56, 46][i]} height="16" rx="8" fill={i === 0 ? L : FILL} stroke={i === 0 ? "none" : LINE} />
-          <text x={8 + [0, 40, 102][i] + [34, 56, 46][i] / 2} y="17" textAnchor="middle" fontSize="7.5" fontWeight={i === 0 ? 800 : 400} fill={i === 0 ? "#03010B" : S} fontFamily="var(--font-sans)">
+    <svg viewBox="0 0 340 130" className="h-full w-full" aria-hidden>
+      {["Todo", "Camisetas", "Gorras"].map((t, k) => (
+        <g key={t} className="ib-rise" style={v(0)}>
+          <rect x={10 + k * 62} y="6" width={k === 0 ? 40 : 56} height="16" rx="8" fill={k === 0 ? L : FILL} stroke={k === 0 ? "none" : LINE} />
+          <text x={10 + k * 62 + (k === 0 ? 20 : 28)} y="17" textAnchor="middle" fontSize="7.5" fontWeight="700" fill={k === 0 ? "#03010B" : S} fontFamily="var(--font-sans)">
             {t}
           </text>
         </g>
       ))}
+      {productos.map((k) => {
+        const x = 10 + k * 66;
+        return (
+          <g key={k} className="ib-rise" style={v(k + 1)}>
+            <rect x={x} y="30" width="58" height="94" rx="8" fill={FILL} stroke={k === 1 ? L : LINE} strokeOpacity={k === 1 ? 0.6 : 1} />
+            <rect x={x + 6} y="36" width="46" height="40" rx="5" fill={k === 1 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
+            <rect x={x + 6} y="84" width="34" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+            <rect x={x + 6} y="94" width="24" height="4" rx="2" fill="rgba(255,255,255,0.22)" />
+            <circle cx={x + 46} cy="110" r="7" fill={k === 1 ? L : "rgba(255,255,255,0.12)"} />
+            <path d={`M${x + 43} 110 h6 M${x + 46} 107 v6`} stroke={k === 1 ? "#03010B" : S} strokeWidth="1.6" strokeLinecap="round" />
+          </g>
+        );
+      })}
+      <circle cx="122" cy="110" r="11" fill="none" stroke={L} strokeWidth="1.5" className="ib-tap" />
       {/* carrito con el número de productos */}
-      <g>
-        <path d="M278 8 h5 l4 14 h15 l3 -10 h-20" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="290" cy="26" r="1.8" fill="rgba(255,255,255,0.7)" />
-        <circle cx="300" cy="26" r="1.8" fill="rgba(255,255,255,0.7)" />
-        <g className="ib-pop" style={v(4)}>
-          <circle cx="307" cy="8" r="6.5" fill={L} />
-          <text x="307" y="10.8" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#03010B" fontFamily="var(--font-display)">3</text>
-        </g>
+      <g className="ib-rise" style={v(5)}>
+        <rect x="282" y="34" width="50" height="44" rx="10" fill={FILL} stroke={LINE} />
+        <path d="M294 48 h4 l4 14 h14 l3 -10 h-19" fill="none" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="304" cy="67" r="2" fill="#FFFFFF" />
+        <circle cx="314" cy="67" r="2" fill="#FFFFFF" />
       </g>
-      {prods.map((i) => (
-        <g key={i} className="ib-rise" style={v(i)}>
-          <rect x={8 + i * 78} y="32" width="70" height="92" rx="8" fill={FILL} stroke={i === 1 ? L : LINE} strokeOpacity={i === 1 ? 0.6 : 1} />
-          <rect x={14 + i * 78} y="38" width="58" height="40" rx="5" fill={i === 1 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
-          <rect x={14 + i * 78} y="85" width="40" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
-          <rect x={14 + i * 78} y="95" width="26" height="4" rx="2" fill={i === 1 ? L : "rgba(255,255,255,0.25)"} />
-          <circle cx={63 + i * 78} cy="110" r="7" fill={i === 1 ? L : "rgba(255,255,255,0.12)"} />
-          <path d={`M${60 + i * 78} 110 h6 M${63 + i * 78} 107 v6`} stroke={i === 1 ? "#03010B" : "#FFFFFF"} strokeWidth="1.5" strokeLinecap="round" />
-        </g>
-      ))}
-      <circle cx="141" cy="110" r="10" fill="none" stroke={L} strokeWidth="1.5" className="ib-tap" />
-    </svg>
-  );
-}
-
-/* Catálogo (D-195) · Pedido directo a tu WhatsApp: llega ordenado, con productos y cantidades */
-function Whatsapp() {
-  const lineas = [
-    { t: "2 × Camiseta negra", y: 112 },
-    { t: "1 × Gorra", y: 126 },
-    { t: "3 × Stickers", y: 140 },
-  ];
-  return (
-    <svg viewBox="0 0 160 250" className="h-full w-full" aria-hidden>
-      <rect x="30" y="12" width="100" height="228" rx="20" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-      <rect x="66" y="19" width="28" height="5" rx="2.5" fill={LINE} />
-      {/* encabezado del chat */}
-      <rect x="38" y="30" width="84" height="26" rx="6" fill="rgba(255,255,255,0.06)" />
-      <circle cx="51" cy="43" r="7" fill={L} />
-      <path d="M47.5 46.5 l1-2.6 a3.6 3.6 0 1 1 1.5 1.5 z" fill="none" stroke="#03010B" strokeWidth="1.1" strokeLinejoin="round" />
-      <rect x="62" y="38" width="40" height="4.5" rx="2.25" fill="rgba(255,255,255,0.7)" />
-      <rect x="62" y="46" width="26" height="3.5" rx="1.75" fill="rgba(255,255,255,0.25)" />
-      {/* el pedido */}
-      <g className="ib-rise" style={v(0)}>
-        <rect x="42" y="72" width="76" height="98" rx="8" fill="rgba(182,255,0,0.1)" stroke={L} strokeOpacity="0.5" />
-        <text x="49" y="88" fontSize="8" fontWeight="800" fill={L} fontFamily="var(--font-display)">Nuevo pedido</text>
-        <rect x="49" y="94" width="62" height="1" fill="rgba(255,255,255,0.15)" />
-      </g>
-      {lineas.map((l, i) => (
-        <text key={l.t} x="49" y={l.y - 4} fontSize="6.6" fill="rgba(255,255,255,0.85)" fontFamily="var(--font-sans)" className="ib-rise" style={v(i + 1)}>
-          {l.t}
+      <g className="ib-pop">
+        <circle cx="328" cy="36" r="9" fill={L} />
+        <text x="328" y="39.5" textAnchor="middle" fontSize="9" fontWeight="800" fill="#03010B" fontFamily="var(--font-display)">
+          2
         </text>
-      ))}
-      <g className="ib-rise" style={v(4)}>
-        <rect x="49" y="144" width="62" height="1" fill="rgba(255,255,255,0.15)" />
-        <text x="49" y="158" fontSize="7" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">Total</text>
-        <text x="111" y="158" textAnchor="end" fontSize="7" fontWeight="800" fill={L} fontFamily="var(--font-display)">$ 148.000</text>
-        <path d="M100 165 l2 2 l4 -4 M104 165 l2 2 l4 -4" fill="none" stroke={L} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
       </g>
-      {/* respuesta */}
-      <g className="ib-pop" style={v(5)}>
-        <rect x="42" y="180" width="56" height="20" rx="7" fill="rgba(255,255,255,0.08)" />
-        <rect x="48" y="188" width="40" height="4" rx="2" fill="rgba(255,255,255,0.4)" />
-      </g>
-    </svg>
-  );
-}
-
-/* Catálogo (D-195) · Panel para tu tienda: los pedidos del día con su estado */
-function PanelTienda() {
-  const pedidos = [
-    { n: "#128", e: "Nuevo", on: true },
-    { n: "#127", e: "Preparando", on: false },
-    { n: "#126", e: "Entregado", on: false },
-  ];
-  return (
-    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
-      <rect x="8" y="6" width="304" height="118" rx="10" fill="rgba(255,255,255,0.02)" stroke={LINE} />
-      <rect x="8" y="6" width="56" height="118" rx="10" fill="rgba(255,255,255,0.04)" />
-      {[22, 36, 50, 64].map((y, i) => (
-        <rect key={y} x="18" y={y} width="34" height="5" rx="2.5" fill={i === 1 ? L : "rgba(255,255,255,0.2)"} />
-      ))}
-      <text x="76" y="24" fontSize="8" fill={S} fontFamily="var(--font-sans)">Pedidos de hoy</text>
-      <text x="300" y="26" textAnchor="end" fontSize="16" fontWeight="800" fill={L} fontFamily="var(--font-display)" className="ib-fade" style={v(1)}>
-        12
+      <text x="307" y="94" textAnchor="middle" fontSize="7.5" fill={S} fontFamily="var(--font-sans)">
+        Tu carrito
       </text>
-      {pedidos.map((p, i) => (
-        <g key={p.n} className="ib-rise" style={v(i)}>
-          <rect x="74" y={36 + i * 29} width="228" height="24" rx="6" fill={FILL} stroke={p.on ? L : "none"} strokeOpacity="0.5" />
-          <text x="84" y={51 + i * 29} fontSize="8" fontWeight="800" fill="#FFFFFF" fontFamily="var(--font-display)">{p.n}</text>
-          <rect x="112" y={45 + i * 29} width={70 - i * 10} height="5" rx="2.5" fill="rgba(255,255,255,0.4)" />
-          <rect x="238" y={41 + i * 29} width="56" height="14" rx="7" fill={p.on ? L : "rgba(255,255,255,0.1)"} />
-          <text x="266" y={50.5 + i * 29} textAnchor="middle" fontSize="7" fontWeight={p.on ? 800 : 400} fill={p.on ? "#03010B" : S} fontFamily="var(--font-sans)">
-            {p.e}
-          </text>
-        </g>
-      ))}
     </svg>
   );
 }
 
-/* Catálogo (D-195) · Inventario: cuánto queda de cada producto */
-function Inventario() {
-  const prods = [
-    { t: "Camiseta negra", q: 24, w: 150 },
-    { t: "Gorra", q: 12, w: 76 },
-    { t: "Termo", q: 3, w: 20 },
+/* Pedido directo a tu WhatsApp: el pedido llega ordenado, con productos y cantidades */
+function Pedido() {
+  const lineas = [
+    { c: "2 ×", t: "Camiseta negra" },
+    { c: "1 ×", t: "Gorra" },
+    { c: "3 ×", t: "Stickers" },
   ];
   return (
-    <svg viewBox="0 0 320 130" className="h-full w-full" aria-hidden>
-      {prods.map((p, i) => (
-        <g key={p.t}>
-          <rect x="8" y={10 + i * 40} width="38" height="30" rx="6" fill={i === 2 ? "rgba(182,255,0,0.14)" : "rgba(255,255,255,0.08)"} />
-          <text x="56" y={21 + i * 40} fontSize="8" fill="rgba(255,255,255,0.85)" fontFamily="var(--font-sans)">{p.t}</text>
-          <rect x="56" y={28 + i * 40} width="200" height="7" rx="3.5" fill="rgba(255,255,255,0.08)" />
-          <rect x="56" y={28 + i * 40} width={p.w} height="7" rx="3.5" fill={i === 2 ? L : "rgba(255,255,255,0.55)"} className="ib-bar" />
-          <text x="300" y={36 + i * 40} textAnchor="end" fontSize="16" fontWeight="800" fill={i === 2 ? L : "#FFFFFF"} fontFamily="var(--font-display)" className="ib-fade" style={v(i + 1)}>
-            {p.q}
+    <svg viewBox="0 0 170 250" className="h-full w-full" aria-hidden>
+      <rect x="10" y="6" width="150" height="238" rx="22" fill="rgba(255,255,255,0.02)" stroke={LINE} />
+      <rect x="10" y="6" width="150" height="40" rx="22" fill={FILL} />
+      <circle cx="32" cy="27" r="9" fill={L} />
+      <rect x="48" y="20" width="56" height="5" rx="2.5" fill="rgba(255,255,255,0.6)" />
+      <rect x="48" y="30" width="34" height="4" rx="2" fill="rgba(255,255,255,0.22)" />
+      <g className="ib-rise" style={v(0)}>
+        <rect x="22" y="58" width="90" height="22" rx="10" fill="rgba(255,255,255,0.08)" />
+        <rect x="32" y="67" width="60" height="4" rx="2" fill="rgba(255,255,255,0.3)" />
+      </g>
+      <g className="ib-rise" style={v(2)}>
+        <rect x="30" y="92" width="120" height="118" rx="12" fill="rgba(182,255,0,0.1)" stroke={L} strokeOpacity="0.5" />
+        <text x="42" y="110" fontSize="9" fontWeight="800" fill={L} fontFamily="var(--font-display)">
+          Nuevo pedido
+        </text>
+        {lineas.map((l, k) => (
+          <g key={l.t} className="ib-fade" style={v(k + 3)}>
+            <text x="42" y={130 + k * 18} fontSize="8.5" fontWeight="700" fill="#FFFFFF" fontFamily="var(--font-sans)">
+              {l.c}
+            </text>
+            <text x="60" y={130 + k * 18} fontSize="8.5" fill="rgba(255,255,255,0.75)" fontFamily="var(--font-sans)">
+              {l.t}
+            </text>
+          </g>
+        ))}
+        <line x1="42" y1="180" x2="138" y2="180" stroke="rgba(255,255,255,0.14)" />
+        <rect x="42" y="188" width="30" height="5" rx="2.5" fill="rgba(255,255,255,0.45)" />
+        <rect x="104" y="188" width="34" height="5" rx="2.5" fill={L} />
+      </g>
+      <g className="ib-pop">
+        <path d="M118 222 l3 3 l6 -6 M124 222 l3 3 l6 -6" fill="none" stroke={L} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+    </svg>
+  );
+}
+
+/* Panel para tu tienda: los pedidos del día y su estado, desde el celular */
+function PanelTienda() {
+  const filas = [
+    { n: "#128", listo: true },
+    { n: "#127", listo: false },
+    { n: "#126", listo: false },
+  ];
+  return (
+    <svg viewBox="0 0 220 120" className="h-full w-full" aria-hidden>
+      <rect x="10" y="8" width="200" height="104" rx="10" fill="rgba(255,255,255,0.02)" stroke={LINE} />
+      <rect x="10" y="8" width="44" height="104" rx="10" fill="rgba(255,255,255,0.04)" />
+      {[24, 38, 52].map((y, i) => (
+        <rect key={y} x="20" y={y} width="24" height="5" rx="2.5" fill={i === 1 ? L : "rgba(255,255,255,0.2)"} />
+      ))}
+      <text x="66" y="26" fontSize="8.5" fontWeight="700" fill="#FFFFFF" fontFamily="var(--font-display)">
+        Pedidos de hoy
+      </text>
+      {filas.map((f, k) => (
+        <g key={f.n} className="ib-rise" style={v(k)}>
+          <rect x="64" y={36 + k * 24} width="136" height="18" rx="6" fill={FILL} />
+          <text x="72" y={48 + k * 24} fontSize="8" fontWeight="700" fill="rgba(255,255,255,0.8)" fontFamily="var(--font-sans)">
+            {f.n}
           </text>
-          {i === 2 && (
-            <g className="ib-pop" style={v(3)}>
-              <rect x="186" y={10 + i * 40} width="70" height="14" rx="7" fill="rgba(182,255,0,0.14)" stroke={L} strokeOpacity="0.6" />
-              <text x="221" y={19.5 + i * 40} textAnchor="middle" fontSize="7" fontWeight="800" fill={L} fontFamily="var(--font-sans)">Quedan pocos</text>
-            </g>
-          )}
+          <rect x="96" y={43 + k * 24} width="40" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+          <rect x="152" y={39 + k * 24} width="42" height="12" rx="6" fill="rgba(255,255,255,0.1)" />
+          <text x="173" y={48 + k * 24} textAnchor="middle" fontSize="7" fill={S} fontFamily="var(--font-sans)">
+            Nuevo
+          </text>
         </g>
       ))}
+      <g className="ib-pop">
+        <rect x="152" y="39" width="42" height="12" rx="6" fill={L} />
+        <text x="173" y="48" textAnchor="middle" fontSize="7" fontWeight="800" fill="#03010B" fontFamily="var(--font-sans)">
+          Enviado
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+/* Inventario: cuánto queda de cada producto y aviso cuando se está acabando */
+function Inventario() {
+  const filas = [
+    { t: "Camiseta negra", n: 12, w: 96 },
+    { t: "Gorra", n: 7, w: 56 },
+    { t: "Stickers", n: 2, w: 16 },
+  ];
+  return (
+    <svg viewBox="0 0 220 120" className="h-full w-full" aria-hidden>
+      {filas.map((f, k) => (
+        <g key={f.t} className="ib-rise" style={v(k)}>
+          <text x="12" y={22 + k * 34} fontSize="8.5" fill="rgba(255,255,255,0.75)" fontFamily="var(--font-sans)">
+            {f.t}
+          </text>
+          <rect x="12" y={30 + k * 34} width="120" height="7" rx="3.5" fill="rgba(255,255,255,0.08)" />
+          <rect x="12" y={30 + k * 34} width={f.w} height="7" rx="3.5" fill={k === 2 ? L : S} className="ib-bar" />
+          <text x="146" y={37 + k * 34} fontSize="10" fontWeight="800" fill={k === 2 ? L : "#FFFFFF"} fontFamily="var(--font-display)">
+            {f.n}
+          </text>
+        </g>
+      ))}
+      <g className="ib-pop">
+        <rect x="160" y="86" width="52" height="16" rx="8" fill={L} />
+        <text x="186" y="97" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#03010B" fontFamily="var(--font-sans)">
+          Quedan 2
+        </text>
+      </g>
     </svg>
   );
 }
 
 const ILUSTRACION: Record<string, () => ReactNode> = {
   carrito: Carrito,
-  whatsapp: Whatsapp,
+  pedido: Pedido,
   panelTienda: PanelTienda,
   inventario: Inventario,
   contacto: Contacto,
@@ -576,12 +596,12 @@ const ILUSTRACION: Record<string, () => ReactNode> = {
 };
 
 // Posición en la grilla de 4 columnas × 3 filas (escritorio). En celular, una columna.
-// Catálogo (D-195): carrito, panel e inventario a lo ancho y el chat de WhatsApp alto, como el celular.
-const CELDA: Record<string, { clase: string; alto: string }> = {
+type Celda = { clase: string; alto: string };
+const CELDA: Record<string, Celda> = {
   carrito: { clase: "lg:col-span-2", alto: "h-36" },
-  panelTienda: { clase: "lg:col-span-2", alto: "h-36" },
-  inventario: { clase: "lg:col-span-2", alto: "h-36" },
-  whatsapp: { clase: "lg:row-span-2", alto: "h-56 lg:h-72" },
+  pedido: { clase: "lg:row-span-2", alto: "mx-auto h-56 w-full max-w-[220px] lg:h-72 lg:max-w-none" },
+  panelTienda: { clase: "", alto: "h-28" },
+  inventario: { clase: "", alto: "h-28" },
   secciones: { clase: "lg:col-span-2", alto: "h-36" },
   paginas: { clase: "lg:col-span-2", alto: "h-36" },
   blog: { clase: "", alto: "h-28" },
@@ -596,7 +616,21 @@ const CELDA: Record<string, { clase: string; alto: string }> = {
   entrega: { clase: "sm:col-span-2", alto: "h-24" },
 };
 
-export default function IncludesBento({ id, titulo, items }: { id: string; titulo: string; items: Incluye[] }) {
+export default function IncludesBento({
+  id,
+  titulo,
+  items,
+  celdas,
+  pie,
+}: {
+  id: string;
+  titulo: string;
+  items: Incluye[];
+  /** Cambia la celda de un ícono solo en esta grilla (p. ej. la entrega a lo ancho en la tienda, D-199). */
+  celdas?: Record<string, Celda>;
+  /** Lo que va debajo de la grilla (en la landing: bono, precio y garantías). */
+  pie?: ReactNode;
+}) {
   return (
     <section aria-labelledby={id} className="relative isolate py-20 sm:py-28">
       <GridBackground orb="50% 45%" />
@@ -605,7 +639,7 @@ export default function IncludesBento({ id, titulo, items }: { id: string; titul
         <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-flow-dense lg:grid-cols-4">
           {items.map((it, i) => {
             const Ilus = ILUSTRACION[it.icono];
-            const celda = CELDA[it.icono] ?? { clase: "", alto: "h-28" };
+            const celda = celdas?.[it.icono] ?? CELDA[it.icono] ?? { clase: "", alto: "h-28" };
             const clave = it.icono === "velocidad";
             return (
               <Reveal as="li" key={it.titulo} delay={(i % 4) * 60} className={cn("ib h-full", celda.clase)}>
@@ -623,6 +657,7 @@ export default function IncludesBento({ id, titulo, items }: { id: string; titul
             );
           })}
         </ul>
+        {pie}
       </Container>
     </section>
   );

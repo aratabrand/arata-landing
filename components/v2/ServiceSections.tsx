@@ -32,6 +32,7 @@ export function ServiceHero({
   ctaSecundario,
   casos,
   tipo,
+  enlace,
 }: {
   etiqueta: string;
   titulo: string;
@@ -40,6 +41,8 @@ export function ServiceHero({
   ctaSecundario: string;
   casos: string[];
   tipo: string;
+  /** Adónde lleva el botón principal; por defecto /agendar con el tipo elegido (D-197: landings van directo al calendario). */
+  enlace?: string;
 }) {
   const [a, b] = casos.map(porSlug);
   return (
@@ -56,7 +59,7 @@ export function ServiceHero({
           </h1>
           <p className="mx-auto mt-6 max-w-xl animate-fade-up text-v2-lead text-fog [animation-delay:80ms] lg:mx-0">{texto}</p>
           <div className="mt-8 flex animate-fade-up flex-col items-stretch gap-3 [animation-delay:140ms] sm:flex-row sm:justify-center lg:justify-start">
-            <Button href={agendarCon(tipo)} size="lg" arrow>
+            <Button href={enlace ?? agendarCon(tipo)} size="lg" arrow>
               {cta}
             </Button>
             <Button href="#casos" size="lg" variant="secondary">
@@ -163,6 +166,7 @@ export function IncludesSection({
 export function PriceBar({
   precio,
   antes,
+  enlace,
   nota,
   pago,
   boton,
@@ -171,6 +175,8 @@ export function PriceBar({
   precio: string;
   /** Precio normal tachado al lado, cuando hay oferta (D-192). */
   antes?: string;
+  /** Adónde lleva el botón; por defecto /agendar con el tipo (D-197). */
+  enlace?: string;
   nota: string;
   pago: string;
   boton: string;
@@ -191,7 +197,7 @@ export function PriceBar({
         </p>
         <p className="mt-2 text-sm text-fog">{pago}</p>
       </div>
-      <Button href={agendarCon(tipo)} size="lg" arrow className="shrink-0">
+      <Button href={enlace ?? agendarCon(tipo)} size="lg" arrow className="shrink-0">
         {boton}
       </Button>
     </div>

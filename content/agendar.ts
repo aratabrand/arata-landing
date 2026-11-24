@@ -12,6 +12,9 @@ export type TipoAgenda = "pagina" | "catalogo" | "sistema" | "auditoria";
 export const calLinks = {
   reunion: process.env.NEXT_PUBLIC_CAL_LINK || "arata-san/asesoria-30min",
   auditoria: process.env.NEXT_PUBLIC_CAL_LINK_AUDITORIA || "arata-san/auditoria",
+  // D-197: agenda directa de las landings de campaña. Evento propio en Cal.com que pide el WhatsApp
+  // (y la casilla de datos); mientras no exista, usa el de la reunión.
+  landing: process.env.NEXT_PUBLIC_CAL_LINK_LANDING || process.env.NEXT_PUBLIC_CAL_LINK || "arata-san/asesoria-30min",
 };
 
 export const agendar = {

@@ -20,6 +20,7 @@ Este folder documenta **todo** el proceso de construcción del sitio de agencia 
 | [`blueprint/06-seo-geo-velocidad.md`](blueprint/06-seo-geo-velocidad.md) | SEO por página, datos estructurados, GEO (`llms.txt`), velocidad medida, legal y **lista de lanzamiento** | 5 |
 | [`blueprint/07-medicion-lanzamiento.md`](blueprint/07-medicion-lanzamiento.md) | Estado del lanzamiento, eventos que envía el sitio, **guía para instalar GA4 en GTM** y qué mirar cada semana | 6 |
 | [`portafolio.md`](portafolio.md) | Casos de estudio: problema → solución → resultado de cada proyecto | 0–2 |
+| [`campanas/auditoria-oferta-2026-11-24.md`](campanas/auditoria-oferta-2026-11-24.md) | **Auditoría de la oferta** con el método Hormozi (skill `alex-hormozi-pitch`): puntaje, fugas, riesgos y mejoras por prioridad | Campañas |
 | [`campanas/meta-tienda-whatsapp.md`](campanas/meta-tienda-whatsapp.md) | **Campaña de Meta** de Tienda por WhatsApp: pruebas de la landing `/lp/catalogos`, dolores del comerciante, ángulos de anuncio, mejoras por prioridad y copy para aprobar | Campañas |
 | [`decisiones.md`](decisiones.md) | Bitácora de cada decisión vigente: qué, cuándo, quién y por qué | Todas |
 | [`decisiones-archivo.md`](decisiones-archivo.md) | Decisiones reemplazadas del todo (historia, no se aplican) | — |
