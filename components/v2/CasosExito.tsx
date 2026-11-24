@@ -12,8 +12,11 @@ export default function CasosExito({
   id = "casos",
   servicio,
   pie,
+  sinEnlaces = false,
 }: {
   id?: string;
+  /** Landings de campaña (D-189): sin enlace a la ficha del caso, nadie sale de la página. */
+  sinEnlaces?: boolean;
   servicio?: "pagina" | "catalogo";
   pie?: ReactNode;
 } = {}) {
@@ -61,7 +64,7 @@ export default function CasosExito({
               reproducir: casosExito.reproducir,
               anterior: casosExito.anterior,
               siguiente: casosExito.siguiente,
-              verCaso: casosExito.verCaso,
+              verCaso: sinEnlaces ? "" : casosExito.verCaso,
             }}
           />
         </Reveal>

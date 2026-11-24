@@ -221,8 +221,11 @@ export function CaseCard({
   sizes,
   nivel = "h3",
   priority = false,
+  enlace = true,
 }: {
   proyecto: Proyecto;
+  /** false = tarjeta sin enlace a la ficha (landings de campaña, D-189). */
+  enlace?: boolean;
   frase?: string;
   sizes?: string;
   /** Nivel del título: h2 si la tarjeta va justo debajo del h1 (orden de encabezados). */
@@ -231,26 +234,43 @@ export function CaseCard({
   priority?: boolean;
 }) {
   const Titulo = nivel;
-  return (
-    <Spotlight as="article" className="group h-full p-2">
-      <Link href={`/portafolio/${proyecto.slug}`} className="flex h-full flex-col">
-        <HoverCapsule className="v2-frame aspect-[16/10]">
-          <ProjectPreview
-            proyecto={proyecto}
-            priority={priority}
-            sizes={sizes ?? "(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"}
-          />
-        </HoverCapsule>
-        <div className="flex flex-1 flex-col px-3 pb-3 pt-4">
-          <p className="text-xs font-semibold text-fog">{proyecto.etiqueta}</p>
-          <Titulo className="mt-1.5 font-display text-xl font-bold tracking-heading text-white">{proyecto.nombre}</Titulo>
-          <p className="mt-1.5 flex-1 text-sm leading-relaxed text-fog">{frase ?? proyecto.frase}</p>
+  const clases = "flex h-full flex-col";
+  const vista = (
+    <ProjectPreview
+      proyecto={proyecto}
+      priority={priority}
+      sizes={sizes ?? "(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"}
+    />
+  );
+  const cuerpo = (
+    <>
+      {enlace ? (
+        <HoverCapsule className="v2-frame aspect-[16/10]">{vista}</HoverCapsule>
+      ) : (
+        <div className="v2-frame relative aspect-[16/10]">{vista}</div>
+      )}
+      <div className="flex flex-1 flex-col px-3 pb-3 pt-4">
+        <p className="text-xs font-semibold text-fog">{proyecto.etiqueta}</p>
+        <Titulo className="mt-1.5 font-display text-xl font-bold tracking-heading text-white">{proyecto.nombre}</Titulo>
+        <p className="mt-1.5 flex-1 text-sm leading-relaxed text-fog">{frase ?? proyecto.frase}</p>
+        {enlace && (
           <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-colors group-hover:text-lime">
             Ver caso
             <ArrowRight aria-hidden className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </span>
-        </div>
-      </Link>
+        )}
+      </div>
+    </>
+  );
+  return (
+    <Spotlight as="article" className="group h-full p-2">
+      {enlace ? (
+        <Link href={`/portafolio/${proyecto.slug}`} className={clases}>
+          {cuerpo}
+        </Link>
+      ) : (
+        <div className={clases}>{cuerpo}</div>
+      )}
     </Spotlight>
   );
 }
@@ -259,10 +279,13 @@ export function CasesSection({
   titulo,
   boton,
   items,
+  sinEnlaces = false,
 }: {
   titulo: string;
   boton: string;
   items: { slug: string; frase: string }[];
+  /** Landings de campaña (D-189): sin botón al portafolio ni enlaces a las fichas. */
+  sinEnlaces?: boolean;
 }) {
   return (
     <section id="casos" aria-labelledby="casos-titulo" className="scroll-mt-20 py-20 sm:py-28">
@@ -271,15 +294,17 @@ export function CasesSection({
           id="casos-titulo"
           title={titulo}
           action={
-            <Button href="/portafolio" variant="secondary">
-              {boton}
-            </Button>
+            sinEnlaces ? undefined : (
+              <Button href="/portafolio" variant="secondary">
+                {boton}
+              </Button>
+            )
           }
         />
         <div className={cn("mt-10 grid gap-4 sm:grid-cols-2", items.length > 2 && "lg:grid-cols-3")}>
           {items.map((c, i) => (
             <Reveal key={c.slug} delay={i * 80} className="h-full">
-              <CaseCard proyecto={porSlug(c.slug)} frase={c.frase} />
+              <CaseCard proyecto={porSlug(c.slug)} frase={c.frase} enlace={!sinEnlaces} />
             </Reveal>
           ))}
         </div>

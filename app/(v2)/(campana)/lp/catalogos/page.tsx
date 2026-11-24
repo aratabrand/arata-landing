@@ -30,6 +30,7 @@ export default function LandingCatalogos() {
       <CasosExito
         id="casos-catalogo"
         servicio="catalogo"
+        sinEnlaces
         pie={
           <>
             <PriceBar
@@ -44,7 +45,7 @@ export default function LandingCatalogos() {
         }
       />
       <CustomSystemSection {...c.sistema} />
-      <CasesSection {...c.casos} />
+      <CasesSection {...c.casos} sinEnlaces />
       <StepsSection id="proceso" {...c.proceso} />
       <FaqSection titulo={c.faq.titulo} subtitulo="" items={c.faq.items} />
       <CtaCard cta={c.cta} />
