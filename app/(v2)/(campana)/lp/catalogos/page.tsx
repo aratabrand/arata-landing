@@ -9,10 +9,10 @@ import CintaOferta from "@/components/v2/campana/CintaOferta";
 import { ofertaVigente, textosLanding } from "@/content/campanas/catalogos";
 import { paginaV2 } from "@/lib/seo";
 
-// Landing de la campaña de Meta (D-188): copia de /catalogos-y-sistemas con marco propio.
+// Landing de la campaña de Meta (D-189): copia de /catalogos-y-sistemas con marco propio.
 // Textos en content/campanas/catalogos.ts (la página del sitio no se toca).
 // noindex (lo pone el layout de (campana)), sin JSON-LD y fuera del sitemap.
-// D-191: la oferta de noviembre termina sola. La página es estática pero se vuelve a armar
+// D-192: la oferta de noviembre termina sola. La página es estática pero se vuelve a armar
 // cada hora: pasada la fecha sale sin cinta y con el precio normal.
 export const revalidate = 3600;
 

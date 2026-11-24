@@ -15,7 +15,7 @@ export default function CasosExito({
   sinEnlaces = false,
 }: {
   id?: string;
-  /** Landings de campaña (D-189): sin enlace a la ficha del caso, nadie sale de la página. */
+  /** Landings de campaña (D-190): sin enlace a la ficha del caso, nadie sale de la página. */
   sinEnlaces?: boolean;
   servicio?: "pagina" | "catalogo";
   pie?: ReactNode;

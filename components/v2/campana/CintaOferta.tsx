@@ -1,7 +1,7 @@
 import { ArrowRight } from "../iconos";
 import { OFERTA, diasOferta, textoDias } from "@/content/campanas/catalogos";
 
-// Cinta de la oferta (D-191): franja lima encima del menú que queda fija al bajar.
+// Cinta de la oferta (D-192): franja lima encima del menú que queda fija al bajar.
 // Toda la cinta lleva a agendar. Sin JavaScript: los días que quedan se calculan
 // al armar la página (se vuelve a armar cada hora). Alto fijo de 40 px: MarcoCampana baja el contenido lo mismo (pt-10).
 export default function CintaOferta({ enlace }: { enlace: string }) {

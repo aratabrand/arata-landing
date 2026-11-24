@@ -6,10 +6,10 @@ import { Button } from "../Button";
 import type { Boton } from "@/lib/sitio-textos";
 import { cn } from "@/lib/utils";
 
-// Header de las landings de campaña (D-188): solo logo y botón de agendar.
+// Header de las landings de campaña (D-189): solo logo y botón de agendar.
 // Sin menú ni enlaces a otras páginas: quien llega por un anuncio tiene una sola salida.
 // Mismo estilo del header del sitio: transparente arriba y vidrio oscuro al bajar.
-// D-191: si hay `cinta` (oferta), va encima del menú y las dos quedan fijas arriba.
+// D-192: si hay `cinta` (oferta), va encima del menú y las dos quedan fijas arriba.
 export default function CampanaHeader({ cta, cinta }: { cta: Boton; cinta?: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {

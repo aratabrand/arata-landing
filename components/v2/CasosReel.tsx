@@ -35,7 +35,7 @@ export type TextosReel = {
   reproducir: string;
   anterior: string;
   siguiente: string;
-  /** Vacío = sin enlace al caso (landings de campaña, D-189). */
+  /** Vacío = sin enlace al caso (landings de campaña, D-190). */
   verCaso: string;
 };
 

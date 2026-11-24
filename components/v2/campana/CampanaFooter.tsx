@@ -5,7 +5,7 @@ import { AbrirPreferenciasCookies } from "@/components/CookieBanner";
 import { cookies } from "@/content/cookies";
 import { footer } from "@/content/inicio";
 
-// Footer corto de las landings de campaña (D-188): sin columnas de enlaces.
+// Footer corto de las landings de campaña (D-189): sin columnas de enlaces.
 // Solo lo que pide la ley: política de datos y volver a elegir las cookies (D-130).
 export default function CampanaFooter() {
   return (

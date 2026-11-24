@@ -169,7 +169,7 @@ export function PriceBar({
   tipo,
 }: {
   precio: string;
-  /** Precio normal tachado al lado, cuando hay oferta (D-191). */
+  /** Precio normal tachado al lado, cuando hay oferta (D-192). */
   antes?: string;
   nota: string;
   pago: string;
@@ -234,7 +234,7 @@ export function CaseCard({
   enlace = true,
 }: {
   proyecto: Proyecto;
-  /** false = tarjeta sin enlace a la ficha (landings de campaña, D-189). */
+  /** false = tarjeta sin enlace a la ficha (landings de campaña, D-190). */
   enlace?: boolean;
   frase?: string;
   sizes?: string;
@@ -294,7 +294,7 @@ export function CasesSection({
   titulo: string;
   boton: string;
   items: { slug: string; frase: string }[];
-  /** Landings de campaña (D-189): sin botón al portafolio ni enlaces a las fichas. */
+  /** Landings de campaña (D-190): sin botón al portafolio ni enlaces a las fichas. */
   sinEnlaces?: boolean;
 }) {
   return (

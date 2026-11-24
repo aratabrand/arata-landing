@@ -1,14 +1,14 @@
 import { catalogos } from "@/content/servicios";
 
-/* ── Landing de campaña de Meta: Tienda por WhatsApp — /lp/catalogos (D-188) ──
+/* ── Landing de campaña de Meta: Tienda por WhatsApp — /lp/catalogos (D-189) ──
    Arranca como copia de /catalogos-y-sistemas. Para cambiar un texto SOLO en la
    campaña, se pone la llave aquí y la página del sitio no se toca.
    Plan y copy por aprobar: docs/campanas/meta-tienda-whatsapp.md */
 
-// D-190: precio normal en pesos. 800 USD con la TRM del 24 nov 2026 ($ 3.505,92) = $ 2.804.736 → redondeado.
+// D-191: precio normal en pesos. 800 USD con la TRM del 24 nov 2026 ($ 3.505,92) = $ 2.804.736 → redondeado.
 export const PRECIO_COP = "$ 2.800.000";
 
-// D-191: oferta de noviembre. Precio fijo (sin «desde»), con el precio normal tachado.
+// D-192: oferta de noviembre. Precio fijo (sin «desde»), con el precio normal tachado.
 // Termina sola: la página se vuelve a armar cada hora (revalidate) y, pasada la fecha,
 // sale sin cinta y con el precio normal. Para una oferta nueva se cambian estos datos.
 export const OFERTA = {
@@ -58,7 +58,7 @@ export function textosLanding(conOferta: boolean) {
         ? `precio especial hasta el ${OFERTA.hastaTexto}.`
         : "unos 800 USD. Depende del tamaño de tu tienda.",
     },
-    // D-190: sin «Tu Negocio en Orden»: el anuncio vende una sola oferta.
+    // D-191: sin «Tu Negocio en Orden»: el anuncio vende una sola oferta.
     proceso: {
       ...catalogos.proceso,
       items: catalogos.proceso.items.map((p) =>
@@ -68,9 +68,9 @@ export function textosLanding(conOferta: boolean) {
     faq: {
       ...catalogos.faq,
       items: [
-        // D-191: con la oferta el precio es fijo; la pregunta del «desde» no aplica
+        // D-192: con la oferta el precio es fijo; la pregunta del «desde» no aplica
         ...(conOferta ? faqBase.filter((f) => !f.p.includes("desde")) : faqBase),
-        // D-190: respuestas de Sergio (24 nov 2026)
+        // D-191: respuestas de Sergio (24 nov 2026)
         {
           p: "¿Cuántos productos caben?",
           r: conOferta

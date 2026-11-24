@@ -4,12 +4,12 @@
 |---|---|---|---|
 | Borrador | 0.3 | 2026-11-24 | Sergio (copy y oferta) · Andrés (público y presupuesto) |
 
-**Landing:** `aratasan.com/lp/catalogos` (D-188, D-189) · **Objetivo:** reuniones agendadas para *Tienda por WhatsApp en 5 Días* (desde 800 USD).
-**Regla:** primero se aprueba el copy (§5) y después se construye (§4). Ya construido (D-190): sin *Tu Negocio en Orden*, precio en pesos y las respuestas de productos y primer año. Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
+**Landing:** `aratasan.com/lp/catalogos` (D-189, D-190) · **Objetivo:** reuniones agendadas para *Tienda por WhatsApp en 5 Días* (desde 800 USD).
+**Regla:** primero se aprueba el copy (§5) y después se construye (§4). Ya construido (D-191): sin *Tu Negocio en Orden*, precio en pesos y las respuestas de productos y primer año. Los dolores de §2 marcados como *por validar* se confirman en las llamadas antes de volverlos titulares.
 
 ---
 
-## 0. Oferta vigente (D-191)
+## 0. Oferta vigente (D-192)
 
 | Qué | Valor |
 |---|---|
@@ -35,8 +35,8 @@ Medido sobre la construcción de producción, en local, con Lighthouse en celula
 | Primer pantallazo (360 × 640) | Título, «Desde 800 USD» y botón visibles sin bajar | Bien |
 | Largo de la página | **13 pantallas** en celular pequeño | Larga para tráfico frío de Instagram. Meta: 8 o 9 |
 | Botones a agendar | 6, más la barra fija | Bien |
-| Enlaces que sacan de la página | **0** (se quitaron portafolio y fichas, D-189) | Bien. Solo quedan Agendar y la política de datos (en otra pestaña) |
-| Ofertas en la página | ~~2~~ → **1** (se quitó *Tu Negocio en Orden*, D-190) | Un anuncio, una oferta |
+| Enlaces que sacan de la página | **0** (se quitaron portafolio y fichas, D-190) | Bien. Solo quedan Agendar y la política de datos (en otra pestaña) |
+| Ofertas en la página | ~~2~~ → **1** (se quitó *Tu Negocio en Orden*, D-191) | Un anuncio, una oferta |
 | Prueba social | 1 video (Caravana), **sin testimonio** | Es lo que más falta para tráfico frío |
 | Origen del interesado | Las `utm` de Meta no pasan a `/agendar` ni a Cal.com | Si rechaza cookies, no sabemos que vino de Meta |
 | `/agendar` | Tiene el menú completo del sitio | Al tocar «Agendar» vuelve a haber salidas |
@@ -99,8 +99,8 @@ Medido sobre la construcción de producción, en local, con Lighthouse en celula
 | «El que me hizo la página desapareció» | Mantenimiento opcional (15 % al mes); seguimos aquí | FAQ (nueva) |
 | «¿Y si no me sirve?» | Garantía de velocidad + 2 rondas de ajustes | Junto al precio |
 | «Mis clientes no pagan en línea» | No hace falta: el pedido llega por WhatsApp y cobras como siempre | FAQ (ya está) |
-| «Tengo muchos productos» | Caben más de 100 (D-190) | FAQ ✅ |
-| «¿Qué pasa después del primer año?» | Se renueva el contrato y se paga el dominio (D-190) | FAQ ✅ |
+| «Tengo muchos productos» | Caben más de 100 (D-191) | FAQ ✅ |
+| «¿Qué pasa después del primer año?» | Se renueva el contrato y se paga el dominio (D-191) | FAQ ✅ |
 
 ---
 
@@ -161,7 +161,7 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 | 1 | **Pixel + evento *Lead*** con permiso propio en el aviso de cookies y la política actualizada | Sin pixel, Meta no sabe a quién buscar | Sergio y Andrés (25 nov) + Claude |
 | 2 | **Pasar el origen a la agenda:** las `utm` de la landing viajan a `/agendar` y quedan en las notas de Cal.com («Origen: Meta · ángulo A»); el panel lo muestra en Interesados. Además, evento `clic_agendar` en cada botón de la landing | Saber qué anuncio trae reuniones aunque rechacen cookies, y cuánta gente toca «Agendar» | Claude |
 | 3 | **`/agendar` sin menú** cuando viene de la landing | Al tocar «Agendar» vuelven a aparecer salidas | Claude |
-| 4 | ✅ **Quitar *Tu Negocio en Orden*** de la landing (sección, pregunta y mención en el proceso), D-190 | Un anuncio, una oferta, un botón | Hecho |
+| 4 | ✅ **Quitar *Tu Negocio en Orden*** de la landing (sección, pregunta y mención en el proceso), D-191 | Un anuncio, una oferta, un botón | Hecho |
 | 5 | **Titular según el ángulo del anuncio** (§5.1) | Continuidad entre anuncio y página | Copy: Sergio · Código: Claude |
 | 6 | **Título sin animación en la landing** | Baja el LCP de 3,3 s y deja la velocidad fija arriba de 90 | Claude |
 
@@ -172,9 +172,9 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 | 7 | **Sección de dolores más fuerte:** 4 tarjetas por grupo (tiempo, ventas, control, confianza) con el costo de seguir igual (§5.2) | La sección actual es corta y no dice qué le cuesta |
 | 8 | **«Así te llega el pedido»:** captura real de un pedido en WhatsApp | Es la promesa central; hoy no se ve |
 | 9 | **Testimonio de Caravana** (texto o video corto del dueño) | Única pieza de prueba que falta y la más fuerte para tráfico frío |
-| 10 | **Preguntas que faltan** (§5.4). ✅ Ya están: cuántos productos caben y qué pasa después del primer año (D-190) | Son las objeciones de §2-F |
+| 10 | **Preguntas que faltan** (§5.4). ✅ Ya están: cuántos productos caben y qué pasa después del primer año (D-191) | Son las objeciones de §2-F |
 | 11 | **Página más corta:** de 13 a 8 o 9 pantallas (sin *Tu Negocio en Orden*, casos en una fila deslizable) | Tráfico frío lee poco |
-| 12 | ✅ **Precio en pesos:** «Desde $ 2.800.000 · unos 800 USD» (D-190) | El comerciante colombiano piensa en pesos |
+| 12 | ✅ **Precio en pesos:** «Desde $ 2.800.000 · unos 800 USD» (D-191) | El comerciante colombiano piensa en pesos |
 
 ### P2 — Pruebas A/B (una a la vez, con al menos 2 semanas de datos)
 
@@ -191,7 +191,7 @@ Cifras de referencia para empezar (se reemplazan por las propias después de 2 s
 
 ### 5.0 Lo que la landing dice hoy, dolor por dolor
 
-Se compararon los 24 dolores de §2 con todo el texto de `/lp/catalogos` (ya sin *Tu Negocio en Orden* y con precio en pesos, D-190).
+Se compararon los 24 dolores de §2 con todo el texto de `/lp/catalogos` (ya sin *Tu Negocio en Orden* y con precio en pesos, D-191).
 
 | Grupo | Dolor | ¿Lo dice hoy? | Dónde / qué falta |
 |---|---|---|---|
@@ -217,8 +217,8 @@ Se compararon los 24 dolores de §2 con todo el texto de `/lp/catalogos` (ya sin
 | F. Miedos | El que le hizo la página desapareció | 🟡 | La tarjeta de mantenimiento no dice para qué sirve |
 | F. Miedos | ¿Y si no me sirve? | 🟡 | La garantía es de velocidad y dice «tu página», no «tu tienda» |
 | F. Miedos | Sus clientes no pagan en línea | ✅ | Preguntas |
-| F. Miedos | Tiene muchos productos | ✅ | Preguntas: más de 100 (D-190) |
-| F. Miedos | Después del primer año | ✅ | Preguntas: se renueva el contrato y se paga el dominio (D-190) |
+| F. Miedos | Tiene muchos productos | ✅ | Preguntas: más de 100 (D-191) |
+| F. Miedos | Después del primer año | ✅ | Preguntas: se renueva el contrato y se paga el dominio (D-191) |
 
 **Resultado: 10 resueltos, 5 a medias y 9 sin tocar.** Lo mejor cubierto es el *control* (inventario, qué se vende). Faltan por completo la *confianza* y la *dependencia de Instagram*, y la mitad del *tiempo* y de las *ventas que se escapan*: justo los dolores que más se sienten en el día a día.
 
