@@ -32,7 +32,6 @@
   --pn-alerta-fuerte: 255 107 139;
   --pn-ambar: 255 199 107;
   --pn-verde: 74 222 128; /* D-155: verde de semáforo (estados), distinto del lima de Arata */
-  /* D-153: tarjetas del sistema (D-150): negras con humo blanco suave y borde gris */
   --pn-tarjeta: #0f0f12; /* D-164: tarjeta lisa, como en claro (sin humo): un solo estilo */
   --pn-tarjeta-borde: rgb(255 255 255 / 0.13);
   --pn-tarjeta-sombra: inset 0 1px 0 rgb(255 255 255 / 0.06);
@@ -172,8 +171,8 @@
 [data-tema="claro"] .border-white\/12 { border-color: rgb(3 1 11 / 0.18); }
 /* Sin el brillo que recorre los botones */
 .pn-root .v2-shine::after { display: none; }
-/* Píldora del sistema (D-150, D-153): negra con borde gris claro (blanca con borde tinta en claro).
-   Activa (filtro o pestaña elegida, D-155): verde de Arata en oscuro, morado en claro. */
+/* Píldora del sistema (D-153; nació en D-150, archivada): negra con borde gris claro (blanca con borde tinta en claro).
+   Activa (filtro o pestaña elegida): lima sólido con texto tinta en los dos modos (D-164, D-167). */
 .pn-pildora {
   color: rgb(var(--pn-pildora-texto));
   background: var(--pn-pildora);

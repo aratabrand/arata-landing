@@ -79,7 +79,7 @@ export async function probarAviso(): Promise<Resultado> {
   }
 }
 
-/** Lo último para la ventana de la campana (D-120): alertas de entrega + cambios recientes. Marca como vistas. */
+/** Lo último para la ventana de la campana (nació en D-120, archivada): alertas de entrega + cambios recientes. Marca como vistas. */
 export async function verNotificacionesRecientes(): Promise<
   | { ok: true; alertas: { id: string; nombre: string; tipo: TipoAlerta; texto: string }[]; eventos: EventoHistorial[]; visto: string | null; miUsuario: string }
   | { ok: false; error: string }

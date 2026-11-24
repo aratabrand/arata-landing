@@ -27,7 +27,7 @@ const config: Config = {
 
         // ── v2 (sitio de agencia, solo fondo oscuro) — docs/blueprint/04-sistema-de-diseno.md ──
         surface: {
-          // D-146: neutras (sin tinte morado). El panel usa las suyas (tailwind.panel.config.ts)
+          // neutras, sin tinte morado (desde D-146, archivada; grises en D-162). El panel usa las suyas (tailwind.panel.config.ts)
           1: "#0B0B0D", // tarjetas
           2: "#121215", // hover / elevado / botón secundario
           3: "#19191D", // menús desplegables, modales

@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 // Header v2 (ref. 21st.dev captura 05):
 // barra completa, transparente arriba y con vidrio oscuro al bajar;
 // en escritorio el menú va en una píldora de vidrio con un selector de vidrio suave
-// que marca la página actual y sigue al mouse (D-121, mismo estilo del panel D-120);
+// que marca la página actual y sigue al mouse (D-121; nació igual al menú en píldora del panel, D-120, archivada);
 // "Servicios ▾" abre un mega menú con tarjetas de vista previa;
 // en celular, panel a pantalla completa (D-070).
 //

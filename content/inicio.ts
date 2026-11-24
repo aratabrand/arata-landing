@@ -147,7 +147,7 @@ export type Paquete = {
   recomendado?: boolean;
   /** D-175: el paquete cotizado no va como tarjeta sino como banner debajo de las 3 columnas. */
   banner?: boolean;
-  /** Ícono SVG propio del paquete (D-150, components/v2/IconosMarca.tsx). */
+  /** Ícono SVG propio del paquete (nació en D-150, archivada; components/v2/IconosMarca.tsx). */
   icono?: "capas" | "tienda" | "sistema" | "edificio";
 };
 

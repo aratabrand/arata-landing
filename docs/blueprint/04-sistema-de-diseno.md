@@ -172,7 +172,7 @@ Títulos muy grandes, en negrita, con **tracking negativo** (−0.03 a −0.04 e
 | Pieza | Archivo | Qué hace |
 |---|---|---|
 | Tokens | `tailwind.config.ts` | Colores `surface-1/2/3`, `fog`, `fog-dim`, `brand-soft`; radios `btn` (10) · `frame` (16) · `card` (24); tracking `display` / `heading`; escala `v2-hero` · `v2-h2` · `v2-h3` · `v2-lead`; sombra `glow-purple`; opacidad `8` |
-| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (lisa), `.v2-destacada` (degradado lima), `.v2-icono` (sin uso desde D-147), `.v2-primario` (botón principal lima), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 |
+| Clases base | `app/globals.css` (bloque v2) | `.v2-card` (lisa), `.v2-destacada` (degradado lima), `.v2-icono` (sin uso desde D-147), `.v2-primario` (botón principal lima), `.v2-glass` (garantías), `.v2-frame`, `.v2-spotlight`, `.v2-glow`, `.v2-grid`, `.v2-faq`, `.v2-progress-fill`, `.v2-pop`. `.v2-shine` queda sin uso desde D-142 (archivada) |
 | Contenido | `content/inicio.ts`, `content/proyectos.ts` | Copy aprobado y portafolio. **Para cambiar un texto o sumar un proyecto, se edita aquí**, no en los componentes |
 | Botón | `components/v2/Button.tsx` | `primary` (lima, `.v2-primario`) · `secondary` (oscuro con borde) · `ghost`; `md` / `lg`; `arrow`; `external`. Para un `<button>` o enlace propio (formulario, portafolio): `clasesBoton()` y `FlechaBoton` |
 | Primitivas | `components/v2/primitives.tsx` | `Container`, `Badge` (con `live`), `Eyebrow`, `Glow`, `SectionHeader`, `Acento` (última palabra del título en cursiva lima, D-164/D-166) |

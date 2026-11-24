@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-// Íconos de marca del sistema (D-150, D-153): SVG propio en grises metálicos con volumen, sin color.
+// Íconos de marca del sistema (D-153; nacieron en D-150, archivada): SVG propio en grises metálicos con volumen, sin color.
 // Copia de components/v2/IconosMarca.tsx a propósito: el panel no importa piezas del sitio (D-135).
 // Si cambias un dibujo aquí, cámbialo también allá. Solo en algunas tarjetas: en el panel, las de
 // proyectos, según el servicio (página, catálogo/tienda, sistema).

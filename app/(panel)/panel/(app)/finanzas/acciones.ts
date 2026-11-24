@@ -122,7 +122,7 @@ export async function guardarReglas(entrada: { tarifaDia: number | string; reser
   });
 }
 
-// ── "¿Quién trabajó?" del formulario del proyecto (D-124) ──────────
+// ── "¿Quién trabajó?" del formulario del proyecto (D-125) ──────────
 type FilaTrabajo = { personaId: string; persona: string; actividad: string; dias: number };
 
 async function validarTrabajo(negocioId: string, t?: { agregar?: { personaId: string; actividad: string; dias: string | number }[]; quitar?: string[] }) {
@@ -186,7 +186,7 @@ export async function guardarProyecto(entrada: {
   /** Valor del día solo de este proyecto ("" = el de Reparto). Solo Sergio. */
   tarifaDia?: string | number | null;
   notas?: string;
-  /** "¿Quién trabajó?" del formulario (D-124): días por persona y área que se agregan o quitan al guardar. */
+  /** "¿Quién trabajó?" del formulario (D-125): días por persona y área que se agregan o quitan al guardar. */
   trabajo?: { agregar?: { personaId: string; actividad: string; dias: string | number }[]; quitar?: string[] };
 }) {
   return ejecutar(async () => {

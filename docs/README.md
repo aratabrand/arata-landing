@@ -51,6 +51,6 @@ Ambas están ocultas a Google (`noindex`) y se revisan en el preview de Vercel d
 
 - **Encabezado de estado** en cada archivo: `Estado`, `Versión`, `Última actualización`, `Aprueba`.
 - **Estados posibles:** `Borrador` → `En revisión` → `Aprobado`. Solo lo `Aprobado` se construye.
-- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva; cuando ya no queda nada vigente de ella, se pasa a `decisiones-archivo.md`.
+- **Decisiones:** toda decisión va a `decisiones.md` con un ID (`D-001`, `D-002`…), único para todo el proyecto. El número se pide con `npx -y tsx scripts/prueba-decisiones.ts --siguiente` y la bitácora se revisa con la misma prueba sin `--siguiente` antes de unir a `main` (D-194). Si una decisión cambia, no se borra: se marca como reemplazada y se enlaza la nueva; cuando ya no queda nada vigente de ella, se pasa a `decisiones-archivo.md`.
 - **Copy:** español colombiano plano, según las reglas de `CLAUDE.md` §2. Esto aplica también a estos documentos cuando muestran texto que irá al sitio.
 - **Nada inventado:** métricas, testimonios y logos de clientes solo si son reales y verificables.
