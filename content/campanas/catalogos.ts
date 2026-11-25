@@ -29,8 +29,16 @@ export const OFERTA = {
   condicion: "para quien agende hasta el 30 de noviembre",
   /** D-197: el 50 % para arrancar, en plata (aprobado por Sergio). */
   arranque: "$\u00A01.100.000",
-  /** D-198: bono de noviembre (Sergio eligió solo este). */
-  bono: "Te subimos tus primeros 30 productos.",
+  /** D-201: bonos de noviembre (skill alex-hormozi-pitch: cada uno quita una objeción; sin valores en plata
+   *  porque no hay un dato real para calcularlos). El primero viene de D-198. */
+  bonos: [
+    // «No tengo tiempo», «tengo muchos productos»
+    { titulo: "Te subimos tus primeros 30 productos", texto: "Tu tienda arranca con productos desde el primer día, sin que tengas que subirlos tú." },
+    // «¿Cómo llevo a mis clientes a la tienda?»
+    { titulo: "Código QR para tu local y tus empaques", texto: "Listo para imprimir: tus clientes abren tu tienda desde el mostrador o desde la bolsa de su pedido." },
+    // «¿Y si nadie entra?»
+    { titulo: "Kit para compartir tu tienda", texto: "El mensaje para tu lista de difusión, el texto para tus estados y la frase con el enlace para tu Instagram." },
+  ],
   /** D-198: cupos de ESTA campaña (el sitio sigue con 4 al mes, D-172). */
   cupos: "Este mes tomamos máximo 8 tiendas.",
 };
@@ -107,7 +115,7 @@ export function textosLanding(conOferta: boolean) {
           conOferta && it.icono === "entrega" ? "Desde que apruebas la propuesta. Los primeros 30 productos los subimos nosotros." : it.texto;
         return { ...it, icono, texto };
       }),
-      bono: conOferta ? { etiqueta: "Bono de noviembre", texto: OFERTA.bono } : null,
+      bonos: conOferta ? { etiqueta: "Bonos de noviembre", condicion: `Gratis ${OFERTA.condicion}.`, items: OFERTA.bonos } : null,
     },
     // D-198: garantía elegida (auditoría, Copy B1), junto a la de velocidad
     garantia: {

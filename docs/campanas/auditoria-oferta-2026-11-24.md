@@ -94,7 +94,7 @@
 | # | Mejora | Palanca | Por qué | Esfuerzo | Decide |
 |---|---|---|---|---|---|
 | 5 | ✅ **Hecho (D-198): «Te la dejamos funcionando», junto a la de velocidad.** **Garantía que ataque el miedo del comerciante** (Copy B) | Probabilidad | La de velocidad es para páginas; este cliente teme que no le sirva | Bajo | Sergio (D-029 había descartado la garantía de plazo) |
-| 6 | ✅ **Hecho (D-198): «Te subimos tus primeros 30 productos».** **Bonos de noviembre** que quiten objeciones (Copy C) | Esfuerzo + pila | Quitan el esfuerzo más grande (subir productos) y ayudan a vender desde el día uno. Un bono con fecha protege el precio mejor que otro descuento | Medio (se entregan en cada proyecto) | Sergio |
+| 6 | ✅ **Hecho (D-198, D-201): los tres bonos — 30 productos, código QR y kit para compartir.** **Bonos de noviembre** que quiten objeciones (Copy C) | Esfuerzo + pila | Quitan el esfuerzo más grande (subir productos) y ayudan a vender desde el día uno. Un bono con fecha protege el precio mejor que otro descuento | Medio (se entregan en cada proyecto) | Sergio |
 | 7 | **Testimonio del dueño de Caravana** y captura real de un pedido en WhatsApp | Probabilidad | La prueba que más pesa para tráfico frío | Bajo (falta el material) | Sergio |
 | 8 | ✅ **Hecho (D-197).** **Precio en plata para arrancar:** «Arrancas con $ 1.100.000 y el resto al entregar» | Sacrificio | Baja la sensación de gasto sin bajar el precio | Bajo | Sergio |
 | 9 | **El camino completo en una línea:** «Agendas, en 48 h tienes la propuesta y en 5 días hábiles tu tienda» | Tiempo de espera | Hace creíble el «5 días» | Bajo | Sergio |
