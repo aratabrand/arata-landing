@@ -17,7 +17,7 @@
 | Hasta | 30 de noviembre de 2026, 11:59 p. m. de Bogotá. El 1 de diciembre la landing vuelve sola a «Desde $ 2.800.000» y la cinta desaparece (se revisa cada hora) |
 | Dónde se ve | Cinta lima fija arriba (precio, precio tachado y días que quedan), inicio y franja de precio |
 | Se cambia en | `OFERTA` en `content/campanas/catalogos.ts` |
-| Bono (D-198) | Te subimos tus primeros 30 productos |
+| Bonos (D-198, D-201) | 1) Te subimos tus primeros 30 productos · 2) Código QR para tu local y tus empaques · 3) Kit para compartir tu tienda (mensaje de difusión, texto para estados y frase con el enlace para Instagram). Gratis para quien agende hasta el 30 |
 | Cupos (D-198) | Máximo 8 tiendas al mes, solo en esta campaña (el sitio sigue con 4, D-172) |
 | Condición (D-195) | Vale para quien **agende** la reunión hasta el 30 de noviembre, aunque la propuesta o el pago lleguen en diciembre. Se dice junto al precio. Auditoría y mejoras: [`auditoria-oferta-2026-11-24.md`](auditoria-oferta-2026-11-24.md) |
 | Regla | El Estatuto del Consumidor (Ley 1480 de 2011) pide que una promoción diga su vigencia y sus condiciones, y que se respete el precio anunciado. Los anuncios de Meta con este precio se apagan el 30 de noviembre |

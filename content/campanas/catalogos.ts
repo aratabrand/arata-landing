@@ -29,8 +29,17 @@ export const OFERTA = {
   condicion: "para quien agende hasta el 30 de noviembre",
   /** D-197: el 50 % para arrancar, en plata (aprobado por Sergio). */
   arranque: "$\u00A01.100.000",
-  /** D-198: bono de noviembre (Sergio eligió solo este). */
-  bono: "Te subimos tus primeros 30 productos.",
+  /** D-201: bonos de noviembre (skill alex-hormozi-pitch: cada uno quita una objeción; sin valores en plata
+   *  porque no hay un dato real para calcularlos). El primero viene de D-198. */
+  bonos: [
+    // D-202: tarjetas tipo cupón. `grande` es la cifra o el nombre corto; `texto`, qué recibe.
+    // «No tengo tiempo», «tengo muchos productos»
+    { variante: "lima", grande: "30 productos", titulo: "Te subimos tus primeros 30 productos", texto: "Te los subimos nosotros: tu tienda arranca con productos desde el primer día." },
+    // «¿Cómo llevo a mis clientes a la tienda?»
+    { variante: "tinta", grande: "Código QR", titulo: "Código QR para tu local y tus empaques", texto: "Para tu local y tus empaques, listo para imprimir. Tus clientes abren tu tienda con la cámara." },
+    // «¿Y si nadie entra?»
+    { variante: "talon", grande: "Kit para compartir", titulo: "Kit para compartir tu tienda", texto: "El mensaje para tu lista de difusión, el texto para tus estados y la frase para tu Instagram." },
+  ] as const,
   /** D-198: cupos de ESTA campaña (el sitio sigue con 4 al mes, D-172). */
   cupos: "Este mes tomamos máximo 8 tiendas.",
 };
@@ -107,7 +116,7 @@ export function textosLanding(conOferta: boolean) {
           conOferta && it.icono === "entrega" ? "Desde que apruebas la propuesta. Los primeros 30 productos los subimos nosotros." : it.texto;
         return { ...it, icono, texto };
       }),
-      bono: conOferta ? { etiqueta: "Bono de noviembre", texto: OFERTA.bono } : null,
+      bonos: conOferta ? { etiqueta: "Bonos de noviembre", condicion: `Gratis ${OFERTA.condicion}.`, items: OFERTA.bonos } : null,
     },
     // D-198: garantía elegida (auditoría, Copy B1), junto a la de velocidad
     garantia: {

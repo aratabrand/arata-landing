@@ -7,6 +7,7 @@ import { Assurances } from "@/components/v2/Pricing";
 import CasosExito from "@/components/v2/CasosExito";
 import MarcoCampana from "@/components/v2/campana/MarcoCampana";
 import CintaOferta from "@/components/v2/campana/CintaOferta";
+import PilaBonos from "@/components/v2/campana/PilaBonos";
 import { AGENDAR_LP, ofertaVigente, textosLanding } from "@/content/campanas/catalogos";
 import { paginaV2 } from "@/lib/seo";
 
@@ -38,7 +39,7 @@ export default function LandingCatalogos() {
       <ServiceHero {...c.hero} tipo="catalogo" enlace={AGENDAR_LP} />
       <ProblemSection id="problema-catalogo" titulo={c.problema.titulo} cierre={c.problema.cierre} items={c.problema.items} />
       <CasosExito id="casos-catalogo" servicio="catalogo" sinEnlaces textos={c.casosExito} />
-      {/* D-198: primero todo lo que recibe (pila de valor), después el bono, el precio y las garantías */}
+      {/* D-198, D-201: primero todo lo que recibe (pila de valor), después los bonos, el precio y las garantías */}
       <IncludesBento
         id="incluye"
         titulo={c.incluye.titulo}
@@ -47,10 +48,16 @@ export default function LandingCatalogos() {
         celdas={{ entrega: { clase: "sm:col-span-2 lg:col-span-4", alto: "mx-auto h-24 w-full max-w-xl" } }}
         pie={
           <div className="mt-10 space-y-4">
-            {c.incluye.bono && (
-              <div className="flex flex-col gap-2 rounded-card border border-lime/30 bg-surface-1 p-5 sm:flex-row sm:items-center sm:gap-4 sm:p-6">
-                <span className="inline-flex w-fit rounded-full bg-lime px-3 py-1 text-xs font-semibold text-ink">{c.incluye.bono.etiqueta}</span>
-                <p className="font-display text-lg font-bold tracking-heading text-white">{c.incluye.bono.texto}</p>
+            {/* D-202: bonos como cupones que se recogen en un mazo al bajar */}
+            {c.incluye.bonos && (
+              <div className="pt-6">
+                <div className="mx-auto max-w-2xl text-center">
+                  <span className="inline-flex rounded-full bg-lime px-3 py-1 text-xs font-semibold text-ink">{c.incluye.bonos.etiqueta}</span>
+                  <p className="mt-3 text-sm text-fog">{c.incluye.bonos.condicion}</p>
+                </div>
+                <div className="mx-auto mt-6 max-w-2xl">
+                  <PilaBonos bonos={c.incluye.bonos.items} tope={120} />
+                </div>
               </div>
             )}
             <PriceBar
