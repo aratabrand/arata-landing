@@ -32,13 +32,14 @@ export const OFERTA = {
   /** D-201: bonos de noviembre (skill alex-hormozi-pitch: cada uno quita una objeción; sin valores en plata
    *  porque no hay un dato real para calcularlos). El primero viene de D-198. */
   bonos: [
+    // D-202: tarjetas tipo cupón. `grande` es la cifra o el nombre corto; `texto`, qué recibe.
     // «No tengo tiempo», «tengo muchos productos»
-    { titulo: "Te subimos tus primeros 30 productos", texto: "Tu tienda arranca con productos desde el primer día, sin que tengas que subirlos tú." },
+    { variante: "lima", grande: "30 productos", titulo: "Te subimos tus primeros 30 productos", texto: "Te los subimos nosotros: tu tienda arranca con productos desde el primer día." },
     // «¿Cómo llevo a mis clientes a la tienda?»
-    { titulo: "Código QR para tu local y tus empaques", texto: "Listo para imprimir: tus clientes abren tu tienda desde el mostrador o desde la bolsa de su pedido." },
+    { variante: "tinta", grande: "Código QR", titulo: "Código QR para tu local y tus empaques", texto: "Para tu local y tus empaques, listo para imprimir. Tus clientes abren tu tienda con la cámara." },
     // «¿Y si nadie entra?»
-    { titulo: "Kit para compartir tu tienda", texto: "El mensaje para tu lista de difusión, el texto para tus estados y la frase con el enlace para tu Instagram." },
-  ],
+    { variante: "talon", grande: "Kit para compartir", titulo: "Kit para compartir tu tienda", texto: "El mensaje para tu lista de difusión, el texto para tus estados y la frase para tu Instagram." },
+  ] as const,
   /** D-198: cupos de ESTA campaña (el sitio sigue con 4 al mes, D-172). */
   cupos: "Este mes tomamos máximo 8 tiendas.",
 };
