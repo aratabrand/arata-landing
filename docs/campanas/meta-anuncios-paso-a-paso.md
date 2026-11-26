@@ -41,7 +41,7 @@
 | Ubicación de la conversión | **Sitio web** |
 | Objetivo de rendimiento | **Maximizar el número de conversiones** |
 | Pixel | **arata.san - Web Principal** |
-| Evento | **Cliente potencial** (Lead, en «Eventos activos»). Con el objetivo Clientes potenciales, Meta no ofrece la conversión personalizada «lead tienda campaña noviembre» en esta lista (26 nov). No importa: Lead solo se dispara cuando alguien agenda y lleva `content_name: lp-catalogos`. La conversión personalizada se usa para **ver** los resultados (columna en el reporte, §6). |
+| Evento | **Cliente potencial** (Lead, en «Eventos activos»): lo manda el sitio cuando alguien agenda, con `content_name: lp-catalogos`. **Si sale gris y Meta sugiere otro objetivo, o el evento que viene marcado es «Comprar», la campaña quedó con el objetivo Ventas:** cambiarla a Clientes potenciales (o crearla de nuevo). La conversión personalizada «lead tienda campaña noviembre» se usa para **ver** los resultados (columna en el reporte, §6). |
 | Programación | Inicio: apenas lo aprueben. **Fin: 30 nov 2026, 11:59 p. m.** |
 | Público | **Público Advantage+** con sugerencias (abajo) |
 | Ubicaciones | **Ubicaciones Advantage+** (Meta reparte entre feed, Reels e historias) |
