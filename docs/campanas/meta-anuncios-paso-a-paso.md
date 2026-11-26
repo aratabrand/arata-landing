@@ -1,6 +1,6 @@
 # Campaña de Meta · Tienda por WhatsApp (noviembre) — paso a paso y textos
 
-> 26 nov 2026. Parte de [`meta-tienda-whatsapp.md`](meta-tienda-whatsapp.md) (plan, dolores y §7 con Cal.com y el pixel, ya listos). Los textos se escribieron con la skill de copy y las reglas de `CLAUDE.md` §2. **Sergio elige una versión por ángulo antes de publicar.**
+> 26 nov 2026. Parte de [`meta-tienda-whatsapp.md`](meta-tienda-whatsapp.md) (plan, dolores y §7 con Cal.com y el pixel, ya listos). Los textos se escribieron con la skill de copy y las reglas de `CLAUDE.md` §2. **✅ Aprobado por Sergio el 26 nov: las versiones ★ de los tres ángulos (A1, B1, D1, con su título y descripción ★).**
 
 ## 0. Lo que hay que tener presente
 
