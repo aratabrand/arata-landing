@@ -17,7 +17,8 @@ import { EVENTO_CAMBIO, PIXEL_ACTIVO, leerConsentimiento, type Consentimiento } 
 // - Retirar el permiso (lib/consentimiento.ts) borra _fbp y _fbc y recarga. El panel no lo carga (app/layout.tsx).
 
 type Fbq = ((...a: unknown[]) => void) & { callMethod?: (...a: unknown[]) => void; queue?: unknown[]; loaded?: boolean; version?: string; push?: unknown };
-type Ventana = Window & { fbq?: Fbq; _fbq?: Fbq; __pixelCargado?: boolean; __pixelPendiente?: string[] };
+type Pendiente = { evento: string; parametros?: Record<string, string> };
+type Ventana = Window & { fbq?: Fbq; _fbq?: Fbq; __pixelCargado?: boolean; __pixelPendiente?: Pendiente[] };
 
 export default function PixelLoader() {
   const ruta = usePathname();
@@ -51,7 +52,7 @@ export default function PixelLoader() {
       w.fbq!("consent", "grant");
       w.fbq!("init", site.pixelId);
       w.fbq!("track", "PageView");
-      for (const evento of w.__pixelPendiente ?? []) w.fbq!("track", evento);
+      for (const p of w.__pixelPendiente ?? []) w.fbq!("track", p.evento, p.parametros);
       w.__pixelPendiente = [];
     }
 
