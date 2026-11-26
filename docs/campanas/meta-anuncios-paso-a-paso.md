@@ -19,7 +19,7 @@
 | 1 | Administrador de anuncios → **Configuración de la cuenta publicitaria** | Moneda **COP** y zona horaria **Bogotá**. La fecha de fin usa esa zona. |
 | 2 | Configuración del negocio → **Cuentas → Páginas** y **Cuentas de Instagram** | La página de Facebook de Arata San y `@arata.san.web` conectadas a la cuenta publicitaria. |
 | 3 | Configuración de la cuenta → **Pagos** | Tarjeta o método de pago activo. |
-| 4 | Creativos | Los 3 de la §5 exportados: 9:16 (Reels e historias) y 4:5 (feed). |
+| 4 | Video | El único video que hay, en 9:16 (Reels e historias). Si se puede, una copia en 4:5 para el feed; si no, Meta lo recorta (revisar la vista previa). |
 
 ## 2. Campaña (5 min)
 
@@ -78,7 +78,7 @@ Para cada anuncio:
 |---|---|
 | Nombre | `A · tiempo`, `B · pedido`, `D · 5 días` |
 | Identidad | Página de Arata San + `@arata.san.web` |
-| Formato | Imagen o video (A en Reel; B y D en imagen o carrusel) |
+| Formato | **Video**: el mismo en los 3 anuncios. Lo que cambia es el texto (el ángulo) |
 | Destino | **Sitio web**: `https://www.aratasan.com/lp/catalogos` |
 | Parámetros de URL | `utm_source=meta&utm_medium=paid&utm_campaign=tienda-noviembre&utm_content=angulo-a` (cambiar a `angulo-b` o `angulo-d`) |
 | Botón | **Reservar** (si no aparece, **Más información**) |
@@ -171,15 +171,18 @@ Los textos usan «tú», no llevan signos de admiración y repiten la promesa de
 | **Máximo 8 tiendas este mes** ★ |
 | $ 2.200.000 hasta el 30 de noviembre |
 
-### Creativos (lo que va en la imagen o el video)
+### Creativo: un solo video para los 3 anuncios (26 nov)
 
-| Ángulo | Formato | Primeros 3 segundos | Texto en pantalla (corto) | Material |
-|---|---|---|---|---|
-| A | Reel 9:16, 10 a 15 s | Un chat lleno de fotos que bajan sin parar | «¿Todavía foto por foto?» → «Un enlace y listo» → precio y «hasta el 30 de nov.» | Video de Caravana |
-| B | Imagen 4:5 | El mensaje de un pedido real, ordenado | «Así te llega el pedido» | Captura de un pedido real de Caravana o Arata Print (con permiso y sin datos del cliente) |
-| D | Carrusel 4:5, 5 tarjetas | «Lista en 5 días hábiles» | Una tarjeta por paso del proceso + precio y fecha al final | Pasos de la landing; se puede hacer con `carrusel-studio` |
+Hay un solo video. No hace falta más para esta campaña: **el mismo video va en los 3 anuncios y cada uno lleva el texto de su ángulo** (A, B o D) y su `utm_content`. Así Meta muestra más el texto que más funciona y se ve en Analytics cuál trajo las reuniones.
 
-Fondo `#020104`, botón y precio en lima, la última palabra del título en cursiva lima (sistema de diseño). Poco texto en la imagen: Meta muestra menos los anuncios llenos de letras.
+| Tema | Qué hacer |
+|---|---|
+| Subirlo | En cada anuncio: **Agregar contenido → Video** y elegir el mismo archivo (o, al duplicar el anuncio A, cambiar solo textos y parámetros de URL) |
+| Tamaño | 9:16 para Reels e historias. Para el feed, una copia en 4:5 si se puede; si no, revisar en la vista previa que el recorte no tape lo importante |
+| Miniatura | Elegir un cuadro donde se vea la tienda o el pedido, no una pantalla en negro |
+| Subtítulos | Activar los subtítulos automáticos de Meta si el video tiene voz: la mayoría lo ve sin sonido |
+| Texto dentro del video | Si se le agrega algo, que sirva para los 3 ángulos: «Tu tienda por WhatsApp en 5 días» y al final «$ 2.200.000 hasta el 30 de nov.». Poco texto: Meta muestra menos los anuncios llenos de letras |
+| Si hay tiempo | Se puede sumar una imagen 4:5 del ángulo B (captura de un pedido real, con permiso y sin datos del cliente) o un carrusel del D con `carrusel-studio`. No es obligatorio para arrancar |
 
 ## 6. Mientras corre (cada día · Andrés)
 
