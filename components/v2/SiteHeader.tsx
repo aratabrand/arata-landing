@@ -27,7 +27,6 @@ import { cn } from "@/lib/utils";
 const previews = [
   proyectos.find((p) => p.slug === "boost-your-menu")!,
   proyectos.find((p) => p.slug === "caravana")!,
-  proyectos.find((p) => p.slug === "danrodedm")!,
 ];
 
 export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } }: { cta?: Boton }) {
@@ -58,7 +57,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
       return () => cancelAnimationFrame(id);
     }
   }, [sel, animar]);
-  const enServicios = menu.servicios.some((x) => x.href !== "/portafolio" && path.startsWith(x.href));
+  const enServicios = menu.servicios.some((x) => path.startsWith(x.href));
   const actual = enServicios ? 0 : menu.links.findIndex((l) => l.href.startsWith("/") && !l.href.includes("#") && (path === l.href || path.startsWith(l.href + "/"))) + 1 || null;
   const marcado = encima ?? (mega ? 0 : actual);
   useLayoutEffect(() => {
@@ -209,7 +208,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             {/* Capa 1 centra (translate); capa 2 anima (v2-pop usa transform propio) */}
             <div
               className={cn(
-                "absolute left-1/2 top-full w-[760px] -translate-x-1/2 pt-3",
+                "absolute left-1/2 top-full w-[520px] -translate-x-1/2 pt-3",
                 // Cerrado no recibe el mouse: antes esta zona invisible abría el menú
                 // al pasar el cursor por debajo de "Servicios".
                 mega ? "pointer-events-auto" : "pointer-events-none"
@@ -219,7 +218,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
                 id="mega-servicios"
                 aria-hidden={!mega}
                 className={cn(
-                  "v2-pop grid grid-cols-3 gap-3 rounded-card border border-white/8 bg-surface-1/95 p-3 shadow-2xl backdrop-blur-xl",
+                  "v2-pop grid grid-cols-2 gap-3 rounded-card border border-white/8 bg-surface-1/95 p-3 shadow-2xl backdrop-blur-xl",
                   mega && "is-open"
                 )}
               >
@@ -314,7 +313,7 @@ export default function SiteHeader({ cta = { texto: menu.cta, enlace: AGENDAR } 
             Servicios
           </p>
           <ul className="mt-3 space-y-2.5">
-            {menu.servicios.slice(0, 2).map((s, i) => (
+            {menu.servicios.map((s, i) => (
               <li key={s.href} className="v2-mnav-item" style={{ ["--d" as string]: i + 1 }}>
                 <Link
                   href={s.href}
