@@ -16,7 +16,7 @@ Base: estrategia aprobada en [`01-estrategia-hormozi.md`](01-estrategia-hormozi.
 
 | Escritorio | Celular |
 |---|---|
-| Logo · **Servicios ▾** (mega menú: Sitios y páginas · Catálogos y sistemas · Portafolio, con vista previa; D-176) · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
+| Logo · **Servicios ▾** (mega menú: Sitios y páginas · Catálogos y sistemas, con vista previa; D-176; el Portafolio salió de aquí por D-207) · Portafolio · Precios · **[Agendar reunión]** | Logo · ☰ → panel a pantalla completa con los mismos enlaces + botón grande "Agendar reunión" |
 
 - "Precios" lleva a la sección de paquetes del inicio (`/#precios`).
 - El botón **Agendar reunión** siempre está visible y es el único con color lima.

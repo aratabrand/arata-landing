@@ -340,11 +340,7 @@ export const menu = {
       texto: "Tienda por WhatsApp y sistemas a tu medida.",
       href: "/catalogos-y-sistemas",
     },
-    {
-      titulo: "Portafolio",
-      texto: "Trabajos reales, negocios reales.",
-      href: "/portafolio",
-    },
+    // D-207: el Portafolio ya no va dentro de Servicios; queda solo como opción del menú
   ],
   links: [
     { label: "Portafolio", href: "/portafolio" },
