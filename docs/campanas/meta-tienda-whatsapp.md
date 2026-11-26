@@ -387,6 +387,8 @@ Precio: **$ 2.200.000** a todo el que haya agendado hasta el 30 de noviembre (D-
 
 ### 7.6 Anuncios (Andrés)
 
+> **Paso a paso en el Administrador de anuncios y textos para elegir: [`meta-anuncios-paso-a-paso.md`](meta-anuncios-paso-a-paso.md).**
+
 - Enlace del anuncio, con su origen para medir cada ángulo:
   `https://www.aratasan.com/lp/catalogos?utm_source=meta&utm_medium=paid&utm_campaign=tienda-noviembre&utm_content=angulo-a`
   (cambiar `angulo-a` por `angulo-b`, `angulo-d` según el anuncio, §3)
