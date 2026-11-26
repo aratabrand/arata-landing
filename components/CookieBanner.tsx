@@ -4,9 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "@/components/v2/iconos";
-import { cookies as t } from "@/content/cookies";
+import { cookies as t, textoAviso } from "@/content/cookies";
 import {
   CLARITY_ACTIVO,
+  PIXEL_ACTIVO,
   EVENTO_ABRIR,
   guardarConsentimiento,
   leerConsentimiento,
@@ -16,7 +17,8 @@ import { cn } from "@/lib/utils";
 
 // Aviso de cookies (D-130). Aparece si la persona no ha elegido (o su elección venció a los 12 meses).
 // Con Microsoft Clarity encendido (D-132) hay un segundo permiso, aparte del de Google Analytics, y quien
-// eligió antes de que existiera Clarity vuelve a ver el aviso.
+// eligió antes de que existiera Clarity vuelve a ver el aviso. Con el pixel de Meta (D-203), lo mismo con un
+// tercer permiso, «Publicidad».
 // - Aceptar, Rechazar y Preferencias con el mismo peso visual que importa: rechazar es un solo toque.
 // - Preferencias: <dialog> nativo (atrapa el foco, cierra con Escape, devuelve el foco).
 // - No tapa la página: tarjeta fija abajo; no bloquea el scroll ni el uso del sitio.
@@ -34,6 +36,7 @@ function Aviso() {
   const [visible, setVisible] = useState(false);
   const [medicion, setMedicion] = useState(false);
   const [navegacion, setNavegacion] = useState(false);
+  const [publicidad, setPublicidad] = useState(false);
   const [retraso, setRetraso] = useState(1.9);
   const dialogo = useRef<HTMLDialogElement | null>(null);
 
@@ -41,6 +44,7 @@ function Aviso() {
     const c = leerConsentimiento();
     setMedicion(c?.medicion ?? false);
     setNavegacion(c?.navegacion ?? false);
+    setPublicidad(c?.publicidad ?? false);
     // Si ya vio la animación de entrada en esta visita, el aviso sale enseguida
     try {
       if (window.sessionStorage.getItem("as-cargado")) setRetraso(0.4);
@@ -51,16 +55,18 @@ function Aviso() {
       const c = leerConsentimiento();
       setMedicion(c?.medicion ?? false);
       setNavegacion(c?.navegacion ?? false);
+      setPublicidad(c?.publicidad ?? false);
       dialogo.current?.showModal();
     };
     window.addEventListener(EVENTO_ABRIR, abrir);
     return () => window.removeEventListener(EVENTO_ABRIR, abrir);
   }, []);
 
-  const decidir = useCallback((medicionElegida: boolean, navegacionElegida: boolean) => {
-    guardarConsentimiento(medicionElegida, navegacionElegida);
+  const decidir = useCallback((medicionElegida: boolean, navegacionElegida: boolean, publicidadElegida: boolean) => {
+    guardarConsentimiento(medicionElegida, navegacionElegida, publicidadElegida);
     setMedicion(medicionElegida);
     setNavegacion(navegacionElegida);
+    setPublicidad(publicidadElegida);
     setVisible(false);
     dialogo.current?.close();
   }, []);
@@ -80,14 +86,14 @@ function Aviso() {
                 <h2 id="cookies-titulo" className="font-display text-base font-bold text-white">
                   {t.titulo}
                 </h2>
-                <p className="mt-1.5 text-[0.82rem] leading-relaxed text-fog">{CLARITY_ACTIVO ? t.textoConClarity : t.texto}</p>
+                <p className="mt-1.5 text-[0.82rem] leading-relaxed text-fog">{textoAviso(CLARITY_ACTIVO, PIXEL_ACTIVO)}</p>
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => decidir(true, true)} className="v2-primario h-11 rounded-full text-sm font-semibold">
+              <button type="button" onClick={() => decidir(true, true, true)} className="v2-primario h-11 rounded-full text-sm font-semibold">
                 {t.aceptar}
               </button>
-              <button type="button" onClick={() => decidir(false, false)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
+              <button type="button" onClick={() => decidir(false, false, false)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold text-white transition-colors hover:border-white/30">
                 {t.rechazar}
               </button>
               <div className="col-span-2 flex items-center justify-center gap-4 text-sm">
@@ -145,18 +151,21 @@ function Aviso() {
             {CLARITY_ACTIVO && (
               <Opcion id="cookies-navegacion" titulo={t.navegacion.titulo} texto={t.navegacion.texto} activo={navegacion} onCambiar={() => setNavegacion((n) => !n)} />
             )}
+            {PIXEL_ACTIVO && (
+              <Opcion id="cookies-publicidad" titulo={t.publicidad.titulo} texto={t.publicidad.texto} activo={publicidad} onCambiar={() => setPublicidad((p) => !p)} />
+            )}
           </ul>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            <button type="button" onClick={() => decidir(medicion, navegacion)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
+            <button type="button" onClick={() => decidir(medicion, navegacion, publicidad)} className="h-11 rounded-full border border-white/15 bg-surface-2 text-sm font-semibold transition-colors hover:border-white/30">
               {t.guardar}
             </button>
-            <button type="button" onClick={() => decidir(true, true)} className="v2-primario h-11 rounded-full text-sm font-semibold">
+            <button type="button" onClick={() => decidir(true, true, true)} className="v2-primario h-11 rounded-full text-sm font-semibold">
               {t.aceptarTodas}
             </button>
           </div>
           <p className="mt-4 text-xs leading-relaxed text-fog-dim">
-            {CLARITY_ACTIVO ? t.pieConClarity : t.pie}{" "}
+            {CLARITY_ACTIVO || PIXEL_ACTIVO ? t.pieConClarity : t.pie}{" "}
             <Link href="/privacidad#cookies" className="underline underline-offset-4 hover:text-white">
               {t.enlace}
             </Link>

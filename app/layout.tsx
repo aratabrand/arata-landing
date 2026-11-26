@@ -4,6 +4,7 @@ import { site } from "@/lib/site";
 import { GtmInit, GtmScript } from "@/components/GoogleTagManager";
 import CookieBanner from "@/components/CookieBanner";
 import ClarityLoader from "@/components/ClarityLoader";
+import PixelLoader from "@/components/PixelLoader";
 import { V2_PUBLICADO } from "@/lib/lanzamiento";
 import { agenciaV2 } from "@/lib/schema";
 import "./globals.css";
@@ -141,6 +142,8 @@ export default function RootLayout({
         {conMedicion && <CookieBanner />}
         {/* D-132: Microsoft Clarity, solo con el permiso "Cómo navegas" y solo si hay NEXT_PUBLIC_CLARITY_ID */}
         {conMedicion && <ClarityLoader />}
+        {/* D-203: pixel de Meta, solo con el permiso "Publicidad" y solo si hay NEXT_PUBLIC_META_PIXEL_ID */}
+        {conMedicion && <PixelLoader />}
       </body>
     </html>
   );

@@ -10,6 +10,11 @@
 
 type Datos = Record<string, string | number | boolean | null | undefined>;
 
+// D-203: eventos del sitio que también van al pixel de Meta, con su nombre estándar de Meta.
+// Solo la cita agendada: es la conversión que optimiza la campaña. El pixel solo existe si la persona
+// aceptó «Publicidad» (components/PixelLoader.tsx); si todavía no abrió, el evento espera en la cola.
+const A_META: Record<string, string> = { reunion_confirmada: "Lead" };
+
 declare global {
   interface Window {
     dataLayer?: unknown[];
@@ -36,4 +41,14 @@ export function medir(evento: string, datos: Datos = {}) {
   // (React monta la página antes que el layout: pasa en /agendar/gracias).
   (window as Window & { __medirPendiente?: boolean }).__medirPendiente = true;
   window.dispatchEvent(new Event("as:medir"));
+
+  const meta = A_META[evento];
+  if (meta) {
+    const w = window as Window & { fbq?: (...a: unknown[]) => void; __pixelCargado?: boolean; __pixelPendiente?: string[] };
+    if (w.__pixelCargado && w.fbq) w.fbq("track", meta);
+    else {
+      w.__pixelPendiente = [...(w.__pixelPendiente ?? []), meta];
+      window.dispatchEvent(new Event("as:pixel"));
+    }
+  }
 }
