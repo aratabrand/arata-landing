@@ -1,7 +1,7 @@
 import { catalogos } from "@/content/servicios";
 import { precios } from "@/content/inicio";
 import { agendar } from "@/content/agendar";
-import { CLARITY_ACTIVO } from "@/lib/consentimiento";
+import { proveedoresDatos } from "@/lib/consentimiento";
 
 /* ── Landing de campaña de Meta: Tienda por WhatsApp — /lp/catalogos (D-189) ──
    Arranca como copia de /catalogos-y-sistemas. Para cambiar un texto SOLO en la
@@ -198,7 +198,7 @@ export function textosAgenda(conOferta: boolean) {
     oferta: conOferta ? `${OFERTA.nombre}: ${OFERTA.precio} ${OFERTA.condicion}.` : null,
     lateral: agendar.lateral,
     // Aviso de datos antes de agendar (Ley 1581): mismo contenido de la casilla de /agendar (D-099)
-    aviso: `Al agendar autorizas a Arata San a usar tus datos para atender tu solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (${CLARITY_ACTIVO ? "Cal.com, Google y Microsoft" : "Cal.com y Google"}), que pueden estar fuera de Colombia, según la`,
+    aviso: `Al agendar autorizas a Arata San a usar tus datos para atender tu solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (${proveedoresDatos()}), que pueden estar fuera de Colombia, según la`,
     avisoLink: agendar.pasos.datos.autorizacionLink,
     notas: [
       "Necesito: Un catálogo o tienda · oferta de noviembre",

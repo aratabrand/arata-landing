@@ -365,10 +365,13 @@ Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúscul
 2. **Verificar el dominio.** Meta Business → **Configuración del negocio → Seguridad de la marca → Dominios → Agregar** `aratasan.com` → método **registro TXT de DNS** → copiar el valor.
    - Cloudflare → `aratasan.com` → **DNS → Add record**: tipo `TXT`, nombre `@`, contenido el valor de Meta.
    - Volver a Meta → **Verificar** (puede tardar unos minutos).
-3. **Pasarle el ID del pixel a Claude.** Claude lo instala así:
-   - Un permiso propio **«Publicidad»** en el aviso de cookies: sin aceptar, el pixel no abre (Ley 1581, como Analytics y Clarity).
-   - La política de datos y la casilla de autorización actualizadas.
-   - `PageView` en el sitio y la landing, y **`Lead`** cuando la cita queda agendada (`/agendar/gracias`, el mismo momento que `reunion_confirmada`).
+3. **Encenderlo en Vercel (ya está programado, D-203).** Proyecto **`arata-landing`** → Settings → Environment Variables → Add, en Production y Preview, sin «Sensitive»:
+   - `NEXT_PUBLIC_META_PIXEL_ID` = el ID del pixel
+   - `NEXT_PUBLIC_META_PIXEL_DESDE` = la fecha del día, así: `27 de noviembre de 2026`
+   Después **Deployments → Production → ⋯ → Redeploy**. Con eso, solo:
+   - el aviso de cookies suma el permiso **«Publicidad (Meta)»** y vuelve a preguntar a quien ya había elegido; sin aceptar, el pixel no abre (Ley 1581);
+   - la política de datos y las casillas de autorización nombran a Meta;
+   - `PageView` en cada página y **`Lead`** cuando la cita queda agendada (`/agendar/gracias`).
 4. **Probar.** Administrador de eventos → **Probar eventos** → abrir la landing, aceptar «Publicidad» y agendar una prueba: deben verse `PageView` y `Lead`.
 
 ### 7.5 Antes de la primera venta (Andrés)

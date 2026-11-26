@@ -11,16 +11,27 @@
 // - Dos permisos separados (D-132): "medicion" (Google Analytics: cuántas visitas) y "navegacion"
 //   (Microsoft Clarity: mapas de clics y grabaciones, más invasivo). "Aceptar" da los dos; se pueden
 //   elegir uno por uno en Preferencias. Clarity solo existe si hay `site.clarityId`.
+// - Tercer permiso (D-203): "publicidad" (pixel de Meta: medir los anuncios de Facebook e Instagram y
+//   mostrarle anuncios de Arata San). Solo existe si hay `site.pixelId`. Con el pixel, Meta no recibe
+//   nombre, correo ni WhatsApp (sin "coincidencia avanzada") y no se rastrean botones solos (autoConfig apagado).
 
 import { site } from "@/lib/site";
 
 export const CLAVE = "as-cookies";
 /** Microsoft Clarity está encendido (hay ID de proyecto). Si no, no hay segundo permiso ni se menciona. */
 export const CLARITY_ACTIVO = site.clarityId !== "";
+/** Pixel de Meta encendido (hay ID). Si no, no hay permiso de publicidad ni se menciona a Meta. */
+export const PIXEL_ACTIVO = site.pixelId !== "";
 export const VERSION = 1;
 const VIGENCIA_MS = 365 * 24 * 60 * 60 * 1000;
 
-export type Consentimiento = { v: number; medicion: boolean; navegacion?: boolean; fecha: string };
+export type Consentimiento = { v: number; medicion: boolean; navegacion?: boolean; publicidad?: boolean; fecha: string };
+
+/** Proveedores que reciben datos al agendar o al medir, para las casillas de autorización (Ley 1581, art. 26). */
+export function proveedoresDatos(): string {
+  const lista = ["Cal.com", "Google", ...(CLARITY_ACTIVO ? ["Microsoft"] : []), ...(PIXEL_ACTIVO ? ["Meta"] : [])];
+  return `${lista.slice(0, -1).join(", ")} y ${lista[lista.length - 1]}`;
+}
 
 export const EVENTO_CAMBIO = "as:consentimiento";
 export const EVENTO_ABRIR = "as:abrir-cookies";
@@ -43,20 +54,23 @@ export function leerConsentimiento(): Consentimiento | null {
  * (permiso nuevo = autorización nueva: Ley 1581, finalidad distinta).
  */
 export function necesitaPreguntar(c: Consentimiento | null) {
-  return !c || (CLARITY_ACTIVO && c.navegacion === undefined);
+  return !c || (CLARITY_ACTIVO && c.navegacion === undefined) || (PIXEL_ACTIVO && c.publicidad === undefined);
 }
 
 type Ventana = Window & {
   gtag?: (...a: unknown[]) => void;
   clarity?: (...a: unknown[]) => void;
   __clarityCargado?: boolean;
+  fbq?: (...a: unknown[]) => void;
+  __pixelCargado?: boolean;
 };
 
-export function guardarConsentimiento(medicion: boolean, navegacion = false) {
+export function guardarConsentimiento(medicion: boolean, navegacion = false, publicidad = false) {
   const c: Consentimiento = {
     v: VERSION,
     medicion,
     ...(CLARITY_ACTIVO ? { navegacion } : {}),
+    ...(PIXEL_ACTIVO ? { publicidad } : {}),
     fecha: new Date().toISOString(),
   };
   try {
@@ -68,16 +82,25 @@ export function guardarConsentimiento(medicion: boolean, navegacion = false) {
   w.gtag?.("consent", "update", { analytics_storage: medicion ? "granted" : "denied" });
   if (!medicion) borrarCookiesDeMedicion();
   window.dispatchEvent(new CustomEvent(EVENTO_CAMBIO, { detail: c }));
-  // Retirar el permiso de Clarity: avisarle, borrar sus cookies y recargar para que su script
-  // deje de correr (no hay una forma limpia de "pararlo" sin recargar).
+  // Retirar un permiso de una herramienta ya abierta: avisarle, borrar sus cookies y recargar para que su
+  // script deje de correr (no hay una forma limpia de "pararlo" sin recargar).
+  let recargar = false;
   if (CLARITY_ACTIVO && !navegacion && w.__clarityCargado) {
     try {
       w.clarity?.("consentv2", { ad_Storage: "denied", analytics_Storage: "denied" });
       w.clarity?.("consent", false);
     } catch {}
     borrarCookies(NOMBRES_CLARITY);
-    window.location.reload();
+    recargar = true;
   }
+  if (PIXEL_ACTIVO && !publicidad && w.__pixelCargado) {
+    try {
+      w.fbq?.("consent", "revoke");
+    } catch {}
+    borrarCookies(NOMBRES_META);
+    recargar = true;
+  }
+  if (recargar) window.location.reload();
   return c;
 }
 
@@ -85,6 +108,8 @@ const esGoogle = (n: string) => n === "_ga" || n.startsWith("_ga_") || n === "_g
 /** Cookies de Clarity. _clck y _clsk son de este sitio; CLID, MUID y ANONID las pone Microsoft en su dominio
  *  (no se pueden borrar desde aquí; la persona las borra desde su navegador). */
 const NOMBRES_CLARITY = ["_clck", "_clsk", "CLID", "ANONID", "MUID", "SM"];
+/** Cookies del pixel de Meta en este sitio (D-203). Las de facebook.com las borra la persona desde su navegador. */
+const NOMBRES_META = ["_fbp", "_fbc"];
 
 function borrarCookiesDeMedicion() {
   borrarCookies((n) => esGoogle(n));

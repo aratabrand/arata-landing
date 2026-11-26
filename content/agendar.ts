@@ -1,7 +1,7 @@
 // /agendar y /agendar/gracias — copy APROBADO en docs/blueprint/03-copy.md (D-053, D-041, D-054).
 // Flujo: docs/blueprint/02-arquitectura.md §2.
 
-import { CLARITY_ACTIVO } from "@/lib/consentimiento";
+import { proveedoresDatos } from "@/lib/consentimiento";
 
 export type TipoAgenda = "pagina" | "catalogo" | "sistema" | "auditoria";
 
@@ -66,7 +66,7 @@ export const agendar = {
       correo: "Tu correo",
       correoPlaceholder: "tucorreo@ejemplo.com",
       // D-099: autorización previa, expresa e informada, incluido el envío fuera de Colombia (art. 9 y 26)
-      autorizacion: `Autorizo a Arata San a usar mis datos para atender mi solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (${CLARITY_ACTIVO ? "Cal.com, Google y Microsoft" : "Cal.com y Google"}), que pueden estar fuera de Colombia, según la`,
+      autorizacion: `Autorizo a Arata San a usar mis datos para atender mi solicitud y a enviarlos a los proveedores que usa para agendar y medir el sitio (${proveedoresDatos()}), que pueden estar fuera de Colombia, según la`,
       autorizacionLink: "Política de tratamiento de datos",
     },
   },
