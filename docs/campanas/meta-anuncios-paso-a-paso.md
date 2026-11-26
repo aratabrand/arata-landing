@@ -41,7 +41,7 @@
 | Ubicación de la conversión | **Sitio web** |
 | Objetivo de rendimiento | **Maximizar el número de conversiones** |
 | Pixel | **arata.san - Web Principal** |
-| Evento | La conversión personalizada **lead tienda campaña noviembre**. Si no sale en la lista, **Cliente potencial** (Lead): hoy casi todo el que agenda viene de la landing. |
+| Evento | **Cliente potencial** (Lead, en «Eventos activos»). Con el objetivo Clientes potenciales, Meta no ofrece la conversión personalizada «lead tienda campaña noviembre» en esta lista (26 nov). No importa: Lead solo se dispara cuando alguien agenda y lleva `content_name: lp-catalogos`. La conversión personalizada se usa para **ver** los resultados (columna en el reporte, §6). |
 | Programación | Inicio: apenas lo aprueben. **Fin: 30 nov 2026, 11:59 p. m.** |
 | Público | **Público Advantage+** con sugerencias (abajo) |
 | Ubicaciones | **Ubicaciones Advantage+** (Meta reparte entre feed, Reels e historias) |
@@ -189,6 +189,7 @@ Hay un solo video. No hace falta más para esta campaña: **el mismo video va en
 | Cuándo | Qué mirar | Qué hacer |
 |---|---|---|
 | Al aprobarse | Que el enlace abra la landing con la cinta de la oferta, dentro de Instagram y de Facebook | Si algo falla, pausar y avisar a Claude |
+| Al aprobarse | Administrador de anuncios → **Columnas → Personalizar columnas** → buscar **lead tienda campaña noviembre** → marcarla → guardar como «Tienda noviembre» | Así se ven las reuniones de la landing por anuncio |
 | Cada día | Panel → **Clientes → Interesados**: quién agendó | Escribirle por WhatsApp el mismo día (lo contesta una persona) |
 | Cada día | Comentarios y mensajes del anuncio | Responder con la respuesta de abajo |
 | A las 48 h | CTR del enlace de cada anuncio | Si uno está bajo 1 % y otro lo pasa, **apagar el bajo** (no borrarlo). No tocar el conjunto. |
@@ -233,7 +234,7 @@ Además, la sesión en la nube necesita permiso de red para `graph.facebook.com`
 | Nivel | Comando | Valores |
 |---|---|---|
 | Campaña | `meta ads campaign create` | `--objective OUTCOME_LEADS`, `--special-ad-categories NONE`, presupuesto diario de campaña (CBO, en centavos de COP), `--status PAUSED` |
-| Conjunto | `meta ads adset create` | `--optimization-goal OFFSITE_CONVERSIONS`, `--destination-type WEBSITE`, `--promoted-object` con el pixel y la conversión «lead tienda campaña noviembre» (o `--custom-event-type LEAD`), `--targeting-countries CO`, `--advantage-audience`, `--end-time 2026-11-30T23:59:00-05:00` |
+| Conjunto | `meta ads adset create` | `--optimization-goal OFFSITE_CONVERSIONS`, `--destination-type WEBSITE`, `--pixel-id` del pixel con `--custom-event-type LEAD`, `--targeting-countries CO`, `--advantage-audience`, `--end-time 2026-11-30T23:59:00-05:00` |
 | Video | `meta ads creative create --video` (o `--video-id` si ya está en la biblioteca de la cuenta) | Se sube una vez y se usa en los 3 |
 | 3 creativos | `meta ads creative create` | `--body`, `--title`, `--description` ★ de cada ángulo, `--link-url https://www.aratasan.com/lp/catalogos`, `--url-tags` con `utm_content=angulo-a/b/d`, `--call-to-action BOOK_TRAVEL` («Reservar»; o `GET_OFFER`, «Obtener oferta»), `--degrees-of-freedom-spec` con las mejoras de texto apagadas |
 | 3 anuncios | `meta ads ad create` | `A · tiempo`, `B · pedido`, `D · 5 días`, `--conversion-domain aratasan.com`, `--status PAUSED` |
