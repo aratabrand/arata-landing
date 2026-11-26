@@ -94,6 +94,9 @@ export const agendar = {
     cargando: "Abriendo el calendario…",
     sinCalendario: "Termina por WhatsApp: te mandamos los horarios disponibles.",
     botonWhatsapp: "Enviar por WhatsApp",
+    // D-205: si el calendario tarda o falla, se puede abrir de nuevo sin recargar la página
+    lento: "El calendario está tardando más de lo normal.",
+    reintentar: "Volver a intentar",
   },
   lateral: {
     titulo: "Qué pasa en la reunión",
