@@ -154,6 +154,7 @@ Progresión: **sistema Figma → build Claude Code**.
 - Salidas modulares: preferir respuestas tipo tabla, no prosa larga.
 - Iteración dirigida: cambios puntuales a slides/elementos específicos, no rebuilds completos.
 - **Ofertas, precios, promociones, garantías, bonos o pitch:** usar la skill `alex-hormozi-pitch` (`.claude/skills/alex-hormozi-pitch/`): crear (Flujo A) o auditar (Flujo B) con el método de *$100M Offers*, sin inventar datos y con la Ley 1480 (D-196). Última auditoría: `docs/campanas/auditoria-oferta-2026-11-24.md`.
+- **Anuncios de Meta:** skills `meta-ads` (operar: crear, reportes, pausar) y `meta-ads-setup` (instalar el CLI oficial `meta-ads` y sacar el token) en `.claude/skills/`. Token nunca en el chat ni en el repo; todo se crea en pausa y lo prende una persona; cuenta en COP (D-206). Paso a paso de la campaña: `docs/campanas/meta-anuncios-paso-a-paso.md`.
 
 ---
 

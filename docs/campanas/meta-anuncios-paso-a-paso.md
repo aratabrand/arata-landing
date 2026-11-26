@@ -1,6 +1,6 @@
 # Campaña de Meta · Tienda por WhatsApp (noviembre) — paso a paso y textos
 
-> 26 nov 2026. Parte de [`meta-tienda-whatsapp.md`](meta-tienda-whatsapp.md) (plan, dolores y §7 con Cal.com y el pixel, ya listos). Los textos se escribieron con la skill de copy y las reglas de `CLAUDE.md` §2. **Sergio elige una versión por ángulo antes de publicar.**
+> 26 nov 2026. Parte de [`meta-tienda-whatsapp.md`](meta-tienda-whatsapp.md) (plan, dolores y §7 con Cal.com y el pixel, ya listos). Los textos se escribieron con la skill de copy y las reglas de `CLAUDE.md` §2. **✅ Aprobado por Sergio el 26 nov: las versiones ★ de los tres ángulos (A1, B1, D1, con su título y descripción ★).**
 
 ## 0. Lo que hay que tener presente
 
@@ -41,7 +41,7 @@
 | Ubicación de la conversión | **Sitio web** |
 | Objetivo de rendimiento | **Maximizar el número de conversiones** |
 | Pixel | **arata.san - Web Principal** |
-| Evento | La conversión personalizada **lead tienda campaña noviembre**. Si no sale en la lista, **Cliente potencial** (Lead): hoy casi todo el que agenda viene de la landing. |
+| Evento | **Cliente potencial** (Lead, en «Eventos activos»). Con el objetivo Clientes potenciales, Meta no ofrece la conversión personalizada «lead tienda campaña noviembre» en esta lista (26 nov). No importa: Lead solo se dispara cuando alguien agenda y lleva `content_name: lp-catalogos`. La conversión personalizada se usa para **ver** los resultados (columna en el reporte, §6). |
 | Programación | Inicio: apenas lo aprueben. **Fin: 30 nov 2026, 11:59 p. m.** |
 | Público | **Público Advantage+** con sugerencias (abajo) |
 | Ubicaciones | **Ubicaciones Advantage+** (Meta reparte entre feed, Reels e historias) |
@@ -189,6 +189,7 @@ Hay un solo video. No hace falta más para esta campaña: **el mismo video va en
 | Cuándo | Qué mirar | Qué hacer |
 |---|---|---|
 | Al aprobarse | Que el enlace abra la landing con la cinta de la oferta, dentro de Instagram y de Facebook | Si algo falla, pausar y avisar a Claude |
+| Al aprobarse | Administrador de anuncios → **Columnas → Personalizar columnas** → buscar **lead tienda campaña noviembre** → marcarla → guardar como «Tienda noviembre» | Así se ven las reuniones de la landing por anuncio |
 | Cada día | Panel → **Clientes → Interesados**: quién agendó | Escribirle por WhatsApp el mismo día (lo contesta una persona) |
 | Cada día | Comentarios y mensajes del anuncio | Responder con la respuesta de abajo |
 | A las 48 h | CTR del enlace de cada anuncio | Si uno está bajo 1 % y otro lo pasa, **apagar el bajo** (no borrarlo). No tocar el conjunto. |
@@ -206,3 +207,48 @@ Hay un solo video. No hace falta más para esta campaña: **el mismo video va en
 | ¿Los 8 cupos al mes pasan a ser regla del sitio? (hoy solo esta campaña, D-198) | Sergio |
 | Con los datos de noviembre: separar públicos P1, P2 y P3 y probar el ángulo C (control) | Andrés |
 | Anotar lo que se decida en `docs/decisiones.md` | Sergio |
+
+## 8. Ruta con el Meta Ads CLI (D-206)
+
+Con las skills `meta-ads` y `meta-ads-setup`, Claude puede crear la campaña completa **en pausa** desde el chat, con los textos ★ exactos, y después sacar los reportes diarios. Sergio o Andrés la revisan en el Administrador de anuncios y la prenden. Las dos rutas terminan igual; esta evita errores al copiar y pegar y deja los reportes automáticos.
+
+### 8.1 Lo que hay que hacer una sola vez (20 min · Sergio)
+
+Sigue la skill `meta-ads-setup` (fases 3 a 5), con estos cambios para Arata:
+
+| # | Dónde | Qué |
+|---|---|---|
+| 1 | Business Suite → Configuración → **Usuarios → Usuarios del sistema → Agregar** | Nombre `ads-cli` (sin espacios), rol **Administrador** |
+| 2 | **Cuentas → Cuentas publicitarias** → la de Arata San → **Asignar acceso** | `ads-cli` con **Control total**. No crear una cuenta nueva: la de Arata ya está en COP |
+| 3 | **Cuentas → Páginas** → Arata San → Asignar acceso | `ads-cli` con Control total |
+| 4 | **Orígenes de datos → Conjuntos de datos** → arata.san - Web Principal → Asignar acceso | `ads-cli` |
+| 5 | developers.facebook.com/apps → **Crear app** | Tipo **Negocio**, caso de uso **Crear y administrar anuncios con la API de marketing**, portafolio de Arata San |
+| 6 | Business Suite → **Cuentas → Apps** → la app → Asignar acceso | `ads-cli` (este paso se hace aquí, no en developers) |
+| 7 | **Usuarios del sistema → ads-cli → Generar token** | App la del paso 5, caducidad **Nunca**, permisos `business_management`, `ads_management`, `ads_read`, `pages_show_list`, `pages_read_engagement`, `pages_manage_ads` |
+| 8 | **El token no se pega en el chat.** | En la sesión en la nube, Claude abre el formulario seguro de credenciales para `graph.facebook.com` y ahí se pega. En el computador, va en `~/.env-meta-ads` |
+
+Además, la sesión en la nube necesita permiso de red para `graph.facebook.com` (y `graph-video.facebook.com` para subir el video). Claude lo pide con una aprobación; nadie más lo puede encender.
+
+### 8.2 Lo que crea Claude (todo en `PAUSED`)
+
+| Nivel | Comando | Valores |
+|---|---|---|
+| Campaña | `meta ads campaign create` | `--objective OUTCOME_LEADS`, `--special-ad-categories NONE`, presupuesto diario de campaña (CBO, en centavos de COP), `--status PAUSED` |
+| Conjunto | `meta ads adset create` | `--optimization-goal OFFSITE_CONVERSIONS`, `--destination-type WEBSITE`, `--pixel-id` del pixel con `--custom-event-type LEAD`, `--targeting-countries CO`, `--advantage-audience`, `--end-time 2026-11-30T23:59:00-05:00` |
+| Video | `meta ads creative create --video` (o `--video-id` si ya está en la biblioteca de la cuenta) | Se sube una vez y se usa en los 3 |
+| 3 creativos | `meta ads creative create` | `--body`, `--title`, `--description` ★ de cada ángulo, `--link-url https://www.aratasan.com/lp/catalogos`, `--url-tags` con `utm_content=angulo-a/b/d`, `--call-to-action BOOK_TRAVEL` («Reservar»; o `GET_OFFER`, «Obtener oferta»), `--degrees-of-freedom-spec` con las mejoras de texto apagadas |
+| 3 anuncios | `meta ads ad create` | `A · tiempo`, `B · pedido`, `D · 5 días`, `--conversion-domain aratasan.com`, `--status PAUSED` |
+
+Antes de crear, Claude corre los comandos con `--execution-options validate_only` (Meta revisa sin crear nada) y muestra el resultado.
+
+### 8.3 Mientras corre
+
+| Cuándo | Qué hace Claude |
+|---|---|
+| Cada día | Reporte de gasto, clics, CTR del enlace y reuniones por anuncio (`meta ads insights get --level ad`) |
+| A las 48 h | Marca los anuncios con CTR del enlace bajo 1 %; Sergio o Andrés deciden si se pausan (`meta ads ad update <id> --status PAUSED`) |
+| 30 nov | Revisa que el conjunto quedó terminado por la fecha de fin |
+
+### 8.4 Qué falta probar
+
+- El CLI manda el token en cada llamada. En la nube se prueba primero con `meta auth status` y `meta ads adaccount list`, por si no acepta el token que pone el proxy. Si no funciona, el plan B es la ruta manual (§1 a §6), que ya está lista.
