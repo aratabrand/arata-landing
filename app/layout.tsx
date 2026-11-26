@@ -70,6 +70,9 @@ export const metadata: Metadata = {
     images: ["/og/og-v2.png"],
   },
   robots: { index: true, follow: true },
+  // D-203: verificación del dominio aratasan.com en Meta Business (Seguridad de la marca → Dominios).
+  // Es pública y no mide nada; va en todas las páginas porque Meta la busca en el inicio.
+  verification: { other: { "facebook-domain-verification": "11mqv1we5mfe213ofni40lwwemkcli" } },
   icons: { icon: "/icon.svg" },
 };
 
