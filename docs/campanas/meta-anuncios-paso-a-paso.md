@@ -81,7 +81,7 @@ Para cada anuncio:
 | Formato | **Video**: el mismo en los 3 anuncios. Lo que cambia es el texto (el ángulo) |
 | Destino | **Sitio web**: `https://www.aratasan.com/lp/catalogos` |
 | Parámetros de URL | `utm_source=meta&utm_medium=paid&utm_campaign=tienda-noviembre&utm_content=angulo-a` (cambiar a `angulo-b` o `angulo-d`) |
-| Botón | **Reservar** (si no aparece, **Más información**) |
+| Botón | **Solicitar cita** en los 3 anuncios: es lo que pasa al tocar (agendar la reunión). Segunda opción: «Obtener oferta». No usar «Realizar pedido» ni «Registrarte»: prometen otra cosa |
 | Seguimiento | Pixel **arata.san - Web Principal** marcado |
 | Mejoras de Advantage+ | **Apagar las que cambian o generan texto** (variaciones de texto, texto con IA): podrían quitar la fecha o la condición de la oferta. Las de imagen (brillo, recorte) pueden quedar. |
 
