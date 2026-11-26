@@ -22,8 +22,21 @@ declare global {
   }
 }
 
-export function medir(evento: string, datos: Datos = {}) {
+/** D-204: «origen» de la dirección (p. ej. lp-catalogos, la landing de la campaña), solo letras, números y guiones. */
+function origenDeLaPagina(): string | null {
+  try {
+    const o = new URLSearchParams(window.location.search).get("origen");
+    return o && /^[a-z0-9-]{1,40}$/.test(o) ? o : null;
+  } catch {
+    return null;
+  }
+}
+
+export function medir(evento: string, datosEntrada: Datos = {}) {
   if (typeof window === "undefined") return;
+  // D-204: si la página trae ?origen= (la cita se agendó desde una landing de campaña), va en el evento
+  const origen = origenDeLaPagina();
+  const datos: Datos = origen && datosEntrada.origen == null ? { ...datosEntrada, origen } : datosEntrada;
   window.dataLayer = window.dataLayer ?? [];
   // Si el contenedor aún no abrió, se crea el mismo gtag() del código de GA4: la llamada
   // queda en la cola (dataLayer) y GA4 la procesa al cargar. Así no se pierde ningún evento.
@@ -44,10 +57,12 @@ export function medir(evento: string, datos: Datos = {}) {
 
   const meta = A_META[evento];
   if (meta) {
-    const w = window as Window & { fbq?: (...a: unknown[]) => void; __pixelCargado?: boolean; __pixelPendiente?: string[] };
-    if (w.__pixelCargado && w.fbq) w.fbq("track", meta);
+    // D-204: el origen va como content_name: en Meta se separan los Lead de la campaña de los del sitio
+    const parametros = origen ? { content_name: origen } : undefined;
+    const w = window as Window & { fbq?: (...a: unknown[]) => void; __pixelCargado?: boolean; __pixelPendiente?: { evento: string; parametros?: Record<string, string> }[] };
+    if (w.__pixelCargado && w.fbq) w.fbq("track", meta, parametros);
     else {
-      w.__pixelPendiente = [...(w.__pixelPendiente ?? []), meta];
+      w.__pixelPendiente = [...(w.__pixelPendiente ?? []), { evento: meta, parametros }];
       window.dispatchEvent(new Event("as:pixel"));
     }
   }

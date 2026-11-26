@@ -49,7 +49,8 @@ export default function AgendaDirecta({
         sinDetalles
         onAgendada={() => {
           medir("cita_agendada", { tipo: "catalogo", origen });
-          router.push("/agendar/gracias?tipo=catalogo");
+          // D-204: el origen viaja a la página de «¡Listo!» para que el Lead diga que vino de la landing
+          router.push(`/agendar/gracias?tipo=catalogo&origen=${encodeURIComponent(origen)}`);
         }}
       />
     </div>

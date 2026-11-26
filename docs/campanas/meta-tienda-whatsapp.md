@@ -372,7 +372,8 @@ Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúscul
    - el aviso de cookies suma el permiso **«Publicidad (Meta)»** y vuelve a preguntar a quien ya había elegido; sin aceptar, el pixel no abre (Ley 1581);
    - la política de datos y las casillas de autorización nombran a Meta;
    - `PageView` en cada página y **`Lead`** cuando la cita queda agendada (`/agendar/gracias`).
-4. **Probar.** Administrador de eventos → **Probar eventos** → abrir la landing, aceptar «Publicidad» y agendar una prueba: deben verse `PageView` y `Lead`.
+4. **Probar.** Administrador de eventos → **Probar eventos** → en «Confirmar los eventos de tu sitio web» escribir la dirección **completa de la landing**, `https://www.aratasan.com/lp/catalogos` (si se pone solo `aratasan.com`, abre el inicio) → aceptar las cookies y agendar una prueba: deben verse `PageView` y `Lead` con `content_name: lp-catalogos` (D-204). ✅ Dominio verificado y eventos probados el 26 nov.
+5. **Conversión de la campaña (D-204).** Administrador de eventos → **Conversiones personalizadas → Crear**: nombre `Lead · Tienda noviembre`, origen el pixel «Arata San», evento **Lead**, regla **URL contiene** `origen=lp-catalogos`. En el conjunto de anuncios, optimizar a esa conversión: cuenta solo las citas agendadas desde la landing, no las del resto del sitio.
 
 ### 7.5 Antes de la primera venta (Andrés)
 
