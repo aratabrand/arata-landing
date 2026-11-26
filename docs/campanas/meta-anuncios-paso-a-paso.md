@@ -87,7 +87,17 @@ Para cada anuncio:
 
 Revisar y **Publicar**. Meta manda aviso cuando los aprueba.
 
-### Textos para elegir
+### Copy final para pegar (26 nov, pulido de las versiones ★)
+
+Pulido con la skill de copy sin cambiar datos ni oferta: (1) cada texto cierra con lo que pasa al tocar **«Solicitar cita»**; (2) B ya no dice «Así te llega…», porque hay un solo video y no se sabe si muestra un pedido; (3) el título de D dice qué es lo que queda listo; (4) los 3 dicen el máximo de 8 tiendas.
+
+| Anuncio | Texto principal | Título | Descripción |
+|---|---|---|---|
+| A · tiempo | ¿Todavía mandas foto por foto cada vez que te preguntan «qué tienes»?<br>Con tu tienda por WhatsApp mandas un solo enlace: el cliente ve todo, arma su pedido y te llega ordenado a tu WhatsApp. Lista en 5 días hábiles.<br>Precio de noviembre: $ 2.200.000 (antes $ 2.800.000) para quien agende hasta el 30 de noviembre. Este mes tomamos máximo 8 tiendas.<br>Solicita una cita de 30 minutos y te mostramos cómo quedaría la tuya. | Deja de mandar foto por foto | $ 2.200.000 hasta el 30 de noviembre |
+| B · pedido | Cada pedido te llega a tu WhatsApp en un solo mensaje: los productos, las cantidades y el total.<br>Sin pedidos perdidos en el chat. Sin anotar en un cuaderno.<br>Tú confirmas y cobras como siempre: tus clientes no tienen que pagar en línea.<br>Tu tienda queda lista en 5 días hábiles. $ 2.200.000 (antes $ 2.800.000) para quien agende hasta el 30 de noviembre. Este mes tomamos máximo 8 tiendas.<br>Solicita una cita de 30 minutos y te mostramos cómo quedaría la tuya. | El pedido te llega ordenado | Cobras como siempre |
+| D · 5 días | Tu tienda por WhatsApp, lista en 5 días hábiles.<br>Catálogo con carrito, pedidos ordenados a tu WhatsApp, panel e inventario. Te la dejamos funcionando.<br>Pagas 50 % para arrancar ($ 1.100.000) y 50 % cuando la recibes.<br>Precio de noviembre: $ 2.200.000 (antes $ 2.800.000) para quien agende hasta el 30 de noviembre. Este mes tomamos máximo 8 tiendas.<br>Solicita una cita de 30 minutos y te mostramos cómo quedaría la tuya. | Tu tienda lista en 5 días hábiles | Máximo 8 tiendas este mes |
+
+### Textos para elegir (versiones de origen)
 
 Los textos usan «tú», no llevan signos de admiración y repiten la promesa de la landing («Deja de mandar foto por foto»). En el celular se ven unos 125 caracteres antes de «Ver más». Por eso **lo importante va en la primera línea**.
 
