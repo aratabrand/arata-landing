@@ -308,3 +308,83 @@ Se cubren los dolores D y E sin agregar secciones nuevas. Quedan 9 preguntas (ho
 | 28 nov | Prender campaña | Andrés |
 | Cada lunes | Revisar el embudo de §3 y anotar decisiones en `decisiones.md` | Andrés y Sergio |
 | Semana 3 | Primera prueba A/B de P2 | Andrés |
+
+---
+
+## 7. Paso a paso para prender la campaña (26 nov 2026)
+
+Lo hacen Sergio y Andrés en Cal.com, Vercel, Meta y Cloudflare. Ninguna clave pasa por el chat. Los nombres de los botones pueden variar un poco según el idioma de cada herramienta.
+
+### 7.1 Evento de Cal.com para la landing (15 min · Sergio)
+
+El webhook del panel está en **Ajustes → Desarrollador → Webhooks** y vale para toda la cuenta, así que el evento nuevo también llega a Interesados sin tocar nada más.
+
+1. Cal.com → **Tipos de evento** → **Nuevo**.
+   - Título: `Tienda por WhatsApp · Precio de noviembre`
+   - URL: `tienda-noviembre`
+   - Duración: 30 min
+2. Pestaña **Detalles**: la misma ubicación de la reunión de siempre (Cal Video).
+3. Pestaña **Disponibilidad**: el mismo horario de la reunión de siempre.
+4. Pestaña **Avanzado**:
+   - **Requiere confirmación: apagado.** Quien viene del anuncio queda agendado de una; si se queda encendido, espera a que lo acepten.
+   - **Preguntas de reserva → Agregar una pregunta**:
+
+     | Tipo | Identificador | Etiqueta | Obligatoria |
+     |---|---|---|---|
+     | Teléfono | `whatsapp` | Tu WhatsApp | Sí |
+     | Casilla de verificación | `autorizacion` | Autorizo a Arata San a usar mis datos para atender mi solicitud, según la Política de tratamiento de datos (aratasan.com/privacidad). | Sí |
+
+   - Dejar visible **Notas adicionales** (no obligatoria): ahí llegan «Necesito» e «Inversión» desde la landing.
+5. Guardar. El enlace queda `cal.com/arata-san/tienda-noviembre`. El valor para Vercel es **`arata-san/tienda-noviembre`**.
+
+Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúsculas y sin tilde): así los busca el panel (`lib/panel/cal.ts`).
+
+### 7.2 Conectar el evento a la landing (5 min · Sergio)
+
+1. Vercel → proyecto **`arata-landing`** (no `arata-panel`) → **Settings → Environment Variables → Add**:
+   - Key: `NEXT_PUBLIC_CAL_LINK_LANDING`
+   - Value: `arata-san/tienda-noviembre`
+   - Environments: **Production** y **Preview**. No es secreta: no marcar «Sensitive».
+2. **Deployments** → el último de Production → **⋯ → Redeploy**. Las variables `NEXT_PUBLIC_` se leen al construir: sin redeploy no cambia nada.
+
+### 7.3 Prueba completa (10 min · Sergio o Andrés)
+
+1. Desde el celular, abrir `aratasan.com/lp/catalogos` → tocar **Agendar reunión**.
+2. Elegir una hora. Cal.com debe pedir nombre, correo, **WhatsApp** y la **casilla**.
+3. Al confirmar, debe llegar a «¡Listo! Tu reunión quedó agendada» y al celular el aviso del panel.
+4. Panel → **Clientes → Interesados**: la reserva debe tener el WhatsApp, «Necesito: Un catálogo o tienda · oferta de noviembre», «Inversión: $ 2.200.000, precio de noviembre (agendé antes del 30)» y la autorización «sí, casilla en Cal.com».
+5. Cancelar la reserva de prueba en Cal.com: debe llegar el aviso de cancelación.
+
+### 7.4 Pixel de Meta (20 min · Sergio y Andrés, después Claude)
+
+1. **Crear el pixel.** Meta Business → **Administrador de eventos → Conectar orígenes de datos → Web → Pixel de Meta**.
+   - Nombre: `Arata San`
+   - Sitio: `aratasan.com`
+   - Cuando pregunte cómo instalarlo, elegir **instalar el código manualmente**. No usar WPCode: el sitio es Next.js y el código lo pone Claude con su permiso de cookies.
+   - Copiar el **ID del pixel** (un número de 15 a 16 cifras). No es secreto: es público en la página.
+2. **Verificar el dominio.** Meta Business → **Configuración del negocio → Seguridad de la marca → Dominios → Agregar** `aratasan.com` → método **registro TXT de DNS** → copiar el valor.
+   - Cloudflare → `aratasan.com` → **DNS → Add record**: tipo `TXT`, nombre `@`, contenido el valor de Meta.
+   - Volver a Meta → **Verificar** (puede tardar unos minutos).
+3. **Pasarle el ID del pixel a Claude.** Claude lo instala así:
+   - Un permiso propio **«Publicidad»** en el aviso de cookies: sin aceptar, el pixel no abre (Ley 1581, como Analytics y Clarity).
+   - La política de datos y la casilla de autorización actualizadas.
+   - `PageView` en el sitio y la landing, y **`Lead`** cuando la cita queda agendada (`/agendar/gracias`, el mismo momento que `reunion_confirmada`).
+4. **Probar.** Administrador de eventos → **Probar eventos** → abrir la landing, aceptar «Publicidad» y agendar una prueba: deben verse `PageView` y `Lead`.
+
+### 7.5 Antes de la primera venta (Andrés)
+
+| Bono | Qué preparar |
+|---|---|
+| Subir 30 productos | Pedirle al cliente fotos, nombre, precio y categoría de 30 productos. Se suben antes de la entrega |
+| Código QR | Cuando la tienda esté publicada, un QR a su enlace, listo para imprimir (local y empaques) |
+| Kit para compartir | Mensaje de difusión, texto para estados y frase con el enlace para la biografía de Instagram, con el nombre y el enlace de la tienda |
+
+Precio: **$ 2.200.000** a todo el que haya agendado hasta el 30 de noviembre (D-195), aunque apruebe o pague en diciembre. Máximo 8 tiendas este mes (D-198).
+
+### 7.6 Anuncios (Andrés)
+
+- Enlace del anuncio, con su origen para medir cada ángulo:
+  `https://www.aratasan.com/lp/catalogos?utm_source=meta&utm_medium=paid&utm_campaign=tienda-noviembre&utm_content=angulo-a`
+  (cambiar `angulo-a` por `angulo-b`, `angulo-d` según el anuncio, §3)
+- Objetivo: **Clientes potenciales** en el sitio web, optimizando a `Lead` cuando el pixel esté probado (§3).
+- **30 de noviembre: apagar los anuncios con $ 2.200.000.** La página quita la oferta y los bonos sola el 1 de diciembre, los anuncios no.
