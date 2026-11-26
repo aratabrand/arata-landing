@@ -335,7 +335,7 @@ El webhook del panel está en **Ajustes → Desarrollador → Webhooks** y vale 
      | Casilla de verificación | `autorizacion` | Autorizo a Arata San a usar mis datos para atender mi solicitud, según la Política de tratamiento de datos (aratasan.com/privacidad). | Sí |
 
    - Dejar visible **Notas adicionales** (no obligatoria): ahí llegan «Necesito» e «Inversión» desde la landing.
-5. Guardar. El enlace queda `cal.com/arata-san/tienda-noviembre`. El valor para Vercel es **`arata-san/tienda-noviembre`**.
+5. Guardar. **Hecho el 26 nov:** el evento quedó en `cal.com/arata-san/catalogo-noviembre` (sin confirmación manual, teléfono obligatorio con el campo propio de Cal.com `attendeePhoneNumber`, que el panel también lee, y casilla `autorizacion` obligatoria). El valor para Vercel es **`arata-san/catalogo-noviembre`**. ◻ Falta mostrar el **correo** y hacerlo obligatorio (sin él no llegan la confirmación ni el recordatorio).
 
 Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúsculas y sin tilde): así los busca el panel (`lib/panel/cal.ts`).
 
@@ -343,7 +343,7 @@ Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúscul
 
 1. Vercel → proyecto **`arata-landing`** (no `arata-panel`) → **Settings → Environment Variables → Add**:
    - Key: `NEXT_PUBLIC_CAL_LINK_LANDING`
-   - Value: `arata-san/tienda-noviembre`
+   - Value: `arata-san/catalogo-noviembre`
    - Environments: **Production** y **Preview**. No es secreta: no marcar «Sensitive».
 2. **Deployments** → el último de Production → **⋯ → Redeploy**. Las variables `NEXT_PUBLIC_` se leen al construir: sin redeploy no cambia nada.
 
