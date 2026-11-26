@@ -335,7 +335,7 @@ El webhook del panel está en **Ajustes → Desarrollador → Webhooks** y vale 
      | Casilla de verificación | `autorizacion` | Autorizo a Arata San a usar mis datos para atender mi solicitud, según la Política de tratamiento de datos (aratasan.com/privacidad). | Sí |
 
    - Dejar visible **Notas adicionales** (no obligatoria): ahí llegan «Necesito» e «Inversión» desde la landing.
-5. Guardar. **Hecho el 26 nov:** el evento quedó en `cal.com/arata-san/catalogo-noviembre` (sin confirmación manual, teléfono obligatorio con el campo propio de Cal.com `attendeePhoneNumber`, que el panel también lee, y casilla `autorizacion` obligatoria). El valor para Vercel es **`arata-san/catalogo-noviembre`**. ◻ Falta mostrar el **correo** y hacerlo obligatorio (sin él no llegan la confirmación ni el recordatorio).
+5. Guardar. **Hecho el 26 nov:** el evento quedó en `cal.com/arata-san/catalogo-noviembre` (sin confirmación manual, teléfono obligatorio con el campo propio de Cal.com `attendeePhoneNumber`, que el panel también lee, y casilla `autorizacion` obligatoria). El valor para Vercel es **`arata-san/catalogo-noviembre`**. Correo visible y obligatorio ✅ (revisado en la página pública del evento). ◻ Falta en Vercel `NEXT_PUBLIC_CAL_LINK_LANDING` + redeploy.
 
 Los identificadores deben ser exactamente `whatsapp` y `autorizacion` (minúsculas y sin tilde): así los busca el panel (`lib/panel/cal.ts`).
 
